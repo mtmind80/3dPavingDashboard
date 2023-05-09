@@ -1,0 +1,35 @@
+/* My styles created for this project
+
+
+ */
+
+.resourceLink{
+
+    margin:10px;
+    font-family:Nunito,sans-serif;
+    font-size:1.2rem;
+    font-weight:400;
+    line-height:1.5;
+    color:#505d69;
+    text-align:left;
+}
+
+.resourceLink:hover{
+    margin:11px;
+    font-family:Nunito,sans-serif;
+    font-size:1.2rem;
+    font-weight:400;
+    line-height:1.5;
+    color:#2874A6;
+    text-align:left;
+}
+
+.marzipan {
+    padding:8px;
+    font-family:Nunito,sans-serif;
+    font-size:1.0rem;
+    font-weight:400;
+    line-height:1.5;
+    color:#2874A6;
+    
+}

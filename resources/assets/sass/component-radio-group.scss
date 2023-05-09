@@ -1,0 +1,100 @@
+$radio-color: #2F71B3;
+
+div.radio-container {
+    .gap-6 {
+        gap: 6px;
+    }
+    white-space: normal;
+    padding: 0;
+    margin-bottom: 0;
+    font-weight: normal;
+    cursor: pointer;
+    background-color: transparent;
+    border: 0 solid #c8c8c8;
+    border-radius: 3px;
+    color: #747474;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+    label.radio-item {
+        text-align: left;
+        white-space: nowrap;
+        span {
+            font-size: 15px;
+        }
+        i {
+            font-size: 20px;
+        }
+        input {
+            display: none;
+            &[type="checkbox"] {
+                ~ i.fa-square-o {
+                    color: #747474;
+                    display: inline;
+                }
+                ~ i.fa-check-square-o {
+                    display: none;
+                }
+                &:checked {
+                    ~ i.fa-square-o {
+                        display: none;
+                    }
+                    ~ i.fa-check-square-o {
+                        color: $radio-color;
+                        display: inline;
+                    }
+                }
+            }
+            &[type="radio"] {
+                ~ i.unchecked {
+                    color: #c8c8c8;
+                    display: inline;
+                }
+                ~ i.checked {
+                    display: none;
+                }
+                &:checked {
+                    ~ i.unchecked {
+                        display: none;
+                    }
+                    ~ i.checked{
+                        color: $radio-color;
+                        display: inline;
+                    }
+                }
+            }
+        }
+        &:hover {
+            input {
+                &[type="checkbox"] {
+                    ~ i {
+                        color: $radio-color;
+                    }
+                    &:checked {
+                        ~ i.unchecked {
+                            display: none;
+                        }
+                        ~ i.checked {
+                            color: $radio-color;
+                            display: inline;
+                        }
+                    }
+                }
+                &[type="radio"] {
+                    ~ i {
+                        color: $radio-color;
+                    }
+                }
+            }
+        }
+        &.active,
+        &:hover {
+            color: #7AA3CC;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+        }
+    }
+
+}
