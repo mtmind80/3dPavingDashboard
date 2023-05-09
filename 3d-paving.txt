@@ -1,0 +1,92 @@
+customer portal
+https://portal.hostgator.com/login
+keith@3-dpaving.com
+3DDashboard
+
+keith@3-dpaving.com
+tech support pin 2012
+3dpavingdashboard.com
+Plan: VPS / Snappy 2000 VPS Package
+Package ID: 179238
+
+tech support pin 2012
+VPS, Power Panel and WHM
+user : root
+new password 
+PavingD_4Pi0&urZ!+w
+PavingD_4Pi0&urZ!+w
+
+https://developers.google.com/calendar
+address
+2801 N. University Drive
+Suite 302  Coral Springs, FL 33065
+
+
+
+https://development.3dpavingdashboard.com/
+
+putty setup
+IP : 192.254.138.21
+user: pavingd
+bisp0ke3408#*1
+
+
+
+godaddy
+https://sso.godaddy.com/
+userid: 88742577
+password: Champs03.
+primary email : thom@3-dpaving.com
+tech support pin 7384
+
+Miket
+1!Geothermal
+miket@3-dpavingdashboard.com
+
+
+ftp
+mtmind80
+3408EKwq
+FTP Username: mtmind80@dashboard.3-dpaving.com
+FTP server: ftp.3-dpaving.com
+FTP & explicit FTPS port:  21
+192.169.168.112
+
+
+
+DB
+pavingd_cocobeach 
+
+user: 
+pavingd_dashboard2022
+
+password:
+3408EKwqPav1ng*1
+
+SSH
+user
+pavingd
+
+password
+bisp0ke3408#*1
+
+
+Generating public/private rsa key pair.
+Enter passphrase (empty for no passphrase): 
+Enter same passphrase again: 
+Your identification has been saved in /home/pavingd/.ssh/id_rsa.
+Your public key has been saved in /home/pavingd/.ssh/id_rsa.pub.
+The key fingerprint is:
+SHA256:rkhKLzB72lShY5q1ccGTnkxOuZ73is2H3606QRKIHwQ 
+The key's randomart image is:
++---[RSA 2048]----+
+|  E+..           |
+|  ..oo.          |
+|   .X. .         |
+|   B.*. .        |
+|  * O  oS        |
+|o= B . ..        |
+|o++ + ....       |
+|.+o+ *.oo. .     |
+|.oo.+ =++oo..    |
++----[SHA256]-----+
