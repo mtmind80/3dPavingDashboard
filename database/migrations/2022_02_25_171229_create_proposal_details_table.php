@@ -24,8 +24,8 @@ class CreateProposalDetailsTable extends Migration
             $table->unsignedBigInteger('location_id')->nullable()->default(null);
             $table->unsignedBigInteger('fieldmanager_id')->nullable()->default(null);
             $table->unsignedBigInteger('second_fieldmanager_id')->nullable()->default(null);
-            $table->float('cost', 8, 2, true)->default(0);
-            $table->string('service_name', 250);
+            $table->decimal('cost',13,2, true)->nullable()->default(0);
+            $table->string('service_name', 250)->nullable();
             $table->mediumText('service_desc')->nullable();
             $table->boolean('bill_after')->default(false);
             $table->integer('dsort')->unsigned()->nullable()->default(0);
