@@ -1053,7 +1053,7 @@ JOIN proposals ON proposals.id = potbljoborderdetail.jordJobID;
 
 
 #REALIGN potbljoborderdetail with the new id
-UPDATE proposal_details set id = id* 42333;
+UPDATE proposal_details set id = id * 42333;
 UPDATE proposal_details set id = old_detail_id;
 
 
@@ -1289,7 +1289,7 @@ proposal_id,
 material_id,
 name,
 cost,
-service_id
+service_category_id
 )
 SELECT 
 omatjobID,
