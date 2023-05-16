@@ -13,10 +13,10 @@
     <tr>
         <td class="w-50 p8">
            Service Type:
-            {{ $service_category_name }}
-            <p>Service Title: 
-                <input type="text" class="form-control" name="name" id="name" value= "{{ $service->name }}">
-            </p>  </td>
+            {{ $service_category_name }} - {{$proposalDetail->services_id}}
+         <br/>
+            Service Title: <input type="text" class="form-control" name="name" id="name" value= "{{ $proposalDetail->service_name }}">
+          </td>
         <td class="w-50 p8">
             Service Location:
             <p class="mb0">{!! $proposalDetail->location->full_location_two_lines !!}</p>
