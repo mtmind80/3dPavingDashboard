@@ -66,17 +66,29 @@ Update proposals set permit_required =1 where id = 5889;
 Update proposals set permit_required =1, mot_required=1, nto_required=1, on_alert =1  where id = 5879;
 
 UPDATE proposals Set progressive_billing = 1 where id =10680;
-
-INSERT INTO proposal_details (proposal_id, location_id, services_id,service_desc,service_name,created_by) VALUES(10680, 6196, 4,'Ashpalt' ,'Asphalt',10);
-INSERT INTO proposal_details (proposal_id, location_id, services_id,service_desc,service_name,created_by) VALUES(10680, 6196,6,'Sidewalks' ,'Sidewalks',10);
-INSERT INTO proposal_details (proposal_id, location_id, services_id,service_desc,service_name,created_by) VALUES(10680, 6196,21,'Drainage and Catchbasins' ,'Drainage and Catchbasins',10);
-INSERT INTO proposal_details (proposal_id, location_id, services_id,service_desc,service_name,created_by) VALUES(10680, 6196,1,'Excavation' ,'Excavation',10);
-INSERT INTO proposal_details (proposal_id, location_id, services_id,service_desc,service_name,created_by) VALUES(10680, 6196,16,'Other' ,'Other Service',10);
-INSERT INTO proposal_details (proposal_id, location_id, services_id,service_desc,service_name,created_by) VALUES(10680, 6196,20,'Pavement' ,'Pavement',10);
-INSERT INTO proposal_details (proposal_id, location_id, services_id,service_desc,service_name,created_by) VALUES(10680,6196, 2,'Rock' ,'Rock',10);
-INSERT INTO proposal_details (proposal_id, location_id, services_id,service_desc,service_name,created_by) VALUES(10680,6196, 15,'Seal Coating' ,'Seal Coating',10);
-INSERT INTO proposal_details (proposal_id, location_id, services_id,service_desc,service_name,created_by) VALUES(10680,6196, 18,'Pavement' ,'Pavement',10);
-INSERT INTO proposal_details (proposal_id, location_id, services_id,service_desc,service_name,created_by) VALUES(10680,6196, 17,'Sub Contractor' ,'Sub Contractor',10);
+DELETE FROM proposal_details WHERE proposal_id = 10680;
+INSERT INTO proposal_details (proposal_id, location_id, services_id,service_desc,service_name,created_by) VALUES(10680,6196,1,"All Excavation","All Excavation",10);
+INSERT INTO proposal_details (proposal_id, location_id, services_id,service_desc,service_name,created_by) VALUES(10680,6196,2,"Rock Services","Rock Services",10);
+INSERT INTO proposal_details (proposal_id, location_id, services_id,service_desc,service_name,created_by) VALUES(10680,6196,3,"Repairs","Repairs",10);
+INSERT INTO proposal_details (proposal_id, location_id, services_id,service_desc,service_name,created_by) VALUES(10680,6196,4,"Asphalt Paving - (Over 3500 SY)","Asphalt Paving - (Over 3500 SY)",10);
+INSERT INTO proposal_details (proposal_id, location_id, services_id,service_desc,service_name,created_by) VALUES(10680,6196,5,"Paving (Under 3500 SY)","Paving (Under 3500 SY)",10);
+INSERT INTO proposal_details (proposal_id, location_id, services_id,service_desc,service_name,created_by) VALUES(10680,6196,6,"Curb (Extruded)","Curb (Extruded)",10);
+INSERT INTO proposal_details (proposal_id, location_id, services_id,service_desc,service_name,created_by) VALUES(10680,6196,7,"Curb (Type D) ","Curb (Type D) ",10);
+INSERT INTO proposal_details (proposal_id, location_id, services_id,service_desc,service_name,created_by) VALUES(10680,6196,8,"Curb (Type Mod D) ","Curb (Type Mod D) ",10);
+INSERT INTO proposal_details (proposal_id, location_id, services_id,service_desc,service_name,created_by) VALUES(10680,6196,9,"Curb (Type F)","Curb (Type F)",10);
+INSERT INTO proposal_details (proposal_id, location_id, services_id,service_desc,service_name,created_by) VALUES(10680,6196,10,"Curb (Valley Gutter)" ,"Curb (Valley Gutter) ",10);
+INSERT INTO proposal_details (proposal_id, location_id, services_id,service_desc,service_name,created_by) VALUES(10680,6196,11,"Curb (Header) [New or Repairs]","Curb (Header) [New or Repairs]",10);
+INSERT INTO proposal_details (proposal_id, location_id, services_id,service_desc,service_name,created_by) VALUES(10680,6196,12,"Slab" ,"Slab",10);
+INSERT INTO proposal_details (proposal_id, location_id, services_id,service_desc,service_name,created_by) VALUES(10680,6196,13,"Ramp" ,"Ramp ",10);
+INSERT INTO proposal_details (proposal_id, location_id, services_id,service_desc,service_name,created_by) VALUES(10680,6196,14,"Sidewalks" ,"Sidewalks ",10);
+INSERT INTO proposal_details (proposal_id, location_id, services_id,service_desc,service_name,created_by) VALUES(10680,6196,15,"Sealcoating","Sealcoating",10);
+INSERT INTO proposal_details (proposal_id, location_id, services_id,service_desc,service_name,created_by) VALUES(10680,6196,16,"Other Service" ,"Other Service ",10);
+INSERT INTO proposal_details (proposal_id, location_id, services_id,service_desc,service_name,created_by) VALUES(10680,6196,17,"Any Sub Contractor","Any Sub Contractor",10);
+INSERT INTO proposal_details (proposal_id, location_id, services_id,service_desc,service_name,created_by) VALUES(10680,6196,18,"Pavement Markings","Pavement Markings",10);
+INSERT INTO proposal_details (proposal_id, location_id, services_id,service_desc,service_name,created_by) VALUES(10680,6196,19,"Milling","Milling",10);
+INSERT INTO proposal_details (proposal_id, location_id, services_id,service_desc,service_name,created_by) VALUES(10680,6196,20,"Paver Brick","Paver Brick",10);
+INSERT INTO proposal_details (proposal_id, location_id, services_id,service_desc,service_name,created_by) VALUES(10680,6196,21,"Drainage and Catchbasins","Drainage and Catchbasins",10);
+INSERT INTO proposal_details (proposal_id, location_id, services_id,service_desc,service_name,created_by) VALUES(10680,6196,22,"Milling and Paving- (Over 3500 SY)","Milling and Paving- (Over 3500 SY)",10);
 
 
 

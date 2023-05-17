@@ -484,7 +484,6 @@ class ProposalController extends Controller
 
             $data['hostwithHttp'] = $hostwithHttp;
 
-
             $data['id'] = $id;
             $data['proposal'] = $proposal;
             $data['permits'] = $permits;
@@ -618,9 +617,17 @@ class ProposalController extends Controller
         $data['paginate'] = 1;
 
         if($proposalId) {
-            $records = Proposal::where('id', $proposalId)->get();
+            $records = Proposal::where('id', $proposalId)->first();
             $data['paginate'] = 0;
 
+            if($records) {
+                if($records['job_master_id']) {
+                    return redirect()->route('show_workorder', ['id' => $proposalId]);
+                } else {
+                    return redirect()->route('show_proposal', ['id' => $proposalId]);
+                }
+            }
+        
         } else {
             //            $contacts = Contact::search($needle)->sortable()->with(['contactType', 'company'])->paginate($perPage);
             //only pending proposals
@@ -636,7 +643,7 @@ class ProposalController extends Controller
         }
 
         if(!$records) {
-            \Session::flash('message', 'Sorry no matching records were found!');
+            \Session::flash('error', 'Sorry no matching records were found!');
             return redirect()->back();
 
         }
