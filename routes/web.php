@@ -62,7 +62,8 @@ Route::group(['middleware' => ['auth']], function() {
         Route::post('/{id}/{detail_id}/doassignmanager', 'WorkOrderController@doassignmanager')->name('doassignmanager');
 
         Route::post('/{work_order}/add-note', 'WorkOrderController@storeNote')->name('workorder_note_store');
-
+        Route::get('/view_service/{proposal_id}/{id}', 'WorkOrderController@view_service')->name('view_service');
+        
         /*************** Timesheets  ***************/
 
         Route::group(['prefix' => 'timesheets'], function() {

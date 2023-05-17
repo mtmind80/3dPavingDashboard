@@ -1,5 +1,5 @@
 <div class="mt20 mb10">
-    <form method="" action="#" id="cost_formula_form" class="admin-form">
+    <form action="#" id="cost_formula_form" class="admin-form">
         {{-- This form is for reference to calculate costs it it never submitted --}}
         @if($proposal->progressive_billing)
             <div class="row card-body">
@@ -486,7 +486,7 @@
                 ]"
                 ></x-form-text>
             </div>
-            <div class="col-sm-3">
+            <div class="col-sm-2">
                 <x-form-text name="cost_per_day"
                              class="check-contact tc"
                              placeholder="enter value"
@@ -498,31 +498,24 @@
                 ]"
                 ></x-form-text>
             </div>
-            <div class="col-sm-3">
-                <x-form-text name="tons"
-                             class="check-contact tc"
-                             placeholder="disabled"
-                             id="tons"
-                             :params="[
-                    'label' => 'Tons',
-                    'iconClass' => 'none',
-                    'value' => '{{$service->tons}}',
-                ]"
-                ></x-form-text>
+            <div class="col-sm-2">
+                <label class="form-field-label">Loads</label>
+                <input type="text" name="loads" id="loads"
+                       class="check-contact tc"
+                       placeholder="calculated"
+                       value = '{{$service->loads}}'
+                       disabled >            
+            </div>
+            <div class="col-sm-2">
+                    <label class="form-field-label">Tons</label>
+                    <input type="text" name="tons" id="tons"
+                                 class="check-contact tc"
+                                 placeholder="calculated"
+                                value = '{{$service->tons}}'
+                    disabled >
 
             </div>
-            <div class="col-sm-3">
-                <x-form-text name="loads"
-                             class="check-contact tc"
-                             placeholder="enter value"
-                             id="loads"
-                             :params="[
-                    'label' => 'Loads',
-                    'iconClass' => 'none',
-                    'value' => '{{$service->loads}}',
-                ]"
-                ></x-form-text>
-            </div>
+        
 
         </div>
 
@@ -617,11 +610,13 @@
                 ></x-form-text>
             </div>
             <div class="col-sm-4">
-                <x-form-text name="tons"
+                <div class='check-contact tc' id="tonnage"></div>
+                <x-form-text name="tons" id="tons"
                              class="check-contact tc"
                              placeholder="enter value"
                              id="tons"
                              :params="[
+                             'hint' => 'This field is calculated',
                     'label' => 'Excavate Tons',
                     'iconClass' => 'none',
                     'value' => '{{$service->tons}}',
@@ -1174,8 +1169,8 @@ updated_at
             // and populate other display items on the page
 
 
-            var cost_form = $("#cost_formula_form");
-            var estimatorForm = $("#estimator_form");
+            var cost_form = $("#cost_formula_form");  // values to determine cost
+            var estimatorForm = $("#estimator_form"); // form to set values for submit and save
             //alert(cost_form);
             
             calculate(cost_form, estimatorForm, serviceId, proposalDetailId, proposalId, serviceCategoryId);
@@ -1220,8 +1215,25 @@ updated_at
 
                 if (serviceCategoryId == 4) {
                     {{-- 4	Excavation --}}
+if($("#square_feet").val() >0 && $("#depth").val() > 0) {
 
 
+                        var tontimes = (7 / 1080);
+                        var tons = Math.ceil($("#square_feet").val() * tontimes * $("#depth").val());
+                        var loads = Math.ceil(tons / 18);
+
+//estimator form srt values 
+
+                        var ourcost = $("#cost_per_day").val();
+                        $("#header_show_materials_cost").val(ourcost);
+                        var profit = $("#profit").val();
+
+                        alert('tons ='.tons);
+
+                    } else {
+                        alert('tons =');
+    
+                    }
                 }
 
 
