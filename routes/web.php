@@ -60,11 +60,13 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('/{id}/show', 'WorkOrderController@show')->name('show_workorder');
         Route::get('/{id}/{detail_id}/assignmanager', 'WorkOrderController@assignmanager')->name('assignmanager');
         Route::post('/{id}/{detail_id}/doassignmanager', 'WorkOrderController@doassignmanager')->name('doassignmanager');
-
         Route::post('/{work_order}/add-note', 'WorkOrderController@storeNote')->name('workorder_note_store');
         Route::get('/view_service/{proposal_id}/{id}', 'WorkOrderController@view_service')->name('view_service');
-        
-        /*************** Timesheets  ***************/
+    });
+
+    /** END workorders */        
+
+    /*************** Timesheets  ***************/
 
         Route::group(['prefix' => 'timesheets'], function() {
             Route::get('/{proposal_detail_id}/list', 'WorkOrderTimesheetsController@index')->name('workorder_timesheet_list');
@@ -242,8 +244,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::group(['prefix' => 'proposals'], function() {
 
         Route::get('/new', 'ProposalController@new')->name('new_proposal');
-
-
+        
         Route::get('', 'ProposalController@index')->name('proposals');
         //post to search method show results
 
@@ -289,13 +290,6 @@ Route::group(['middleware' => ['auth']], function() {
 
     });
     /** END Proposals */
-
-    /*
-    //Leads  create: role_id 1,2,3
-    Route::group(['prefix' => 'leads'], function() {
-        Route::get('/', 'LeadsController@index')->name('leads');
-    });
-    END Leads */
 
     //uplaod  create: role_id 1,2,3
     Route::group(['prefix' => 'upload'], function() {
@@ -460,5 +454,4 @@ Route::group(['middleware' => ['auth']], function() {
     });
     /** END Leads */
 
-});
 

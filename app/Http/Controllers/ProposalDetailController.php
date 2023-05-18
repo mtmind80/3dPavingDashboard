@@ -764,7 +764,18 @@ class ProposalDetailController extends Controller
 
     public function destroy($id)
     {
-        //
+        // remove service , return to proposal services
+        $service = ProposalDetail::find($id)->first()->toArray();
+        if($service) {
+            $proposal_id = $service['proposal_id'];
+            ProposalDetail::destroy($id);
+            \Session::flash('error', 'Service was deleted!');
+            return route('show_proposal',['id'=> $proposal_id]);
+        }
+
+        \Session::flash('error', 'Sorry no matching records were found!');
+        return redirect()->back();
+
     }
 
     public function newservice($proposalId)

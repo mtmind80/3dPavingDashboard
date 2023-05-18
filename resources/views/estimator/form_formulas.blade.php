@@ -1168,19 +1168,14 @@ updated_at
             // when the page loads we may need to repeat some calculations to determine total costs
             // and populate other display items on the page
 
-
-            var cost_form = $("#cost_formula_form");  // values to determine cost
-            var estimatorForm = $("#estimator_form"); // form to set values for submit and save
-            //alert(cost_form);
-            
-            calculate(cost_form, estimatorForm, serviceId, proposalDetailId, proposalId, serviceCategoryId);
-
             function calculate(cost_form, estimatorForm, services_id, proposal_detail_id, proposal_id, serviceCategoryId) {
                 //cost_form has data used to calculate costs, 
                 //estimator form gets hidden values filled in and data gets sent via ajax on save
                 //what service did we pick
                 //alert(services_id);
-                 //alert(serviceCategoryName);
+                //alert(serviceCategoryName);
+                //The Math.ceil() static method always rounds up and returns the smaller integer 
+                // greater than or equal to a given number.
 
 
                 if (serviceCategoryId == 1) {
@@ -1200,7 +1195,7 @@ updated_at
                 if (serviceCategoryId == 2) {
 
                     {{-- concrete --}}
-                    {{--IF $details.cmpServiceID < 12- *curb mix* --}}
+                            {{--IF $details.cmpServiceID < 12- *curb mix* --}}
                     if (service_id < 12) {
 
                     } else if (service_id >= 12) {
@@ -1215,26 +1210,42 @@ updated_at
 
                 if (serviceCategoryId == 4) {
                     {{-- 4	Excavation --}}
-if($("#square_feet").val() >0 && $("#depth").val() > 0) {
+
+                    var square_feet = $("#square_feet").val();
+                    var depth = $("#depth").val();
+
+                    if (square_feet > 0 && depth > 0) {
+                        
+                            confirm("Would you like to allow this?").then(function (result) {
+                                if (!result) {
+                                    return; //Not allowed, so here must cancel the execution
+                                } else{
+                                        var tontimes = (7 / 1080);
+                                        console.log(tontimes);
+                                        console.log(Math.ceil(tontimes));
+                                        var tons = Math.ceil(square_feet * depth * tontimes);
+                                        var loads = Math.ceil(tons / 18);
 
 
-                        var tontimes = (7 / 1080);
-                        var tons = Math.ceil($("#square_feet").val() * tontimes * $("#depth").val());
-                        var loads = Math.ceil(tons / 18);
+                                        //estimator form srt values 
+                                        $("#loads").val(loads);
+                                        $("#tons").val(tons);
+                                        var ourcost = $("#cost_per_day").val();
+                                        console.log(ourcost);
 
-//estimator form srt values 
+                                        //$("#header_show_materials_cost").val(ourcost);
+                                        //var profit = $("#profit").val();
 
-                        var ourcost = $("#cost_per_day").val();
-                        $("#header_show_materials_cost").val(ourcost);
-                        var profit = $("#profit").val();
+                                        alert('tons ='. tons);
 
-                        alert('tons ='.tons);
-
-                    } else {
-                        alert('tons =');
-    
+                                    }
+                            
+                        });
+                                
+                        
                     }
                 }
+                {{-- END	Excavation --}}
 
 
                 if (serviceCategoryId == 5) {
@@ -1243,6 +1254,8 @@ if($("#square_feet").val() >0 && $("#depth").val() > 0) {
 
 
                 }
+                {{-- end Other --}}
+
                 if (serviceCategoryId == 6) {
 
                     {{--  Paver Brick --}}
@@ -1257,96 +1270,111 @@ if($("#square_feet").val() >0 && $("#depth").val() > 0) {
                 }
 
 
-            }
+                if (serviceCategoryId == 8) {
 
-            if (serviceCategoryId == 8) {
+                    {{--  Seal Coating  these are the user imput fields that need to be filled in validated--}}
 
-                {{--  Seal Coating  these are the user imput fields that need to be filled in validated--}}
-
-                    square_feet = $("#square_feet").val();
+                        square_feet = $("#square_feet").val();
                     primer = $("#primaer").val();
                     fastset = $("#fastset").val();
-                if(square_feet == parseInt(square_feet)
-                    && primer == parseInt(primer)
-                    && fastset == parseInt(fastset))
-                {
+                    if (square_feet == parseInt(square_feet)
+                        && primer == parseInt(primer)
+                        && fastset == parseInt(fastset)) {
 
-                    var yield = $( "#yield" ).val();;
-
-                    //calculate amounts
-
-                    /*
-                     SEALER  = Size/Yield  = GAL SEALER
-                     AND SAND = GAL SEALER * 2
-                     ADDITIVE = AND GAL SEALER / 50
-                     */
+                        var yield = $("#yield").val();
 
 
-                    var sand = Math.ceil(sealer * 2);
-                    $("#sand").val(sand);
+                        //calculate amounts
 
-                    var sealer = Math.ceil(square_feet / yield);
-                    $("#sealer").val(sealer);
-
-                    var additive = Math.ceil(sealer / 50);
-                    $("#additive").val(additive);
-
+                        /*
+                         SEALER  = Size/Yield  = GAL SEALER
+                         AND SAND = GAL SEALER * 2
+                         ADDITIVE = AND GAL SEALER / 50
+                         */
 
 
-                    var sandtotal = Math.ceil(parseFloat(sandcost) * parseFloat(sand));
-                    var fastsettotal = Math.ceil(parseFloat(fastsetcost) * parseFloat(fastset));
-                    var primertotal = Math.ceil(parseFloat(primercost) * parseFloat(primer));
-                    var additivetotal = Math.ceil(parseFloat(additivecost) * parseFloat(additive));
-                    var sealertotal = Math.ceil(parseFloat(sealercost) * parseFloat(sealer));
+                        var sand = Math.ceil(sealer * 2);
+                        $("#sand").val(sand);
 
-                    $("#SandTotal").val('$' + sandtotal.toFixed(2));
-                    cost_form.FastSetTotal.value = '$' + fastsettotal.toFixed(2);
-                    cost_form.SealerTotal.value = '$' + sealertotal.toFixed(2);
-                    cost_form.PrimerTotal.value = '$' + primertotal.toFixed(2);
-                    cost_form.AdditiveTotal.value = '$' + additivetotal.toFixed(2);
+                        var sealer = Math.ceil(square_feet / yield);
+                        $("#sealer").val(sealer);
 
-                    var subtotal = Math.ceil(
-                        parseFloat(sandtotal)  +
-                        parseFloat(fastsettotal) +
-                        parseFloat(primertotal) +
-                        parseFloat(additivetotal) +
-                        parseFloat(sealertotal)
-                    );
-
-                    $("#mcost").val(subtotal);
-
-                    //total up
-                    var combinedcost = parseFloat($("#POVTotal").val()) + parseFloat($("#POequipTotal").val()) + parseFloat($("#POlaborTotal").val()) + parseFloat($("#POOtherTotal").val()) + parseFloat(cost_form.mcost.value);
-
-                    var otcost = Math.ceil(parseFloat(combinedcost) + parseFloat(profit));
-                    var overhead = Math.ceil((otcost / 0.7) - otcost);
-                    $("#explain").html('calculated at 30%');
-                    //var overhead = Math.ceil((parseFloat(combinedcost) +  parseFloat(profit)) * 30)/100;
+                        var additive = Math.ceil(sealer / 50);
+                        $("#additive").val(additive);
 
 
-                    var str = cost_form.jordProposalText.value;
-                    var newstr = str.replace('@@SQFT@@', cost_form.jordSquareFeet.value);
-                    var newstr = newstr.replace('@@PHASES@@', cost_form.jordPhases.value);
-                    cost_form.jordProposalText.value = newstr;
+                        var sandtotal = Math.ceil(parseFloat(sandcost) * parseFloat(sand));
+                        var fastsettotal = Math.ceil(parseFloat(fastsetcost) * parseFloat(fastset));
+                        var primertotal = Math.ceil(parseFloat(primercost) * parseFloat(primer));
+                        var additivetotal = Math.ceil(parseFloat(additivecost) * parseFloat(additive));
+                        var sealertotal = Math.ceil(parseFloat(sealercost) * parseFloat(sealer));
+
+                        $("#SandTotal").val('$' + sandtotal.toFixed(2));
+                        cost_form.FastSetTotal.value = '$' + fastsettotal.toFixed(2);
+                        cost_form.SealerTotal.value = '$' + sealertotal.toFixed(2);
+                        cost_form.PrimerTotal.value = '$' + primertotal.toFixed(2);
+                        cost_form.AdditiveTotal.value = '$' + additivetotal.toFixed(2);
+
+                        var subtotal = Math.ceil(
+                            parseFloat(sandtotal) +
+                            parseFloat(fastsettotal) +
+                            parseFloat(primertotal) +
+                            parseFloat(additivetotal) +
+                            parseFloat(sealertotal)
+                        );
+
+                        $("#mcost").val(subtotal);
+
+                        //total up
+                        var combinedcost = parseFloat($("#POVTotal").val()) + parseFloat($("#POequipTotal").val()) + parseFloat($("#POlaborTotal").val()) + parseFloat($("#POOtherTotal").val()) + parseFloat(cost_form.mcost.value);
+
+                        var otcost = Math.ceil(parseFloat(combinedcost) + parseFloat(profit));
+                        var overhead = Math.ceil((otcost / 0.7) - otcost);
+                        $("#explain").html('calculated at 30%');
+                        //var overhead = Math.ceil((parseFloat(combinedcost) +  parseFloat(profit)) * 30)/100;
+
+
+                        var str = cost_form.jordProposalText.value;
+                        var newstr = str.replace('@@SQFT@@', cost_form.jordSquareFeet.value);
+                        var newstr = newstr.replace('@@PHASES@@', cost_form.jordPhases.value);
+                        cost_form.jordProposalText.value = newstr;
+
+
+                    }
 
 
                 }
 
+                if (serviceCategoryId == 9) {
+
+                    {{--  striping  not used for this service--}}
+
+                }
+
+                if (serviceCategoryId == 10) {
+
+                    {{--  Sub Contractor --}}
+                }
 
             }
 
-            if (serviceCategoryId == 9) {
 
-                {{--  striping  not used for this service--}}
+            var cost_form = $("#cost_formula_form");  // values to determine cost
+            var estimatorForm = $("#estimator_form"); // form to set values for submit and save
+            //alert(cost_form);
 
-            }
-
-            if (serviceCategoryId == 10) {
-
-                {{--  Sub Contractor --}}
-            }
+            calculate(cost_form, estimatorForm, serviceId, proposalDetailId, proposalId, serviceCategoryId);
 
 
+
+
+            headerCalculateCombinedCostingButton2.on('click', function(){
+
+                calculate(cost_form, estimatorForm, serviceId, proposalDetailId, proposalId, serviceCategoryId);
+
+            });
+            
         });
+
     </script>
 @endpush

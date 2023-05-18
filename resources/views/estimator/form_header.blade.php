@@ -77,7 +77,9 @@
                             </div>
                         </td>
                         <td class="w1-6">
-                            <a id="header_calculate_combined_costing_button" href="javascript:" class="{{ $site_button_class }} top-2 prel">Calculate</a>
+                            <a id="header_calculate_combined_costing_button2" href="javascript:" class="{{ $site_button_class }} top-2 prel">Save Service</a>
+<!--                            <a id="header_calculate_combined_costing_button" href="javascript:" class="{{ $site_button_class }} top-2 prel">Calculate</a>
+-->
                             <a class="{{ $site_button_class }}" href="{{ route('show_proposal',['id'=> $proposalDetail->proposal_id]) }}">@lang('translation.cancel')</a>
                         </td>
                     </tr>
@@ -175,6 +177,8 @@
 
 @push('partials-scripts')
     <script>
+
+            
         var headerElCustomerPrice = $('#header_show_customer_price');
         var headerElCombinedCosting= $('#header_show_combined_costing');
 
@@ -184,6 +188,7 @@
         var headerElBreakEven= $('#form_header_break_even');
 
         var headerCalculateCombinedCostingButton = $('#header_calculate_combined_costing_button');
+        var headerCalculateCombinedCostingButton2 = $('#header_calculate_combined_costing_button2');
 
         var headerElVehiclesCost = $('#header_show_vehicles_cost');
         var headerElEquipmentCost = $('#header_show_equipment_cost');
@@ -198,12 +203,15 @@
         var headerAlert = $('#header_alert');
 
         $(document).ready(function () {
+            
+            
             headerAlert.on('click', function(ev){
                 ev.stopPropagation();
                 ev.preventDefault();
                 closeAlert(headerAlert);
             });
 
+                
             headerCalculateCombinedCostingButton.on('click', function(){
                 headerElForm.validate({
                     rules: {
@@ -290,5 +298,6 @@
                 headerElForm.trigger('reset');
             }
         });
+        
     </script>
 @endpush
