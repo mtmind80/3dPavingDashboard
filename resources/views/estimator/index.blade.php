@@ -19,38 +19,38 @@
     <div class="row estimator-form admin-form">
         <form method="POST" accept-charset="UTF-8" id="estimator_form" class="admin-form">
             @csrf
-            <input type="hidden" name="id" id="id" value="{{ $proposalDetail->id }}">
-            <input type="hidden" name="service_name" id="name" value="{{ $proposalDetail->service_name }}">
-            <input type="hidden" name="services_id" id="services_id" value="{{ $proposalDetail->services_id }}">
-            <input type="hidden" name="proposal_id" id="proposal_id" value="{{ $proposalDetail->proposal_id }}">
-            <input type="hidden" name="catchbasins" id="catchbasins" value="{{ $proposalDetail->catchbasins }}">
-            <input type="hidden" name="linear_feet" id="linear_feet" value="{{ $proposalDetail->linear_feet }}">
-            <input type="hidden" name="cost_per_linear_feet" id="cost_per_linear_feet" value="{{ $proposalDetail->cost_per_linear_feet }}">
-            <input type="hidden" name="square_feet" id="square_feet" value="{{ $proposalDetail->square_feet }}">
-            <input type="hidden" name="square_yards" id="square_yards" value="{{ $proposalDetail->square_yards }}">
-            <input type="hidden" name="cubic_yards" id="cubic_yards" value="{{ $proposalDetail->cubic_yards }}">
-            <input type="hidden" name="tons" id="tons" value="{{ $proposalDetail->tons }}">
-            <input type="hidden" name="loads" id="loads" value="{{ $proposalDetail->loads }}">
-            <input type="hidden" name="locations" id="locations" value="{{ $proposalDetail->locations }}">
+            <input type="hidden" name="id" id="x_id" value="{{ $proposalDetail->id }}">
+            <input type="hidden" name="service_name" id="x_service_name" value="{{ $proposalDetail->service_name }}">
+            <input type="hidden" name="services_id" id="x_services_id" value="{{ $proposalDetail->services_id }}">
+            <input type="hidden" name="proposal_id" id="x_proposal_id" value="{{ $proposalDetail->proposal_id }}">
+            <input type="hidden" name="catchbasins" id="x_catchbasins" value="{{ $proposalDetail->catchbasins }}">
+            <input type="hidden" name="linear_feet" id="x_linear_feet" value="{{ $proposalDetail->linear_feet }}">
+            <input type="hidden" name="cost_per_linear_feet" id="x_cost_per_linear_feet" value="{{ $proposalDetail->cost_per_linear_feet }}">
+            <input type="hidden" name="square_feet" id="x_square_feet" value="{{ $proposalDetail->square_feet }}">
+            <input type="hidden" name="square_yards" id="x_square_yards" value="{{ $proposalDetail->square_yards }}">
+            <input type="hidden" name="cubic_yards" id="x_cubic_yards" value="{{ $proposalDetail->cubic_yards }}">
+            <input type="hidden" name="tons" id="x_tons" value="{{ $proposalDetail->tons }}">
+            <input type="hidden" name="loads" id="x_loads" value="{{ $proposalDetail->loads }}">
+            <input type="hidden" name="locations" id="x_locations" value="{{ $proposalDetail->locations }}">
             
-            <input type="hidden" name="depth" id="depth" value="{{ $proposalDetail->depth }}">
-            <input type="hidden" name="profit" id="profit" value="{{ $proposalDetail->profit }}">
-            <input type="hidden" name="days" id="days" value="{{ $proposalDetail->days }}">
-            <input type="hidden" name="cost_per_day" id="cost_per_day" value="{{ $proposalDetail->cost_per_day }}">
-            <input type="hidden" name="break_even" id="break_even" value="{{ $proposalDetail->break_even }}">
-            <input type="hidden" name="bill_after" id="bill_after" value="{{ $proposalDetail->bill_after }}">
-            <input type="hidden" name="proposal_text" id="proposal_text" value="{{ $proposalDetail->proposal_text }}">
-            <input type="hidden" name="sealer" id="sealer" value="{{ $proposalDetail->sealer }}">
-            <input type="hidden" name="sand" id="sand" value="{{ $proposalDetail->sand }}">
-            <input type="hidden" name="additive" id="additive" value="{{ $proposalDetail->additive }}">
-            <input type="hidden" name="primer" id="primer" value="{{ $proposalDetail->primer }}">
-            <input type="hidden" name="phases" id="phases" value="{{ $proposalDetail->phases }}">
-            <input type="hidden" name="yield" id="yield" value="{{ $proposalDetail->yield }}">
-            <input type="hidden" name="fastset" id="fastset" value="{{ $proposalDetail->fastset }}">
-            <input type="hidden" name="location_id" id="location_id" value="{{ $proposalDetail->location_id }}">
-            <input type="hidden" name="cost" id="cost" value="{{ $proposalDetail->cost }}">
-            <input type="hidden" name='toncost' id='toncost' value="{{ $proposalDetail->toncost }}">
-            <input type="hidden" name='tackcost' id='tackcost' value="{{ $proposalDetail->tackcost }}">
+            <input type="hidden" name="depth" id="x_depth" value="{{ $proposalDetail->depth }}">
+            <input type="hidden" name="profit" id="x_profit" value="{{ $proposalDetail->profit }}">
+            <input type="hidden" name="days" id="x_days" value="{{ $proposalDetail->days }}">
+            <input type="hidden" name="cost_per_day" id="x_cost_per_day" value="{{ $proposalDetail->cost_per_day }}">
+            <input type="hidden" name="break_even" id="x_break_even" value="{{ $proposalDetail->break_even }}">
+            <input type="hidden" name="bill_after" id="x_bill_after" value="{{ $proposalDetail->bill_after }}">
+            <input type="hidden" name="proposal_text" id="x_proposal_text" value="{{ $proposalDetail->proposal_text }}">
+            <input type="hidden" name="sealer" id="x_sealer" value="{{ $proposalDetail->sealer }}">
+            <input type="hidden" name="sand" id="x_sand" value="{{ $proposalDetail->sand }}">
+            <input type="hidden" name="additive" id="x_additive" value="{{ $proposalDetail->additive }}">
+            <input type="hidden" name="primer" id="x_primer" value="{{ $proposalDetail->primer }}">
+            <input type="hidden" name="phases" id="x_phases" value="{{ $proposalDetail->phases }}">
+            <input type="hidden" name="yield" id="x_yield" value="{{ $proposalDetail->yield }}">
+            <input type="hidden" name="fastset" id="x_fastset" value="{{ $proposalDetail->fastset }}">
+            <input type="hidden" name="location_id" id="x_location_id" value="{{ $proposalDetail->location_id }}">
+            <input type="hidden" name="cost" id="x_cost" value="{{ $proposalDetail->cost }}">
+            <input type="hidden" name='toncost' id='x_toncost' value="{{ $proposalDetail->toncost }}">
+            <input type="hidden" name='tackcost' id='x_tackcost' value="{{ $proposalDetail->tackcost }}">
 
 
 
