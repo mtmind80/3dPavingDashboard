@@ -457,8 +457,7 @@
         @if($service->service_category_id == 4)
 
             <!--  4	Excavation -->
-
-
+        
             <div class="row">
                 <div class="col-sm-2">
                     <label class="control-label">Sq. Ft.</label>
@@ -1175,6 +1174,7 @@
             // when the page loads we may need to repeat some calculations to determine total costs
             // and populate other display items on the page
 
+
             function calculate(cost_form, estimatorForm, services_id, proposal_detail_id, proposal_id, serviceCategoryId) {
                 //cost_form has data used to calculate costs, 
                 //estimator form gets hidden values filled in and data gets sent via ajax on save
@@ -1183,7 +1183,12 @@
                 //alert(serviceCategoryName);
                 //The Math.ceil() static method always rounds up and returns the smaller integer 
                 // greater than or equal to a given number.
-
+                var profit = $("#form_header_profit").val();
+                var overhead = $("#form_header_over_head").val();
+                var breakeven  = $("#form_header_break_even").val();
+                var regex=/^[0-9]+$/;  // numbers only
+                
+                console.log(profit + ' - ' + breakeven + ' - ' +  overhead);
 
                 if (serviceCategoryId == 1) {
 
@@ -1217,11 +1222,19 @@
 
                 if (serviceCategoryId == 4) {
                     {{-- 4	Excavation --}}
-
+                    
                     var square_feet = $("#square_feet").val();
                     var depth = $("#depth").val();
                     var ourcost = $("#cost_per_day").val();
+                    
 
+                    
+                    
+                    if (!square_feet.match(regex) || !depth.match(regex)) { // check these are numbers
+                        showErrorAlert('You can only enter numbers for square feet and depth.', headerAlert);
+                        return;
+                    }
+                    
                     if (square_feet > 0 && depth > 0) {
 
                         var tontimes = (7 / 1080);
@@ -1238,6 +1251,7 @@
                         //alert('tons ='.tons);
 
                     }
+                    
 
                 }
                 {{-- END	Excavation --}}
@@ -1351,8 +1365,15 @@
                     {{--  Sub Contractor --}}
                 }
 
+                //add it up
+                additup();
+                
+                //save it sub mit form via ajax
+                saveit();
+                
             }
 
+            
 
             var cost_form = $("#cost_formula_form");  // values to determine cost
             var estimatorForm = $("#estimator_form"); // form to set values for submit and save
@@ -1367,6 +1388,17 @@
 
             });
 
+            
+            function additup()
+            {
+                
+            }
+            
+            function saveit() 
+            {
+                
+                
+            }
         });
 
     </script>

@@ -43,7 +43,7 @@
                                      :params="[
                                         'label' => 'none',
                                         'iconClass' => 'none',
-                                        'value' => '',
+                                        'value' => '{{$proposalDetail->profit}}',
                                     ]"
                                 ></x-form-text>
                             </div>
@@ -57,7 +57,7 @@
                                      :params="[
                                         'label' => 'none',
                                         'iconClass' => 'none',
-                                        'value' => '',
+                                        'value' => '{{$proposalDetail->overhead}}',
                                     ]"
                                 ></x-form-text>
                             </div>
@@ -71,7 +71,7 @@
                                      :params="[
                                         'label' => 'none',
                                         'iconClass' => 'none',
-                                        'value' => '',
+                                        'value' => '{{$proposalDetail->break_even}}',
                                     ]"
                                 ></x-form-text>
                             </div>
@@ -199,12 +199,10 @@
 
         var headerElTotalCost = $('#header_total_cost');
         var headerElEstimatorFormFieldTotalCost = $('#estimator_form_header_total_cost');
-
-        var headerAlert = $('#header_alert');
+        var headerAlert = $('#header_alert');        
 
         $(document).ready(function () {
-            
-            
+
             headerAlert.on('click', function(ev){
                 ev.stopPropagation();
                 ev.preventDefault();
