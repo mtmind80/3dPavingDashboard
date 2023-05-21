@@ -457,29 +457,27 @@
         @if($service->service_category_id == 4)
 
             <!--  4	Excavation -->
-        
+
             <div class="row">
                 <div class="col-sm-2">
-                    <label class="control-label">Sq. Ft.</label>
                     <x-form-text name="square_feet"
                                  class="check-contact tc"
                                  placeholder="enter value"
                                  id="square_feet"
                                  :params="[
-                    'label' => 'none',
+                    'label' => 'Square Feet',
                     'iconClass' => 'none',
                     'value' => '{{$service->square_feet}}',
                 ]"
                     ></x-form-text>
                 </div>
                 <div class="col-sm-2">
-                    <label class="control-label">Depth In inches</label>
                     <x-form-text name="depth"
                                  class="check-contact tc"
                                  placeholder="enter value"
                                  id="depth"
                                  :params="[
-                    'label' => 'none',
+                    'label' => 'Depth In inches',
                     'iconClass' => 'none',
                     'value' => '{{$service->depth}}',
                 ]"
@@ -498,10 +496,10 @@
                     ></x-form-text>
                 </div>
                 <div class="col-sm-2">
-                    <label class="form-field-label">Loads</label>
                     <x-form-show
                             class="w180 show-check-contact"
                             :params="[
+                    'label' => 'Loads',
                            'placeholder'=>'calculated',
                     'value'=>'{{$service->loads}}',
                                     'name'=>'loads',
@@ -510,11 +508,11 @@
                     </x-form-show>
                 </div>
                 <div class="col-sm-2">
-                    <label class="form-field-label">Tons</label>
                     <x-form-show
                             class="w180 show-check-contact"
                             :params="[
                            'placeholder'=>'calculated',
+                    'label' => 'Tons',
                     'value'=>'{{$service->tons}}',
                     'name'=>'ton',
                     'id'=>'tons'
@@ -680,28 +678,28 @@
                     ></x-form-text>
                 </div>
                 <div class="col-sm-3">
-                    <x-form-text name="tons"
-                                 class="check-contact tc"
-                                 placeholder="disabled"
-                                 id="tons"
-                                 :params="[
-                    'label' => 'Tons',
-                    'iconClass' => 'none',
-                    'value' => '{{$service->tons}}',
-                ]"
-                    ></x-form-text>
+                    <x-form-show
+                            class="w180 show-check-contact"
+                            :params="[
+                    'label' => 'Loads',
+                           'placeholder'=>'calculated',
+                    'value'=>'{{$service->loads}}',
+                                    'name'=>'loads',
+                                    'id'=>'loads'
+                    ]">
+                    </x-form-show>
                 </div>
                 <div class="col-sm-3">
-                    <x-form-text name="loads"
-                                 class="check-contact tc"
-                                 placeholder="enter value"
-                                 id="loads"
-                                 :params="[
-                    'label' => 'Loads',
-                    'iconClass' => 'none',
-                    'value' => '{{$service->loads}}',
-                ]"
-                    ></x-form-text>
+                    <x-form-show
+                            class="w180 show-check-contact"
+                            :params="[
+                           'placeholder'=>'calculated',
+                    'label' => 'Tons',
+                    'value'=>'{{$service->tons}}',
+                    'name'=>'ton',
+                    'id'=>'tons'
+                    ]">
+                    </x-form-show>
                 </div>
 
             </div>
@@ -711,7 +709,7 @@
                     <!-- Show rock cost -->
                     <input type="radio" id="cost_per_day" name="cost_per_day"
                            class="form-control" value="{{$materialsCB[7]}}"
-                           onChange="Javascript:CALCME(this.form,7);">
+                    >
                 </div>
 
                 <div class="col-sm-4">
@@ -722,8 +720,7 @@
                 <div class="col-sm-1">
                     <input type="radio" id="cost_per_day" name="cost_per_day"
                            class="form-control" value="{{$materialsCB[6]}}" checked
-
-                           onChange="Javascript:CALCME(this.form,7);">
+                    >
                 </div>
                 <div class="col-sm-4">
                     <label class="control-label">Base Rock (Broward & Dade)
@@ -1185,10 +1182,19 @@
                 // greater than or equal to a given number.
                 var profit = $("#form_header_profit").val();
                 var overhead = $("#form_header_over_head").val();
-                var breakeven  = $("#form_header_break_even").val();
-                var regex=/^[0-9]+$/;  // numbers only
+                var breakeven = $("#form_header_break_even").val();
+                var regex = /^[0-9]+$/;  // numbers only
+                var mcost = 0;
+                console.log(profit + ' - ' + breakeven + ' - ' + overhead);
+
+                if(!parseInt($('#form_header_over_head').text())){
+                    
+                  showInfoAlert('You can only enter numbers for profit, overhead and break even.', headerAlert);
+                    
+                };
+
+
                 
-                console.log(profit + ' - ' + breakeven + ' - ' +  overhead);
 
                 if (serviceCategoryId == 1) {
 
@@ -1222,19 +1228,22 @@
 
                 if (serviceCategoryId == 4) {
                     {{-- 4	Excavation --}}
-                    
+
                     var square_feet = $("#square_feet").val();
                     var depth = $("#depth").val();
                     var ourcost = $("#cost_per_day").val();
-                    
 
-                    
-                    
+
                     if (!square_feet.match(regex) || !depth.match(regex)) { // check these are numbers
-                        showErrorAlert('You can only enter numbers for square feet and depth.', headerAlert);
+                        showInfoAlert('You can only enter numbers for square feet and depth.', headerAlert);
+
+                        setTimeout(() => {
+                            closeAlert();
+                        }, 2000);
+
                         return;
                     }
-                    
+
                     if (square_feet > 0 && depth > 0) {
 
                         var tontimes = (7 / 1080);
@@ -1243,15 +1252,17 @@
 
                         $("#loads").text(loads);
                         $("#tons").text(tons);
-                        $("#header_show_materials_cost").text('$' + parseFloat(ourcost, 10).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,").toString());
+                        var mcost = parseFloat(ourcost, 10).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,").toString();
+                        $("#header_show_materials_cost").text('$' + mcost);
                         //alert("Loads = Tons / 18 and Tons = Square feet * depth * " + tontimes);
                         //$("#header_show_materials_cost").text('$' + ourcost);
+
 
                         //var profit = $("#profit").val();
                         //alert('tons ='.tons);
 
                     }
-                    
+
 
                 }
                 {{-- END	Excavation --}}
@@ -1275,6 +1286,52 @@
 
                 if (serviceCategoryId == 7) {
                     {{--  Rock --}}
+
+
+                    alert($('#form_header_over_head').text());
+                    
+                    var square_feet = $("#square_feet").val();
+                    var depth = $("#depth").val();
+                    var rockcost = $('input[name="cost_per_day"]:checked').val();
+
+
+                    if (!square_feet.match(regex) || !depth.match(regex)) { // check these are numbers
+                        showInfoAlert('You can only enter numbers for square feet and depth.', headerAlert);
+
+                        setTimeout(() => {
+                            closeAlert();
+                        }, 2000);
+
+                        return;
+                    }
+
+                    if (square_feet > 0 && depth > 0) {
+
+                        var str = "{!! $service->service_text_en !!}";
+
+                        var newstr = str.replace('@@INCHES@@',depth);
+
+                        $("#proposaltext").val(newstr);
+                        
+                        var tontimes = (7 / 1080);
+                        var tons = Math.ceil(square_feet * depth * tontimes);
+                        var loads = Math.ceil(tons / 18);
+
+                        $("#loads").text(loads);
+                        $("#tons").text(tons);
+                        alert('Materials =' + tons + ' * ' + rockcost );
+                        materials = (tons * rockcost);
+                        var mcost = parseFloat(materials, 10).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,").toString();
+                        $("#header_show_materials_cost").text('$' + mcost);
+                        //alert("Loads = Tons / 18 and Tons = Square feet * depth * " + tontimes);
+                        //$("#header_show_materials_cost").text('$' + ourcost);
+
+
+                        //var profit = $("#profit").val();
+                        //alert('tons ='.tons);
+
+                    }
+                    
 
                 }
 
@@ -1366,14 +1423,13 @@
                 }
 
                 //add it up
-                additup();
-                
+                additup(mcost);
+
                 //save it sub mit form via ajax
                 saveit();
-                
+
             }
 
-            
 
             var cost_form = $("#cost_formula_form");  // values to determine cost
             var estimatorForm = $("#estimator_form"); // form to set values for submit and save
@@ -1388,16 +1444,26 @@
 
             });
 
-            
-            function additup()
-            {
-                
+
+            function additup(mcost) {
+
+                alert('Materials:' + mcost);
+                alert('Equipment:' + $('#estimator_form_equipment_total_cost').val());
+                alert('Vehicle:' + $('#estimator_form_vehicle_total_cost').val());
+                alert('Additional:' + $('#estimator_form_additional_cost_total_cost').val());
+                alert('Labor:' + $('#estimator_form_labor_total_cost').val());
+                var combinedcost = parseFloat($('#estimator_form_equipment_total_cost').val()) + parseFloat($('#estimator_form_labor_total_cost').val()) + parseFloat($('#estimator_form_additional_cost_total_cost').val()) + parseFloat($('#estimator_form_vehicle_total_cost').val()) + parseFloat($("#cost_per_day").val());
+                var othercost = parseFloat($('#form_header_over_head').val()) + parseFloat($('#form_header_break_even').val()) + parseFloat($('#form_header_profit').val());
+
+
+                headerElCombinedCosting.text(parseFloat(combinedcost).toFixed(2));
+                headerElCustomerPrice.text(parseFloat(combinedcost + othercost).toFixed(2));
+
             }
-            
-            function saveit() 
-            {
-                
-                
+
+            function saveit() {
+
+
             }
         });
 
