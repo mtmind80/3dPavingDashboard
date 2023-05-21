@@ -1288,18 +1288,19 @@
                     {{--  Rock --}}
 
 
-                    alert($('#form_header_over_head').text());
+                    //alert($('#form_header_over_head').text());
                     
                     var square_feet = $("#square_feet").val();
                     var depth = $("#depth").val();
                     var rockcost = $('input[name="cost_per_day"]:checked').val();
+alert(rockcost);
 
 
                     if (!square_feet.match(regex) || !depth.match(regex)) { // check these are numbers
                         showInfoAlert('You can only enter numbers for square feet and depth.', headerAlert);
 
                         setTimeout(() => {
-                            closeAlert();
+                            closeAlert(headerAlert);
                         }, 2000);
 
                         return;
