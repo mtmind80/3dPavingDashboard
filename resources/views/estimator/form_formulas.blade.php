@@ -1187,7 +1187,7 @@
                 var mcost = 0;
                 console.log(profit + ' - ' + breakeven + ' - ' + overhead);
 
-                if(!parseInt($('#form_header_over_head').text())){
+                if(parseFloat($('#form_header_over_head').text()) != 'NaN'){
                     
                   showInfoAlert('You can only enter numbers for profit, overhead and break even.', headerAlert);
                     
@@ -1254,6 +1254,7 @@
                         $("#tons").text(tons);
                         var mcost = parseFloat(ourcost, 10).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,").toString();
                         $("#header_show_materials_cost").text('$' + mcost);
+                        
                         //alert("Loads = Tons / 18 and Tons = Square feet * depth * " + tontimes);
                         //$("#header_show_materials_cost").text('$' + ourcost);
 
@@ -1280,8 +1281,6 @@
 
                     {{--  Paver Brick --}}
 
-
-
                 }
 
                 if (serviceCategoryId == 7) {
@@ -1293,7 +1292,8 @@
                     var square_feet = $("#square_feet").val();
                     var depth = $("#depth").val();
                     var rockcost = $('input[name="cost_per_day"]:checked').val();
-alert(rockcost);
+
+                    //alert(rockcost);
 
 
                     if (!square_feet.match(regex) || !depth.match(regex)) { // check these are numbers
@@ -1320,7 +1320,7 @@ alert(rockcost);
 
                         $("#loads").text(loads);
                         $("#tons").text(tons);
-                        alert('Materials =' + tons + ' * ' + rockcost );
+                        //alert('Materials =' + tons + ' * ' + rockcost );
                         materials = (tons * rockcost);
                         var mcost = parseFloat(materials, 10).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,").toString();
                         $("#header_show_materials_cost").text('$' + mcost);
@@ -1448,17 +1448,19 @@ alert(rockcost);
 
             function additup(mcost) {
 
+/*
                 alert('Materials:' + mcost);
+ 
                 alert('Equipment:' + $('#estimator_form_equipment_total_cost').val());
                 alert('Vehicle:' + $('#estimator_form_vehicle_total_cost').val());
                 alert('Additional:' + $('#estimator_form_additional_cost_total_cost').val());
                 alert('Labor:' + $('#estimator_form_labor_total_cost').val());
+ */
                 var combinedcost = parseFloat($('#estimator_form_equipment_total_cost').val()) + parseFloat($('#estimator_form_labor_total_cost').val()) + parseFloat($('#estimator_form_additional_cost_total_cost').val()) + parseFloat($('#estimator_form_vehicle_total_cost').val()) + parseFloat($("#cost_per_day").val());
                 var othercost = parseFloat($('#form_header_over_head').val()) + parseFloat($('#form_header_break_even').val()) + parseFloat($('#form_header_profit').val());
-
-
-                headerElCombinedCosting.text(parseFloat(combinedcost).toFixed(2));
-                headerElCustomerPrice.text(parseFloat(combinedcost + othercost).toFixed(2));
+                
+                headerElCombinedCosting.text('$' + parseFloat(combinedcost).toFixed(2));
+                headerElCustomerPrice.text('$' + parseFloat(combinedcost + othercost).toFixed(2));
 
             }
 
