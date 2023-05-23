@@ -19,7 +19,7 @@ class CreateProposalDetailAdditionalCostsTable extends Migration
             $table->unsignedBigInteger('proposal_detail_id');
             $table->unsignedBigInteger('created_by')->nullable()->default(1);
             $table->float('amount')->nullable()->default(0);
-            $table->enum('type', ['Dump Fee', 'Other'])->default('Dump Fee');
+            $table->string('type', 120)->default('Dump Fee');
             $table->mediumText('description')->nullable();
             $table->timestamps();
 

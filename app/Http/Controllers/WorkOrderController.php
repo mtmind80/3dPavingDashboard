@@ -143,6 +143,18 @@ class WorkOrderController extends Controller
         return view('pages-404');
     }
 
+    
+    public function view_service($proposal_id, $id) {
+
+
+        $data = array();
+        
+
+        return view('workorders.view_service', $data);
+
+    }
+
+
     public function doassignmanager(Request $request, $id, $detail_id)
     {
 

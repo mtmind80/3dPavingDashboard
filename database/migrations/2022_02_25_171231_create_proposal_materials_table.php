@@ -20,7 +20,7 @@ class CreateProposalMaterialsTable extends Migration
             $table->unsignedBigInteger('material_id');
             $table->string('name',80)->nullable();
             $table->unsignedBigInteger('service_category_id')->nullable()->default(0);
-            $table->float('cost',8,2, true)->default(0);
+            $table->float('cost', 8, 2, true)->default(0);
             $table->timestamps();
         });
     }
