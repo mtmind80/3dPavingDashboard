@@ -79,6 +79,7 @@ ALTER TABLE datatblmultivendorpricing ADD `service_id` INT NOT NULL AFTER `SERVI
 INSERT INTO web_configs (`KEY`,`VALUE`) SELECT `cfgKey`,`cfgValue` FROM `syswebconfig`;
 #setup backup for config
 INSERT INTO web_config_bak (`KEY`,`VALUE`) SELECT `cfgKey`,`cfgValue` FROM `syswebconfig`;
+INSERT INTO web_configs (`KEY`,`VALUE`) VALUES('webSitetitle','3-DPaving.com');
 
 # Update new employee id to use 
 UPDATE crmtblcontacts c inner join users u on c.cntId = u.old_id set c.user_id = u.id;
@@ -741,25 +742,36 @@ INSERT INTO `counties` (`id`, `zip`, `lat`, `lng`, `state`, `city`, `county`) VA
 INSERT INTO `counties` (`id`, `zip`, `lat`, `lng`, `state`, `city`, `county`) VALUES (NULL, '33394', '26.1216', '-80.1439', 'FL', 'Ft. Lauderdale', 'Broward');
 
 
+INSERT INTO `counties` (`id`, `zip`, `lat`, `lng`, `state`, `city`, `county`) VALUES (NULL, '33341', '26.3583', '-80.0835', 'FL', 'Boca Raton', 'Palm Beach');
+INSERT INTO `counties` (`id`, `zip`, `lat`, `lng`, `state`, `city`, `county`) VALUES (NULL, '33255', '26.3583', '-80.0835', 'FL', 'Miami', 'Dade');
+
+ 	
 
 
+
+Update contacts set postal_code = '33125' where postal_code ='33255';
+Update contacts set postal_code = '33125' where postal_code ='33343';
 Update contacts set postal_code = '33323' where postal_code ='33423';
-Update contacts set postal_code = '33341' where postal_code ='33431';
+Update contacts set postal_code = '33431' where postal_code ='33341';
 Update contacts set postal_code = '33936' where postal_code ='33963';
-
- 
 Update contacts set postal_code = '33255' WHERE postal_code ='33258';
 
+ 
+Update contacts set postal_code = '33431' where city ='Boca Raton' and postal_code ='33343';
+Update contacts set postal_code = '33431' where city ='Boca Raton' and postal_code ='33341';
+Update contacts set postal_code = '33441' where city ='Deerfield Beach' and postal_code ='33341';
+ 
+ 
 #update counties in contacts
 UPDATE contacts p JOIN counties c on c.zip = p.postal_code Set p.county = c.county; 
 
 #check any missing zips that we might find
-SELECT postal_code, count(*) FROM `contacts` WHERE postal_code <> '' 
+SELECT city, postal_code, count(*) FROM `contacts` WHERE postal_code <> '' 
 AND LEFT(postal_code,2) = '33' 
 AND postal_code is not null 
 AND LENGTH(postal_code) = 5 
 AND county is null 
-Group By postal_code 
+Group By city, postal_code 
 Order by postal_code;
 
 #Update County on locations
@@ -871,6 +883,9 @@ UPDATE potbljoborders
 LEFT JOIN contacts on contacts.id = potbljoborders.jobcntID
 Set potbljoborders.jobcntID = 1
 Where contacts.id is null;
+
+
+Select * FROM `contacts` WHERE id = 1;
 
 #insert a number 1
 INSERT INTO `contacts` (`id`, `contact_type_id`, `first_name`, `last_name`, `email`, `phone`, `alt_email`, `alt_phone`, `address1`, `address2`, `city`, `postal_code`, `state`, `county`, `billing_address1`, `billing_address2`, `billing_city`, `billing_postal_code`, `billing_state`, `contact`, `note`, `related_to`, `created_by`, `old_id`, `created_at`, `updated_at`, `deleted_at`) VALUES ('1', '18', 'demo do not use', NULL, NULL, NULL, NULL, NULL, '123 street', NULL, NULL, NULL, 'FL', NULL, NULL, NULL, NULL, NULL, 'FL', NULL, NULL, '0', '10', '1', NULL, NULL, NULL);
@@ -1135,7 +1150,7 @@ equipID
 FROM 
 datatblequipment;
 
-UPDATE equipment set id = id * 2121;
+UPDATE equipment set id = id * 4212;
 UPDATE equipment set id = old_id;
 
 
