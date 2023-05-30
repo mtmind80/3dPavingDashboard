@@ -1128,7 +1128,10 @@ AND posubVendorID is not null
 AND posubVendorID <> 3;
 
 
-#SELECT * FROM potbljobordersubcontractors JOIN potbljoborderdetail on potbljoborderdetail.jordID = potbljobordersubcontractors.posubjordID JOIN potbljoborders on potbljoborders.jobID = potbljoborderdetail.jordJobID WHERE YEAR(potbljoborders.jobCreatedDateTime) > 2019 
+#SELECT * FROM potbljobordersubcontractors 
+#JOIN potbljoborderdetail on potbljoborderdetail.jordID = potbljobordersubcontractors.posubjordID 
+#JOIN potbljoborders on potbljoborders.jobID = potbljoborderdetail.jordJobID 
+#WHERE YEAR(potbljoborders.jobCreatedDateTime) > 2019 
 
 
 #EQUIPMENT
