@@ -78,7 +78,8 @@
                         </td>
                         <td class="w1-6">
                             <a id="header_calculate_combined_costing_button2" href="javascript:" class="{{ $site_button_class }} top-2 prel">Save Service</a>
-<!--                            <a id="header_calculate_combined_costing_button" href="javascript:" class="{{ $site_button_class }} top-2 prel">Calculate</a>
+
+                            <!--                            <a id="header_calculate_combined_costing_button" href="javascript:" class="{{ $site_button_class }} top-2 prel">Save Service</a>
 -->
                             <a class="{{ $site_button_class }}" href="{{ route('show_proposal',['id'=> $proposalDetail->proposal_id]) }}">@lang('translation.cancel')</a>
                         </td>
@@ -243,6 +244,9 @@
                 });
 
                 if (headerElForm.valid()) {
+
+                    calculate(cost_form, estimatorForm, serviceId, proposalDetailId, proposalId, serviceCategoryId);
+                    
                     let formData = headerElForm.serializeObject();
                     let extraFormProperties = {proposal_detail_id: proposalDetailId};
 

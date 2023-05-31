@@ -17,7 +17,7 @@
     @endcomponent
 
     <div class="row estimator-form admin-form">
-        <form method="POST" accept-charset="UTF-8" id="estimator_form" class="admin-form">
+        <form method="POST" action="{{route('checkform')}}" accept-charfset="UTF-8" id="estimator_form" class="admin-form">
             @csrf
             <input type="hidden" name="id" id="x_id" value="{{ $proposalDetail->id }}">
             <input type="hidden" name="service_name" id="x_service_name" value="{{ $proposalDetail->service_name }}">
@@ -32,6 +32,7 @@
             <input type="hidden" name="tons" id="x_tons" value="{{ $proposalDetail->tons }}">
             <input type="hidden" name="loads" id="x_loads" value="{{ $proposalDetail->loads }}">
             <input type="hidden" name="locations" id="x_locations" value="{{ $proposalDetail->locations }}">
+            <input type="hidden" name="overhead" id="x_overhead" value="{{ $proposalDetail->overhead }}">
             
             <input type="hidden" name="depth" id="x_depth" value="{{ $proposalDetail->depth }}">
             <input type="hidden" name="profit" id="x_profit" value="{{ $proposalDetail->profit }}">
@@ -59,6 +60,7 @@
             <input type="hidden" name="labor_total_cost" id="estimator_form_labor_total_cost" value="">
             <input type="hidden" name="additional_cost_total_cost" id="estimator_form_additional_cost_total_cost" value="">
             <input type="hidden" name="materials_cost_total_cost" id="estimator_form_materials_cost_total_cost" value="">
+            <input type="hidden" name="subcontractor_cost_total_cost" id="estimator_form_subcontractor_cost_total_cost" value="">
 
             
         </form>
@@ -76,7 +78,7 @@
             <div class="card">
                 <div class="card-header alert-light">
                     @include('_partials._alert', ['alertId' => 'service_text_alert'])
-                    <h5>@lang('translation.service_description_template')</h5>
+                    <h5>@lang('translation.service_description')</h5>
                     @include('estimator.form_service_text')
                 </div>
             </div>

@@ -130,6 +130,24 @@ class ProposalDetailController extends Controller
         return view('estimator.index', $data);
     }
 
+
+    public function checkform(Request $request)
+    {
+        
+        $formfields = $request->only([
+            'cost',
+            'tons',
+            'services_id',
+            'proposal_id'
+        ]);
+        print_r($formfields);
+        
+        exit();
+
+
+    }
+    
+
     // To be updated
 
     public function ajaxCalculateCombinedCosting(Request $request)
