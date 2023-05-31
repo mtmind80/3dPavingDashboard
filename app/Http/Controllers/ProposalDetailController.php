@@ -130,6 +130,26 @@ class ProposalDetailController extends Controller
         return view('estimator.index', $data);
     }
 
+
+    public function checkform(Request $request)
+    {
+        
+        $formfields = $request->all();
+        echo "<pre>";
+        
+        $proposal_detail = ProposalDetail::where('id', '=', $formfields['id'])->first();
+   
+        unset($formfields['_token']);
+        unset ($formfields['id']);
+
+        $proposal_detail->update($formfields);
+        \Session::flash('error', 'Service was saved!');
+        
+        return redirect()->back();
+
+    }
+    
+
     // To be updated
 
     public function ajaxCalculateCombinedCosting(Request $request)

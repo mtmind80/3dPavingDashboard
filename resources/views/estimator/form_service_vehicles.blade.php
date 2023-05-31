@@ -6,13 +6,13 @@
         <label class="control-label">Select Vehicle<i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
     </div>
     <div class="col-sm-2 tc">
-        <label class="control-label">Number<i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
+        <label class="control-label">Number of Vehicles<i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
     </div>
     <div class="col-sm-2 tc">
-        <label class="control-label">Days<i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
+        <label class="control-label">How Many Days<i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
     </div>
     <div class="col-sm-2 tc">
-        <label class="control-label">Hours<i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
+        <label class="control-label">Hours per day<i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
     </div>
 </div>
 

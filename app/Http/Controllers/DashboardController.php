@@ -345,7 +345,7 @@ class DashboardController extends Controller
             JOIN locations on locations.id = proposals.location_id 
             WHERE YEAR(proposals.sale_date) = $selectedYear
             AND proposals.job_master_id is not null
-            AND proposal_details.status_id < 4 
+            AND proposal_details.status_id < 4
             AND proposals.proposal_statuses_id <> 7";
 
 
@@ -363,6 +363,7 @@ class DashboardController extends Controller
         $countys = DB::select($query);
 
         $countys = json_decode(json_encode($countys, true), true);
+
         $counties = [];
         $eries = [];
         $labels = [];

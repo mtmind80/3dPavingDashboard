@@ -406,4 +406,5 @@ return [
     "min_cost" => "Min Cost",
     "additionalcost" => "Additional Costs",
     "service_description_template" => "Service Description Template",
+    "service_description" => "Service Description",
 ];
