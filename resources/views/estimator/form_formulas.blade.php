@@ -467,9 +467,8 @@
                                  :params="[
                     'label' => 'Square Feet',
                     'iconClass' => 'none',
-                    'value' => '{{$service->square_feet}}',
                 ]"
-                    ></x-form-text>
+                    >{{$proposalDetail->square_feet}}</x-form-text>
                 </div>
                 <div class="col-sm-2">
                     <x-form-text name="depth"
@@ -479,9 +478,8 @@
                                  :params="[
                     'label' => 'Depth In inches',
                     'iconClass' => 'none',
-                    'value' => '{{$service->depth}}',
                 ]"
-                    ></x-form-text>
+                    >{{$proposalDetail->depth}}</x-form-text>
                 </div>
                 <div class="col-sm-2">
                     <x-form-text name="cost_per_day"
@@ -491,9 +489,8 @@
                                  :params="[
                     'label' => 'Our Cost',
                     'iconClass' => 'none',
-                    'value' => '{{$service->cost_per_day}}',
                 ]"
-                    ></x-form-text>
+                    >{{$proposalDetail->cost_per_day}}</x-form-text>
                 </div>
                 <div class="col-sm-2">
                     <x-form-show
@@ -501,11 +498,9 @@
                             :params="[
                     'label' => 'Loads',
                            'placeholder'=>'calculated',
-                    'value'=>'{{$service->loads}}',
                                     'name'=>'loads',
                                     'id'=>'loads'
-                    ]">
-                    </x-form-show>
+                    ]">{{$proposalDetail->loads}}</x-form-show>
                 </div>
                 <div class="col-sm-2">
                     <x-form-show
@@ -513,10 +508,9 @@
                             :params="[
                            'placeholder'=>'calculated',
                     'label' => 'Tons',
-                    'value'=>'{{$service->tons}}',
                     'name'=>'ton',
                     'id'=>'tons'
-                    ]">
+                    ]">{{$proposalDetail->tons}}
                     </x-form-show>
                 </div>
 

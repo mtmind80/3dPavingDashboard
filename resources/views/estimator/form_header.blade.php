@@ -34,18 +34,17 @@
                                 </x-form-show>
                             </div>
                         </td>
-                        <td class="w1-6 pr10">{{$proposalDetail->profit}}
+                        <td class="w1-6 pr10">
                             <div class="admin-form-item-widget">
                                 <x-form-text name="profit"
                                      class="check-contact"
                                      placeholder="enter value"
                                      id="form_header_profit"
-                                     slot="{{$proposalDetail->profit}}"
                                      :params="[
                                         'label' => 'none',
                                         'iconClass' => 'none',
                                     ]"
-                                ></x-form-text>
+                                >{{$proposalDetail->profit}}</x-form-text>
                             </div>
                         </td>
                         <td class="w1-6 pr10">
@@ -57,9 +56,9 @@
                                      :params="[
                                         'label' => 'none',
                                         'iconClass' => 'none',
-                                        'value' => '{{$proposalDetail->overhead}}',
+                                        
                                     ]"
-                                ></x-form-text>
+                                >{{$proposalDetail->overhead}}</x-form-text>
                             </div>
                         </td>
                         <td class="w1-6 pr10">
@@ -71,9 +70,8 @@
                                      :params="[
                                         'label' => 'none',
                                         'iconClass' => 'none',
-                                        'value' => '{{$proposalDetail->break_even}}',
                                     ]"
-                                ></x-form-text>
+                                >{{$proposalDetail->break_even}}</x-form-text>
                             </div>
                         </td>
                         <td class="w1-6">
