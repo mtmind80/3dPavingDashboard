@@ -134,16 +134,18 @@ class ProposalDetailController extends Controller
     public function checkform(Request $request)
     {
         
-        $formfields = $request->only([
-            'cost',
-            'tons',
-            'services_id',
-            'proposal_id'
-        ]);
-        print_r($formfields);
+        $formfields = $request->all();
+        echo "<pre>";
         
-        exit();
+        $proposal_detail = ProposalDetail::where('id', '=', $formfields['id'])->first();
+   
+        unset($formfields['_token']);
+        unset ($formfields['id']);
 
+        $proposal_detail->update($formfields);
+        \Session::flash('error', 'Service was saved!');
+        
+        return redirect()->back();
 
     }
     

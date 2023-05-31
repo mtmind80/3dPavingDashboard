@@ -1260,9 +1260,7 @@
                         //add it up
                         additup(mcost);
 
-                        var cost = headerElCustomerPrice.text();
                         $("#x_square_feet").val(square_feet);
-                        $("#x_cost").val(cost);
                         $("#x_loads").val(loads);
                         $("#x_tons").val(tons);
                         $("#x_proposal_text").val(proposaltext);
@@ -1478,8 +1476,9 @@
  */
                 var combinedcost = parseFloat($('#estimator_form_equipment_total_cost').val()) + parseFloat($('#estimator_form_labor_total_cost').val()) + parseFloat($('#estimator_form_additional_cost_total_cost').val()) + parseFloat($('#estimator_form_vehicle_total_cost').val()) + parseFloat($("#cost_per_day").val());
                 var othercost = parseFloat($('#form_header_over_head').val()) + parseFloat($('#form_header_break_even').val()) + parseFloat($('#form_header_profit').val());
-                
-                headerElCombinedCosting.text('$' + parseFloat(combinedcost).toFixed(2));
+                combinedcost = parseFloat(combinedcost).toFixed(2);
+                headerElCombinedCosting.text('$' + combinedcost);
+                $("#x_cost").val(combinedcost);
                 headerElCustomerPrice.text('$' + parseFloat(combinedcost + othercost).toFixed(2));
 
             }

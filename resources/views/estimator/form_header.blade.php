@@ -34,16 +34,16 @@
                                 </x-form-show>
                             </div>
                         </td>
-                        <td class="w1-6 pr10">
+                        <td class="w1-6 pr10">{{$proposalDetail->profit}}
                             <div class="admin-form-item-widget">
                                 <x-form-text name="profit"
                                      class="check-contact"
                                      placeholder="enter value"
                                      id="form_header_profit"
+                                     slot="{{$proposalDetail->profit}}"
                                      :params="[
                                         'label' => 'none',
                                         'iconClass' => 'none',
-                                        'value' => '{{$proposalDetail->profit}}',
                                     ]"
                                 ></x-form-text>
                             </div>
