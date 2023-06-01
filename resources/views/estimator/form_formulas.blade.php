@@ -470,7 +470,7 @@
                 ]"
                     >{{$proposalDetail->square_feet}}</x-form-text>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm-2">{{$proposalDetail->depth}}
                     <x-form-text name="depth"
                                  class="check-contact tc"
                                  placeholder="enter value"
@@ -481,7 +481,7 @@
                 ]"
                     >{{$proposalDetail->depth}}</x-form-text>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm-2">{{$proposalDetail->cost_per_day}}
                     <x-form-text name="cost_per_day"
                                  class="check-contact tc"
                                  placeholder="enter value"
@@ -1254,6 +1254,7 @@
                         //add it up
                         additup(mcost);
 
+                        // set all relevant form values for update 
                         $("#x_square_feet").val(square_feet);
                         $("#x_loads").val(loads);
                         $("#x_tons").val(tons);
@@ -1264,12 +1265,6 @@
                         $("#x_toncost").val(0);
                         $("#x_overhead").val(headerElOverHead.val());
                         
-                        //alert("Loads = Tons / 18 and Tons = Square feet * depth * " + tontimes);
-                        //$("#header_show_materials_cost").text('$' + ourcost);
-
-                        //var profit = $("#profit").val();
-                        //alert('tons ='.tons);
-
                     }
 
 
@@ -1295,8 +1290,6 @@
                     {{--  Rock --}}
 
 
-                    //alert($('#form_header_over_head').text());
-                    
                     var square_feet = $("#square_feet").val();
                     var depth = $("#depth").val();
                     var rockcost = $('input[name="cost_per_day"]:checked').val();

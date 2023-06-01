@@ -20,7 +20,7 @@
                                     class="w180 show-check-contact"
                                     :params="[
                                         'id' => 'header_show_customer_price',
-                                    ]">
+                                    ]">{{$proposalDetail->cost}}
                                 </x-form-show>
                             </div>
                         </td>
