@@ -38,7 +38,7 @@
             statusbar: false
         });
     </script>
-    
+
     <script>
         $(document).ready(function () {
             var servicedesc = "{!! $service->service_text_en !!}";
@@ -55,7 +55,7 @@
                 }
             }
 
-            
+
             if (serviceCategoryId == 2) {
 
                 {{-- concrete --}}
@@ -118,7 +118,7 @@
 
                 {{--  Sub Contractor --}}
             }
-            
+
             $("#reset_description").click(function() {
                 tinymce.activeEditor.setContent(servicedesc);
                 return;

@@ -24,7 +24,7 @@
             <input type="hidden" name="bill_after" value="0">
         @endif
         {{--
-    
+
                     Categories
                     1	Asphalt
                     2	Concrete
@@ -36,7 +36,7 @@
                     8	Seal Coating
                     9	Striping
                     10	Sub Contractor
-    
+
                     Services
                     3	1	Repairs
                     4	1	Asphalt Paving - (Over 3500 SY)
@@ -60,7 +60,7 @@
                     15	8	Sealcoating
                     18	9	Pavement Markings
                     17	10	Any Sub Contractor
-    
+
                     --}}
 
 
@@ -1167,12 +1167,12 @@
 
 
             function calculate(cost_form, estimatorForm, services_id, proposal_detail_id, proposal_id, serviceCategoryId, dosave) {
-                //cost_form has data used to calculate costs, 
+                //cost_form has data used to calculate costs,
                 //estimator form gets hidden values filled in and data gets sent via ajax on save
                 //what service did we pick
                 //alert(services_id);
                 //alert(serviceCategoryName);
-                //The Math.ceil() static method always rounds up and returns the smaller integer 
+                //The Math.ceil() static method always rounds up and returns the smaller integer
                 // greater than or equal to a given number.
                 var estimatorform = $("#estimator_form");
                 var profit = $("#form_header_profit").val();
@@ -1181,13 +1181,13 @@
                 var regex = "/^[0-9]+$/";  // numbers only
                 var mcost = 0;
 
-                
+
                 if(parseFloat(profit) == 'NaN' || parseFloat(overhead) == 'NaN' ||parseFloat(breakeven) == 'NaN'){
                     showInfoAlert('You can only enter numbers for profit, overhead and break even.', headerAlert);
                 };
 
 
-                
+
 
                 if (serviceCategoryId == 1) {
 
@@ -1244,17 +1244,17 @@
                         $("#header_show_materials_cost").text('$' + mcost);
 
                         var bill_after = $('input[name="bill_after"]:checked').val();
-                        var str = "{!! $service->service_text_en !!}";                         
+                        var str = "{!! $service->service_text_en !!}";
                         var newstr = str.replace('@@TONS@@', tons);
 
                         var proposaltext = tinymce.activeEditor.getContent();
                             // ok so set square_feet, cost, loads, tons, depth, bill_after, profit, break_even, location_id, overhead, toncost, proposal_text
-                        
-                        
+
+
                         //add it up
                         additup(mcost);
 
-                        // set all relevant form values for update 
+                        // set all relevant form values for update
                         $("#x_square_feet").val(square_feet);
                         $("#x_loads").val(loads);
                         $("#x_tons").val(tons);
@@ -1264,7 +1264,7 @@
                         $("#x_break_even").val(headerElBreakEven.val());
                         $("#x_toncost").val(0);
                         $("#x_overhead").val(headerElOverHead.val());
-                        
+
                     }
 
 
@@ -1314,7 +1314,7 @@
                         var newstr = str.replace('@@INCHES@@',depth);
 
                         $("#proposaltext").val(newstr);
-                        
+
                         var tontimes = (7 / 1080);
                         var tons = Math.ceil(square_feet * depth * tontimes);
                         var loads = Math.ceil(tons / 18);
@@ -1333,7 +1333,7 @@
                         //alert('tons ='.tons);
 
                     }
-                    
+
 
                 }
 
@@ -1447,15 +1447,15 @@
             });
 
 
-            function additup(mcost) 
+            function additup(mcost)
             {
 
                 subcost = 0;
-               $("#header_show_subcontractors_cost").html(subcost);
-                $("#estimator_form_subcontractor_cost_total_cost").val(subcost)
+               $("#header_show_subcontractor_cost").html(subcost);
+                $("#estimator_form_subcontractor_total_cost").val(subcost)
                /*
                 alert('Materials:' + mcost);
- 
+
                 alert('Equipment:' + $('#estimator_form_equipment_total_cost').val());
                 alert('Vehicle:' + $('#estimator_form_vehicle_total_cost').val());
                 alert('Additional:' + $('#estimator_form_additional_cost_total_cost').val());
@@ -1470,13 +1470,13 @@
 
             }
 
-            function saveit() 
+            function saveit()
             {
 
 
                 $("#estimator_form").submit();
                 //estimatorform.submit();
-                
+
             }
         });
 

@@ -17,7 +17,7 @@
         <div class="col-sm-3 admin-form-item-widget">
             <x-form-select name="type"
                 :items="$typesCB"
-                selected=""
+                selected="0"
                 :params="[
                     'id' => 'additional_cost_type',
                     'iconClass' => 'none',

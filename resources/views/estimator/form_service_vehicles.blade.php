@@ -23,7 +23,7 @@
         <div class="col-sm-3 admin-form-item-widget">
             <x-form-select name="vehicle_id"
                 :items="$vehiclesCB"
-                selected=""
+                selected="0"
                 :params="[
                     'id' => 'vehicle_id',
                     'iconClass' => 'none',
