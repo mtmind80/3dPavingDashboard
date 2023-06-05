@@ -12,20 +12,15 @@ class AcceptedDocuments extends Model
 
     /** Methods */
 
-    static public function extensionsStr()
+    static public function extensionsStrCid()
     {
-        $items = self::extensionsArray();
+        $items = self::pluck('extension')->toArray();
 
-        return !is_null($items) ? implode(',', $items) : null;
-    }
-
-    static public function extensionsArray()
-    {
-        if (!$items = self::pluck('extension')->toArray()) {
+        if (empty($items) || count($items) === 0) {
             return null;
         }
 
-        return $items;
+        return preg_replace(['/\s+/', '/,+/'], ['', ','], implode(',', $items));
     }
 
 }

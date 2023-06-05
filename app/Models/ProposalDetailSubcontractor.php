@@ -68,7 +68,7 @@ class ProposalDetailSubcontractor extends Model
 
     public static function clearAccepted($proposalDetailId)
     {
-        return self::where('proposal_detail_id', $proposalDetailId)->update(['accepted' => false]);
+        return self::where('proposal_detail_id', $proposalDetailId)->where('accepted', 1)->update(['accepted' => false]);
     }
 
 

@@ -129,7 +129,7 @@ class ProposalDetailController extends Controller
             'laborCB' => LaborRate::LaborWithRatesCB(['0' => 'Select labor']),
             'contractorsCB' => Contractor::contractorsWithOverheadCB(['0' => 'Select contractor']),
             'contractors' => Contractor::orderBy('name')->get(),
-            'allowedFileExtensions' => AcceptedDocuments::extensionsStr(),
+            'allowedFileExtensions' => AcceptedDocuments::extensionsStrCid(),
             'strippingCB' => StripingCost::strippingCB(['0' => 'Select contractor']),
             'typesCB' => ['0' => 'Select type', 'Dump Fee' => 'Dump Fee', 'Other' => 'Other'],
         ];
@@ -845,7 +845,7 @@ class ProposalDetailController extends Controller
                         if (
                             ($result = $this->uploadFile('attached_bid', $destinationPath, [
                                 'unique_name' => true,
-                                'allowed_extensions' => AcceptedDocuments::extensionsArray(),
+                                'allowed_extensions' => AcceptedDocuments::extensionsStrCid(),
                                 'prefix' => $request->proposal_detail_id,
                             ]))
                             && $result['success'] === true
@@ -862,12 +862,23 @@ class ProposalDetailController extends Controller
                             $uploadError = ' Error uploading the file. '.$result['error'] ?? 'Unknown error.';
                         }
 
+                        if (!empty($accepted)) {
+                            ProposalDetailSubcontractor::clearAccepted($request->proposal_detail_id);
+                        }
+
                         $proposalDetailSubcontractor = ProposalDetailSubcontractor::create($data);
+
+                        $proposalDetailSubcontractors = ProposalDetailSubcontractor::where('proposal_detail_id', $request->proposal_detail_id)->get();
+
+                        $data = [
+                            'partialSubcontractors' => $proposalDetailSubcontractors,
+                        ];
 
                         $response = [
                             'success' => true,
                             'message' => 'Subcontractor added.'.$uploadError,
                             'data' => [
+                                'grid' => view('estimator._subcontractors_grid', $data)->render(),
                                 'subcontractor_name' => $contractorName,
                                 'overhead' => $overhead,
                                 'overhead_in_percent' => round($overhead, 1).'%',
