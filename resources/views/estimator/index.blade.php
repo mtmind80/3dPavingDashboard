@@ -33,7 +33,7 @@
             <input type="hidden" name="loads" id="x_loads" value="{{ $proposalDetail->loads }}">
             <input type="hidden" name="locations" id="x_locations" value="{{ $proposalDetail->locations }}">
             <input type="hidden" name="overhead" id="x_overhead" value="{{ $proposalDetail->overhead }}">
-            
+
             <input type="hidden" name="depth" id="x_depth" value="{{ $proposalDetail->depth }}">
             <input type="hidden" name="profit" id="x_profit" value="{{ $proposalDetail->profit }}">
             <input type="hidden" name="days" id="x_days" value="{{ $proposalDetail->days }}">
@@ -59,10 +59,10 @@
             <input type="hidden" name="equipment_total_cost" id="estimator_form_equipment_total_cost" value="">
             <input type="hidden" name="labor_total_cost" id="estimator_form_labor_total_cost" value="">
             <input type="hidden" name="additional_cost_total_cost" id="estimator_form_additional_cost_total_cost" value="">
-            <input type="hidden" name="materials_cost_total_cost" id="estimator_form_materials_cost_total_cost" value="">
-            <input type="hidden" name="subcontractor_cost_total_cost" id="estimator_form_subcontractor_cost_total_cost" value="">
+            <input type="hidden" name="materials_total_cost" id="estimator_form_materials_total_cost" value="">
+            <input type="hidden" name="subcontractor_total_cost" id="estimator_form_subcontractor_total_cost" value="">
 
-            
+
         </form>
         <div class="col-12">
             @include('_partials._alert')

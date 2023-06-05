@@ -56,7 +56,7 @@
                                      :params="[
                                         'label' => 'none',
                                         'iconClass' => 'none',
-                                        
+
                                     ]"
                                 >{{$proposalDetail->overhead}}</x-form-text>
                             </div>
@@ -161,7 +161,7 @@
                                 <x-form-show
                                     class="w180 show-check-contact"
                                     :params="[
-                                        'id' => 'header_show_subcontractors_cost',
+                                        'id' => 'header_show_subcontractor_cost',
                                     ]">
                                 </x-form-show>
                                 @endif
@@ -177,7 +177,7 @@
 @push('partials-scripts')
     <script>
 
-            
+
         var headerElCustomerPrice = $('#header_show_customer_price');
         var headerElCombinedCosting= $('#header_show_combined_costing');
 
@@ -194,11 +194,11 @@
         var headerElMaterialsCost = $('#header_show_materials_cost');
         var headerElLaborCost = $('#header_show_labor_cost');
         var headerElAdditionalCost = $('#header_show_additional_cost');
-        var headerElSubcontactorsCost = $('#header_show_subcontractors_cost');
+        var headerElSubcontractorCost = $('#header_show_subcontractor_cost');
 
         var headerElTotalCost = $('#header_total_cost');
         var headerElEstimatorFormFieldTotalCost = $('#estimator_form_header_total_cost');
-        var headerAlert = $('#header_alert');        
+        var headerAlert = $('#header_alert');
 
         $(document).ready(function () {
 
@@ -208,7 +208,7 @@
                 closeAlert(headerAlert);
             });
 
-                
+
             headerCalculateCombinedCostingButton.on('click', function(){
                 headerElForm.validate({
                     rules: {
@@ -244,7 +244,7 @@
                 if (headerElForm.valid()) {
 
                     calculate(cost_form, estimatorForm, serviceId, proposalDetailId, proposalId, serviceCategoryId);
-                    
+
                     let formData = headerElForm.serializeObject();
                     let extraFormProperties = {proposal_detail_id: proposalDetailId};
 
@@ -298,6 +298,6 @@
                 headerElForm.trigger('reset');
             }
         });
-        
+
     </script>
 @endpush

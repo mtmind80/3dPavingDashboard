@@ -1,132 +1,384 @@
+<!-- subcintractor sections -->
 
-<!-- begin row -->
+<!-- input fields values row -->
+<form method="POST" action="#" accept-charset="UTF-8" id="subcontractor_form" class="admin-form mt10" enctype="multipart/form-data">
+    @csrf
+    <input type="hidden" name="proposal_detail_id" value="{{ $proposalDetail->id }}">
+    <div class="row">
+        <!-- left column -->
+        <div class="col-sm-7">
+            <!-- first left row -->
+            <div class="row">
+                <div class="col-sm-6 mb2 fwb">
+                    <label class="control-label">Select a Sub Contractor<i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
+                </div>
+                <div class="col-sm-3 tc">
+                    <label class="control-label">Overhead<i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
+                </div>
+                <div class="col-sm-3 tc">
+                    <label class="control-label">Quoted Cost<i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 admin-form-item-widget">
+                    <label class="field select">
+                        <select name="subcontractor_id" id="subcontractor_id" class="form-control grayed">
+                            <option value="0" selected="" disabled="">Select contractor</option>
+                            @foreach ($contractors as $contractor)
+                                <option value="{{ $contractor->id }}" data-overhead="{{ $contractor->overhead }}">{{ $contractor->name_and_overhead_percent }}</option>
+                            @endforeach
+                        </select>
+                        <i class="arrow double"></i>
+                    </label>
+                </div>
+                <div class="col-sm-3 tc admin-form-item-widget">
+                    <x-form-text name="overhead"
+                        class="check-contact tc"
+                        placeholder="enter value"
+                        id="subcontractor_overhead"
+                        :params="[
+                            'label' => 'none',
+                            'iconClass' => 'none',
+                        ]"
+                    >0</x-form-text>
+                </div>
+                <div class="col-sm-3 tc admin-form-item-widget">
+                    <x-form-text name="cost"
+                        class="check-contact tc"
+                        placeholder="enter value"
+                        id="subcontractor_cost"
+                        :params="[
+                            'label' => 'none',
+                            'iconClass' => 'none',
+                        ]"
+                    >0.00</x-form-text>
+                </div>
+            </div>
 
-<form method="POST" action="#" accept-charset="UTF-8" id="subcontractor_form" class="admin-form">
-<div class="row">
-    <div class="col-sm-7">
+            <!-- second left row -->
 
-        <select class="form-control btn-outline-success" name="posubVendorID" id="posubVendorID">
-            <option value="0">Select a Sub Contractor</option>
-            <option value="713">(DO NOT USE) A. Lewis Milling  - 0%</option>
-            <option value="691">(DO NOT USE) Alexis Luis Milling  - 0%</option>
-            <option value="690">Alexis Luis - 12%</option>
-            <option value="1545">Allied Trucking - 10%</option>
-            <option value="714">Asphalt Specialist  - 0%</option>
-            <option value="712">Barriero  - 0%</option>
-            <option value="790">BRIAN  SNYDER - 0%</option>
-            <option value="433">Charlie Blackburn - 0%</option>
-            <option value="1571">COASTAL PIPELINE - 0%</option>
-            <option value="1401">Danelo Moreno - 30%</option>
-            <option value="692">Daren Daly - 0%</option>
-            <option value="1572">DOUGLASS, LEAVY &amp; ASSOCIATES INC.  - 0%</option>
-            <option value="715">GEM Paver Systems  - 0%</option>
-            <option value="718">Green Earth Power Washing  - 0%</option>
-            <option value="919">Justin Lieffer - 0%</option>
-            <option value="720">Native Lines  - 0%</option>
-            <option value="974">Paul Garcia - 30%</option>
-            <option value="716">Perfect Pavers  - 0%</option>
-            <option value="717">Rck's Bricks  - 0%</option>
-            <option value="1593">Rockline Underground - 0%</option>
-            <option value="721">Scott Munroe  - 0%</option>
-            <option value="719">SP Facility Management  - 0%</option>
-        </select>
+            <div class="row">
+                <div class="col-sm-10 admin-form-item-widget">
+                    <x-form-file-upload name="attached_bid"
+                        class="check-contact tl"
+                        id="subcontractor_attached_bid"
+                        :params="[
+                            'label' => 'Attach Bid',
+                        ]"
+                    ></x-form-file-upload>
+                </div>
+                <div class="col-sm-2 tc admin-form-item-widget">
+                    <x-form-check-box name="accepted"
+                        class="check-contact tc mt33"
+                        id="subcontractor_accepted"
+                        value="1"
+                    >Accepted</x-form-check-box>
+                </div>
+            </div>
+        </div>
 
+        <!-- right column -->
+        <div class="col-sm-5">
+            <div class="row">
+                <div class="col-sm-6 mb2 fwb">
+                    <label class="control-label">Description<i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 admin-form-item-widget">
+                    <x-form-textarea name="description"
+                         class="check-contact tl h140 pl20"
+                         id="subcontractor_description"
+                         :params="[
+                            'label' => 'none',
+                            'iconClass' => 'none',
+                        ]"
+                    ></x-form-textarea>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
-<br>
-<!-- begin row -->
-<div class="row">
-    <div class="col-sm-7">
-        <label class="control-label">Description of Service</label>
-        <textarea class="form-control" name="description" id="description"></textarea>
-    </div>
-</div>
-<br>
-<!-- begin row -->
-<div class="row">
-    <div class="col-sm-3">
-        <label class="control-label">Over Head %</label>
-        <input type="text" class="form-control btn-outline-success" name="overHead" id="overHead">
-    </div>
-    <div class="col-sm-3">
-        <label class="control-label">Quoted Cost</label>
-        <input type="text" class="form-control btn-outline-success" name="cost" id="cost">
-    </div>
-    <div class="col-sm-3">
-        <label class="control-label">Have Bid</label>
-        <input type="checkbox" class="form-control btn-outline-success" name="have_bid" id="have_bid" value="1">
-    </div>
-</div>
-<!-- end row -->
-
-<br>
-
-<!-- begin row -->
-<div class="row">
-    <div class="col-sm-2">
-        Sub Contractor
-    </div>
-    <div class="col-sm-3 left">
-        Description
-    </div>
-    <div class="col-sm-2">
-        Over head
-    </div>
-    <div class="col-sm-2">
-        Cost
-    </div>
-    <div class="col-sm-2">
-        Total
-    </div>
-    <div class="col-sm-1">
-        &nbsp;
-    </div>
-
-</div>
-
-<!-- begin row -->
-<div class="row">
-
-    <div class="col-sm-2">
-        Asphalt Specialist
-        <br>0%
-    </div>
-
-    <div class="col-sm-3">
-        1 mob
-    </div>
-
-    <div class="col-sm-2">
-        $0.00
-    </div>
-
-    <div class="col-sm-2">
-        $2,000.00
-    </div>
-
-    <div class="col-sm-2">
-
-        $2,000.00
-    </div>
-
-    <div class="col-sm-1">
-        <a href="#"><span class="ri-delete-bin-2-line"></span> remove</a>
-    </div>
-
-
-</div>
-
-<div class="row">
-    <div class="col-sm-3">
-        <a href="#" class="{{ $site_button_class }}">Add Sub Contractor</a>
-    </div>
-    <div class="col-sm-2">
-        <label class="control-label"></label> <span class="lbl">Total Sub Contractors</span>
-    </div>
-
-    <div class="col-sm-3">
-        <input type="hidden" id="SubTotal" name="SubTotal" value="8645.00">
-        <input type="text" id="SubTotals" name="SubTotals" class="form-control" style="background:lightblue;" value="$8,645.00" disabled="">
-    </div>
-</div>
 </form>
+
+<!-- subcontractor header row -->
+<div id="subcontractor_rows_header" class="row fwb pb4 border-bottom-solid{{ !empty($proposalDetail->subcontractors) && $proposalDetail->subcontractors->count() > 0 ? '' : ' hidden' }}">
+    <div class="col-sm-4">Subcontractor</div>
+    <div class="col-sm-1 tc">Overhead</div>
+    <div class="col-sm-1 tc">Quoted Cost</div>
+    <div class="col-sm-1 tc">Total Cost</div>
+    <div class="col-sm-3 tc">Attached Bid</div>
+    <div class="col-sm-1 tc">Accepted</div>
+    <div class="col-sm-1 tc">Actions</div>
+</div>
+
+<!-- subcontractor row -->
+<div id="subcontractor_rows_container" class="mb20">
+    @if (!empty($proposalDetail->subcontractors) && $proposalDetail->subcontractors->count() > 0)
+        @foreach ($proposalDetail->subcontractors as $subcontractor)
+            <div id="proposal_detail_subcontractor_id_{{ $subcontractor->id }}" class="row subcontractor-row border-bottom-dashed{{ !empty($subcontractor->accepted) ? ' subcontractor-accepted' : '' }}">
+                <div class="col-sm-4 subcontractor-name can-be-bold">{{ $subcontractor->contractor->name }}</div>
+                <div class="col-sm-1 tc subcontractor-overhead can-be-bold">{{ $subcontractor->overhead_percent }}</div>
+                <div class="col-sm-1 tc subcontractor-cost can-be-bold" data-cost="{{ $subcontractor->cost }}">{{ $subcontractor->html_cost }}</div>
+                <div class="col-sm-1 tc subcontractor-total_cost can-be-bold" data-total_cost="{{ $subcontractor->total_cost }}">{{ $subcontractor->html_total_cost }}</div>
+                <div class="col-sm-3 tc subcontractor-attached_bid">{!! $subcontractor->link_attached_bid !!}</div>
+                <div class="col-sm-1 tc subcontractor-accepted" data-accepted="{{ $subcontractor->accepted }}">{!! !empty($subcontractor->accepted) ? '<i class="fa fa-check color-green"></i>' : '' !!}</div>
+                <div class="col-sm-1 tc">
+                    <button
+                        class="btn p0 btn-danger tc subcontractor-remove-button"
+                        type="button"
+                        data-toggle="tooltip"
+                        title="remove contractor"
+                        data-proposal_detail_subcontractor_id="{{ $subcontractor->id }}"
+                    >
+                        <i class="far fa-trash-alt dib m0 plr5"></i>
+                    </button>
+                </div>
+            </div>
+        @endforeach
+    @endif
+</div>
+
+<!-- subcontractor footer row -->
+<div class="row mt12">
+    <div class="col-sm-3">
+        <a id="subcontractor_add_button" href="javascript:" class="{{ $site_button_class }}">Add Subcontractor</a>
+    </div>
+    <div class="col-sm-2 pt8 m0">
+        <label class="control-label">Total Subcontractors</label>
+    </div>
+    <div class="col-sm-2">
+        <div class="admin-form-item-widget">
+            <x-form-show
+                class="show-check-contact"
+                :params="[
+                    'id' => 'subcontractor_total_cost',
+                ]">
+            </x-form-show>
+        </div>
+    </div>
+    <div class="col-sm-5 xs-hidden"></div>
+</div>
+
+@push('partials-scripts')
+    <script>
+        $(document).ready(function () {
+            var subcontractorElForm = $('#subcontractor_form');
+            var subcontractorElRowsHeader = $('#subcontractor_rows_header');
+            var subcontractorElRowsContainer = $('#subcontractor_rows_container');
+            var subcontractorEl = $('#subcontractor_id');
+            var subcontractorElOverhead = $('#subcontractor_overhead');
+            var subcontractorAddButton = $('#subcontractor_add_button');
+            var subcontractorElTotalCost = $('#subcontractor_total_cost');
+            var subcontractorElEstimatorFormFieldTotalCost = $('#estimator_form_subcontractor_total_cost');
+
+            var subcontractorsAlert = $('#subcontractors_alert');
+
+            subcontractorsAlert.on('click', function(ev){
+                ev.stopPropagation();
+                ev.preventDefault();
+                closeAlert(subcontractorsAlert);
+            });
+
+            subcontractorUpdateTotalCost();
+
+            subcontractorEl.change(function(){
+                let el = $(this);
+                let selected = el.find('option:selected');
+                let subcontractorOverhead = selected.data('overhead');
+
+                subcontractorElOverhead.val(subcontractorOverhead);
+            });
+
+            subcontractorAddButton.on('click', function(){
+                subcontractorElForm.validate({
+                    rules: {
+                        subcontractor_id: {
+                            required: true,
+                            positive: true
+                        },
+                        overhead: {
+                            required: true,
+                            float: true,
+                            rangelength: [0, 100]
+                        },
+                        cost: {
+                            required: true,
+                            float  : true
+                        },
+                        description: {
+                            required: true,
+                            text: true
+                        }
+                    },
+                    messages: {
+                        subcontractor_id: {
+                            required: "@lang('translation.field_required')",
+                            float: "@lang('translation.select_item')"
+                        },
+                        overhead: {
+                            required: "@lang('translation.field_required')",
+                            float: "@lang('translation.invalid_entry')"
+                        },
+                        cost: {
+                            required: "@lang('translation.field_required')",
+                            float: "@lang('translation.invalid_entry')"
+                        },
+                        description: {
+                            required: "@lang('translation.field_required')",
+                            text: "@lang('translation.invalid_entry')"
+                        }
+                    }
+                });
+
+                if (subcontractorElForm.valid()) {
+                    //let formData = subcontractorElForm.serializeObject();
+                    let formData = new FormData(subcontractorElForm[0]);
+                    let extraFormProperties = {
+                        proposal_detail_id: proposalDetailId
+                    };
+
+                    $.extend(formData, extraFormProperties);
+
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        type: "POST",
+                        url: "{{ route('ajax_subcontractor_add_new') }}",
+                        beforeSend: function (request){
+                            showSpinner();
+                        },
+                        complete: function (){
+                            hideSpinner();
+                        },
+                        success: function (response){
+                            if (!response) {
+                                showErrorAlert('Critical error has occurred.', subcontractorsAlert);
+                            } else if (response.success) {
+                                let data = response.data;
+                                let html  = '';
+
+                                let subcontractorRows = $('.subcontractor-row');
+
+                                if (subcontractorRows.length === 0) {
+                                    subcontractorElRowsHeader.removeClass('hidden');
+                                }
+
+                                html += '<div id="proposal_detail_subcontractor_id_'+ data. proposal_detail_subcontractor_id +'" class="row subcontractor-row border-bottom-dashed'+(Number(data.accepted) === 1 ? ' subcontractor-accepted' : '')+'">';
+                                html += '   <div class="col-sm-4 subcontractor-name can-be-bold">'+ data.subcontractor_name +'</div>';
+                                html += '   <div class="col-sm-1 tc subcontractor-overhead can-be-bold" data-overhead="'+ data.overhead +'">'+ data.overhead_in_percent +'</div>';
+                                html += '   <div class="col-sm-1 tc subcontractor-cost can-be-bold" data-cost="'+ data.cost +'">'+ data.formatted_cost +'</div>';
+                                html += '   <div class="col-sm-1 tc subcontractor-total_cost can-be-bold" data-total_cost="'+ data.total_cost +'">'+ data.formatted_total_cost +'</div>';
+                                html += '   <div class="col-sm-3 tc subcontractor-attached_bid">'+ data.link_attached_bid +'</div>';
+                                html += '   <div class="col-sm-1 tc subcontractor-accepted" data-accepted="'+ data.accepted +'">'+ data.formatted_accepted +'</div>';
+                                html += '   <div class="col-sm-1 tc">';
+                                html += '       <button class="btn p0 btn-danger tc subcontractor-remove-button" type="button" data-toggle="tooltip" title="remove item" data-proposal_detail_subcontractor_id="'+ data. proposal_detail_subcontractor_id +'"><i class="far fa-trash-alt dib m0 plr5"></i></button>';
+                                html += '   </div>';
+                                html += '</div>';
+
+                                subcontractorElRowsContainer.append(html);
+
+                                subcontractorUpdateTotalCost();
+
+                                subcontractorResetForm(data.description);
+
+                                if (response.message) {
+                                    showSuccessAlert(response.message, subcontractorsAlert);
+                                }
+                            } else {
+                                showErrorAlert(response.message, subcontractorsAlert);
+                            }
+                        },
+                        error: function (response){
+                            @if (env('APP_ENV') === 'local')
+                                showErrorAlert(response.responseJSON.message, subcontractorsAlert);
+                            @else
+                                showErrorAlert(response.message, 'Critical error has occurred.');
+                            @endif
+                        }
+                    });
+                }
+            });
+
+            subcontractorElRowsContainer.on('click', '.subcontractor-remove-button', function(){
+                let el = $(this);
+                let proposal_detail_subcontractor_id = el.data('proposal_detail_subcontractor_id');
+
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: {
+                        proposal_detail_subcontractor_id: proposal_detail_subcontractor_id
+                    },
+                    type: "POST",
+                    url: "{{ route('ajax_subcontractor_remove') }}",
+                    beforeSend: function (request){
+                        showSpinner();
+                    },
+                    complete: function (){
+                        hideSpinner();
+                    },
+                    success: function (response){
+                        if (!response) {
+                            showErrorAlert('Critical error has occurred.', subcontractorsAlert);
+                        } else if (response.success) {
+
+                            $('#proposal_detail_subcontractor_id_' + response.data.proposal_detail_subcontractor_id).remove();
+
+                            let subcontractorRows = $('.subcontractor-row');
+
+                            if (subcontractorRows.length === 0) {
+                                subcontractorElRowsHeader.addClass('hidden');
+                            }
+
+                            subcontractorUpdateTotalCost();
+
+                            if (response.message) {
+                                showSuccessAlert(response.message, subcontractorsAlert);
+                            }
+                        } else {
+                            showErrorAlert(response.message, subcontractorsAlert);
+                        }
+                    },
+                    error: function (response){
+                        @if (env('APP_ENV') === 'local')
+                        showErrorAlert(response.responseJSON.message, subcontractorsAlert);
+                        @else
+                        showErrorAlert(response.message, 'Critical error has occurred.');
+                        @endif
+                    }
+                });
+            });
+
+            function subcontractorUpdateTotalCost()
+            {
+                let subcontractorElAccepted = $('.subcontractor-accepted');
+                let totalElCost = subcontractorElAccepted.find('.subcontractor-total_cost');
+                let totalCost = totalElCost.data('total_cost');
+                let currrencyTotalCost = totalElCost.html();
+                let subcontractorElTotalCost = $('#subcontractor_total_cost');
+
+                subcontractorElTotalCost.html(currrencyTotalCost);
+                subcontractorElEstimatorFormFieldTotalCost.val(totalCost);
+
+                subcontractorElTotalCost.html(currrencyTotalCost);
+
+                headerElSubcontractorCost.html(currrencyTotalCost);
+                headerElSubcontractorCost.data('subcontractor_total_cost', totalCost);
+            }
+
+            function subcontractorResetForm(description)
+            {
+                subcontractorElForm.trigger('reset');
+                subcontractorElForm.find('textarea[name="description"]').html(description);
+                subcontractorElForm.find('.remove-file-link').click();
+            }
+        });
+    </script>
+@endpush
+
+

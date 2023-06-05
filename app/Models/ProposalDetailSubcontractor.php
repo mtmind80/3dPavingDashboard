@@ -2,12 +2,21 @@
 
 namespace App\Models;
 
+use App\Helpers\Currency;
 use Illuminate\Database\Eloquent\Model;
 
 class ProposalDetailSubcontractor extends Model
 {
-    //
-    protected $table = 'proposal_detail_subcontractors';
+    protected $fillable = [
+        'proposal_detail_id',
+        'contractor_id',
+        'cost',
+        'overhead',
+        'accepted',
+        'attached_bid',
+        'description',
+        'created_by',
+    ];
 
     /** relationships */
 
@@ -20,5 +29,47 @@ class ProposalDetailSubcontractor extends Model
     {
         return $this->belongsTo(Contractor::class, 'contractor_id');
     }
+
+    /** scopes */
+
+    /** Accessor(get) and Mutators(set) */
+
+    public function getOverheadPercentAttribute()
+    {
+        return round($this->overhead, 1).'%';
+    }
+
+    public function getNameAndOverheadPercentAttribute()
+    {
+        return $this->name.' - '.$this->overhead_percent;
+    }
+
+    public function getHtmlCostAttribute()
+    {
+        return Currency::format($this->cost);
+    }
+
+    public function getTotalCostAttribute()
+    {
+        return $this->cost * (1 + $this->overhead / 100);
+    }
+
+    public function getHtmlTotalCostAttribute()
+    {
+        return Currency::format($this->total_cost);
+    }
+
+    public function getLinkAttachedBidAttribute()
+    {
+        return !empty($this->attached_bid) ? '<a href="'.asset('media/bids').'/'.$this->attached_bid.'" target="_blank">'.$this->attached_bid.'</a>' : null;
+    }
+
+    /** Methods */
+
+    public static function clearAccepted($proposalDetailId)
+    {
+        return self::where('proposal_detail_id', $proposalDetailId)->update(['accepted' => false]);
+    }
+
 
 }
