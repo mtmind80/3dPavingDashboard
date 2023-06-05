@@ -397,4 +397,5 @@ return [
     "min_cost" => "Costo Mínimo",
     "additionalcost" => "Costos Adicionales",
     "service_description_template" => "Plantilla de Descripción de Servicio",
+    "service_description" => "Service Description",
 ];

@@ -216,6 +216,8 @@ Route::group(['middleware' => ['auth']], function() {
         // Schedule a service
         Route::get('/scehdule/{service_id}', 'ProposalDetailController@schedule')->name('schedule_service');
         // Select service type
+        Route::post('/checkform', 'ProposalDetailController@checkform')->name('checkform');
+
         Route::get('/new_service/{proposal_id}', 'ProposalDetailController@newservice')->name('new_service');
         // Start New Service with a service type
         Route::post('/create_service/{proposal_id}', 'ProposalDetailController@create')->name('create_detail');

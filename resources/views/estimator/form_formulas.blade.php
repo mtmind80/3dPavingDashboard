@@ -467,11 +467,10 @@
                                  :params="[
                     'label' => 'Square Feet',
                     'iconClass' => 'none',
-                    'value' => '{{$service->square_feet}}',
                 ]"
-                    ></x-form-text>
+                    >{{$proposalDetail->square_feet}}</x-form-text>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm-2">{{$proposalDetail->depth}}
                     <x-form-text name="depth"
                                  class="check-contact tc"
                                  placeholder="enter value"
@@ -479,11 +478,10 @@
                                  :params="[
                     'label' => 'Depth In inches',
                     'iconClass' => 'none',
-                    'value' => '{{$service->depth}}',
                 ]"
-                    ></x-form-text>
+                    >{{$proposalDetail->depth}}</x-form-text>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm-2">{{$proposalDetail->cost_per_day}}
                     <x-form-text name="cost_per_day"
                                  class="check-contact tc"
                                  placeholder="enter value"
@@ -491,9 +489,8 @@
                                  :params="[
                     'label' => 'Our Cost',
                     'iconClass' => 'none',
-                    'value' => '{{$service->cost_per_day}}',
                 ]"
-                    ></x-form-text>
+                    >{{$proposalDetail->cost_per_day}}</x-form-text>
                 </div>
                 <div class="col-sm-2">
                     <x-form-show
@@ -501,11 +498,9 @@
                             :params="[
                     'label' => 'Loads',
                            'placeholder'=>'calculated',
-                    'value'=>'{{$service->loads}}',
                                     'name'=>'loads',
                                     'id'=>'loads'
-                    ]">
-                    </x-form-show>
+                    ]">{{$proposalDetail->loads}}</x-form-show>
                 </div>
                 <div class="col-sm-2">
                     <x-form-show
@@ -513,10 +508,9 @@
                             :params="[
                            'placeholder'=>'calculated',
                     'label' => 'Tons',
-                    'value'=>'{{$service->tons}}',
                     'name'=>'ton',
                     'id'=>'tons'
-                    ]">
+                    ]">{{$proposalDetail->tons}}
                     </x-form-show>
                 </div>
 
@@ -1172,7 +1166,7 @@
             // and populate other display items on the page
 
 
-            function calculate(cost_form, estimatorForm, services_id, proposal_detail_id, proposal_id, serviceCategoryId) {
+            function calculate(cost_form, estimatorForm, services_id, proposal_detail_id, proposal_id, serviceCategoryId, dosave) {
                 //cost_form has data used to calculate costs, 
                 //estimator form gets hidden values filled in and data gets sent via ajax on save
                 //what service did we pick
@@ -1180,17 +1174,16 @@
                 //alert(serviceCategoryName);
                 //The Math.ceil() static method always rounds up and returns the smaller integer 
                 // greater than or equal to a given number.
+                var estimatorform = $("#estimator_form");
                 var profit = $("#form_header_profit").val();
                 var overhead = $("#form_header_over_head").val();
                 var breakeven = $("#form_header_break_even").val();
-                var regex = /^[0-9]+$/;  // numbers only
+                var regex = "/^[0-9]+$/";  // numbers only
                 var mcost = 0;
-                console.log(profit + ' - ' + breakeven + ' - ' + overhead);
 
-                if(parseFloat($('#form_header_over_head').text()) != 'NaN'){
-                    
-                  showInfoAlert('You can only enter numbers for profit, overhead and break even.', headerAlert);
-                    
+                
+                if(parseFloat(profit) == 'NaN' || parseFloat(overhead) == 'NaN' ||parseFloat(breakeven) == 'NaN'){
+                    showInfoAlert('You can only enter numbers for profit, overhead and break even.', headerAlert);
                 };
 
 
@@ -1233,15 +1226,10 @@
                     var depth = $("#depth").val();
                     var ourcost = $("#cost_per_day").val();
 
-
-                    if (!square_feet.match(regex) || !depth.match(regex)) { // check these are numbers
+                    console.log(square_feet + '-' + depth);
+                    if (parseFloat(square_feet) == 'NaN' || parseFloat(depth) == 'NaN') { // check these are numbers
                         showInfoAlert('You can only enter numbers for square feet and depth.', headerAlert);
-
-                        setTimeout(() => {
-                            closeAlert();
-                        }, 2000);
-
-                        return;
+                        //return;
                     }
 
                     if (square_feet > 0 && depth > 0) {
@@ -1254,14 +1242,29 @@
                         $("#tons").text(tons);
                         var mcost = parseFloat(ourcost, 10).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,").toString();
                         $("#header_show_materials_cost").text('$' + mcost);
+
+                        var bill_after = $('input[name="bill_after"]:checked').val();
+                        var str = "{!! $service->service_text_en !!}";                         
+                        var newstr = str.replace('@@TONS@@', tons);
+
+                        var proposaltext = tinymce.activeEditor.getContent();
+                            // ok so set square_feet, cost, loads, tons, depth, bill_after, profit, break_even, location_id, overhead, toncost, proposal_text
                         
-                        //alert("Loads = Tons / 18 and Tons = Square feet * depth * " + tontimes);
-                        //$("#header_show_materials_cost").text('$' + ourcost);
+                        
+                        //add it up
+                        additup(mcost);
 
-
-                        //var profit = $("#profit").val();
-                        //alert('tons ='.tons);
-
+                        // set all relevant form values for update 
+                        $("#x_square_feet").val(square_feet);
+                        $("#x_loads").val(loads);
+                        $("#x_tons").val(tons);
+                        $("#x_proposal_text").val(proposaltext);
+                        $("#x_bill_after").val(bill_after);
+                        $("#x_profit").val(headerElProfit.val());
+                        $("#x_break_even").val(headerElBreakEven.val());
+                        $("#x_toncost").val(0);
+                        $("#x_overhead").val(headerElOverHead.val());
+                        
                     }
 
 
@@ -1287,8 +1290,6 @@
                     {{--  Rock --}}
 
 
-                    //alert($('#form_header_over_head').text());
-                    
                     var square_feet = $("#square_feet").val();
                     var depth = $("#depth").val();
                     var rockcost = $('input[name="cost_per_day"]:checked').val();
@@ -1423,11 +1424,10 @@
                     {{--  Sub Contractor --}}
                 }
 
-                //add it up
-                additup(mcost);
-
                 //save it sub mit form via ajax
-                saveit();
+                if(dosave){
+                    saveit();
+                }
 
             }
 
@@ -1435,20 +1435,25 @@
             var cost_form = $("#cost_formula_form");  // values to determine cost
             var estimatorForm = $("#estimator_form"); // form to set values for submit and save
             //alert(cost_form);
-
-            calculate(cost_form, estimatorForm, serviceId, proposalDetailId, proposalId, serviceCategoryId);
+            var dosave = false;
+            calculate(cost_form, estimatorForm, serviceId, proposalDetailId, proposalId, serviceCategoryId, dosave);
 
 
             headerCalculateCombinedCostingButton2.on('click', function () {
 
-                calculate(cost_form, estimatorForm, serviceId, proposalDetailId, proposalId, serviceCategoryId);
+                var dosave = true;
+                calculate(cost_form, estimatorForm, serviceId, proposalDetailId, proposalId, serviceCategoryId, dosave);
 
             });
 
 
-            function additup(mcost) {
+            function additup(mcost) 
+            {
 
-/*
+                subcost = 0;
+               $("#header_show_subcontractors_cost").html(subcost);
+                $("#estimator_form_subcontractor_cost_total_cost").val(subcost)
+               /*
                 alert('Materials:' + mcost);
  
                 alert('Equipment:' + $('#estimator_form_equipment_total_cost').val());
@@ -1458,15 +1463,20 @@
  */
                 var combinedcost = parseFloat($('#estimator_form_equipment_total_cost').val()) + parseFloat($('#estimator_form_labor_total_cost').val()) + parseFloat($('#estimator_form_additional_cost_total_cost').val()) + parseFloat($('#estimator_form_vehicle_total_cost').val()) + parseFloat($("#cost_per_day").val());
                 var othercost = parseFloat($('#form_header_over_head').val()) + parseFloat($('#form_header_break_even').val()) + parseFloat($('#form_header_profit').val());
-                
-                headerElCombinedCosting.text('$' + parseFloat(combinedcost).toFixed(2));
+                combinedcost = parseFloat(combinedcost).toFixed(2);
+                headerElCombinedCosting.text('$' + combinedcost);
+                $("#x_cost").val(combinedcost);
                 headerElCustomerPrice.text('$' + parseFloat(combinedcost + othercost).toFixed(2));
 
             }
 
-            function saveit() {
+            function saveit() 
+            {
 
 
+                $("#estimator_form").submit();
+                //estimatorform.submit();
+                
             }
         });
 
