@@ -805,12 +805,22 @@ class ProposalDetailController extends Controller
                     'success' => false,
                     'message' => $validator->messages()->first(),
                 ];
+            } else if (!empty($request->accepted) && !$request->hasFile('attached_bid')) {
+                $response = [
+                    'success' => false,
+                    'message' => 'You must attach the bid if the contractor is accepted.',
+                ];
             } else {
                 try {
                     if(!$contractor = Contractor::find($request->subcontractor_id)) {
                         $response = [
                             'success' => false,
                             'message' => 'Contractor not found.',
+                        ];
+                    } else if (ProposalDetailSubcontractor::where('proposal_detail_id', $request->proposal_detail_id)->where('contractor_id', $request->subcontractor_id)->count() > 0) {
+                        $response = [
+                            'success' => false,
+                            'message' => 'Contractor already exists.',
                         ];
                     } else {
                         $contractorName = $contractor->name;
@@ -832,36 +842,31 @@ class ProposalDetailController extends Controller
                             'created_by' => auth()->user()->id,
                         ];
 
-                        $destinationPath = 'media/bids/';
-
                         $uploadError = '';
-                        $attachedBid = null;
 
-                        if (
-                            ($result = $this->uploadFile('attached_bid', $destinationPath, [
-                                'unique_name' => true,
-                                'allowed_extensions' => AcceptedDocuments::extensionsStrCid(),
-                                'prefix' => $request->proposal_detail_id,
-                            ]))
-                            && $result['success'] === true
-                        ) {
-                            $attachedBid = $result['fileName'];
-                            $data['attached_bid'] = $attachedBid;
-                        } else {
-                            if (!$result['success']) {
-                                $response = [
-                                    'success' => false,
-                                    'message' => $result['error'],
-                                ];
+                        if ($request->hasFile('attached_bid')) {
+                            $destinationPath = 'media/bids/';
+
+                            if (
+                                ($result = $this->uploadFile('attached_bid', $destinationPath, [
+                                    'unique_name' => true,
+                                    'allowed_extensions' => AcceptedDocuments::extensionsStrCid(),
+                                    'prefix' => $request->proposal_detail_id,
+                                ]))
+                                && $result['success'] === true
+                            ) {
+                                $attachedBid = $result['fileName'];
+                                $data['attached_bid'] = $attachedBid;
+                            } else {
+                                $uploadError = ' Error uploading the file. ' . $result['error'] ?? 'Unknown error.';
                             }
-                            $uploadError = ' Error uploading the file. '.$result['error'] ?? 'Unknown error.';
                         }
 
                         if (!empty($accepted)) {
                             ProposalDetailSubcontractor::clearAccepted($request->proposal_detail_id);
                         }
 
-                        $proposalDetailSubcontractor = ProposalDetailSubcontractor::create($data);
+                        ProposalDetailSubcontractor::create($data);
 
                         $proposalDetailSubcontractors = ProposalDetailSubcontractor::where('proposal_detail_id', $request->proposal_detail_id)->get();
 
@@ -874,7 +879,9 @@ class ProposalDetailController extends Controller
                             'message' => 'Subcontractor added.'.$uploadError,
                             'data' => [
                                 'grid' => view('estimator._subcontractors_grid', $data)->render(),
+                                /*
                                 'subcontractor_name' => $contractorName,
+
                                 'overhead' => $overhead,
                                 'overhead_in_percent' => round($overhead, 1).'%',
                                 'cost' => $cost,
@@ -884,8 +891,9 @@ class ProposalDetailController extends Controller
                                 'accepted' => (integer)$accepted,
                                 'formatted_accepted' => !empty($accepted) ? '<i class="fa fa-check color-green"></i>' : '',
                                 'link_attached_bid' => !empty($attachedBid) ? '<a href="'.asset('media/bids/').'/'.$attachedBid.'" target="_blank">'.$attachedBid.'</a>' : '',
+                                */
                                 'description' => $description,
-                                'proposal_detail_subcontractor_id' => $proposalDetailSubcontractor->id,
+                                //'proposal_detail_subcontractor_id' => $proposalDetailSubcontractor->id,
                             ],
                         ];
                     }
@@ -936,6 +944,13 @@ class ProposalDetailController extends Controller
                             'message' => 'Proposal detail subcontractor not found.',
                         ];
                     } else {
+                        if (!empty($proposalDetailSubcontractor->attached_bid)) {
+                            $fullPathFile = public_path('media/bids/').$proposalDetailSubcontractor->attached_bid;
+                            if (file_exists($fullPathFile)) {
+                                unlink($fullPathFile);
+                            }
+                        }
+
                         $proposalDetailSubcontractor->delete();
 
                         $response = [
@@ -978,12 +993,10 @@ class ProposalDetailController extends Controller
         if($service) {
             $proposal_id = $service['proposal_id'];
             ProposalDetail::destroy($id);
-            \Session::flash('error', 'Service was deleted!');
-            return route('show_proposal',['id'=> $proposal_id]);
+            return route('show_proposal',['id'=> $proposal_id])->with('error', 'Service was deleted!');
         }
 
-        \Session::flash('error', 'Sorry no matching records were found!');
-        return redirect()->back();
+        return redirect()->back()->with('error', 'Sorry no matching records were found!');
 
     }
 

@@ -109,7 +109,7 @@
     <div class="col-sm-1 tc">Total Cost</div>
     <div class="col-sm-3 tc">Attached Bid</div>
     <div class="col-sm-1 tc">Accepted</div>
-    <div class="col-sm-1 tc">Actions</div>
+    <div class="col-sm-1 tc">Remove</div>
 </div>
 
 <!-- subcontractor row -->
@@ -210,7 +210,6 @@
                 });
 
                 if (subcontractorElForm.valid()) {
-                    //let formData = subcontractorElForm.serializeObject();
                     let formData = new FormData(subcontractorElForm[0]);
                     let extraFormProperties = {
                         proposal_detail_id: proposalDetailId
@@ -246,20 +245,6 @@
                                     subcontractorElRowsHeader.removeClass('hidden');
                                 }
 
-                                {{--
-                                html += '<div id="proposal_detail_subcontractor_id_'+ data. proposal_detail_subcontractor_id +'" class="row subcontractor-row border-bottom-dashed'+(Number(data.accepted) === 1 ? ' subcontractor-accepted' : '')+'">';
-                                html += '   <div class="col-sm-4 subcontractor-name can-be-bold">'+ data.subcontractor_name +'</div>';
-                                html += '   <div class="col-sm-1 tc subcontractor-overhead can-be-bold" data-overhead="'+ data.overhead +'">'+ data.overhead_in_percent +'</div>';
-                                html += '   <div class="col-sm-1 tc subcontractor-cost can-be-bold" data-cost="'+ data.cost +'">'+ data.formatted_cost +'</div>';
-                                html += '   <div class="col-sm-1 tc subcontractor-total_cost can-be-bold" data-total_cost="'+ data.total_cost +'">'+ data.formatted_total_cost +'</div>';
-                                html += '   <div class="col-sm-3 tc subcontractor-attached_bid">'+ data.link_attached_bid +'</div>';
-                                html += '   <div class="col-sm-1 tc subcontractor-accepted" data-accepted="'+ data.accepted +'">'+ data.formatted_accepted +'</div>';
-                                html += '   <div class="col-sm-1 tc">';
-                                html += '       <button class="btn p0 btn-danger tc subcontractor-remove-button" type="button" data-toggle="tooltip" title="remove item" data-proposal_detail_subcontractor_id="'+ data. proposal_detail_subcontractor_id +'"><i class="far fa-trash-alt dib m0 plr5"></i></button>';
-                                html += '   </div>';
-                                html += '</div>';
-                                --}}
-
                                 subcontractorElRowsContainer.html(data.grid);
 
                                 subcontractorUpdateTotalCost();
@@ -273,7 +258,7 @@
                                 showErrorAlert(response.message, subcontractorsAlert);
                             }
                         },
-                        error: function (response){
+                        error: function (response, status, error){
                             @if (env('APP_ENV') === 'local')
                                 showErrorAlert(response.responseJSON.message, subcontractorsAlert);
                             @else
@@ -327,9 +312,9 @@
                     },
                     error: function (response){
                         @if (env('APP_ENV') === 'local')
-                        showErrorAlert(response.responseJSON.message, subcontractorsAlert);
+                            showErrorAlert(response.responseJSON.message, subcontractorsAlert);
                         @else
-                        showErrorAlert(response.message, 'Critical error has occurred.');
+                            showErrorAlert(response.message, 'Critical error has occurred.');
                         @endif
                     }
                 });
