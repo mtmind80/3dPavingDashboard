@@ -15,7 +15,15 @@
             @lang('translation.estimator')
         @endslot
     @endcomponent
+<script>
+    //globals
+    var current_subContractor_total =0;
+    var current_labor_total =0;
+    var current_vehicle_total =0;
+    var current_equipment_total =0;
+    var current_additional_total =0;
 
+</script>
     <div class="row estimator-form admin-form">
         <form method="POST" action="{{route('checkform')}}" accept-charfset="UTF-8" id="estimator_form" class="admin-form">
             @csrf
@@ -62,8 +70,8 @@
             <input type="hidden" name="materials_total_cost" id="estimator_form_materials_total_cost" value="">
             <input type="hidden" name="subcontractor_total_cost" id="estimator_form_subcontractor_total_cost" value="">
 
-
         </form>
+        
         <div class="col-12">
             @include('_partials._alert')
             <div class="card">
@@ -125,6 +133,9 @@
             @endif
         </div>
     </div>
+
+    @include('estimator.wrapitup')
+
 @endsection
 
 @section('page-js')
@@ -134,6 +145,7 @@
         var serviceCategoryId = Number("{{ $proposalDetail->service->service_category_id }}");
         var serviceCategoryName = "{{ $service_category_name }}";
         var proposalId = Number("{{ $proposalDetail->proposal_id }}");
+
     </script>
 @stop
 

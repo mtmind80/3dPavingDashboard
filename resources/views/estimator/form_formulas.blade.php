@@ -1180,7 +1180,7 @@
             // and populate other display items on the page
 
 
-            function calculate(cost_form, estimatorForm, services_id, proposal_detail_id, proposal_id, serviceCategoryId) {
+            function calculate(cost_form, estimatorForm, services_id, proposal_detail_id, proposal_id, serviceCategoryId, dosave) {
                 //cost_form has data used to calculate costs,
                 //estimator form gets hidden values filled in and data gets sent via ajax on save
                 //what service did we pick
@@ -1239,8 +1239,7 @@
                     var square_feet = $("#square_feet").val();
                     var depth = $("#depth").val();
                     var ourcost = $("#cost_per_day").val();
-
-                    console.log(square_feet + '-' + depth);
+                    
                     if (parseFloat(square_feet) == 'NaN' || parseFloat(depth) == 'NaN') { // check these are numbers
                         showInfoAlert('You can only enter numbers for square feet and depth.', headerAlert);
                         //return;
@@ -1256,15 +1255,14 @@
                         $("#tons").text(tons);
                         var mcost = parseFloat(ourcost, 10).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,").toString();
                         $("#header_show_materials_cost").text('$' + mcost);
-
+                        
                         var bill_after = $('input[name="bill_after"]:checked').val();
                         var str = "{!! $service->service_text_en !!}";
                         var newstr = str.replace('@@TONS@@', tons);
 
                         var proposaltext = tinymce.activeEditor.getContent();
                             // ok so set square_feet, cost, loads, tons, depth, bill_after, profit, break_even, location_id, overhead, toncost, proposal_text
-
-
+                        
                         //add it up
                         additup(mcost);
 
@@ -1449,7 +1447,9 @@
                 $("#x_overhead").val(headerElOverHead.val());
 
                 //then save it
-                saveit();
+                if(dosave) {
+                    saveit();
+                }
                 
             }
 
@@ -1459,20 +1459,21 @@
             
             
             // when page loads we need to calculate some things without saving
-            recalculate(cost_form, estimatorForm, serviceId, proposalDetailId, proposalId, serviceCategoryId);
+            //calculate(cost_form, estimatorForm, serviceId, proposalDetailId, proposalId, serviceCategoryId, false);
 
             // when you want to calculate and save record 
             headerCalculateCombinedCostingButton2.on('click', function () {
 
-                calculate(cost_form, estimatorForm, serviceId, proposalDetailId, proposalId, serviceCategoryId);
+                calculate(cost_form, estimatorForm, serviceId, proposalDetailId, proposalId, serviceCategoryId, true);
 
             });
 
 
             function additup(mcost)
             {
-
-                var combinedcost = parseFloat($('#estimator_form_subcontractor_total_cost').val()) + parseFloat($('#estimator_form_equipment_total_cost').val()) + parseFloat($('#estimator_form_labor_total_cost').val()) + parseFloat($('#estimator_form_additional_cost_total_cost').val()) + parseFloat($('#estimator_form_vehicle_total_cost').val()) + parseFloat($("#cost_per_day").val());
+  
+                var combinedcost = parseFloat($('#estimator_form_subcontractor_total_cost').val()); 
+                    //+ parseFloat($('#estimator_form_equipment_total_cost').val()) + parseFloat($('#estimator_form_labor_total_cost').val()) + parseFloat($('#estimator_form_additional_cost_total_cost').val()) + parseFloat($('#estimator_form_vehicle_total_cost').val()) + parseFloat($("#cost_per_day").val());
                 var othercost = parseFloat($('#form_header_over_head').val()) + parseFloat($('#form_header_break_even').val()) + parseFloat($('#form_header_profit').val());
                 console.log('combined ' + combinedcost);
                 console.log('other: ' + othercost);
@@ -1489,213 +1490,7 @@
 
             }
 
-
-            function recalculate(cost_form, estimatorForm, services_id, proposal_detail_id, proposal_id, serviceCategoryId) {
-
-                var estimatorform = $("#estimator_form");
-                var profit = {{$proposalDetail->profit}};
-                var overhead = {{$proposalDetail->overhead}};
-                var breakeven = {{$proposalDetail->break_even}};
-                var mcost = 0;
-
-
-                if (parseFloat(profit) == 'NaN' || parseFloat(overhead) == 'NaN' || parseFloat(breakeven) == 'NaN') {
-                    showInfoAlert('You can only enter numbers for profit, overhead and break even.', headerAlert);
-                }
-                ;
-
-
-                if (serviceCategoryId == 1) {
-
-                    {{-- re asphalt --}}
-                    if (proposalDetailId == 19) {
-                        {{-- re Asphalt Milling --}}
-
-                    } else {
-
-
-                    }
-                }
-
-                {{-- END of Asphalt --}}
-
-                if (serviceCategoryId == 2) {
-
-                    {{-- re concrete --}}
-                            {{--IF $details.cmpServiceID < 12- *curb mix* --}}
-                    if (service_id < 12) {
-
-                    } else if (service_id >= 12) {
-
-                    }
-                }
-
-                if (serviceCategoryId == 3) {
-                    {{--re Drainage and Catchbasins--}}
-
-                }
-
-                if (serviceCategoryId == 4) {
-                    {{-- 4	re Excavation --}}
-
-                    var square_feet = {{$proposalDetail->square_feet}};
-                    var depth = {{$proposalDetail->depth}};
-                    var ourcost = {{$proposalDetail->cost_per_day}};
-                    $("#loads").text({{$proposalDetail->loads}});
-                    $("#tons").text({{$proposalDetail->tons}});
-
-                    if (parseFloat(square_feet) == 'NaN' || parseFloat(depth) == 'NaN') { // check these are numbers
-                        showInfoAlert('You can only enter numbers for square feet and depth.', headerAlert);
-                        //return;
-                    }
-
-                    console.log('Cost: ' + $('#estimator_form_additional_cost_total_cost').val());
-                    if (square_feet > 0 && depth > 0) {
-
-                        console.log($('#estimator_form_subcontractor_total_cost').html());
-                        var combinedcost = parseFloat($('#estimator_form_subcontractor_total_cost').val()) + parseFloat($('#estimator_form_equipment_total_cost').val()) + parseFloat($('#estimator_form_labor_total_cost').val()) + parseFloat($('#estimator_form_additional_cost_total_cost').val()) + parseFloat($('#estimator_form_vehicle_total_cost').val()) + parseFloat($("#cost_per_day").val());
-                        console.log(combinedcost);
-                        
-                        var tontimes = (7 / 1080);
-                        var tons = Math.ceil(square_feet * depth * tontimes);
-                        var loads = Math.ceil(tons / 18);
-                        var mcost = parseFloat(ourcost, 10).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,").toString();
-                        $("#header_show_materials_cost").text('$' + mcost);
-                        combined = {{$proposalDetail->cost}} + {{$proposalDetail->cost}} 
-                        headerElCustomerPrice.text('$' + {{$proposalDetail->cost}}.toFixed(2));
-                        headerElCombinedCosting.text('$' + combinedcost.toFixed(2));
-                    }
-
-
-                }
-                {{-- END	Excavation --}}
-
-
-                if (serviceCategoryId == 5) {
-
-                    {{--  Other --}}
-
-
-                }
-                {{-- end Other --}}
-
-                if (serviceCategoryId == 6) {
-
-                    {{--  Paver Brick --}}
-
-                }
-
-                if (serviceCategoryId == 7) {
-                    {{--  Rock --}}
-
-                    var square_feet = {{$proposalDetail->square_feet}};
-                    var depth = {{$proposalDetail->depth}};
-                    var ourcost = {{$proposalDetail->cost_per_day}};
-                    $("#loads").text({{$proposalDetail->loads}});
-                    $("#tons").text({{$proposalDetail->tons}});
-
-                    var rockcost = $('input[name="cost_per_day"]:checked').val();
-
-                    materials = (tons * rockcost);
-                    var mcost = parseFloat(materials, 10).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,").toString();
-                    $("#header_show_materials_cost").text('$' + mcost);
-
-
-                }
-
-
-                if (serviceCategoryId == 8) {
-
-                    {{--  Seal Coating  these are the user input fields that need to be filled in validated--}}
-
-                        square_feet = $("#square_feet").val();
-                    primer = $("#primer").val();
-                    fastset = $("#fastset").val();
-                    if (square_feet == parseInt(square_feet)
-                        && primer == parseInt(primer)
-                        && fastset == parseInt(fastset)) {
-
-                        var yield = $("#yield").val();
-
-
-                        //calculate amounts
-
-                        /*
-                         SEALER  = Size/Yield  = GAL SEALER
-                         AND SAND = GAL SEALER * 2
-                         ADDITIVE = AND GAL SEALER / 50
-                         */
-
-
-                        var sand = Math.ceil(sealer * 2);
-                        $("#sand").val(sand);
-
-                        var sealer = Math.ceil(square_feet / yield);
-                        $("#sealer").val(sealer);
-
-                        var additive = Math.ceil(sealer / 50);
-                        $("#additive").val(additive);
-
-
-                        var sandtotal = Math.ceil(parseFloat(sandcost) * parseFloat(sand));
-                        var fastsettotal = Math.ceil(parseFloat(fastsetcost) * parseFloat(fastset));
-                        var primertotal = Math.ceil(parseFloat(primercost) * parseFloat(primer));
-                        var additivetotal = Math.ceil(parseFloat(additivecost) * parseFloat(additive));
-                        var sealertotal = Math.ceil(parseFloat(sealercost) * parseFloat(sealer));
-
-                        $("#SandTotal").val('$' + sandtotal.toFixed(2));
-                        cost_form.FastSetTotal.value = '$' + fastsettotal.toFixed(2);
-                        cost_form.SealerTotal.value = '$' + sealertotal.toFixed(2);
-                        cost_form.PrimerTotal.value = '$' + primertotal.toFixed(2);
-                        cost_form.AdditiveTotal.value = '$' + additivetotal.toFixed(2);
-
-                        var subtotal = Math.ceil(
-                            parseFloat(sandtotal) +
-                            parseFloat(fastsettotal) +
-                            parseFloat(primertotal) +
-                            parseFloat(additivetotal) +
-                            parseFloat(sealertotal)
-                        );
-
-                        $("#mcost").val(subtotal);
-
-                        //total up
-                        var combinedcost = parseFloat($("#POVTotal").val()) + parseFloat($("#POequipTotal").val()) + parseFloat($("#POlaborTotal").val()) + parseFloat($("#POOtherTotal").val()) + parseFloat(cost_form.mcost.value);
-
-                        var otcost = Math.ceil(parseFloat(combinedcost) + parseFloat(profit));
-                        var overhead = Math.ceil((otcost / 0.7) - otcost);
-                        $("#explain").html('calculated at 30%');
-                        //var overhead = Math.ceil((parseFloat(combinedcost) +  parseFloat(profit)) * 30)/100;
-
-
-                        var str = cost_form.jordProposalText.value;
-                        var newstr = str.replace('@@SQFT@@', cost_form.jordSquareFeet.value);
-                        var newstr = newstr.replace('@@PHASES@@', cost_form.jordPhases.value);
-                        cost_form.jordProposalText.value = newstr;
-
-
-                    }
-
-
-                }
-
-                if (serviceCategoryId == 9) {
-
-                    {{--  striping  not used for this service--}}
-
-                }
-
-                if (serviceCategoryId == 10) {
-
-                    {{--  Sub Contractor --}}
-                }
-
-
-            }
-
-
-        
-
+            
         });
 
     </script>

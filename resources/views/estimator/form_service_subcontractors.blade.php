@@ -331,10 +331,11 @@
                 subcontractorElTotalCost.html(currrencyTotalCost);
                 subcontractorElEstimatorFormFieldTotalCost.val(totalCost);
 
-                subcontractorElTotalCost.html(currrencyTotalCost);
-
+                
                 headerElSubcontractorCost.html(currrencyTotalCost);
                 headerElSubcontractorCost.data('subcontractor_total_cost', totalCost);
+                current_subContractor_total = totalCost;
+
             }
 
             function subcontractorResetForm(description)
