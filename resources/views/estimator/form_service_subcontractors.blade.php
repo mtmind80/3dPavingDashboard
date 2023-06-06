@@ -210,7 +210,6 @@
                 });
 
                 if (subcontractorElForm.valid()) {
-                    //let formData = subcontractorElForm.serializeObject();
                     let formData = new FormData(subcontractorElForm[0]);
                     let extraFormProperties = {
                         proposal_detail_id: proposalDetailId
@@ -218,22 +217,10 @@
 
                     $.extend(formData, extraFormProperties);
 
-                    $(document).ajaxError(function( event, jqxhr, settings, thrownError ) {
-
-                        if(!settings.suppressGlobalErrorHandler){
-
-                            console.log('inside ajaxError:');
-                            console.log(error);
-
-                        }
-
-                    });
-
                     $.ajax({
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        suppressGlobalErrorHandler: true,
                         data: formData,
                         contentType: false,
                         processData: false,
