@@ -66,7 +66,7 @@
     <div class="col-sm-4">Type</div>
     <div class="col-sm-1 tc">Cost</div>
     <div class="col-sm-6 tc">Short Description</div>
-    <div class="col-sm-1 tc">Actions</div>
+    <div class="col-sm-1 tc">Remove</div>
 </div>
 
 <!-- additional costs rows -->

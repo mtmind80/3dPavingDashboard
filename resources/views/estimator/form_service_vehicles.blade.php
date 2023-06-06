@@ -78,7 +78,7 @@
     <div class="col-sm-1 tc">Hours</div>
     <div class="col-sm-1 tc">Rate</div>
     <div class="col-sm-1 tc">Total</div>
-    <div class="col-sm-1 tc">Actions</div>
+    <div class="col-sm-1 tc">Remove</div>
 </div>
 
 <!-- vehicles row -->
