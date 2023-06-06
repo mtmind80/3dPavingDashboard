@@ -28,10 +28,10 @@
     <script>
         tinymce.init({
             selector: '#proposaltext',
-
+            promotion: false,
             setup: function (editor) {
                 editor.on('init', function (e) {
-                    editor.setContent("{{ $proposalDetail->proposal_text }}");
+                    editor.setContent("{!! $proposalDetail->proposal_text !!}");
                 });
             },
             height : 300,

@@ -13,7 +13,7 @@
                     <label class="control-label">Select a Sub Contractor<i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
                 </div>
                 <div class="col-sm-3 tc">
-                    <label class="control-label">Overhead<i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
+                    <label class="control-label">Overhead %<i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
                 </div>
                 <div class="col-sm-3 tc">
                     <label class="control-label">Quoted Cost<i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
@@ -104,7 +104,7 @@
 <!-- subcontractor header row -->
 <div id="subcontractor_rows_header" class="row fwb pb4 border-bottom-solid{{ !empty($proposalDetail->subcontractors) && $proposalDetail->subcontractors->count() > 0 ? '' : ' hidden' }}">
     <div class="col-sm-4">Subcontractor</div>
-    <div class="col-sm-1 tc">Overhead</div>
+    <div class="col-sm-1 tc">Overhead %</div>
     <div class="col-sm-1 tc">Quoted Cost</div>
     <div class="col-sm-1 tc">Total Cost</div>
     <div class="col-sm-3 tc">Attached Bid</div>
@@ -331,10 +331,11 @@
                 subcontractorElTotalCost.html(currrencyTotalCost);
                 subcontractorElEstimatorFormFieldTotalCost.val(totalCost);
 
-                subcontractorElTotalCost.html(currrencyTotalCost);
-
+                
                 headerElSubcontractorCost.html(currrencyTotalCost);
                 headerElSubcontractorCost.data('subcontractor_total_cost', totalCost);
+                current_subContractor_total = totalCost;
+
             }
 
             function subcontractorResetForm(description)
