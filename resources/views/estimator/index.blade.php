@@ -58,6 +58,7 @@
             <input type="hidden" name="fastset" id="x_fastset" value="{{ $proposalDetail->fastset }}">
             <input type="hidden" name="location_id" id="x_location_id" value="{{ $proposalDetail->location_id }}">
             <input type="hidden" name="cost" id="x_cost" value="{{ $proposalDetail->cost }}">
+            <input type="hidden" name="material_cost" id="x_material_cost" value="{{ $proposalDetail->material_cost }}">
             <input type="hidden" name='toncost' id='x_toncost' value="{{ $proposalDetail->toncost }}">
             <input type="hidden" name='tackcost' id='x_tackcost' value="{{ $proposalDetail->tackcost }}">
 

@@ -1,6 +1,6 @@
 <div class="mt20 mb10">
     <form action="#" id="cost_formula_form" class="admin-form">
-        {{-- This form is for reference to calculate costs it it never submitted --}}
+        {{-- This form is for reference to calculate costs it is never submitted --}}
 
         {{--
 
@@ -47,7 +47,7 @@
 
             <!-- asphalt -->
 
-            @if($proposalDetail->id == 19)
+            @if($proposalDetail->services_id == 19)
                 {{-- Asphalt Milling --}}
                 <div class="row">
                     <div class="col-sm-3">
@@ -632,7 +632,7 @@
             </div>
 
         @endif
-        @if($service->service_category_id == 7)
+        @if($service->service_category_id == 7)  
 
             <!--  Rock -->
 
@@ -665,9 +665,9 @@
                     <x-form-show
                             class="w180 show-check-contact"
                             :params="[
-                    'label' => 'Loads',
-                           'placeholder'=>'calculated',
-                    'value'=>'{{$service->loads}}',
+                             'label' => 'Loads',
+                             'placeholder'=>'calculated',
+                             'value'=>'{{$service->loads}}',
                                     'name'=>'loads',
                                     'id'=>'loads'
                     ]">
@@ -1201,6 +1201,7 @@
                 var breakeven = $("#form_header_break_even").val();
                 var regex = "/^[0-9]+$/";  // numbers only
                 var mcost = 0;
+                var proposaltext = tinymce.activeEditor.getContent();
                 
 
                 if (serviceCategoryId == 1) {
@@ -1260,18 +1261,19 @@
                         $("#tons").text(tons);
                         var mcost = parseFloat(ourcost, 10).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,").toString();
                         $("#header_show_materials_cost").text('$' + mcost);
-                        
-                        var bill_after = $('input[name="bill_after"]:checked').val();
-                        var str = "{!! $service->service_text_en !!}";
-                        var newstr = str.replace('@@TONS@@', tons);
+                        if(proposaltext == '') {
+                            var str = "{!! $service->service_text_en !!}";
+                            var proposaltext = str.replace('@@TONS@@', tons);
+                            tinymce.activeEditor.setContent("proposaltext");
+                        }
 
-                        var proposaltext = tinymce.activeEditor.getContent();
-                            // ok so set square_feet, cost, loads, tons, depth, bill_after, profit, break_even, location_id, overhead, toncost, proposal_text
-                        
+                        var bill_after = $('input[name="bill_after"]:checked').val();
                         //add it up
                         additup(mcost);
 
+                        // ok so set square_feet, cost, loads, tons, depth, bill_after, profit, break_even, location_id, overhead, toncost, proposal_text
                         // set all relevant form values for update
+                        $("#x_material_cost").val(mcost);
                         $("#x_square_feet").val(square_feet);
                         $("#x_depth").val(depth);
                         $("#x_loads").val(loads);
@@ -1308,10 +1310,7 @@
                     var square_feet = $("#square_feet").val();
                     var depth = $("#depth").val();
                     var rockcost = $('input[name="cost_per_day"]:checked').val();
-
-                    alert(depth);
-
-
+                    
                     if (!square_feet.match(regex) || !depth.match(regex)) { // check these are numbers
                         showInfoAlert('You can only enter numbers for square feet and depth.', headerAlert);
 
@@ -1339,19 +1338,20 @@
                         //alert('Materials =' + tons + ' * ' + rockcost );
                         materials = (tons * rockcost);
                         var mcost = parseFloat(materials, 10).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,").toString();
+                        if(proposaltext == '') {
+                            var str = "{!! $service->service_text_en !!}";
+                            var proposaltext = str.replace('@@INCHES@@', depth);
+                            tinymce.activeEditor.setContent("proposaltext");
+                        }
+
                         $("#header_show_materials_cost").text('$' + mcost);
                         $("#x_square_feet").val(square_feet);
+                        $("#x_material_cost").val(mcost);
                         $("#x_depth").val(depth);
                         $("#x_tons").val(tons);
+                        $("#x_material_cost").val(mcost);
                         $("#x_loads").val(loads);
-
-                        alert("Loads = Tons / 18 and Tons = Square feet * depth * " + tontimes);
-                        //$("#header_show_materials_cost").text('$' + ourcost);
-
-
-                        //var profit = $("#profit").val();
-                        //alert('tons ='.tons);
-
+                        
                     }
 
 

@@ -75,7 +75,7 @@
 
             if (serviceCategoryId == 4) {
                 {{-- 4	Excavation --}}
-                $("#tons").text();
+                tons = $("#tons").text();
                 servicedesc = servicedesc.replace('@@TONS@@', tons);
             }
 
@@ -97,7 +97,9 @@
 
             if (serviceCategoryId == 7) {
                 {{--  Rock --}}
-
+                var depth = $("#depth").val();
+                servicedesc = servicedesc.replace('@@INCHES@@', depth);
+                
             }
 
 
