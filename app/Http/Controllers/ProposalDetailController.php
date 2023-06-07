@@ -142,11 +142,18 @@ class ProposalDetailController extends Controller
     {
 
         $formfields = $request->all();
+        //print_r($formfields);
+        //exit();
         $proposal_detail = ProposalDetail::where('id', '=', $formfields['id'])->first();
         unset($formfields['_token']);
         unset ($formfields['id']);
         $proposal_detail->update($formfields);
-        \Session::flash('error', 'Service was saved!');
+        \Session::flash('success', 'Service was saved!');
+        if($formfields['stayorleave']  =='true')
+        {
+            return redirect()->route('show_proposal',['id'=> $formfields['proposal_id']]);
+            
+        }
         return redirect()->back();
 
     }

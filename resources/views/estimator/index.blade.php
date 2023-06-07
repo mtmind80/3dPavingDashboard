@@ -61,11 +61,14 @@
             <input type="hidden" name='toncost' id='x_toncost' value="{{ $proposalDetail->toncost }}">
             <input type="hidden" name='tackcost' id='x_tackcost' value="{{ $proposalDetail->tackcost }}">
 
+            <input type="hidden" name='stayorleave' id='stayorleave' value="false">
+            {{-- user will stay  after save --}}
+
             <input type="hidden" name="vehicle_total_cost" id="estimator_form_vehicle_total_cost" value="{{ $proposalDetail->total_cost_vehicles }}">
             <input type="hidden" name="equipment_total_cost" id="estimator_form_equipment_total_cost" value="{{ $proposalDetail->total_cost_equipment }}">
             <input type="hidden" name="labor_total_cost" id="estimator_form_labor_total_cost" value="{{ $proposalDetail->total_cost_labor }}">
             <input type="hidden" name="additional_cost_total_cost" id="estimator_form_additional_cost_total_cost" value="{{ $proposalDetail->total_additional_costs }}">
-            <input type="hidden" name="materials_total_cost" id="estimator_form_materials_total_cost" value="">
+            <input type="hidden" name="materials_total_cost" id="estimator_form_materials_total_cost" value="{{ $proposalDetail->cost_per_day }}">
             <input type="hidden" name="subcontractor_total_cost" id="estimator_form_subcontractor_total_cost" value="{{ $proposalDetail->total_cost_subcontractor }}">
         </form>
 
