@@ -100,6 +100,11 @@ class ProposalDetail extends Model
         return $this->hasMany(ProposalDetailSubcontractor::class, 'proposal_detail_id');
     }
 
+    public function acceptedSubcontractor()
+    {
+        return $this->hasOne(ProposalDetailSubcontractor::class, 'proposal_detail_id')->where('accepted', 1);
+    }
+
     public function service()
     {
         return $this->belongsTo(Service::class, 'services_id');
@@ -121,6 +126,44 @@ class ProposalDetail extends Model
 
     // Mutators and Accessors
 
+    public function getTotalCostVehiclesAttribute()
+    {
+        $otalCost = 0;
+
+        foreach ($this->vehicles as $item) {
+            $otalCost += $item->cost;
+        }
+
+        return $otalCost;
+    }
+
+    public function getTotalCostEquipmentAttribute()
+    {
+        $otalCost = 0;
+
+        foreach ($this->equipment as $item) {
+            $otalCost += $item->cost;
+        }
+
+        return $otalCost;
+    }
+
+    public function getTotalCostLaborAttribute()
+    {
+        $otalCost = 0;
+
+        foreach ($this->labor as $item) {
+            $otalCost += $item->cost;
+        }
+
+        return $otalCost;
+    }
+
+    public function getTotalCostSubcontractorAttribute()
+    {
+        return $this->acceptedSubcontractor->total_cost ?? 0;
+    }
+
     public function getTotalAdditionalCostsAttribute()
     {
         return $this->getTotalAdditionalCosts();
@@ -130,6 +173,7 @@ class ProposalDetail extends Model
     {
         return $this->getIsScheduled();
     }
+
     // Methods:
 
     public function getIsScheduled()
@@ -141,6 +185,5 @@ class ProposalDetail extends Model
     {
         return $this->additionalCosts()->sum('amount');
     }
-
 
 }
