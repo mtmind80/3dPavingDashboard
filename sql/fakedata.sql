@@ -65,6 +65,7 @@ Update proposals set permit_required =1 where id = 5878;
 Update proposals set permit_required =1 where id = 5889;
 Update proposals set permit_required =1, mot_required=1, nto_required=1, on_alert =1  where id = 5879;
 
+Update proposals Set name = "Test Proposal Name" WHERE id = 10680; 
 UPDATE proposals Set progressive_billing = 1 where id =10680;
 DELETE FROM proposal_details WHERE proposal_id = 10680;
 INSERT INTO proposal_details (proposal_id, location_id, services_id,service_desc,service_name,created_by) VALUES(10680,6196,1,"All Excavation","All Excavation",10);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Currency;
+use App\Models\AcceptedDocuments;
 use App\Models\Contractor;
 use App\Models\Equipment;
 use App\Models\LaborRate;
@@ -12,6 +13,7 @@ use App\Models\ProposalDetail;
 use App\Models\ProposalDetailAdditionalCost;
 use App\Models\ProposalDetailEquipment;
 use App\Models\ProposalDetailLabor;
+use App\Models\ProposalDetailSubcontractor;
 use App\Models\ProposalDetailVehicle;
 use App\Models\ProposalMaterial;
 use App\Models\Service;
@@ -22,9 +24,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use App\Traits\UploadFileTrait;
 
 class ProposalDetailController extends Controller
 {
+    use UploadFileTrait;
+
     public function index($id)
     {
         $data['proposal_id'] = $id;
@@ -107,7 +112,7 @@ class ProposalDetailController extends Controller
         $rockMaterials = ProposalMaterial::where('proposal_id', $proposal_id)->byServiceCategory(7);
         $sealcoatMaterials = ProposalMaterial::where('proposal_id', $proposal_id)->byServiceCategory(8);
         $materialsCB = ProposalMaterial::where('proposal_id', $proposal_id)->pluck('cost', 'material_id')->toArray();
- 
+
         $data = [
             'header_name' => 'Build Service Estimate',
             'proposalDetail' => $proposalDetail,
@@ -122,7 +127,9 @@ class ProposalDetailController extends Controller
             'materialsCB' => $materialsCB,
             'vehiclesCB' => Vehicle::vehiclesCB(['0' => 'Select vehicle']),
             'laborCB' => LaborRate::LaborWithRatesCB(['0' => 'Select labor']),
-            'contractorsCB' => Contractor::contractorsCB(['0' => 'Select contractor']),
+            'contractorsCB' => Contractor::contractorsWithOverheadCB(['0' => 'Select contractor']),
+            'contractors' => Contractor::orderBy('name')->get(),
+            'allowedFileExtensions' => AcceptedDocuments::extensionsStrCid(),
             'strippingCB' => StripingCost::strippingCB(['0' => 'Select contractor']),
             'typesCB' => ['0' => 'Select type', 'Dump Fee' => 'Dump Fee', 'Other' => 'Other'],
         ];
@@ -133,22 +140,24 @@ class ProposalDetailController extends Controller
 
     public function checkform(Request $request)
     {
-        
+
         $formfields = $request->all();
-        echo "<pre>";
-        
+        //print_r($formfields);
+        //exit();
         $proposal_detail = ProposalDetail::where('id', '=', $formfields['id'])->first();
-   
         unset($formfields['_token']);
         unset ($formfields['id']);
-
         $proposal_detail->update($formfields);
-        \Session::flash('error', 'Service was saved!');
-        
+        \Session::flash('success', 'Service was saved!');
+        if($formfields['stayorleave']  =='true')
+        {
+            return redirect()->route('show_proposal',['id'=> $formfields['proposal_id']]);
+            
+        }
         return redirect()->back();
 
     }
-    
+
 
     // To be updated
 
@@ -782,6 +791,208 @@ class ProposalDetailController extends Controller
         return response()->json($response);
     }
 
+    public function ajaxSubcontractorAddNew(Request $request)
+    {
+        // overhead cost subcontractor_id havebid attached_bid description
+
+        if($request->isMethod('post') && $request->ajax()) {
+            $validator = Validator::make(
+                $request->only(['proposal_detail_id', 'subcontractor_id', 'overhead', 'cost', 'accepted', 'description']), [
+                    'proposal_detail_id' => 'required|positive',
+                    'subcontractor_id' => 'required|positive',
+                    'overhead' => 'required|float|min:0|max:100',
+                    'cost' => 'required|float',
+                    'accepted' => 'nullable|boolean',
+                    'description' => 'nullable|text',
+                ]
+            );
+
+            if($validator->fails()) {
+                $response = [
+                    'success' => false,
+                    'message' => $validator->messages()->first(),
+                ];
+            } else if (!empty($request->accepted) && !$request->hasFile('attached_bid')) {
+                $response = [
+                    'success' => false,
+                    'message' => 'You must attach the bid if the contractor is accepted.',
+                ];
+            } else {
+                try {
+                    if(!$contractor = Contractor::find($request->subcontractor_id)) {
+                        $response = [
+                            'success' => false,
+                            'message' => 'Contractor not found.',
+                        ];
+                    } else if (ProposalDetailSubcontractor::where('proposal_detail_id', $request->proposal_detail_id)->where('contractor_id', $request->subcontractor_id)->count() > 0) {
+                        $response = [
+                            'success' => false,
+                            'message' => 'Contractor already exists.',
+                        ];
+                    } else {
+                        $contractorName = $contractor->name;
+                        $overhead = (float)$request->overhead;
+                        $cost = (float)$request->cost;
+                        $formattedCost = Currency::format($cost);
+                        $totalCost = $cost * (1 + $overhead / 100);
+                        $formattedTotalCost = Currency::format($totalCost);
+                        $accepted = (boolean)$request->accepted;
+                        $description = $request->description;
+
+                        $data = [
+                            'proposal_detail_id' => $request->proposal_detail_id,
+                            'contractor_id' => $request->subcontractor_id,
+                            'cost' => $cost,
+                            'overhead' => $overhead,
+                            'accepted' => $accepted,
+                            'description' => $description,
+                            'created_by' => auth()->user()->id,
+                        ];
+
+                        $uploadError = '';
+
+                        if ($request->hasFile('attached_bid')) {
+                            $destinationPath = 'media/bids/';
+
+                            if (
+                                ($result = $this->uploadFile('attached_bid', $destinationPath, [
+                                    'unique_name' => true,
+                                    'allowed_extensions' => AcceptedDocuments::extensionsStrCid(),
+                                    'prefix' => $request->proposal_detail_id,
+                                ]))
+                                && $result['success'] === true
+                            ) {
+                                $attachedBid = $result['fileName'];
+                                $data['attached_bid'] = $attachedBid;
+                            } else {
+                                $uploadError = ' Error uploading the file. ' . $result['error'] ?? 'Unknown error.';
+                            }
+                        }
+
+                        if (!empty($accepted)) {
+                            ProposalDetailSubcontractor::clearAccepted($request->proposal_detail_id);
+                        }
+
+                        ProposalDetailSubcontractor::create($data);
+
+                        $proposalDetailSubcontractors = ProposalDetailSubcontractor::where('proposal_detail_id', $request->proposal_detail_id)->get();
+
+                        $data = [
+                            'partialSubcontractors' => $proposalDetailSubcontractors,
+                        ];
+
+                        $response = [
+                            'success' => true,
+                            'message' => 'Subcontractor added.'.$uploadError,
+                            'data' => [
+                                'grid' => view('estimator._subcontractors_grid', $data)->render(),
+                                /*
+                                'subcontractor_name' => $contractorName,
+
+                                'overhead' => $overhead,
+                                'overhead_in_percent' => round($overhead, 1).'%',
+                                'cost' => $cost,
+                                'formatted_cost' => $formattedCost,
+                                'total_cost' => $totalCost,
+                                'formatted_total_cost' => $formattedTotalCost,
+                                'accepted' => (integer)$accepted,
+                                'formatted_accepted' => !empty($accepted) ? '<i class="fa fa-check color-green"></i>' : '',
+                                'link_attached_bid' => !empty($attachedBid) ? '<a href="'.asset('media/bids/').'/'.$attachedBid.'" target="_blank">'.$attachedBid.'</a>' : '',
+                                */
+                                'description' => $description,
+                                //'proposal_detail_subcontractor_id' => $proposalDetailSubcontractor->id,
+                            ],
+                        ];
+                    }
+                } catch(Exception $e) {
+                    if(env('APP_ENV') === 'local') {
+                        $response = [
+                            'success' => false,
+                            'message' => $e->getMessage(),
+                        ];
+                    } else {
+                        Log::error(get_class() . ' - ' . $e->getMessage());
+                        $response = [
+                            'success' => false,
+                            'message' => 'Exception error',
+                        ];
+                    }
+                }
+            }
+        } else {
+            $response = [
+                'success' => false,
+                'message' => 'Invalid request.',
+            ];
+        }
+
+        return response()->json($response);
+    }
+
+    public function ajaxSubcontractorRemove(Request $request)
+    {
+        if($request->isMethod('post') && $request->ajax()) {
+            $validator = Validator::make(
+                $request->only(['proposal_detail_subcontractor_id']), [
+                    'proposal_detail_subcontractor_id' => 'required|positive',
+                ]
+            );
+
+            if($validator->fails()) {
+                $response = [
+                    'success' => false,
+                    'message' => $validator->messages()->first(),
+                ];
+            } else {
+                try {
+                    if(!$proposalDetailSubcontractor = ProposalDetailSubcontractor::find($request->proposal_detail_subcontractor_id)) {
+                        $response = [
+                            'success' => false,
+                            'message' => 'Proposal detail subcontractor not found.',
+                        ];
+                    } else {
+                        if (!empty($proposalDetailSubcontractor->attached_bid)) {
+                            $fullPathFile = public_path('media/bids/').$proposalDetailSubcontractor->attached_bid;
+                            if (file_exists($fullPathFile)) {
+                                unlink($fullPathFile);
+                            }
+                        }
+
+                        $proposalDetailSubcontractor->delete();
+
+                        $response = [
+                            'success' => true,
+                            'message' => 'Subcontractor removed.',
+                            'data' => [
+                                'proposal_detail_subcontractor_id' => $request->proposal_detail_subcontractor_id,
+                            ],
+                        ];
+                    }
+                } catch(Exception $e) {
+                    if(env('APP_ENV') === 'local') {
+                        $response = [
+                            'success' => false,
+                            'message' => $e->getMessage(),
+                        ];
+                    } else {
+                        Log::error(get_class() . ' - ' . $e->getMessage());
+                        $response = [
+                            'success' => false,
+                            'message' => 'Exception error',
+                        ];
+                    }
+                }
+            }
+        } else {
+            $response = [
+                'success' => false,
+                'message' => 'Invalid request.',
+            ];
+        }
+
+        return response()->json($response);
+    }
+
     public function destroy($id)
     {
         // remove service , return to proposal services
@@ -789,12 +1000,10 @@ class ProposalDetailController extends Controller
         if($service) {
             $proposal_id = $service['proposal_id'];
             ProposalDetail::destroy($id);
-            \Session::flash('error', 'Service was deleted!');
-            return route('show_proposal',['id'=> $proposal_id]);
+            return route('show_proposal',['id'=> $proposal_id])->with('error', 'Service was deleted!');
         }
 
-        \Session::flash('error', 'Sorry no matching records were found!');
-        return redirect()->back();
+        return redirect()->back()->with('error', 'Sorry no matching records were found!');
 
     }
 

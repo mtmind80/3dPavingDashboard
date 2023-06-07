@@ -154,7 +154,7 @@ class DashboardController extends Controller
         ];
         $percent = 0;
         $salespercent = 0;
-        if($totalSalesRevenue > 0) {
+        if($totalSalesRevenue > 0 && $proposalsCreated > 0) {
             $salespercent = (int)(($totalSalesRevenue * 100) / $salesgoals);
             $percent = (int)(($workOrdersCreated * 100) / $proposalsCreated);
             //intval(($totalSalesRevenue * 100) / $salesgoals);

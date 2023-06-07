@@ -64,7 +64,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('/view_service/{proposal_id}/{id}', 'WorkOrderController@view_service')->name('view_service');
     });
 
-    /** END workorders */        
+    /** END workorders */
 
     /*************** Timesheets  ***************/
 
@@ -238,7 +238,8 @@ Route::group(['middleware' => ['auth']], function() {
         Route::post('/ajax-labor-remove', 'ProposalDetailController@ajaxLaborRemove')->name('ajax_labor_remove');
         Route::post('/ajax-additional-cost-add-new', 'ProposalDetailController@ajaxAdditionalCostAddNew')->name('ajax_additional_cost_add_new');
         Route::post('/ajax-additional-cost-remove', 'ProposalDetailController@ajaxAdditionalCostRemove')->name('ajax_additional_cost_remove');
-
+        Route::post('/ajax-subcontractor-add-new', 'ProposalDetailController@ajaxSubcontractorAddNew')->name('ajax_subcontractor_add_new');
+        Route::post('/ajax-subcontractor-remove', 'ProposalDetailController@ajaxSubcontractorRemove')->name('ajax_subcontractor_remove');
     });
     /** END Proposal Details */
 
@@ -246,7 +247,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::group(['prefix' => 'proposals'], function() {
 
         Route::get('/new', 'ProposalController@new')->name('new_proposal');
-        
+
         Route::get('', 'ProposalController@index')->name('proposals');
         //post to search method show results
 

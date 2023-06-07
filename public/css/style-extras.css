@@ -1,4 +1,21 @@
 /** from backend css */
+.error,
+.danger,
+.color-red {
+  color: #C0383C !important; }
+
+.success,
+.color-green {
+  color: #28bf28 !important; }
+
+.warning,
+.color-orange {
+  color: #ffa500 !important; }
+
+.info,
+.color-blue {
+  color: #09afe1 !important; }
+
 .text-color {
   color: #222222 !important; }
 
@@ -649,5 +666,61 @@ table .td-tt {
 .status.danger {
   color: red;
   font-weight: 600; }
+
+.upload-file-widget .prepend-icon {
+  top: 0;
+  left: 0;
+  display: inline-block;
+  vertical-align: top;
+  position: relative;
+  width: 100%; }
+.upload-file-widget .file.append-button .button {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: auto;
+  float: none;
+  height: 34px;
+  line-height: 34px;
+  padding: 0 16px;
+  z-index: 10; }
+.upload-file-widget .file.append-button > label.field-icon {
+  right: 4px;
+  left: auto; }
+.upload-file-widget .file .gui-file {
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  padding: 8px 10px;
+  position: absolute;
+  -moz-opacity: 0;
+  opacity: 0;
+  z-index: 11;
+  bottom: 0;
+  right: 0; }
+.upload-file-widget .file .field {
+  display: block;
+  position: relative; }
+  .upload-file-widget .file .field .gui-input {
+    position: relative;
+    vertical-align: top;
+    border: 1px solid #DDD;
+    display: -moz-inline-stack;
+    display: inline-block;
+    color: #626262;
+    outline: none;
+    height: 42px;
+    width: 100%;
+    padding: 10px;
+    padding-left: 10px;
+    font-size: 13px;
+    font-weight: 400; }
+.upload-file-widget .form-field-label {
+  display: block;
+  padding-bottom: 4px; }
+
+.subcontractor-accepted .can-be-bold {
+  font-weight: bolder;
+  color: green; }
 
 /*# sourceMappingURL=style-extras.css.map */

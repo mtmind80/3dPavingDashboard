@@ -23,7 +23,7 @@
         <div class="col-sm-3 admin-form-item-widget">
             <x-form-select name="labor_id"
                 :items="$laborCB"
-                selected=""
+                selected="0"
                 :params="[
                     'id' => 'labor_id',
                     'iconClass' => 'none',
@@ -78,7 +78,7 @@
     <div class="col-sm-1 tc">Hours</div>
     <div class="col-sm-1 tc">Rate</div>
     <div class="col-sm-1 tc">Total</div>
-    <div class="col-sm-1 tc">Actions</div>
+    <div class="col-sm-1 tc">Remove</div>
 </div>
 
 <!-- labor row -->

@@ -52,16 +52,28 @@ class Contractor extends Model
         return $this->searchable;
     }
 
+    /** relationships */
 
-
+    /** scopes */
 
     /** Accessor(get) and Mutators(set) */
 
-
     public function getFullAddressTwoLineAttribute()
     {
-        return self::buildFullAddress(address_line1, $this->city, $this->state, $this->postal_code, '<br>', address_line2);
+        return self::buildFullAddress($this->address_line1, $this->city, $this->state, $this->postal_code, '<br>', $this->address_line2);
     }
+
+    public function getOverheadPercentAttribute()
+    {
+        return round($this->overhead, 1).'%';
+    }
+
+    public function getNameAndOverheadPercentAttribute()
+    {
+        return $this->name.' - '.$this->overhead_percent;
+    }
+
+    /** Methods */
 
     public static function buildFullAddress($address, $city = '', $state = '', $zip = '', $separator = '<br>', $address2 = '')
     {
@@ -101,6 +113,17 @@ class Contractor extends Model
     static public function contractorsCB($default = [])
     {
         $items = self::orderBy('name')->pluck('name', 'id')->toArray();
+
+        if (!empty($default)) {
+            return $default + $items;
+        }
+
+        return $items;
+    }
+
+    static public function contractorsWithOverheadCB($default = [])
+    {
+        $items = self::orderBy('name')->get()->pluck('name_and_overhead_percent', 'id')->toArray();
 
         if (!empty($default)) {
             return $default + $items;

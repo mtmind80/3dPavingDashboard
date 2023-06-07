@@ -56,7 +56,7 @@
                                      :params="[
                                         'label' => 'none',
                                         'iconClass' => 'none',
-                                        
+
                                     ]"
                                 >{{$proposalDetail->overhead}}</x-form-text>
                             </div>
@@ -75,12 +75,7 @@
                             </div>
                         </td>
                         <td class="w1-6">
-                            <a id="header_calculate_combined_costing_button2" href="javascript:" class="{{ $site_button_class }} top-2 prel">Save Service</a>
-
-                            <!--                            <a id="header_calculate_combined_costing_button" href="javascript:" class="{{ $site_button_class }} top-2 prel">Save Service</a>
--->
-                            <a class="{{ $site_button_class }}" href="{{ route('show_proposal',['id'=> $proposalDetail->proposal_id]) }}">@lang('translation.cancel')</a>
-                        </td>
+    &nbsp; </td>
                     </tr>
                     </tbody>
                 </table>
@@ -161,7 +156,7 @@
                                 <x-form-show
                                     class="w180 show-check-contact"
                                     :params="[
-                                        'id' => 'header_show_subcontractors_cost',
+                                        'id' => 'header_show_subcontractor_cost',
                                     ]">
                                 </x-form-show>
                                 @endif
@@ -170,6 +165,7 @@
                     </tr>
                 </tbody>
             </table>
+            
         </div>
     </div>
 </div>
@@ -177,7 +173,7 @@
 @push('partials-scripts')
     <script>
 
-            
+
         var headerElCustomerPrice = $('#header_show_customer_price');
         var headerElCombinedCosting= $('#header_show_combined_costing');
 
@@ -188,17 +184,18 @@
 
         var headerCalculateCombinedCostingButton = $('#header_calculate_combined_costing_button');
         var headerCalculateCombinedCostingButton2 = $('#header_calculate_combined_costing_button2');
+        var headerCalculateCombinedCostingButton3 = $('#header_calculate_combined_costing_button3');
 
         var headerElVehiclesCost = $('#header_show_vehicles_cost');
         var headerElEquipmentCost = $('#header_show_equipment_cost');
         var headerElMaterialsCost = $('#header_show_materials_cost');
         var headerElLaborCost = $('#header_show_labor_cost');
         var headerElAdditionalCost = $('#header_show_additional_cost');
-        var headerElSubcontactorsCost = $('#header_show_subcontractors_cost');
+        var headerElSubcontractorCost = $('#header_show_subcontractor_cost');
 
         var headerElTotalCost = $('#header_total_cost');
         var headerElEstimatorFormFieldTotalCost = $('#estimator_form_header_total_cost');
-        var headerAlert = $('#header_alert');        
+        var headerAlert = $('#header_alert');
 
         $(document).ready(function () {
 
@@ -208,7 +205,7 @@
                 closeAlert(headerAlert);
             });
 
-                
+
             headerCalculateCombinedCostingButton.on('click', function(){
                 headerElForm.validate({
                     rules: {
@@ -244,7 +241,7 @@
                 if (headerElForm.valid()) {
 
                     calculate(cost_form, estimatorForm, serviceId, proposalDetailId, proposalId, serviceCategoryId);
-                    
+
                     let formData = headerElForm.serializeObject();
                     let extraFormProperties = {proposal_detail_id: proposalDetailId};
 
@@ -298,6 +295,6 @@
                 headerElForm.trigger('reset');
             }
         });
-        
+
     </script>
 @endpush

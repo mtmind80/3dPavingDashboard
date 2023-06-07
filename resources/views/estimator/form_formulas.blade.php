@@ -1,30 +1,9 @@
 <div class="mt20 mb10">
     <form action="#" id="cost_formula_form" class="admin-form">
         {{-- This form is for reference to calculate costs it it never submitted --}}
-        @if($proposal->progressive_billing)
-            <div class="row card-body">
-                <div class="col-sm-8">
-                    <strong> Progressive Billing:</strong> <br/>Do you want to bill the customer after this service is
-                    completed?
-                </div>
-                <div class="col-sm-2">
-                    <div class="admin-form-item-widget">
-                        YES <input type="radio" class="form-control" name="bill_after" id="bill_after1" value="1"
-                                   @if($proposalDetail->bill_after) checked @endif >
-                    </div>
-                </div>
-                <div class="col-sm-2">
-                    <div class="admin-form-item-widget">
-                        NO <input type="radio" class="form-control" name="bill_after" id="bill_after2" value="0"
-                                  @if(!$proposalDetail->bill_after) checked @endif >
-                    </div>
-                </div>
-            </div>
-        @else
-            <input type="hidden" name="bill_after" value="0">
-        @endif
+
         {{--
-    
+
                     Categories
                     1	Asphalt
                     2	Concrete
@@ -36,7 +15,7 @@
                     8	Seal Coating
                     9	Striping
                     10	Sub Contractor
-    
+
                     Services
                     3	1	Repairs
                     4	1	Asphalt Paving - (Over 3500 SY)
@@ -60,7 +39,7 @@
                     15	8	Sealcoating
                     18	9	Pavement Markings
                     17	10	Any Sub Contractor
-    
+
                     --}}
 
 
@@ -72,19 +51,21 @@
                 {{-- Asphalt Milling --}}
                 <div class="row">
                     <div class="col-sm-3">
+                        <label  class="control-label">Size of project in SQ FT <i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
+
                         <x-form-text name="square_feet"
                                      class="check-contact tc"
                                      placeholder="enter value"
                                      id="square_feet"
                                      :params="[
-                    'label' => 'Size of project in SQ FT',
+                    'label' => 'none',
                     'iconClass' => 'none',
                     'value' => '{{$service->square_feet}}',
                 ]"
                         ></x-form-text>
                     </div>
                     <div class="col-sm-3">
-                        <label class="control-label">Depth In Inches</label>
+                        <label class="control-label">Depth In Inches <i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
                         <x-form-text name="depth"
                                      class="check-contact tc"
                                      placeholder="enter value"
@@ -97,7 +78,8 @@
                         ></x-form-text>
                     </div>
                     <div class="col-sm-3">
-                        <label class="control-label">Days of Milling</label>
+
+                        <label class="control-label">Days of Milling <i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
                         <x-form-text name="days"
                                      class="check-contact tc"
                                      placeholder="enter value"
@@ -112,7 +94,7 @@
                     </div>
 
                     <div class="col-sm-3">
-                        <label class="control-label">Cost Per Day</label>
+                        <label class="control-label">Cost Per Day <i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
                         <x-form-text name="cost_per_day"
                                      class="check-contact tc"
                                      placeholder="enter value"
@@ -130,7 +112,7 @@
                 <div class="row">
 
                     <div class="col-sm-3">
-                        <label class="control-label">Locations</label>
+                        <label class="control-label">Locations <i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
                         <x-form-text name="locations"
                                      class="check-contact tc"
                                      placeholder="enter value"
@@ -144,7 +126,7 @@
 
                     </div>
                     <div class="col-sm-4">
-                        <label class="control-label">SQ. Yards</label>
+                        <label class="control-label">SQ. Yards <i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
                         <x-form-text name="square_yards"
                                      class="check-contact tc"
                                      placeholder="enter value"
@@ -158,7 +140,7 @@
 
                     </div>
                     <div class="col-sm-4">
-                        <label class="control-label">Loads</label>
+                        <label class="control-label">Loads <i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
                         <x-form-text name="loads"
                                      class="check-contact tc"
                                      placeholder="enter value"
@@ -180,7 +162,7 @@
                 <div class="row">
 
                     <div class="col-sm-3">
-                        <label class="control-label">Size of project in SQ FT</label>
+                        <label class="control-label">Size of project in SQ FT <i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
                         <x-form-text name="square_feet"
                                      class="check-contact tc"
                                      placeholder="enter value"
@@ -192,7 +174,7 @@
                 ]"></x-form-text>
                     </div>
                     <div class="col-sm-3">
-                        <label class="control-label">Depth In Inches</label>
+                        <label class="control-label">Depth In Inches <i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
                         <x-form-text name="depth"
                                      class="check-contact tc"
                                      placeholder="enter value"
@@ -206,6 +188,7 @@
                     </div>
 
                     <div class="col-sm-3">
+
                         <x-form-select name="cost_per_linear_feet"
                                        :items="$asphaltMaterials"
                                        selected=""
@@ -215,18 +198,7 @@
 
                     </div>
                     <div class="col-sm-3">
-                        <label class="control-label">Tack Cost:(<i>$40{{--$mat['Tack (per gallon)']--}} per gal.</i>)
-                        </label>
-                        <input type="text" id="tack_cost" name="tack_cost"
-                               class="form-control" value="" disabled>
-                    </div>
-
-                </div>
-                <br/>
-                <div class="row">
-
-                    <div class="col-sm-3">
-                        <label class="control-label">Locations</label>
+                        <label class="control-label">Locations <i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
                         <x-form-text name="locations"
                                      class="check-contact tc"
                                      placeholder="enter value"
@@ -239,15 +211,26 @@
                         ></x-form-text>
 
                     </div>
-                    <div class="col-sm-4">
-                        <label class="control-label">SQ. Yards</label>
-                        <input type="text" id="square_yards" name="square_yards"
-                               class="form-control" value="{{$service->square_yards}}">
+                    
+                </div>
+                <br/>
+                <div class="row">
+
+                    <div class="col-sm-3">
+                        <label class="control-label">Tack Cost:(<i>$40{{--$mat['Tack (per gallon)']--}} per gal.</i>)
+                        </label>
+                        <input type="text" id="tack_cost" name="tack_cost"
+                               class="form-control" value="" disabled>
                     </div>
                     <div class="col-sm-4">
-                        <label class="control-label">Tons</label>
+                        <label class="control-label">SQ. Yards </label>
+                        <input type="text" id="square_yards" name="square_yards"
+                               class="form-control" value="{{$service->square_yards}}" disabled>
+                    </div>
+                    <div class="col-sm-4">
+                        <label class="control-label">Tons </label>
                         <input type="text" id="tons" name="tons"
-                               class="form-control" value="{{$service->tons}}">
+                               class="form-control" value="{{$service->tons}}" disabled>
                     </div>
                 </div>
 
@@ -266,7 +249,7 @@
 
                 <div class="row">
                     <div class="col-sm-3">
-                        <label class="control-label">Length In Feet (linear feet)</label>
+                        <label class="control-label">Length In Feet (linear feet) <i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
                         <x-form-text name="linear_feet"
                                      class="check-contact tc"
                                      placeholder="enter value"
@@ -280,7 +263,7 @@
                     </div>
 
                     <div class="col-sm-2">
-                        <label class="control-label">Locations</label>
+                        <label class="control-label">Locations <i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
                         <x-form-text name="locations"
                                      class="check-contact tc"
                                      placeholder="enter value"
@@ -293,7 +276,7 @@
                         ></x-form-text>
                     </div>
                     <div class="col-sm-3">
-                        <label class="control-label">CU YDS</label>
+                        <label class="control-label">CU YDS <i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
                         <x-form-text name="cubic_yards"
                                      class="check-contact tc"
                                      placeholder="enter value"
@@ -306,7 +289,7 @@
                         ></x-form-text>
                     </div>
                     <div class="col-sm-4">
-                        <label class="control-label">Curb Mix Cost Per CU. YD.</label>
+                        <label class="control-label">Curb Mix Cost Per CU. YD. <i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
                         <x-form-text name="cost_per_linear_feet"
                                      class="check-contact tc"
                                      placeholder="enter value"
@@ -328,7 +311,7 @@
                 <br/>
                 <div class="row">
                     <div class="col-sm-2">
-                        <label class="control-label">Sq. Ft.</label>
+                        <label class="control-label">Square Feet <i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
                         <x-form-text name="square_feet"
                                      class="check-contact tc"
                                      placeholder="enter value"
@@ -341,7 +324,7 @@
 
                     </div>
                     <div class="col-sm-2">
-                        <label class="control-label">Depth (inches)</label>
+                        <label class="control-label">Depth (inches) <i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
                         <x-form-text name="depth"
                                      class="check-contact tc"
                                      placeholder="enter value"
@@ -354,7 +337,7 @@
                         ></x-form-text>
                     </div>
                     <div class="col-sm-2">
-                        <label class="control-label">Locations</label>
+                        <label class="control-label">Locations <i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
                         <x-form-text name="locations"
                                      class="check-contact tc"
                                      placeholder="enter value"
@@ -367,7 +350,7 @@
                         ></x-form-text>
                     </div>
                     <div class="col-sm-3">
-                        <label class="control-label">CU YDS</label>
+                        <label class="control-label">CU YDS <i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
                         <x-form-text name="cubic_yards"
                                      class="check-contact tc"
                                      placeholder="enter value"
@@ -380,7 +363,7 @@
                         ></x-form-text>
                     </div>
                     <div class="col-sm-3">
-                        <label class="control-label">Drum Mix Cost</label>
+                        <label class="control-label">Drum Mix Cost <i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
                         <x-form-text name="cost_per_linear_feet"
                                      class="check-contact tc"
                                      placeholder="enter value"
@@ -406,7 +389,7 @@
             <br/>
             <div class="row">
                 <div class="col-sm-5">
-                    <label class="control-label">Number of Catch Basins</label>
+                    <label class="control-label">Number of Catch Basins <i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
                     <x-form-text name="catchbasins"
                                  class="check-contact tc"
                                  placeholder="enter value"
@@ -421,7 +404,7 @@
 
                 </div>
                 <div class="col-sm-4">
-                    <label class="control-label">Cost</label>
+                    <label class="control-label">Cost <i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
                     <x-form-text name="cost_per_day"
                                  class="check-contact tc"
                                  placeholder="enter value"
@@ -439,12 +422,13 @@
             <div class="row">
 
                 <div class="col-sm-9">
+                    <label class="control-label">Job Description <i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
                     <x-form-textarea name="alt_desc"
                                      class="check-contact tc"
                                      placeholder="enter value"
                                      id="alt_desc"
                                      :params="[
-                    'label' => 'Job Description',
+                    'label' => 'none',
                     'iconClass' => 'none',
                     'value' => '{{$service->alt_desc}}',
                 ]"
@@ -459,35 +443,41 @@
             <!--  4	Excavation -->
 
             <div class="row">
-                <div class="col-sm-2">
+                <div class="col-sm-2 admin-form-item-widget">
+                    <label class="control-label">Square Feet <i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
                     <x-form-text name="square_feet"
-                                 class="check-contact tc"
+                                 class="check-contact"
                                  placeholder="enter value"
                                  id="square_feet"
                                  :params="[
-                    'label' => 'Square Feet',
+                    'label' => 'none',
                     'iconClass' => 'none',
                 ]"
                     >{{$proposalDetail->square_feet}}</x-form-text>
                 </div>
-                <div class="col-sm-2">{{$proposalDetail->depth}}
+
+                
+                <div class="col-sm-2">
+                    <label class='control-label'>Depth in Inches <i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
+
                     <x-form-text name="depth"
                                  class="check-contact tc"
                                  placeholder="enter value"
                                  id="depth"
                                  :params="[
-                    'label' => 'Depth In inches',
+                    'label' => 'none',
                     'iconClass' => 'none',
                 ]"
                     >{{$proposalDetail->depth}}</x-form-text>
                 </div>
-                <div class="col-sm-2">{{$proposalDetail->cost_per_day}}
+                <div class="col-sm-2">
+                    <label class='control-label'>Our Cost<i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
                     <x-form-text name="cost_per_day"
                                  class="check-contact tc"
                                  placeholder="enter value"
                                  id="cost_per_day"
                                  :params="[
-                    'label' => 'Our Cost',
+                    'label' => 'none',
                     'iconClass' => 'none',
                 ]"
                     >{{$proposalDetail->cost_per_day}}</x-form-text>
@@ -1153,6 +1143,36 @@
 
         @endif
 
+
+        @if($proposal->progressive_billing)
+            <div class="row card-body">
+                <div class="col-sm-8">
+                    <strong> Progressive Billing:</strong> <br/>Do you want to bill the customer after this service is
+                    completed?
+                </div>
+                <div class="col-sm-2">
+                    <div class="admin-form-item-widget">
+                        YES <input type="radio" class="form-control" name="bill_after" id="bill_after1" value="1"
+                                   @if($proposalDetail->bill_after) checked @endif >
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="admin-form-item-widget">
+                        NO <input type="radio" class="form-control" name="bill_after" id="bill_after2" value="0"
+                                  @if(!$proposalDetail->bill_after) checked @endif >
+                    </div>
+                </div>
+            </div>
+        @else
+            <input type="hidden" name="bill_after" value="0">
+        @endif
+
+        <a id="header_calculate_combined_costing_button2" href="javascript:" class="{{ $site_button_class }} ">Save This Service and Stay</a>
+
+        &nbsp;
+        
+        <a id="header_calculate_combined_costing_button3"  class="{{ $site_button_class }}" href="javascript:">Save and Return To Proposal</a>
+        
     </form>
 
 </div>
@@ -1167,26 +1187,20 @@
 
 
             function calculate(cost_form, estimatorForm, services_id, proposal_detail_id, proposal_id, serviceCategoryId, dosave) {
-                //cost_form has data used to calculate costs, 
-                //estimator form gets hidden values filled in and data gets sent via ajax on save
-                //what service did we pick
-                //alert(services_id);
-                //alert(serviceCategoryName);
-                //The Math.ceil() static method always rounds up and returns the smaller integer 
-                // greater than or equal to a given number.
-                var estimatorform = $("#estimator_form");
+                /*cost_form has data used to calculate costs,
+                estimator form gets hidden values filled in and data gets sent via ajax on save
+                what service did we pick
+                alert(services_id);
+                alert(serviceCategoryName);
+                The Math.ceil() static method always rounds up and returns the smaller integer
+                 greater than or equal to a given number.
+                */
+                
                 var profit = $("#form_header_profit").val();
                 var overhead = $("#form_header_over_head").val();
                 var breakeven = $("#form_header_break_even").val();
                 var regex = "/^[0-9]+$/";  // numbers only
                 var mcost = 0;
-
-                
-                if(parseFloat(profit) == 'NaN' || parseFloat(overhead) == 'NaN' ||parseFloat(breakeven) == 'NaN'){
-                    showInfoAlert('You can only enter numbers for profit, overhead and break even.', headerAlert);
-                };
-
-
                 
 
                 if (serviceCategoryId == 1) {
@@ -1225,12 +1239,16 @@
                     var square_feet = $("#square_feet").val();
                     var depth = $("#depth").val();
                     var ourcost = $("#cost_per_day").val();
-
-                    console.log(square_feet + '-' + depth);
+                    
                     if (parseFloat(square_feet) == 'NaN' || parseFloat(depth) == 'NaN') { // check these are numbers
                         showInfoAlert('You can only enter numbers for square feet and depth.', headerAlert);
-                        //return;
+                        return;
                     }
+
+                    if(parseFloat(profit) == 'NaN' || parseFloat(overhead) == 'NaN' ||parseFloat(breakeven) == 'NaN'){
+                        showInfoAlert('You can only enter numbers for profit, overhead and break even.', headerAlert);
+                        return;
+                    };
 
                     if (square_feet > 0 && depth > 0) {
 
@@ -1242,28 +1260,25 @@
                         $("#tons").text(tons);
                         var mcost = parseFloat(ourcost, 10).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,").toString();
                         $("#header_show_materials_cost").text('$' + mcost);
-
+                        
                         var bill_after = $('input[name="bill_after"]:checked').val();
-                        var str = "{!! $service->service_text_en !!}";                         
+                        var str = "{!! $service->service_text_en !!}";
                         var newstr = str.replace('@@TONS@@', tons);
 
                         var proposaltext = tinymce.activeEditor.getContent();
                             // ok so set square_feet, cost, loads, tons, depth, bill_after, profit, break_even, location_id, overhead, toncost, proposal_text
                         
-                        
                         //add it up
                         additup(mcost);
 
-                        // set all relevant form values for update 
+                        // set all relevant form values for update
                         $("#x_square_feet").val(square_feet);
+                        $("#x_depth").val(depth);
                         $("#x_loads").val(loads);
                         $("#x_tons").val(tons);
-                        $("#x_proposal_text").val(proposaltext);
-                        $("#x_bill_after").val(bill_after);
-                        $("#x_profit").val(headerElProfit.val());
-                        $("#x_break_even").val(headerElBreakEven.val());
                         $("#x_toncost").val(0);
-                        $("#x_overhead").val(headerElOverHead.val());
+                        $("#x_cost_per_day").val(ourcost);
+                        
                         
                     }
 
@@ -1294,7 +1309,7 @@
                     var depth = $("#depth").val();
                     var rockcost = $('input[name="cost_per_day"]:checked').val();
 
-                    //alert(rockcost);
+                    alert(depth);
 
 
                     if (!square_feet.match(regex) || !depth.match(regex)) { // check these are numbers
@@ -1314,7 +1329,7 @@
                         var newstr = str.replace('@@INCHES@@',depth);
 
                         $("#proposaltext").val(newstr);
-                        
+
                         var tontimes = (7 / 1080);
                         var tons = Math.ceil(square_feet * depth * tontimes);
                         var loads = Math.ceil(tons / 18);
@@ -1325,7 +1340,12 @@
                         materials = (tons * rockcost);
                         var mcost = parseFloat(materials, 10).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,").toString();
                         $("#header_show_materials_cost").text('$' + mcost);
-                        //alert("Loads = Tons / 18 and Tons = Square feet * depth * " + tontimes);
+                        $("#x_square_feet").val(square_feet);
+                        $("#x_depth").val(depth);
+                        $("#x_tons").val(tons);
+                        $("#x_loads").val(loads);
+
+                        alert("Loads = Tons / 18 and Tons = Square feet * depth * " + tontimes);
                         //$("#header_show_materials_cost").text('$' + ourcost);
 
 
@@ -1333,7 +1353,7 @@
                         //alert('tons ='.tons);
 
                     }
-                    
+
 
                 }
 
@@ -1424,45 +1444,39 @@
                     {{--  Sub Contractor --}}
                 }
 
-                //save it sub mit form via ajax
-                if(dosave){
-                    saveit();
+                //set these fields for all services
+                $("#x_proposal_text").val(proposaltext);
+                $("#x_bill_after").val(bill_after);
+                $("#x_profit").val(headerElProfit.val());
+                $("#x_break_even").val(headerElBreakEven.val());
+                $("#x_overhead").val(headerElOverHead.val());
+
+                //then save it
+                if(dosave == 1) {
+                    saveit(false);
                 }
-
+                if(dosave == 2) {
+                    saveit(true);
+                }
+                
             }
+            
 
 
-            var cost_form = $("#cost_formula_form");  // values to determine cost
-            var estimatorForm = $("#estimator_form"); // form to set values for submit and save
-            //alert(cost_form);
-            var dosave = false;
-            calculate(cost_form, estimatorForm, serviceId, proposalDetailId, proposalId, serviceCategoryId, dosave);
-
-
-            headerCalculateCombinedCostingButton2.on('click', function () {
-
-                var dosave = true;
-                calculate(cost_form, estimatorForm, serviceId, proposalDetailId, proposalId, serviceCategoryId, dosave);
-
-            });
-
-
-            function additup(mcost) 
+            function additup(mcost)
             {
-
-                subcost = 0;
-               $("#header_show_subcontractors_cost").html(subcost);
-                $("#estimator_form_subcontractor_cost_total_cost").val(subcost)
-               /*
-                alert('Materials:' + mcost);
- 
-                alert('Equipment:' + $('#estimator_form_equipment_total_cost').val());
-                alert('Vehicle:' + $('#estimator_form_vehicle_total_cost').val());
-                alert('Additional:' + $('#estimator_form_additional_cost_total_cost').val());
-                alert('Labor:' + $('#estimator_form_labor_total_cost').val());
- */
-                var combinedcost = parseFloat($('#estimator_form_equipment_total_cost').val()) + parseFloat($('#estimator_form_labor_total_cost').val()) + parseFloat($('#estimator_form_additional_cost_total_cost').val()) + parseFloat($('#estimator_form_vehicle_total_cost').val()) + parseFloat($("#cost_per_day").val());
+  
+                var combinedcost = (parseFloat($('#estimator_form_vehicle_total_cost').val()) + 
+                    parseFloat($('#estimator_form_equipment_total_cost').val()) + 
+                    parseFloat($('#estimator_form_labor_total_cost').val()) + 
+                    parseFloat($('#estimator_form_additional_cost_total_cost').val()) +
+                    parseFloat($('#estimator_form_subcontractor_total_cost').val()));
+                
+                                    
+                    //+ parseFloat($('#estimator_form_equipment_total_cost').val()) + parseFloat($('#estimator_form_labor_total_cost').val()) + parseFloat($('#estimator_form_additional_cost_total_cost').val()) + parseFloat($('#estimator_form_vehicle_total_cost').val()) + parseFloat($("#cost_per_day").val());
                 var othercost = parseFloat($('#form_header_over_head').val()) + parseFloat($('#form_header_break_even').val()) + parseFloat($('#form_header_profit').val());
+                console.log('combined ' + combinedcost);
+                console.log('other: ' + othercost);
                 combinedcost = parseFloat(combinedcost).toFixed(2);
                 headerElCombinedCosting.text('$' + combinedcost);
                 $("#x_cost").val(combinedcost);
@@ -1470,14 +1484,34 @@
 
             }
 
-            function saveit() 
+            function saveit($leave = false)
             {
-
+                if($leave) {
+                    $("#stayorleave").val("true")
+                }
 
                 $("#estimator_form").submit();
-                //estimatorform.submit();
-                
+
             }
+
+            var cost_form = $("#cost_formula_form");  // values to determine cost
+            var estimatorForm = $("#estimator_form"); // form to set values for submit and save
+
+            calculate(cost_form, estimatorForm, serviceId, proposalDetailId, proposalId, serviceCategoryId, 0);
+
+            // when you want to calculate and save record 
+            headerCalculateCombinedCostingButton2.on('click', function () {
+
+                calculate(cost_form, estimatorForm, serviceId, proposalDetailId, proposalId, serviceCategoryId, 1);
+
+            });
+
+            headerCalculateCombinedCostingButton3.on('click', function () {
+
+                calculate(cost_form, estimatorForm, serviceId, proposalDetailId, proposalId, serviceCategoryId, 2);
+
+            });
+
         });
 
     </script>

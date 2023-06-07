@@ -64,19 +64,19 @@
 
         function showErrorAlert(message, alertEl = $('#alert'))
         {
-            alertEl.addClass('alert-danger').removeClass('hidden').find('.alert-message').html(message);
+            alertEl.removeClass('alert-danger alert-success alert-info alert-warning hidden').addClass('alert-danger').find('.alert-message').html(message);
         }
         function showSuccessAlert(message, alertEl = $('#alert'))
         {
-            alertEl.addClass('alert-success').removeClass('hidden').find('.alert-message').html(message);
+            alertEl.removeClass('alert-danger alert-success alert-info alert-warning hidden').addClass('alert-success').find('.alert-message').html(message);
         }
         function showInfoAlert(message, alertEl = $('#alert'))
         {
-            alertEl.addClass('alert-info').removeClass('hidden').find('.alert-message').html(message);
+            alertEl.removeClass('alert-danger alert-success alert-info alert-warning hidden').addClass('alert-info').find('.alert-message').html(message);
         }
         function showWarningAlert(message, alertEl = $('#alert'))
         {
-            alertEl.addClass('alert-warning').removeClass('hidden').find('.alert-message').html(message);
+            alertEl.removeClass('alert-danger alert-success alert-info alert-warning hidden').addClass('alert-warning').find('.alert-message').html(message);
         }
         function closeAlert(alertEl = $('#alert'))
         {

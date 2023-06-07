@@ -226,6 +226,63 @@ $(document).ready(function () {
     $('body .list-table').on('hide.bs.dropdown', function () {
         $(this).css('margin-bottom', 0);
     });
+
+    var uploadFileWidgets = $('.upload-file-widget');
+
+    if (uploadFileWidgets.length > 0) {
+        uploadFileWidgets
+            .on('change', '.gui-file', function() {
+                var guiFile = $(this);
+                var container = guiFile.closest('.upload-file-widget');
+                var guiInput = container.find('.gui-input');
+                var removeFileLink = container.find('.remove-file-link');
+                var guiFileVal = guiFile.val().replace(/(\\|\/)/g, '||');
+                var tokens = guiFileVal.split('||');
+                var hiddenFileName = container.find('.hidden-file-name');
+                var newFilName = tokens[tokens.length-1];
+                guiInput.val(newFilName);
+                hiddenFileName.val(newFilName);
+                removeFileLink.removeClass('hidden');
+                container.removeClass('validation-error');
+                container.find('span.error-message').remove();
+            })
+            .on('click', '.remove-file-link', function() {
+                var removeFileLink = $(this);
+                var container = removeFileLink.closest('.upload-file-widget');
+                var lang = container.data('lang');
+                var guiInput = container.find('.gui-input');
+                var guiFile = container.find('.gui-file');
+                var hiddenFileName = container.find('.hidden-file-name');
+                hiddenFileName.val('');
+                guiFile.val('');
+                guiInput.val('').attr('placeholder', (lang === 'en' ? 'Upload file' : 'Subir fichero'));
+                removeFileLink.addClass('hidden');
+            });
+
+        uploadFileWidgets.each(function(){
+            var container = $(this);
+            var removeFileLink = container.find('.remove-file-link');
+            var hiddenFileName = container.find('.hidden-file-name');
+            if (hiddenFileName.val() !== '') {
+                removeFileLink.removeClass('hidden');
+            }
+        });
+
+        // validation
+        uploadFileWidgets.on('change', 'input:file', function(){
+            var fileField = $(this);
+            var container = fileField.closest('.upload-file-widget');
+
+            container.removeClass('validation-error');
+            container.find('span.error-message').remove();
+
+            var fakeField = container.find('.fake-file-input-field');
+            if (fakeField.length > 0) {
+                fakeField.val(fileField.val());
+            }
+        })
+    }
+
 });
 
 function checkSize()

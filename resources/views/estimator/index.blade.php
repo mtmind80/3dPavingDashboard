@@ -15,7 +15,15 @@
             @lang('translation.estimator')
         @endslot
     @endcomponent
+<script>
+    //globals
+    var current_subContractor_total =0;
+    var current_labor_total =0;
+    var current_vehicle_total =0;
+    var current_equipment_total =0;
+    var current_additional_total =0;
 
+</script>
     <div class="row estimator-form admin-form">
         <form method="POST" action="{{route('checkform')}}" accept-charfset="UTF-8" id="estimator_form" class="admin-form">
             @csrf
@@ -33,7 +41,7 @@
             <input type="hidden" name="loads" id="x_loads" value="{{ $proposalDetail->loads }}">
             <input type="hidden" name="locations" id="x_locations" value="{{ $proposalDetail->locations }}">
             <input type="hidden" name="overhead" id="x_overhead" value="{{ $proposalDetail->overhead }}">
-            
+
             <input type="hidden" name="depth" id="x_depth" value="{{ $proposalDetail->depth }}">
             <input type="hidden" name="profit" id="x_profit" value="{{ $proposalDetail->profit }}">
             <input type="hidden" name="days" id="x_days" value="{{ $proposalDetail->days }}">
@@ -53,17 +61,17 @@
             <input type="hidden" name='toncost' id='x_toncost' value="{{ $proposalDetail->toncost }}">
             <input type="hidden" name='tackcost' id='x_tackcost' value="{{ $proposalDetail->tackcost }}">
 
+            <input type="hidden" name='stayorleave' id='stayorleave' value="false">
+            {{-- user will stay  after save --}}
 
-
-            <input type="hidden" name="vehicle_total_cost" id="estimator_form_vehicle_total_cost" value="">
-            <input type="hidden" name="equipment_total_cost" id="estimator_form_equipment_total_cost" value="">
-            <input type="hidden" name="labor_total_cost" id="estimator_form_labor_total_cost" value="">
-            <input type="hidden" name="additional_cost_total_cost" id="estimator_form_additional_cost_total_cost" value="">
-            <input type="hidden" name="materials_cost_total_cost" id="estimator_form_materials_cost_total_cost" value="">
-            <input type="hidden" name="subcontractor_cost_total_cost" id="estimator_form_subcontractor_cost_total_cost" value="">
-
-            
+            <input type="hidden" name="vehicle_total_cost" id="estimator_form_vehicle_total_cost" value="{{ $proposalDetail->total_cost_vehicles }}">
+            <input type="hidden" name="equipment_total_cost" id="estimator_form_equipment_total_cost" value="{{ $proposalDetail->total_cost_equipment }}">
+            <input type="hidden" name="labor_total_cost" id="estimator_form_labor_total_cost" value="{{ $proposalDetail->total_cost_labor }}">
+            <input type="hidden" name="additional_cost_total_cost" id="estimator_form_additional_cost_total_cost" value="{{ $proposalDetail->total_additional_costs }}">
+            <input type="hidden" name="materials_total_cost" id="estimator_form_materials_total_cost" value="{{ $proposalDetail->cost_per_day }}">
+            <input type="hidden" name="subcontractor_total_cost" id="estimator_form_subcontractor_total_cost" value="{{ $proposalDetail->total_cost_subcontractor }}">
         </form>
+
         <div class="col-12">
             @include('_partials._alert')
             <div class="card">
@@ -125,6 +133,9 @@
             @endif
         </div>
     </div>
+
+    @include('estimator.wrapitup')
+
 @endsection
 
 @section('page-js')
@@ -134,6 +145,7 @@
         var serviceCategoryId = Number("{{ $proposalDetail->service->service_category_id }}");
         var serviceCategoryName = "{{ $service_category_name }}";
         var proposalId = Number("{{ $proposalDetail->proposal_id }}");
+
     </script>
 @stop
 
