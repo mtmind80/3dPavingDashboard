@@ -781,7 +781,11 @@ class ProposalController extends Controller
         } catch(\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
-
+        $referer = request()->headers->get('referer');
+        $this->returnTo = $referer;
+        if(strpos($referer,'?type=note') == 0) {
+            $this->returnTo = $referer . '?type=note';
+        }
         if(!empty($this->returnTo)) {
             return redirect()->to($this->returnTo)->with('success', 'Proposal note added.');
         } else {

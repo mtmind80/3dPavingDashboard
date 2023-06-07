@@ -37,14 +37,14 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#notes" role="tab">
+                            <a class="nav-link" data-toggle="tab" href="#notes" id="notestab" role="tab">
                                 <span class="d-block d-sm-none"><i class="far fa-user"></i></span>
                                 <span class="d-none d-sm-block">@lang('translation.notes') / @lang('translation.media')</span>
                             </a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#crm" role="tab">
+                            <a class="nav-link" data-toggle="tab" href="#crm" id="crmtab" role="tab">
                                 <span class="d-block d-sm-none"><i class="ri-compass-2-line"></i></span>
                                 <span class="d-none d-sm-block">@lang('translation.status') / @lang('translation.letters')</span>
                             </a>
@@ -474,6 +474,16 @@ All
             if(document.referrer.includes('proposaldetails/edit')) {
                 $("#servicestab").click();
             }
+            
+            console.log(document.referrer);
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const querytype = urlParams.get('type');
+            
+            if(querytype =='note') {
+                $("#notestab").click();
+            }
+            
             var body = $('body');
             var noteModal = $('#formNoteModal');
             var noteForm = $('#admin_form_note_modal');
@@ -485,6 +495,7 @@ All
                 let el = $(this);
                 let ProposalNoteContainer = $('#formNoteModalLabel').find('span');
                 let url = el.data('route');
+                console.log(url);
                 let ProposalName = el.data('proposal_name');
 
                 noteForm.attr('action', url);
