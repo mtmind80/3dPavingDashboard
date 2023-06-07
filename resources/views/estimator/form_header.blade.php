@@ -75,12 +75,7 @@
                             </div>
                         </td>
                         <td class="w1-6">
-                            <a id="header_calculate_combined_costing_button2" href="javascript:" class="{{ $site_button_class }} top-2 prel">Save Service</a>
-
-                            <!--                            <a id="header_calculate_combined_costing_button" href="javascript:" class="{{ $site_button_class }} top-2 prel">Save Service</a>
--->
-                            <a class="{{ $site_button_class }}" href="{{ route('show_proposal',['id'=> $proposalDetail->proposal_id]) }}">@lang('translation.cancel')</a>
-                        </td>
+    &nbsp; </td>
                     </tr>
                     </tbody>
                 </table>
@@ -170,6 +165,7 @@
                     </tr>
                 </tbody>
             </table>
+            
         </div>
     </div>
 </div>
@@ -188,6 +184,7 @@
 
         var headerCalculateCombinedCostingButton = $('#header_calculate_combined_costing_button');
         var headerCalculateCombinedCostingButton2 = $('#header_calculate_combined_costing_button2');
+        var headerCalculateCombinedCostingButton3 = $('#header_calculate_combined_costing_button3');
 
         var headerElVehiclesCost = $('#header_show_vehicles_cost');
         var headerElEquipmentCost = $('#header_show_equipment_cost');

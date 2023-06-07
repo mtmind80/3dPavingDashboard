@@ -1166,6 +1166,12 @@
         @else
             <input type="hidden" name="bill_after" value="0">
         @endif
+
+        <a id="header_calculate_combined_costing_button2" href="javascript:" class="{{ $site_button_class }} ">Save This Service and Stay</a>
+
+        &nbsp;
+        
+        <a id="header_calculate_combined_costing_button3"  class="{{ $site_button_class }}" href="javascript:">Save and Return To Proposal</a>
         
     </form>
 
@@ -1181,27 +1187,21 @@
 
 
             function calculate(cost_form, estimatorForm, services_id, proposal_detail_id, proposal_id, serviceCategoryId, dosave) {
-                //cost_form has data used to calculate costs,
-                //estimator form gets hidden values filled in and data gets sent via ajax on save
-                //what service did we pick
-                //alert(services_id);
-                //alert(serviceCategoryName);
-                //The Math.ceil() static method always rounds up and returns the smaller integer
-                // greater than or equal to a given number.
-                var estimatorform = $("#estimator_form");
+                /*cost_form has data used to calculate costs,
+                estimator form gets hidden values filled in and data gets sent via ajax on save
+                what service did we pick
+                alert(services_id);
+                alert(serviceCategoryName);
+                The Math.ceil() static method always rounds up and returns the smaller integer
+                 greater than or equal to a given number.
+                */
+                
                 var profit = $("#form_header_profit").val();
                 var overhead = $("#form_header_over_head").val();
                 var breakeven = $("#form_header_break_even").val();
                 var regex = "/^[0-9]+$/";  // numbers only
                 var mcost = 0;
-
-
-                if(parseFloat(profit) == 'NaN' || parseFloat(overhead) == 'NaN' ||parseFloat(breakeven) == 'NaN'){
-                    showInfoAlert('You can only enter numbers for profit, overhead and break even.', headerAlert);
-                };
-
-
-
+                
 
                 if (serviceCategoryId == 1) {
 
@@ -1242,8 +1242,13 @@
                     
                     if (parseFloat(square_feet) == 'NaN' || parseFloat(depth) == 'NaN') { // check these are numbers
                         showInfoAlert('You can only enter numbers for square feet and depth.', headerAlert);
-                        //return;
+                        return;
                     }
+
+                    if(parseFloat(profit) == 'NaN' || parseFloat(overhead) == 'NaN' ||parseFloat(breakeven) == 'NaN'){
+                        showInfoAlert('You can only enter numbers for profit, overhead and break even.', headerAlert);
+                        return;
+                    };
 
                     if (square_feet > 0 && depth > 0) {
 
@@ -1447,32 +1452,27 @@
                 $("#x_overhead").val(headerElOverHead.val());
 
                 //then save it
-                if(dosave) {
-                    //saveit();
+                if(dosave == 1) {
+                    saveit(false);
+                }
+                if(dosave == 2) {
+                    saveit(true);
                 }
                 
             }
-
-
-            var cost_form = $("#cost_formula_form");  // values to determine cost
-            var estimatorForm = $("#estimator_form"); // form to set values for submit and save
             
-            
-            // when page loads we need to calculate some things without saving
-            //calculate(cost_form, estimatorForm, serviceId, proposalDetailId, proposalId, serviceCategoryId, false);
-
-            // when you want to calculate and save record 
-            headerCalculateCombinedCostingButton2.on('click', function () {
-
-                calculate(cost_form, estimatorForm, serviceId, proposalDetailId, proposalId, serviceCategoryId, true);
-
-            });
 
 
             function additup(mcost)
             {
   
-                var combinedcost = parseFloat($('#estimator_form_subcontractor_total_cost').val()); 
+                var combinedcost = (parseFloat($('#estimator_form_vehicle_total_cost').val()) + 
+                    parseFloat($('#estimator_form_equipment_total_cost').val()) + 
+                    parseFloat($('#estimator_form_labor_total_cost').val()) + 
+                    parseFloat($('#estimator_form_additional_cost_total_cost').val()) +
+                    parseFloat($('#estimator_form_subcontractor_total_cost').val()));
+                
+                                    
                     //+ parseFloat($('#estimator_form_equipment_total_cost').val()) + parseFloat($('#estimator_form_labor_total_cost').val()) + parseFloat($('#estimator_form_additional_cost_total_cost').val()) + parseFloat($('#estimator_form_vehicle_total_cost').val()) + parseFloat($("#cost_per_day").val());
                 var othercost = parseFloat($('#form_header_over_head').val()) + parseFloat($('#form_header_break_even').val()) + parseFloat($('#form_header_profit').val());
                 console.log('combined ' + combinedcost);
@@ -1484,13 +1484,34 @@
 
             }
 
-            function saveit()
+            function saveit($leave = false)
             {
+                if($leave) {
+                    $("#stayorleave").val("true")
+                }
+
                 $("#estimator_form").submit();
 
             }
 
-            
+            var cost_form = $("#cost_formula_form");  // values to determine cost
+            var estimatorForm = $("#estimator_form"); // form to set values for submit and save
+
+            calculate(cost_form, estimatorForm, serviceId, proposalDetailId, proposalId, serviceCategoryId, 0);
+
+            // when you want to calculate and save record 
+            headerCalculateCombinedCostingButton2.on('click', function () {
+
+                calculate(cost_form, estimatorForm, serviceId, proposalDetailId, proposalId, serviceCategoryId, 1);
+
+            });
+
+            headerCalculateCombinedCostingButton3.on('click', function () {
+
+                calculate(cost_form, estimatorForm, serviceId, proposalDetailId, proposalId, serviceCategoryId, 2);
+
+            });
+
         });
 
     </script>
