@@ -142,11 +142,15 @@ class ProposalDetailController extends Controller
     {
 
         $formfields = $request->all();
-        //print_r($formfields);
-        //exit();
+   
         $proposal_detail = ProposalDetail::where('id', '=', $formfields['id'])->first();
         unset($formfields['_token']);
         unset ($formfields['id']);
+        //unset ($formfields['material_cost']);
+
+        //print_r($formfields);
+        //exit(); 
+
         $proposal_detail->update($formfields);
         \Session::flash('success', 'Service was saved!');
         if($formfields['stayorleave']  =='true')

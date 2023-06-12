@@ -645,9 +645,9 @@
                                  :params="[
                     'label' => 'Square Feet',
                     'iconClass' => 'none',
-                    'value' => '{{$service->square_feet}}',
                 ]"
-                    ></x-form-text>
+                    >{{$proposalDetail->square_feet}}
+                    </x-form-text>
                 </div>
                 <div class="col-sm-3">
                     <x-form-text name="depth"
@@ -657,9 +657,9 @@
                                  :params="[
                     'label' => 'Depth in Inches',
                     'iconClass' => 'none',
-                    'value' => '{{$service->depth}}',
-                ]"
-                    ></x-form-text>
+                     ]"
+                    >{{$proposalDetail->depth}}
+                    </x-form-text>
                 </div>
                 <div class="col-sm-3">
                     <x-form-show
@@ -667,10 +667,9 @@
                             :params="[
                              'label' => 'Loads',
                              'placeholder'=>'calculated',
-                             'value'=>'{{$service->loads}}',
                                     'name'=>'loads',
                                     'id'=>'loads'
-                    ]">
+                    ]">{{$proposalDetail->loads}}
                     </x-form-show>
                 </div>
                 <div class="col-sm-3">
@@ -679,10 +678,9 @@
                             :params="[
                            'placeholder'=>'calculated',
                     'label' => 'Tons',
-                    'value'=>'{{$service->tons}}',
                     'name'=>'ton',
                     'id'=>'tons'
-                    ]">
+                    ]">{{$proposalDetail->tons}}
                     </x-form-show>
                 </div>
 
@@ -1202,7 +1200,7 @@
                 var regex = "/^[0-9]+$/";  // numbers only
                 var mcost = 0;
                 var proposaltext = tinymce.activeEditor.getContent();
-                
+
 
                 if (serviceCategoryId == 1) {
 
@@ -1263,11 +1261,9 @@
                         $("#header_show_materials_cost").text('$' + mcost);
                         if(proposaltext == '') {
                             var str = "{!! $service->service_text_en !!}";
-                            var proposaltext = str.replace('@@TONS@@', tons);
+                            proposaltext = str.replace('@@TONS@@', tons);
                             tinymce.activeEditor.setContent("proposaltext");
                         }
-
-                        var bill_after = $('input[name="bill_after"]:checked').val();
                         //add it up
                         additup(mcost);
 
@@ -1310,8 +1306,23 @@
                     var square_feet = $("#square_feet").val();
                     var depth = $("#depth").val();
                     var rockcost = $('input[name="cost_per_day"]:checked').val();
+
+
+                    if (parseInt(profit) !=  profit || parseInt(breakeven) != breakeven || parseInt(overhead) != overhead)
+                    { // check these are numbers
+                        showInfoAlert('You can only enter numbers for profit, break even and overhead.', headerAlert);
+
+                        setTimeout(() => {
+                            closeAlert(headerAlert);
+                        }, 2000);
+
+                        return;
+                    }
+
+                    alert("rock");
                     
-                    if (!square_feet.match(regex) || !depth.match(regex)) { // check these are numbers
+                    if (parseInt(square_feet) !=  square_feet || parseInt(depth) != depth) 
+                    { // check these are numbers
                         showInfoAlert('You can only enter numbers for square feet and depth.', headerAlert);
 
                         setTimeout(() => {
@@ -1322,12 +1333,6 @@
                     }
 
                     if (square_feet > 0 && depth > 0) {
-
-                        var str = "{!! $service->service_text_en !!}";
-
-                        var newstr = str.replace('@@INCHES@@',depth);
-
-                        $("#proposaltext").val(newstr);
 
                         var tontimes = (7 / 1080);
                         var tons = Math.ceil(square_feet * depth * tontimes);
@@ -1349,7 +1354,7 @@
                         $("#x_material_cost").val(mcost);
                         $("#x_depth").val(depth);
                         $("#x_tons").val(tons);
-                        $("#x_material_cost").val(mcost);
+                        $("#x_material_cost").val(materials);
                         $("#x_loads").val(loads);
                         
                     }
@@ -1445,6 +1450,8 @@
                 }
 
                 //set these fields for all services
+                var bill_after = $('input[name="bill_after"]:checked').val();
+
                 $("#x_proposal_text").val(proposaltext);
                 $("#x_bill_after").val(bill_after);
                 $("#x_profit").val(headerElProfit.val());
