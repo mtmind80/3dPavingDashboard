@@ -1573,6 +1573,11 @@ INSERT into equipment (name,rate_type,rate,do_not_use) VALUES("Trencher","per ho
 Update proposal_details set catchbasins = additive where services_id = 21;
 Update proposal_details set additive = 0 where services_id = 21;
 
+
+update proposal_materials 
+JOIN materials ON materials.id = proposal_materials.material_id
+set proposal_materials.service_category_id = materials.service_category_id ;
+
 #START to remove uneeded fields
 
 ALTER TABLE equipment
