@@ -36,6 +36,7 @@ class Controller extends BaseController
                 return $data;
             });
 
+            view()->share('debug_blade', 'false');
             view()->share('web_config', $web_config);
             session(['web_config'=> $web_config]);
 

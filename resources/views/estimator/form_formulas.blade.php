@@ -1,15 +1,6 @@
 <div class="mt20 mb10">
     <form action="#" id="cost_formula_form" class="admin-form">
 
-        {{-- materials cost --}}
-        <input type="hidden" name='mat_tackcost' id='mat_tackcost' value="{{$materialsCB[14]}}">
-        <input type="hidden" name="mat_curbmix" id="mat_curbmix" value="{{$materialsCB[9]}}">
-        <input type="hidden" name="mat_drummix" id="mat_drummix" value="{{$materialsCB[10]}}">
-        <input type="hidden" name="mat_sealer" id="mat_sealer" value="{{$materialsCB[1]}}">
-        <input type="hidden" name="mat_sand" id="mat_sand" value="{{$materialsCB[2]}}">
-        <input type="hidden" name="mat_additive" id="mat_additive" value="{{$materialsCB[3]}}">
-        <input type="hidden" name="mat_primer" id="mat_primer" value="{{$materialsCB[4]}}">
-        <input type="hidden" name="mat_fastset" id="mat_fastset" value="{{$materialsCB[5]}}">
 
 
         {{-- This form is for reference to calculate costs it is never submitted --}}
@@ -1250,27 +1241,26 @@
                 var overhead = $("#form_header_over_head").val();
                 var breakeven = $("#form_header_break_even").val();
                 var regex = "/^[0-9]+$/";  // numbers only
-                var mcost = 0;
+                var materials = 0;
                 var proposaltext = tinymce.activeEditor.getContent();
                 var service = {{ $proposalDetail->services_id }};
 
+                //Materials
+                var tackcost = {{$materialsCB[14]}};
+                var curbmix = {{$materialsCB[9]}};
+                var drummix = {{$materialsCB[10]}};
+                var sealercost = {{$materialsCB[1]}};
+                var sandcost = {{$materialsCB[2]}};
+                var additivecost = {{$materialsCB[3]}};
+                var primercost = {{$materialsCB[4]}};
+                var fastsetcost = {{$materialsCB[5]}};
                 
-                var tackcost = $("#mat_tackcost").val();
-                var curbmix = $("#mat_curbmix").val();
-                var drummix = $("#mat_drummix").val();
-                var sealercost = $("#mat_sealer").val();
-                var sandcost = $("#mat_sand").val();
-                var additivecost = $("#mat_additive").val();
-                var primercost = $("#mat_primer").val();
-                var fastsetcost = $("#mat_fastset").val();
-
-
                 if (parseInt(profit) != profit || parseInt(breakeven) != breakeven || parseInt(overhead) != overhead) { // check these are numbers
                     showInfoAlert('You must only enter numbers for profit, break even and overhead.', headerAlert);
 
                     setTimeout(() => {
                         closeAlert(headerAlert);
-                    }, 2000);
+                    }, 3000);
 
                     return;
                 }
@@ -1326,20 +1316,24 @@
                             var totaltack = tackcost * tackamount;
                             var totaltons = toncost * tonamount;
 
-                            var mcost = parseFloat(totaltack + totaltons);
+                            var materials = parseFloat(totaltack + totaltons);
 
-                            console.log('mcost: ' + mcost);
-                            $("#header_show_materials_cost").text('$' + mcost);
+                            //set display value for materials
+                            $("#header_show_materials_cost").text('$' + materials);
+
                             if (proposaltext == '') {
                                 proposaltext = servicedesc.replace('@@TONS@@', tons);
                                 tinymce.activeEditor.setContent('proposaltext');
                             }
                             //add it up
-                            additup(mcost);
+                            var results = additup(materials);
 
-                            // ok so set square_feet, cost, loads, tons, depth, bill_after, profit, break_even, location_id, overhead, toncost, proposal_text
+                            if({{$debug_blade}}) {
+                                console.log(results);
+                            }
+
                             // set all relevant form values for update
-                            $("#x_material_cost").val(mcost);
+                            $("#x_material_cost").val(materials);
                             $("#x_square_feet").val(square_feet);
                             $("#x_depth").val(depth);
                             $("#x_locations").val(locations);
@@ -1368,9 +1362,7 @@
                         var linear_feet = $("#linear_feet").val();
                         var locations = $("#locations").val();
                         var cost_per_linear_feet = {{$materialsCB[9]}}; // curbmix default 
-
-
-                        console.log('drum mix '  + drummix);
+                        
                         
                         //linear feet
                         if (linear_feet == parseInt(linear_feet)) {
@@ -1411,12 +1403,9 @@
                             if (serviceId == 11) {
                                 cubic_yards = Math.ceil(linear_feet / 25);
                             }
-
-                            console.log('cu' + cubic_yards);
-                            console.log('cost' + cost_per_linear_feet);
+                            
 
                             materials = Math.ceil(cubic_yards * cost_per_linear_feet);
-                            console.log('materials' + materials);
                             $("#header_show_materials_cost").text('$' + materials);
 
 
@@ -1427,9 +1416,9 @@
 
 
                             var results = additup(materials);
-
-                            console.log(results);
-                            
+                            if({{$debug_blade}}) {
+                                console.log(results);
+                            }
                             var otcost = Math.ceil(parseFloat(profit) + results['combined']);
                             var overhead = Math.ceil((otcost / 0.7) - otcost);
                             $("#x_overhead").val(overhead);
@@ -1463,10 +1452,9 @@
                             
                             var cubic_yards = Math.ceil((square_feet * depth) / 300);
 
-
                             $("#cubic_yards").val(cubic_yards);
                             var materials = Math.ceil(cubic_yards * cost_per_linear_feet);
-                            console.log('materials:' + materials);
+
                             $("#header_show_materials_cost").text('$' + materials);
                             
                             if (profit == '') {
@@ -1481,9 +1469,9 @@
                             
                             //total up
                             var results = additup(materials);
-
-                            console.log(results);
-
+                            if({{$debug_blade}}) {
+                                console.log(results);
+                            }
                             var otcost = Math.ceil(parseFloat(profit) + results['combined']);
                             var overhead = Math.ceil((otcost / 0.7) - otcost);
 
@@ -1501,8 +1489,15 @@
                             $("#x_cost_per_linear_feet").val(cost_per_linear_feet);
                             
                         } else {
-                            alert('Square Feet and Depth are Reuqired Fields');
+                            
+                            showInfoAlert('Square Feet and Depth are Required Fields.', headerAlert);
+
+                            setTimeout(() => {
+                                closeAlert(headerAlert);
+                            }, 3000);
+
                             return;
+
                         }
                         console.log('End of Concrete');
                     }
@@ -1539,18 +1534,20 @@
 
                         $("#loads").text(loads);
                         $("#tons").text(tons);
-                        var mcost = parseFloat(ourcost, 10).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
-                        $("#header_show_materials_cost").text('$' + mcost);
+                        var materials = parseFloat(ourcost).toFixed(2);
+                        $("#header_show_materials_cost").text('$' + materials);
                         if (proposaltext == '') {
                             proposaltext = servicedesc.replace('@@TONS@@', tons);
                             tinymce.activeEditor.setContent('proposaltext');
                         }
                         //add it up
-                        additup(mcost);
-
+                        var results = additup(materials);
+                        if({{$debug_blade}}) {
+                            console.log(results);
+                        }
                         // ok so set square_feet, cost, loads, tons, depth, bill_after, profit, break_even, location_id, overhead, toncost, proposal_text
                         // set all relevant form values for update
-                        $("#x_material_cost").val(mcost);
+                        $("#x_material_cost").val(materials);
                         $("#x_square_feet").val(square_feet);
                         $("#x_depth").val(depth);
                         $("#x_loads").val(loads);
@@ -1587,9 +1584,9 @@
                     var square_feet = $("#square_feet").val();
                     var depth = $("#depth").val();
                     var rockcost = $('input[name="cost_per_day"]:checked').val();
-
-                    console.log(rockcost);
-
+                    if({{$debug_blade}}) {
+                        console.log(rockcost);
+                    }
                     if (parseInt(square_feet) != square_feet || parseInt(depth) != depth) { // check these are numbers
                         showInfoAlert('You can only enter numbers for square feet and depth.', headerAlert);
 
@@ -1608,18 +1605,19 @@
 
                         $("#loads").text(loads);
                         $("#tons").text(tons);
-                        materials = (tons * rockcost);
-                        var mcost = parseFloat(materials, 10).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
+                        var materials = (tons * rockcost);
+                        materials = parseFloat(materials).toFixed(2);
 
                         if (proposaltext == '') {
                             var proposaltext = servicedesc.replace('@@INCHES@@', depth);
                             tinymce.activeEditor.setContent(proposaltext);
                         }
 
-                        //add it up
-                        additup(mcost);
-
-                        $("#header_show_materials_cost").text('$' + mcost);
+                        var results = additup(materials);
+                        if({{$debug_blade}}) {
+                            console.log(results);
+                        }
+                        $("#header_show_materials_cost").text('$' + materials);
                         $("#x_square_feet").val(square_feet);
                         $("#x_depth").val(depth);
                         $("#x_tons").val(tons);
@@ -1678,12 +1676,13 @@
                         //material cost  total all above
                         var materials = parseFloat(sandtotal + fastsettotal + primertotal + additivetotal + sealertotal);
                         materials = Math.ceil(materials);
-                        console.log('materials:' + materials);
+                        if({{$debug_blade}}) {
+                            console.log('materials:' + materials);
+                        }
                         $("#header_show_materials_cost").text(formatCurrency.format(materials));
                         
 
                         var results = additup(materials);
-
                         console.log(results);
 
                         var otcost = Math.ceil(parseFloat(profit) + results['combined']);
@@ -1731,15 +1730,18 @@
 
                     {{--  striping  not used for this service--}}
 
+                    console.log("end striping");
                 }
 
                 if (serviceCategoryId == 10) {
 
                     {{--  Sub Contractor --}}
+                    console.log("end sub contractor");
                 }
 
                 //set these fields for all services
                 var bill_after = $('input[name="bill_after"]:checked').val();
+                var proposaltext = tinymce.activeEditor.getContent();
 
                 $("#x_proposal_text").val(proposaltext);
                 $("#x_bill_after").val(bill_after);
@@ -1758,31 +1760,41 @@
             }
 
 
-            function additup(mcost) {
+            function additup(materials) {
 
                 var combinedcost = (parseFloat($('#estimator_form_vehicle_total_cost').val()) +
                     parseFloat($('#estimator_form_equipment_total_cost').val()) +
                     parseFloat($('#estimator_form_labor_total_cost').val()) +
                     parseFloat($('#estimator_form_additional_cost_total_cost').val()) +
-                    parseFloat($('#estimator_form_subcontractor_total_cost').val())) + mcost;
-
+                    parseFloat($('#estimator_form_subcontractor_total_cost').val()) +
+                    parseFloat(materials));
+                if({{$debug_blade}}) {
+                    console.log('add combined:' + combinedcost);
+                }
                 var data = [];
+                //profit overhead breakeven
                 var pob_cost = parseFloat($('#form_header_over_head').val()) + parseFloat($('#form_header_break_even').val()) + parseFloat($('#form_header_profit').val());
 
-                data['combined'] = combinedcost;
-                data['other'] = pob_cost;
+                data['combined'] = parseFloat(combinedcost).toFixed(2);
+                data['pob_cost'] = parseFloat(pob_cost).toFixed(2);
 
                 headerElCombinedCosting.text('$' + pob_cost.toFixed(2));
-                var customercost = combinedcost + pob_cost;
+                data['math'] = parseFloat(combinedcost) + '+' + parseFloat(pob_cost);
+                var customercost = (parseFloat(combinedcost) + parseFloat(pob_cost)).toFixed(2);
+                data['customercost'] = customercost;
+
                 $("#x_cost").val(customercost);
-                headerElCustomerPrice.text('$' + parseFloat(customercost).toFixed(2));
+                headerElCustomerPrice.text('$' + customercost);
 
                 return data;
+
             }
 
             function saveit($leave = false) {
+                
                 if ($leave) {
-                    $("#stayorleave").val("true")
+                    $("#stayorleave").val("true")  // return to proposal page or service page
+       
                 }
 
                 $("#estimator_form").submit();

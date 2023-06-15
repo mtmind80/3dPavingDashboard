@@ -198,7 +198,6 @@ updated_at
         </div>
     </div>
 
-    @include('estimator.wrapitup')
 
 @endsection
 
