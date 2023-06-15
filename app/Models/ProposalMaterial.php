@@ -14,10 +14,13 @@ class ProposalMaterial extends Model
     {
         $data = array();
         $results = $query->where('service_category_id', '=',$service_category_id)->get()->toArray();
+        $r = array();
         foreach ($results as $result)
         {
-            $data[$result['id']] = $result['name'] . ' - ' . number_format($result['cost'], 2);
-            
+            $r['id'] = $result['id'];
+            $r['name'] = $result['name'] . ' - ' . number_format($result['cost'], 2);
+            $r['cost'] = number_format($result['cost'], 2);
+            $data[] = $r;
             }
         return $data;
     }

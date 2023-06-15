@@ -12,8 +12,8 @@
     </tr>
     <tr>
         <td class="w-50 p8">
-           Service Category:
-            {{ $service_category_name }} - {{$proposalDetail->services_id}}
+           Service Category:{{$proposalDetail->services_id}}
+            {{ $service_category_name }} - Service: {{$proposalDetail->services_id}} - Category: {{$service->service_category_id}}
          <br/>
             Service Title: 
             {{ $proposalDetail->service_name }}

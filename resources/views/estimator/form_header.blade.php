@@ -5,9 +5,9 @@
                     <thead>
                     <tr>
                         <th class="w1-6">Customer Price</th>
-                        <th class="w1-6">Combined Costing</th>
+                        <th class="w1-6">Profit/Overhead/Breakeven</th>
                         <th class="w1-6 pr10">Profit <i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></th>
-                        <th class="w1-6 pr10">Over Head <i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></th>
+                        <th class="w1-6 pr10">Over Head <i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i>     <span id="explain"></span></th>
                         <th class="w1-6 pr10">Breakeven <i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></th>
                         <th class="w1-6"></th>
                     </tr>
@@ -59,6 +59,7 @@
 
                                     ]"
                                 >{{$proposalDetail->overhead}}</x-form-text>
+                            
                             </div>
                         </td>
                         <td class="w1-6 pr10">
@@ -79,93 +80,6 @@
                     </tr>
                     </tbody>
                 </table>
-        </div>
-    </div>
-    <div class="row mt10">
-        <div class="col-sm-12">
-            <table class="table-centered table-light full-width">
-                <thead>
-                    <tr>
-                        <th class="w1-6">@lang('translation.vehicle')</th>
-                        <th class="w1-6">@lang('translation.equipment')</th>
-                        <th class="w1-6">@lang('translation.materials')</th>
-                        <th class="w1-6">@lang('translation.labor')</th>
-                        <th class="w1-6">@lang('translation.additionalcost')</th>
-                        <th class="w1-6">
-                                @if($proposalDetail->service->service_category_id != 10)
-                                    @lang('translation.subcontractors')
-                                @endif
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="w1-6 td-tt pr10">
-                            <div class="admin-form-item-widget">
-                                <x-form-show
-                                    class="w180 show-check-contact"
-                                    :params="[
-                                        'id' => 'header_show_vehicles_cost',
-                                    ]">
-                                </x-form-show>
-                            </div>
-                        </td>
-                        <td class="w1-6 td-tt pr10">
-                            <div class="admin-form-item-widget">
-                                <x-form-show
-                                    class="w180 show-check-contact"
-                                    :params="[
-                                        'id' => 'header_show_equipment_cost',
-                                    ]">
-                                </x-form-show>
-                            </div>
-                        </td>
-                        <td class="w1-6 td-tt pr10">
-                            <div class="admin-form-item-widget">
-                                <x-form-show
-                                    class="w180 show-check-contact"
-                                    :params="[
-                                        'id' => 'header_show_materials_cost',
-                                    ]">
-                                </x-form-show>
-                            </div>
-                        </td>
-                        <td class="w1-6 td-tt pr10">
-                            <div class="admin-form-item-widget">
-                                <x-form-show
-                                    class="w180 show-check-contact"
-                                    :params="[
-                                        'id' => 'header_show_labor_cost',
-                                    ]">
-                                </x-form-show>
-                            </div>
-                        </td>
-                        <td class="w1-6 td-tt pr10">
-                            <div class="admin-form-item-widget">
-                                <x-form-show
-                                    class="w180 show-check-contact"
-                                    :params="[
-                                        'id' => 'header_show_additional_cost',
-                                    ]">
-                                </x-form-show>
-                            </div>
-                        </td>
-                        <td class="w1-6 td-tt">
-                            <div class="admin-form-item-widget">
-                                @if($proposalDetail->service->service_category_id != 10)
-                                <x-form-show
-                                    class="w180 show-check-contact"
-                                    :params="[
-                                        'id' => 'header_show_subcontractor_cost',
-                                    ]">
-                                </x-form-show>
-                                @endif
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            
         </div>
     </div>
 </div>
