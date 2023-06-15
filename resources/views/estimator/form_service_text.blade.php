@@ -41,7 +41,7 @@
 
     <script>
         $(document).ready(function () {
-            var servicedesc = '{!! $service->service_text_en !!}'; 
+            var servicedesc = decodeURIComponent(encodeURIComponent("{!! $service->service_template !!}")); 
 
             if (serviceCategoryId == 1) {
 
@@ -65,8 +65,16 @@
 
                 if (serviceId < 12) {
 
+                    cubic_yards = $("#cubic_yards").val();
+                    servicedesc = servicedesc.replace('@@TONS@@', cubic_yards);
+                    
+                    
                 } else if (serviceId >= 12) {
-
+                    cubic_yards = $("#cubic_yards").val();
+                    depth = $("#depth").val();
+                    servicedesc = servicedesc.replace('@@TONS@@', cubic_yards);
+                    servicedesc = servicedesc.replace('@@INCHES@@', depth);
+                    
                 }
             }
 
@@ -109,6 +117,11 @@
 
                 {{--  Seal Coating  these are the user imput fields that need to be filled in validated--}}
 
+                var square_feet = $("#square_feet").val();
+                var phase = $("#phases").val();
+                servicedesc = servicedesc.replace('@@SQFT@@', square_feet);
+                servicedesc = servicedesc.replace('@@PHASES@@', phases);
+                
 
             }
 

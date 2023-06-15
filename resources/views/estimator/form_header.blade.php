@@ -7,7 +7,7 @@
                         <th class="w1-6">Customer Price</th>
                         <th class="w1-6">Profit/Overhead/Breakeven</th>
                         <th class="w1-6 pr10">Profit <i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></th>
-                        <th class="w1-6 pr10">Over Head <i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></th>
+                        <th class="w1-6 pr10">Over Head <i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i>     <span id="explain"></span></th>
                         <th class="w1-6 pr10">Breakeven <i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></th>
                         <th class="w1-6"></th>
                     </tr>
@@ -59,7 +59,6 @@
 
                                     ]"
                                 >{{$proposalDetail->overhead}}</x-form-text>
-                                <span id="explain"></span>
                             
                             </div>
                         </td>

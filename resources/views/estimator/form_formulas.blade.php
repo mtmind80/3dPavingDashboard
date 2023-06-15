@@ -53,7 +53,7 @@
                     17	10	Any Sub Contractor
 
                     --}}
-
+        <div class="mt20 mb10">
 
         @if($service->service_category_id == 1)
 
@@ -63,9 +63,7 @@
                 {{-- Asphalt Milling --}}
                 <div class="row">
                     <div class="col-sm-3">
-                        <label class="control-label">Size of project in SQ FT <i class="field-required fa fa-asterisk"
-                                                                                 data-toggle="tooltip"
-                                                                                 title="@lang('translation.field_required')"></i></label>
+                        <label class="control-label">Size of project in SQ FT <i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
 
                         <x-form-text name="square_feet"
                                      class="check-contact tc"
@@ -366,72 +364,67 @@
                 <br/>
                 <div class="row">
                     <div class="col-sm-2">
-                        <label class="control-label">Square Feet <i class="field-required fa fa-asterisk"
-                                                                    data-toggle="tooltip"
-                                                                    title="@lang('translation.field_required')"></i></label>
+                        <label class="control-label">Square Feet <i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
                         <x-form-text name="square_feet"
                                      class="check-contact tc"
                                      placeholder="enter value"
                                      id="square_feet"
                                      :params="[
-                    'label' => 'none',
-                    'iconClass' => 'none',
-                ]">{{$proposalDetail->square_feet}}</x-form-text>
-
+                                        'label' => 'none',
+                                        'iconClass' => 'none',
+                                      ]">{{$proposalDetail->square_feet}}</x-form-text>
                     </div>
                     <div class="col-sm-2">
-                        <label class="control-label">Depth (inches) <i class="field-required fa fa-asterisk"
-                                                                       data-toggle="tooltip"
-                                                                       title="@lang('translation.field_required')"></i></label>
+                        <label class="control-label">Depth (inches) <i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
                         <x-form-text name="depth"
                                      class="check-contact tc"
                                      placeholder="enter value"
                                      id="depth"
                                      :params="[
-                    'label' => 'none',
-                    'iconClass' => 'none',
-                ]"
-                        >{{$proposalDetail->depth}}</x-form-text>
+                                    'label' => 'none',
+                                    'iconClass' => 'none',
+                                    ]"
+                                    >{{$proposalDetail->depth}}
+                        </x-form-text>
                     </div>
                     <div class="col-sm-2">
-                        <label class="control-label">Locations <i class="field-required fa fa-asterisk"
-                                                                  data-toggle="tooltip"
-                                                                  title="@lang('translation.field_required')"></i></label>
+                        <label class="control-label">Locations <i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
                         <x-form-text name="locations"
                                      class="check-contact tc"
                                      placeholder="enter value"
                                      id="locations"
                                      :params="[
-                    'label' => 'none',
-                    'iconClass' => 'none',
-                ]"
-                        >{{$proposalDetail->locations}}</x-form-text>
+                                        'label' => 'none',
+                                        'iconClass' => 'none',
+                                        ]"
+                                        >{{$proposalDetail->locations}}
+                        </x-form-text>
                     </div>
                     <div class="col-sm-3">
-                        <label class="control-label">Cubic Yards
+                        <label class="form-field-label">Cubic Yards 
                         </label>
 
-                        <x-form-text name="cubic_yards"
-                                     class="check-contact tc"
-                                     placeholder="enter value"
+                        <x-form-show
+                                class="w180 show-check-contact"
+                                     name="cubic_yards"
                                      id="cubic_yards"
                                      :params="[
                     'label' => 'none',
                     'iconClass' => 'none',
                 ]"
-                        >{{$proposalDetail->cubic_yards}}</x-form-text>
+                        >{{$proposalDetail->cubic_yards}}</x-form-show>
                     </div>
                     <div class="col-sm-3">
-                        <label class="control-label">Drum Mix Cost </label>
-                        <x-form-text name="cost_per_linear_feet"
-                                     class="check-contact tc"
-                                     placeholder="enter value"
+                        <label class="form-field-label">Drum Mix Cost </label>
+                        <x-form-show
+                                class="w180 show-check-contact"
+                                     name="cost_per_linear_feet"
                                      id="cost_per_linear_feet"
                                      :params="[
                     'label' => 'none',
                     'iconClass' => 'none',
                 ]"
-                        >{{ \App\Helpers\Currency::format($materialsCB[10] ?? '0.0') }}</x-form-text>
+                        >{{ \App\Helpers\Currency::format($materialsCB[10] ?? '0.0') }}</x-form-show>
 
                     </div>
 
@@ -624,9 +617,8 @@
                                      :params="[
                     'label' => 'Job Description',
                     'iconClass' => 'none',
-                    'value' => '{{$service->alt_desc}}',
                 ]"
-                    ></x-form-textarea>
+                    >{{$proposalDetail->alt_desc}}</x-form-textarea>
                 </div>
 
             </div>
@@ -648,9 +640,8 @@
                                  :params="[
                     'label' => 'Square Feet',
                     'iconClass' => 'none',
-                    'value' => '{{$service->square_feet}}',
                 ]"
-                    ></x-form-text>
+                    >{{$proposalDetail->square_feet}}</x-form-text>
 
                 </div>
                 <div class="col-sm-4">
@@ -661,9 +652,8 @@
                                  :params="[
                     'label' => 'Cost',
                     'iconClass' => 'none',
-                    'value' => '{{$service->cost_per_day}}',
                 ]"
-                    ></x-form-text>
+                    >{{$proposalDetail->cost_per_day}}</x-form-text>
                 </div>
                 <div class="col-sm-4">
                     <div class='check-contact tc' id="tonnage"></div>
@@ -675,9 +665,8 @@
                              'hint' => 'This field is calculated',
                     'label' => 'Excavate Tons',
                     'iconClass' => 'none',
-                    'value' => '{{$service->tons}}',
                 ]"
-                    ></x-form-text>
+                    >{{$proposalDetail->tons}}</x-form-text>
                 </div>
 
             </div>
@@ -693,9 +682,8 @@
                                      :params="[
                     'label' => 'Job Description',
                     'iconClass' => 'none',
-                    'value' => '{{$service->alt_desc}}',
                 ]"
-                    ></x-form-textarea>
+                    >{{$proposalDetail->alt_desc}}</x-form-textarea>
                 </div>
             </div>
 
@@ -812,10 +800,9 @@
                     </div>
                 </div>
                 <div class="col-sm-3">
-                    <label class="control-label">Yield</label>
-
+                    <label class="form-field-label">Yield<i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
                     <select class="form-control" name="yield" id="yield">
-                        <option value="{{$service->yield}}">{{$service->yield}}</option>
+                        <option value="{{$proposalDetail->yield}}">{{$proposalDetail->yield}}</option>
                         <option value="60">60</option>
                         <option value="65">65</option>
                         <option value="70">70</option>
@@ -838,16 +825,16 @@
                 </div>
 
                 <div class="col-sm-3">
+                    <label class="form-field-label">Square Feet <i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
                     <x-form-text name="square_feet"
                                  class="check-contact tc"
                                  placeholder="enter value"
                                  id="square_feet"
                                  :params="[
-                    'label' => 'Square Feet',
+                    'label' => 'none',
                     'iconClass' => 'none',
-                    'value' => '{{$service->square_feet}}',
                 ]"
-                    ></x-form-text>
+                    >{{$proposalDetail->square_feet}}</x-form-text>
                 </div>
 
             </div>
@@ -855,285 +842,183 @@
 
             <div class="row">
                 <div class="col-sm-4">
+                    <label class="form-field-label">Primer (gals)<i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
                     <x-form-text name="primer"
                                  class="check-contact tc"
                                  placeholder="enter value"
                                  id="primer"
                                  :params="[
-                    'label' => 'Oil Spot Primer (gals)',
+                    'label' => 'none',
                     'iconClass' => 'none',
-                    'value' => '{{$service->primer}}',
-                ]"
-                    ></x-form-text>
+                   ]"
+                    >{{$proposalDetail->primer}}</x-form-text>
                 </div>
                 <div class="col-sm-4">
+                    <label class="form-field-label">Fast Set (gals)<i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
                     <x-form-text name="fast_set"
                                  class="check-contact tc"
                                  placeholder="enter value"
                                  id="fast_set"
                                  :params="[
-                    'label' => 'Fast Set (gals)',
+                    'label' => 'none',
                     'iconClass' => 'none',
-                    'value' => '{{$service->fast_set}}',
                 ]"
-                    ></x-form-text>
+                    >{{$proposalDetail->fast_set}}</x-form-text>
                 </div>
                 <div class="col-sm-4">
+                    <label class="form-field-label">Phases<i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
+
                     <x-form-text name="phases"
                                  class="check-contact tc"
                                  placeholder="enter value"
                                  id="phases"
                                  :params="[
-                    'label' => 'Phases',
+                    'label' => 'none',
                     'iconClass' => 'none',
-                    'value' => '{{$service->phases}}',
                 ]"
-                    ></x-form-text>
+                    >{{$proposalDetail->phases}}</x-form-text>
                 </div>
-
-                {{--
-    id
-    proposal_id
-    change_order_id
-    services_id
-    contractor_id
-    status_id
-    location_id
-    fieldmanager_id
-    second_fieldmanager_id
-    service_name
-    service_desc
-    alt_desc
-    linear_feet
-    cost_per_linear_feet
-    square_feet
-    square_yards
-    cubic_yards
-    tons
-    loads
-    locations
-    depth
-    profit
-    days
-    cost_per_day
-    break_even
-    primer
-    yield
-    fast_set
-    additive
-    sealer
-    sand
-    phases
-    overhead
-    cost
-    bill_after
-    dsort
-    proposal_text
-    proposal_note
-    proposal_field_note
-    created_by
-    scheduled_by
-    completed_by
-    completed_date
-    start_date
-    end_date
-    created_at
-    updated_at
-    --}}
-
-
+                
             </div>
             <br/>
             <div class="row">
-                <div class="col-sm-3">
-                    <label class="control-label">Materials Needed</label>
+                <div class="col-sm-2">
+                    <label class="control-label">Materials <br/>Needed</label>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-2">
 
-                    <x-form-text name="sealer"
+                    
+                    <x-form-show name="sealer"
                                  class="check-contact tc"
                                  placeholder="enter value"
                                  id="sealer"
                                  :params="[
-                    'label' => 'Sealer',
+                    'label' => 'Sealer (gals)',
                     'iconClass' => 'none',
-                    'value' => '{{$service->sealer}}',
                 ]"
-                    ></x-form-text>
+                    >{{$proposalDetail->sealer}}</x-form-show>
 
                 </div>
-                <div class="col-sm-3">
-                    <x-form-text name="sand"
+                <div class="col-sm-2">
+                    <x-form-show name="sand"
                                  class="check-contact tc"
                                  placeholder="enter value"
                                  id="sand"
                                  :params="[
-                    'label' => 'Sand (SEALER * 2)',
+                    'label' => 'Sand',
                     'iconClass' => 'none',
-                    'value' => '{{$service->sand}}',
                 ]"
-                    ></x-form-text>
+                    >{{$proposalDetail->sand}}</x-form-show>
 
                 </div>
-                <div class="col-sm-3">
-                    <x-form-text name="additive"
+                <div class="col-sm-2">
+                    <x-form-show name="additive"
                                  class="check-contact tc"
                                  placeholder="enter value"
                                  id="additive"
                                  :params="[
-                    'label' => 'Additive (SEALER / 50)',
+                    'label' => 'Additive (sealer/50)',
                     'iconClass' => 'none',
-                    'value' => '{{$service->additive}}',
                 ]"
-                    ></x-form-text>
+                    >{{$proposalDetail->additive}}</x-form-show>
                 </div>
+                <div class="col-sm-4">
+                &nbsp;</div>
 
             </div>
-            <br/>
 
-            <div class="row panel">
-
+        
                 <div class="row">
-                    <div class="col-sm-2">
+                    <div class="col-2">
                         <label class="control-label">TOTALS </label>
                     </div>
-                    <div class="col-sm-2">
-                        <x-form-text name="SealerTotal"
-                                     class="check-contact tc"
-                                     placeholder="disabled"
-                                     id="SealerTotal"
-                                     :params="[
-                    'label' => 'Sealer',
-                    'iconClass' => 'none',
-                    'value' => '',
-                ]"
-                        ></x-form-text>
+                    <div class="col-2">
+                        <label class="control-label">Sealer</label>
 
+                        <span class="form-control" id="SealerTotal"></span>
                     </div>
-                    <div class="col-sm-2">
-                        <x-form-text name="SandTotal"
-                                     class="check-contact tc"
-                                     placeholder="disabled"
-                                     id="SandTotal"
-                                     :params="[
-                    'label' => 'Sand',
-                    'iconClass' => 'none',
-                    'value' => '',
-                ]"
-                        ></x-form-text>
-
-
+                    <div class="col-2">
+                        <label class="form-field-label">Sand</label>
+                        <span class="form-control" id="SandTotal"></span>
+                    
                     </div>
-                    <div class="col-sm-2">
-                        <x-form-text name="AdditiveTotal"
-                                     class="check-contact tc"
-                                     placeholder="disabled"
-                                     id="AdditiveTotal"
-                                     :params="[
-                    'label' => 'Additive',
-                    'iconClass' => 'none',
-                    'value' => '',
-                ]"
-                        ></x-form-text>
-
+                    <div class="col-2">
+                        <label class="form-field-label">Additive</label>
+                        <span class="form-control" id="AdditiveTotal"></span>
                     </div>
-                    <div class="col-sm-2">
-                        <x-form-text name="PrimerTotal"
-                                     class="check-contact tc"
-                                     placeholder="disabled"
-                                     id="PrimerTotal"
-                                     :params="[
-                    'label' => 'Primer',
-                    'iconClass' => 'none',
-                    'value' => '',
-                ]"
-                        ></x-form-text>
-
+                    <div class="col-2">
+                        <label class="form-field-label">Primer</label>
+                        <span class="form-control" id="PrimerTotal"></span>
                     </div>
-                    <div class="col-sm-2">
-                        <x-form-text name="FastSetTotal"
-                                     class="check-contact tc"
-                                     placeholder="disabled"
-                                     id="FastSetTotal"
-                                     :params="[
-                    'label' => 'FastSet',
-                    'iconClass' => 'none',
-                    'value' => '',
-                ]"
-                        ></x-form-text>
+                    <div class="col-2">
+                        <label class="form-field-label">Fast Set</label>
+                        <span class="form-control" id="FastSetTotal"></span>
                     </div>
-
                 </div>
-
-
-                <div class="row">
-                    <div class="col-sm-2">
+            
+<!--        
+        <div class="row">
+                    <div class="col-2">
                         <label class="control-label">COST</label>
                     </div>
                     <div class="col-sm-2">
-                        <x-form-text name="SealerCost"
+                        <x-form-show name="SealerCost"
                                      class="check-contact tc"
                                      placeholder="disabled"
                                      id="SealerCost"
                                      :params="[
                     'label' => 'Sealer Cost',
                     'iconClass' => 'none',
-                    'value' => '',
-                ]"
-                        ></x-form-text>
+                  ]"
+                        ></x-form-show>
                     </div>
-                    <div class="col-sm-2">
-                        <x-form-text name="SandCost"
+                    <div class="col-2">
+                        <x-form-show name="SandCost"
                                      class="check-contact tc"
                                      placeholder="disabled"
                                      id="SandCost"
                                      :params="[
                     'label' => 'Sand Cost',
                     'iconClass' => 'none',
-                    'value' => '',
                 ]"
-                        ></x-form-text>
+                        ></x-form-show>
                     </div>
-                    <div class="col-sm-2">
-                        <x-form-text name="AdditiveCost"
+                    <div class="col-2">
+                        <x-form-show name="AdditiveCost"
                                      class="check-contact tc"
                                      placeholder="disabled"
                                      id="AdditiveCost"
                                      :params="[
                     'label' => 'Additive Cost',
                     'iconClass' => 'none',
-                    'value' => '',
                 ]"
-                        ></x-form-text>
+                        ></x-form-show>
                     </div>
                     <div class="col-sm-2">
-                        <x-form-text name="PrimerCost"
+                        <x-form-show name="PrimerCost"
                                      class="check-contact tc"
                                      placeholder="disabled"
                                      id="PrimerCost"
                                      :params="[
-                    'label' => 'Primer Cost',
-                    'iconClass' => 'none',
-                    'value' => '',
-                ]"
-                        ></x-form-text>
+                                    'label' => 'Primer Cost',
+                                    'iconClass' => 'none',
+                                    'value' => '',
+                ]"></x-form-show>
                     </div>
                     <div class="col-sm-2">
-                        <x-form-text name="FastSetCost"
+                        <x-form-show name="FastSetCost"
                                      class="check-contact tc"
                                      placeholder="disabled"
                                      id="FastSetCost"
                                      :params="[
-                    'label' => 'FastSet Cost',
-                    'iconClass' => 'none',
-                    'value' => '',
-                ]"
-                        ></x-form-text>
-
+                                    'label' => 'FastSet Cost',
+                                    'iconClass' => 'none',
+                                    'value' => '',
+                ]"></x-form-show>
                     </div>
 
                 </div>
-
+-->
             </div>
 
         @endif
@@ -1360,23 +1245,24 @@
                  greater than or equal to a given number.
                 */
 
+                var servicedesc = "{!! $service->service_template !!}";
                 var profit = $("#form_header_profit").val();
                 var overhead = $("#form_header_over_head").val();
                 var breakeven = $("#form_header_break_even").val();
                 var regex = "/^[0-9]+$/";  // numbers only
                 var mcost = 0;
                 var proposaltext = tinymce.activeEditor.getContent();
-                var servicedesc = '{!! $service->service_text_en !!}';
                 var service = {{ $proposalDetail->services_id }};
 
+                
                 var tackcost = $("#mat_tackcost").val();
                 var curbmix = $("#mat_curbmix").val();
                 var drummix = $("#mat_drummix").val();
-                var sealer = $("#mat_sealer").val();
-                var sand = $("#mat_sand").val();
-                var additive = $("#mat_additive").val();
-                var primer = $("#mat_primer").val();
-                var fastset = $("#mat_fastset").val();
+                var sealercost = $("#mat_sealer").val();
+                var sandcost = $("#mat_sand").val();
+                var additivecost = $("#mat_additive").val();
+                var primercost = $("#mat_primer").val();
+                var fastsetcost = $("#mat_fastset").val();
 
 
                 if (parseInt(profit) != profit || parseInt(breakeven) != breakeven || parseInt(overhead) != overhead) { // check these are numbers
@@ -1481,10 +1367,10 @@
 
                         var linear_feet = $("#linear_feet").val();
                         var locations = $("#locations").val();
-                        var cost_per_linear_feet = 0;
+                        var cost_per_linear_feet = {{$materialsCB[9]}}; // curbmix default 
 
 
-                        console.log(drummix);
+                        console.log('drum mix '  + drummix);
                         
                         //linear feet
                         if (linear_feet == parseInt(linear_feet)) {
@@ -1514,13 +1400,11 @@
                             if (serviceId == 9) {
 
                                 var cost_per_linear_feet = drummix;
-
-
+                                
                                 cubic_yards = Math.ceil(linear_feet / 15);
                             }
                             if (serviceId == 10) {
 
-                                var cost_per_linear_feet = curbmix;
                                 cubic_yards = Math.ceil(linear_feet / 22);
                             }
 
@@ -1542,15 +1426,15 @@
                             }
 
 
-                            var data = additup(materials);
+                            var results = additup(materials);
 
-                            console.log(data);
-
-                            var otcost = Math.ceil(1 + parseFloat(profit));
+                            console.log(results);
+                            
+                            var otcost = Math.ceil(parseFloat(profit) + results['combined']);
                             var overhead = Math.ceil((otcost / 0.7) - otcost);
                             $("#x_overhead").val(overhead);
                             $("#form_header_over_head").val(overhead);
-                            $("#explain").html('calculated at 30%');
+                            $("#explain").html(' 30%');
 
 
                             $("#x_material_cost").val(materials);
@@ -1564,8 +1448,64 @@
 
                     } else if (serviceId >= 12) {
 
+                        /*depth and sqq ft sid 12, 13 14
+                        12    Concrete    Slab [New or Repairs]    (SF * Depth)/300
+                        13    Concrete    Ramp [New or Repairs]    (SF * Depth)/300
+                        14    Concrete    Sidewalks [New or Repairs]    (SF * Depth)/300
+                        */
+                        var square_feet = $("#square_feet").val();
+                        var depth = $("#depth").val();
+                        var locations = $("#locations").val();
+                        var cost_per_linear_feet = {{$materialsCB[10]}};
+                        
+
+                        if (square_feet == parseInt(square_feet) && depth == parseInt(depth)) {
+                            
+                            var cubic_yards = Math.ceil((square_feet * depth) / 300);
+
+
+                            $("#cubic_yards").val(cubic_yards);
+                            var materials = Math.ceil(cubic_yards * cost_per_linear_feet);
+                            console.log('materials:' + materials);
+                            $("#header_show_materials_cost").text('$' + materials);
+                            
+                            if (profit == '') {
+                                profit = 0;
+                                $("#profit").val(0);
+                            }
+
+                    
+                                proposaltext = servicedesc.replace('@@TONS@@', cubic_yards);
+                                proposaltext = proposaltext.replace('@@INCHES@@', depth);
+                                tinymce.activeEditor.setContent('proposaltext');
+                            
+                            //total up
+                            var results = additup(materials);
+
+                            console.log(results);
+
+                            var otcost = Math.ceil(parseFloat(profit) + results['combined']);
+                            var overhead = Math.ceil((otcost / 0.7) - otcost);
+
+                            
+                            $("#x_overhead").val(overhead);
+                            $("#form_header_over_head").val(overhead);
+                            $("#explain").html(' 30%');
+
+                            // set all relevant form values for update
+                            $("#x_material_cost").val(materials);
+                            $("#x_cubic_yards").val(cubic_yards);
+                            $("#x_square_feet").val(square_feet);
+                            $("#x_depth").val(depth);
+                            $("#x_locations").val(locations);
+                            $("#x_cost_per_linear_feet").val(cost_per_linear_feet);
+                            
+                        } else {
+                            alert('Square Feet and Depth are Reuqired Fields');
+                            return;
+                        }
+                        console.log('End of Concrete');
                     }
-                    console.log('End of Concrete');
                 }
 
                 if (serviceCategoryId == 3) {
@@ -1673,7 +1613,7 @@
 
                         if (proposaltext == '') {
                             var proposaltext = servicedesc.replace('@@INCHES@@', depth);
-                            tinymce.activeEditor.setContent('proposaltext');
+                            tinymce.activeEditor.setContent(proposaltext);
                         }
 
                         //add it up
@@ -1697,74 +1637,93 @@
 
                     {{--  Seal Coating  these are the user imput fields that need to be filled in validated--}}
 
-                        square_feet = $("#square_feet").val();
-                    primer = $("#primaer").val();
-                    fastset = $("#fastset").val();
-                    if (square_feet == parseInt(square_feet)
-                        && primer == parseInt(primer)
-                        && fastset == parseInt(fastset)) {
+                        var square_feet = $("#square_feet").val();
+                        var yield = $("#yield>option:selected").val();
+                        var primer = $("#primer").val();
+                        var fastset = $("#fast_set").val();
+                        var phases = $("#phases").val();
 
-                        var yield = $("#yield").val();
-
-
-                        //calculate amounts
-
-                        /*
-                         SEALER  = Size/Yield  = GAL SEALER
-                         AND SAND = GAL SEALER * 2
-                         ADDITIVE = AND GAL SEALER / 50
-                         */
+                    /*
+                    SEALER  = Size/Yield  = GAL SEALER
+                    AND SAND = GAL SEALER * 2
+                    ADDITIVE = AND GAL SEALER / 50
+                    */
 
 
+
+                    if (square_feet == parseInt(square_feet) && primer == parseInt(primer) && fastset == parseInt(fastset) && parseInt(yield) > 0 )
+                    {
+                    
+                        
+                        var sealer = Math.ceil(square_feet/yield);
                         var sand = Math.ceil(sealer * 2);
-                        $("#sand").val(sand);
-
-                        var sealer = Math.ceil(square_feet / yield);
-                        $("#sealer").val(sealer);
-
                         var additive = Math.ceil(sealer / 50);
+
+                        $("#sealer").val(sealer);
+                        $("#sand").val(sand);
                         $("#additive").val(additive);
+                        
+                        var sandtotal = Math.ceil(sandcost * sand);
+                        var fastsettotal = Math.ceil(fastsetcost * fastset);
+                        var primertotal = Math.ceil(primercost * primer);
+                        var additivetotal = Math.ceil(additivecost * additive);
+                        var sealertotal = Math.ceil(sealercost * sealer);
+                        
+                        $("#SealerTotal").text(formatCurrency.format(sealertotal));
+                        $("#AdditiveTotal").text(formatCurrency.format(additivetotal));
+                        $("#PrimerTotal").text(formatCurrency.format(primertotal));
+                        $("#FastSetTotal").text(formatCurrency.format(fastsettotal));
+                        $("#SandTotal").text(formatCurrency.format(sandtotal));
+                        
+                        //material cost  total all above
+                        var materials = parseFloat(sandtotal + fastsettotal + primertotal + additivetotal + sealertotal);
+                        materials = Math.ceil(materials);
+                        console.log('materials:' + materials);
+                        $("#header_show_materials_cost").text(formatCurrency.format(materials));
+                        
 
+                        var results = additup(materials);
 
-                        var sandtotal = Math.ceil(parseFloat(sandcost) * parseFloat(sand));
-                        var fastsettotal = Math.ceil(parseFloat(fastsetcost) * parseFloat(fastset));
-                        var primertotal = Math.ceil(parseFloat(primercost) * parseFloat(primer));
-                        var additivetotal = Math.ceil(parseFloat(additivecost) * parseFloat(additive));
-                        var sealertotal = Math.ceil(parseFloat(sealercost) * parseFloat(sealer));
+                        console.log(results);
 
-                        $("#SandTotal").val('$' + sandtotal.toFixed(2));
-                        cost_form.FastSetTotal.value = '$' + fastsettotal.toFixed(2);
-                        cost_form.SealerTotal.value = '$' + sealertotal.toFixed(2);
-                        cost_form.PrimerTotal.value = '$' + primertotal.toFixed(2);
-                        cost_form.AdditiveTotal.value = '$' + additivetotal.toFixed(2);
-
-                        var subtotal = Math.ceil(
-                            parseFloat(sandtotal) +
-                            parseFloat(fastsettotal) +
-                            parseFloat(primertotal) +
-                            parseFloat(additivetotal) +
-                            parseFloat(sealertotal)
-                        );
-
-                        $("#mcost").val(subtotal);
-
-                        //total up
-                        var combinedcost = parseFloat($("#POVTotal").val()) + parseFloat($("#POequipTotal").val()) + parseFloat($("#POlaborTotal").val()) + parseFloat($("#POOtherTotal").val()) + parseFloat(cost_form.mcost.value);
-
-                        var otcost = Math.ceil(parseFloat(combinedcost) + parseFloat(profit));
+                        var otcost = Math.ceil(parseFloat(profit) + results['combined']);
                         var overhead = Math.ceil((otcost / 0.7) - otcost);
-                        $("#explain").html('calculated at 30%');
-                        //var overhead = Math.ceil((parseFloat(combinedcost) +  parseFloat(profit)) * 30)/100;
+                        
+                        $("#form_header_over_head").val(overhead);
+                        $("#x_overhead").val(overhead);
+                        $("#x_sealer").val(sealer);
+                        $("#x_square_feet").val(square_feet);
+                        $("#x_fast_set").val(fastset);
+                        $("#x_yield").val(yield);
+                        $("#x_phases").val(phases);
+                        $("#x_primer").val(primer);
+                        $("#x_sand").val(sand);
+                        $("#x_additive").val(additive);
+                        $("#x_material_cost").val(materials);
 
 
-                        var str = cost_form.jordProposalText.value;
-                        var newstr = str.replace('@@SQFT@@', cost_form.jordSquareFeet.value);
-                        var newstr = newstr.replace('@@PHASES@@', cost_form.jordPhases.value);
-                        cost_form.jordProposalText.value = newstr;
+                        $("#explain").html(' 30%');
+                        if (proposaltext == '') {
+                            servicedesc = servicedesc.replace('@@SQFT@@', square_feet);
+                            servicedesc = servicedesc.replace('@@PHASES@@', phases);
+                            tinymce.activeEditor.setContent(servicedesc);
+                        }
+                        
 
+                    } else {
 
+                        showInfoAlert('You must only enter numbers for Square Feet, Primer and Fast Set, Profit, Break Even and Overhead.', headerAlert);
+
+                        setTimeout(() => {
+                            closeAlert(headerAlert);
+                        }, 2000);
+
+                        return;
+
+                        
                     }
-
+                    
+                    console.log("end sealcoating");
 
                 }
 
