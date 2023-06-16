@@ -224,7 +224,6 @@
                                                 @php
                                                     $totalcost += $service->cost;
                                                 @endphp
-                                                $service->cost
                                                 <tr>
 
                                                     <td>
@@ -330,7 +329,7 @@
 
                                             @endforeach
                                             <tr>
-                                                <td colspan="4">&nbsp;</td>
+                                                <td class="tc" colspan="4">Grand Total&nbsp;</td>
                                             <td class="tc">     {{ \App\Helpers\Currency::format($totalcost ?? '0.0') }}</br>
                                             </td>
                                                 <td>&nbsp;</td>
