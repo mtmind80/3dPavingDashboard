@@ -10,7 +10,7 @@
             {{$headername}}
         @endslot
         @slot('li_1')
-            <a href="{{route('show_proposal', ['id'=>$proposal_id])}}">@lang('translation.proposal')</a>
+            <a href="{{route('show_proposal', ['id'=>$proposalId])}}">@lang('translation.proposal')</a>
         @endslot
         @slot('li_2')
             @lang('translation.selectservice')
@@ -26,7 +26,7 @@
                 <div class="card-body">
 
                     <form
-                            action="{{ route('create_detail',['proposal_id'=>$proposal_id]) }}" novalidate=""
+                            action="{{ route('create_detail',['proposal_id'=>$proposalId]) }}" novalidate=""
                             method="POST"
                             id="editform">
                         @csrf
@@ -37,10 +37,11 @@
 
                                 <table class="table table-centered border-danger w_100">
                                     <tr>
-                                        <td class="p4"><b>@lang('translation.proposalname')</b></td>
-                                        <td colspan='3' class="p4">{{$proposal['name']}}
+                                        <td class="p10 tc h5"><b>@lang('translation.proposalname')</b></td>
+                                        <td class="p10 tc h5" colspan='3' class="p4">{{$proposal['name']}}
                                         </td>
                                     </tr>
+<!--
                                     <tr>
                                         <td class="p4">@lang('translation.salesmanager')</td>
                                         <td class="p4">
@@ -69,6 +70,7 @@
                                             {{ \Carbon\Carbon::parse($proposal['proposal_date'])->format('j F, Y') }}
                                         </td>
                                     </tr>
+                                    -->
                               
                                 </table>
 
@@ -138,7 +140,7 @@
 
             $("#cancelbutton").click(function (event) {
 
-                window.location.href='{{ route('show_proposal',['id'=>$proposal_id]) }}';
+                window.location.href='{{ route('show_proposal',['id'=>$proposalId]) }}';
             });
             
             $("#submitbutton").click(function (event) {

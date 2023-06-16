@@ -999,18 +999,15 @@ class ProposalDetailController extends Controller
 
     public function destroy($id)
     {
-        // remove service , return to proposal services
-        $service = ProposalDetail::find($id)->first()->toArray();
-        if($service) {
+        $service = ProposalDetail::where('id', '=', $id)->first()->toArray();
+        if(isset($service['proposal_id'])) {
             $proposal_id = $service['proposal_id'];
             ProposalDetail::destroy($id);
-            return route('show_proposal',['id'=> $proposal_id])->with('error', 'Service was deleted!');
+            return redirect()->back()->with('success', 'Service was deleted!');
         }
-
-        return redirect()->back()->with('error', 'Sorry no matching records were found!');
-
+         return redirect()->back()->with('error', 'Sorry no matching records were found!');
     }
-
+    
     public function newservice($proposalId)
     {
         $data['headername'] = "Add New Service";

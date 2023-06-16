@@ -276,6 +276,13 @@
                                                                                 &nbsp; @lang('translation.RefreshMaterials')
                                                                             </a>
                                                                         </li>
+                                                                        <li>
+                                                                            <a href="{{route('remove_detail', ['service_id'=>$service->id])}}"
+                                                                               class="list-group-item-action">
+                                                                                <span class="far fa-trash-alt"></span>
+                                                                                &nbsp; @lang('translation.delete')
+                                                                            </a>
+                                                                        </li>
                                                                     @else
                                                                         @if($service->status_id == 1)
                                                                             <li>
