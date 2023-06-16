@@ -20,6 +20,7 @@ class CreateProposalDetailsTable extends Migration
             $table->unsignedBigInteger('change_order_id')->nullable()->default(null);
             $table->unsignedBigInteger('services_id')->default(0);
             $table->unsignedBigInteger('contractor_id')->nullable()->default(null);
+            $table->string('contractor_bid',191)->nullable()->default(null);
             $table->unsignedBigInteger('status_id')->default(1);
             $table->unsignedBigInteger('location_id')->nullable()->default(null);
             $table->unsignedBigInteger('fieldmanager_id')->nullable()->default(null);
@@ -53,6 +54,7 @@ class CreateProposalDetailsTable extends Migration
             $table->double('overhead')->nullable()->default(0);
             $table->integer('catchbasins')->unsigned()->nullable()->default(0);
             $table->mediumText('proposal_text')->nullable();
+            $table->mediumText('alt_desc')->nullable();
             $table->mediumText('proposal_note')->nullable();
             $table->mediumText('proposal_field_note')->nullable();
             $table->unsignedBigInteger('created_by');

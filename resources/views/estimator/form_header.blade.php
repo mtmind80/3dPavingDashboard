@@ -99,6 +99,7 @@
         var headerCalculateCombinedCostingButton = $('#header_calculate_combined_costing_button');
         var headerCalculateCombinedCostingButton2 = $('#header_calculate_combined_costing_button2');
         var headerCalculateCombinedCostingButton3 = $('#header_calculate_combined_costing_button3');
+        var headerCalculateCombinedCostingButton4 = $('#header_calculate_combined_costing_button4');
 
         var headerElVehiclesCost = $('#header_show_vehicles_cost');
         var headerElEquipmentCost = $('#header_show_equipment_cost');

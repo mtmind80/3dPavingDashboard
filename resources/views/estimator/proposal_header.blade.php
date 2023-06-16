@@ -8,16 +8,23 @@
         <td class="w-50 p8">
             Client Primary Location:
             <p class="mb0">{{ $contact->FullAddressOneLine }}</p>
+
+
         </td>
     </tr>
     <tr>
         <td class="w-50 p8">
-           Service Category:{{$proposalDetail->services_id}}
-            {{ $service_category_name }} - Service: {{$proposalDetail->services_id}} - Category: {{$service->service_category_id}}
+           Service Category:
+            {{ $service_category_name }}
+            @if($debug_blade == 'true')
+            - Service: {{$proposalDetail->services_id}} - Category: {{$service->service_category_id}}
+            @endif
          <br/>
             Service Title: 
             {{ $proposalDetail->service_name }}
-          </td>
+            <br/><br/>
+            <a id="header_calculate_combined_costing_button4" class="{{ $site_button_class }}" href="javascript:">Save This Service</a>
+        </td>
         <td class="w-50 p8">
             Service Location:
             <p class="mb0">{!! $proposalDetail->location->full_location_two_lines !!}</p>
