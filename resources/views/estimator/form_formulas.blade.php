@@ -54,115 +54,103 @@
                 {{-- Asphalt Milling --}}
                 <div class="row">
                     <div class="col-sm-3">
-                        <label class="control-label">Size of project in SQ FT <i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
-
                         <x-form-text name="square_feet"
                                      class="check-contact tc"
                                      placeholder="enter value"
                                      id="square_feet"
                                      :params="[
-                    'label' => 'none',
+                    'label' => 'Size of project in SQ FT',
                     'iconClass' => 'none',
-                    'value' => '{{$service->square_feet}}',
+                    'required' => 'true',
                 ]"
-                        ></x-form-text>
+                        >{{$proposalDetail->square_feet}}</x-form-text>
                     </div>
-                    <div class="col-sm-3">
-                        <label class="control-label">Depth In Inches <i class="field-required fa fa-asterisk"
-                                                                        data-toggle="tooltip"
-                                                                        title="@lang('translation.field_required')"></i></label>
+                    <div class="col-sm-2">
                         <x-form-text name="depth"
                                      class="check-contact tc"
                                      placeholder="enter value"
                                      id="depth"
                                      :params="[
-                    'label' => 'none',
+                    'label' => 'Depth In Inches',
                     'iconClass' => 'none',
-                    'value' => '{{$service->depth}}',
+                    'required' => 'true',
                 ]"
-                        ></x-form-text>
+                        >{{$proposalDetail->depth}}</x-form-text>
                     </div>
                     <div class="col-sm-3">
-
-                        <label class="control-label">Days of Milling <i class="field-required fa fa-asterisk"
-                                                                        data-toggle="tooltip"
-                                                                        title="@lang('translation.field_required')"></i></label>
                         <x-form-text name="days"
                                      class="check-contact tc"
                                      placeholder="enter value"
                                      id="days"
                                      :params="[
-                    'label' => 'none',
+                    'label' => 'Days of Milling',
                     'iconClass' => 'none',
+                    'required' => 'true',
                 ]"
                         >{{$proposalDetail->days}}</x-form-text>
 
                     </div>
 
-                    <div class="col-sm-3">
-                        <label class="control-label">Cost Per Day <i class="field-required fa fa-asterisk"
-                                                                     data-toggle="tooltip"
-                                                                     title="@lang('translation.field_required')"></i></label>
+                    <div class="col-sm-2">
                         <x-form-text name="cost_per_day"
                                      class="check-contact tc"
                                      placeholder="enter value"
                                      id="cost_per_day"
                                      :params="[
-                    'label' => 'none',
+                    'label' => 'Cost Per Day',
                     'iconClass' => 'none',
+                    'required' => 'true',
                 ]"
                         >{{$proposalDetail->cost_per_day}}</x-form-text>
 
                     </div>
-                </div>
-                <br/>
-                <div class="row">
 
-                    <div class="col-sm-3">
-                        <label class="control-label">Locations <i class="field-required fa fa-asterisk"
-                                                                  data-toggle="tooltip"
-                                                                  title="@lang('translation.field_required')"></i></label>
+                    <div class="col-sm-2">
                         <x-form-text name="locations"
                                      class="check-contact tc"
                                      placeholder="enter value"
                                      id="locations"
                                      :params="[
-                    'label' => 'none',
+                    'label' => 'Locations',
                     'iconClass' => 'none',
+                    'required' => 'true',
                 ]"
                         >{{$proposalDetail->locations}}</x-form-text>
 
                     </div>
-                    <div class="col-sm-4">
-                        <label class="control-label">SQ. Yards <i class="field-required fa fa-asterisk"
-                                                                  data-toggle="tooltip"
-                                                                  title="@lang('translation.field_required')"></i></label>
-                        <x-form-text name="square_yards"
+
+                </div>
+                <br/>
+                <div class="row">
+
+                    <div class="col-sm-3">
+                        <x-form-show name="square_yards"
                                      class="check-contact tc"
                                      placeholder="enter value"
                                      id="square_yards"
                                      :params="[
-                    'label' => 'none',
+                    'label' => 'Square Yards',
                     'iconClass' => 'none',
                 ]"
                         >{{$proposalDetail->square_yards}}
-                        </x-form-text>
+                        </x-form-show>
 
                     </div>
-                    <div class="col-sm-4">
-                        <label class="control-label">Loads <i class="field-required fa fa-asterisk"
-                                                              data-toggle="tooltip"
-                                                              title="@lang('translation.field_required')"></i></label>
-                        <x-form-text name="loads"
+                    <div class="col-sm-3">
+                        <x-form-show name="loads"
                                      class="check-contact tc"
                                      placeholder="enter value"
                                      id="loads"
                                      :params="[
-                    'label' => 'none',
+                    'label' => 'loads',
                     'iconClass' => 'none',
                 ]"
-                        >{{$proposalDetail->loads}}</x-form-text>
+                        >{{$proposalDetail->loads}}</x-form-show>
                     </div>
+
+                    <div class="col-sm-6">
+                    </div>
+
                 </div>
 
             @else
@@ -172,30 +160,26 @@
                 <div class="row">
 
                     <div class="col-sm-3">
-                        <label class="control-label">Size of project in SQ FT <i class="field-required fa fa-asterisk"
-                                                                                 data-toggle="tooltip"
-                                                                                 title="@lang('translation.field_required')"></i></label>
                         <x-form-text name="square_feet"
                                      class="check-contact tc"
                                      placeholder="enter value"
                                      id="square_feet"
                                      :params="[
-                    'label' => 'none',
-                    'iconClass' => 'none',
+                                    'label' => 'Square Feet',
+                                    'iconClass' => 'none',
+                                    'required' => 'true',
                 ]">{{$proposalDetail->square_feet}}
                         </x-form-text>
                     </div>
                     <div class="col-sm-3">
-                        <label class="control-label">Depth In Inches <i class="field-required fa fa-asterisk"
-                                                                        data-toggle="tooltip"
-                                                                        title="@lang('translation.field_required')"></i></label>
                         <x-form-text name="depth"
                                      class="check-contact tc"
                                      placeholder="enter value"
                                      id="depth"
                                      :params="[
-                    'label' => 'none',
-                    'iconClass' => 'none',
+                                    'label' => 'Depth in Inches',
+                                    'iconClass' => 'none',
+                                    'required' => 'true',
                 ]"
                         >{{$proposalDetail->depth}}
                         </x-form-text>
@@ -217,16 +201,14 @@
                         </select>
                     </div>
                     <div class="col-sm-3">
-                        <label class="control-label">Locations <i class="field-required fa fa-asterisk"
-                                                                  data-toggle="tooltip"
-                                                                  title="@lang('translation.field_required')"></i></label>
                         <x-form-text name="locations"
                                      class="check-contact tc"
                                      placeholder="enter value"
                                      id="locations"
                                      :params="[
-                    'label' => 'none',
-                    'iconClass' => 'none',
+                                    'label' => 'Locations',
+                                    'iconClass' => 'none',
+                                    'required' => 'true',                    
                 ]"
                         >{{$proposalDetail->locations}}</x-form-text>
 
@@ -236,13 +218,11 @@
                 <br/>
                 <div class="row">
                     <div class="col-sm-4">
-                        <label class="control-label">Tack Cost (gal)
-                        </label>
 
                         <x-form-show
                                 class="w180 show-check-contact"
                                 :params="[
-                    'label' => 'none',
+                    'label' => 'Tack Cost (gal)',
                            'placeholder'=>'0',
                                     'name'=>'tack_cost',
                                     'id'=>'tack_cost'
@@ -250,28 +230,22 @@
 
                     </div>
                     <div class="col-sm-4">
-                        <label class="control-label">SQ. Yards
-                        </label>
-
                         <x-form-show
                                 class="w180 show-check-contact"
                                 :params="[
                                     'placeholder'=>'calculated',
-                                    'label' => 'none',
+                                    'label' => 'Square Yards',
                                     'name'=>'square_yards',
                                     'id'=>'square_yards'
                     ]">{{$proposalDetail->square_yards}}</x-form-show>
 
                     </div>
                     <div class="col-sm-4">
-                        <label class="control-label">Tons
-                        </label>
-
                         <x-form-show
                                 class="w180 show-check-contact"
                                 :params="[
                                     'placeholder'=>'calculated',
-                                    'label' => 'none',
+                                    'label' => 'Tons',
                                     'name'=>'tons',
                                     'id'=>'tons'
                     ]">{{$proposalDetail->tons}}</x-form-show>
@@ -441,7 +415,7 @@
                                  :params="[
                     'label' => 'none',
                     'iconClass' => 'none',
-                    'value' => '{{$service->catchbasins}}',
+                    'value' => '{{$proposalDetail->catchbasins}}',
                 ]"
                     ></x-form-text>
                     {{-- because it is an integer field 'Additive' is used in case of number of catch basins --}}
@@ -457,7 +431,7 @@
                                  :params="[
                     'label' => 'none',
                     'iconClass' => 'none',
-                    'value' => '{{$service->cost_per_day}}',
+                    'value' => '{{$proposalDetail->cost_per_day}}',
                 ]"
                     ></x-form-text>
                 </div>
@@ -477,9 +451,8 @@
                                      :params="[
                     'label' => 'none',
                     'iconClass' => 'none',
-                    'value' => '{{$service->alt_desc}}',
                 ]"
-                    ></x-form-textarea>
+                    >{{$proposalDetail->alt_desc}}</x-form-textarea>
                 </div>
             </div>
 
@@ -579,9 +552,8 @@
                                  :params="[
                     'label' => 'Our Cost',
                     'iconClass' => 'none',
-                    'value' => '{{$service->cost_per_day}}',
                 ]"
-                    ></x-form-text>
+                    >{{$proposalDetail->cost_per_day}}</x-form-text>
                 </div>
 
                 <div class="col-sm-4">
@@ -592,9 +564,8 @@
                                  :params="[
                     'label' => 'Locations',
                     'iconClass' => 'none',
-                    'value' => '{{$service->locations}}',
                 ]"
-                    ></x-form-text>
+                    >{{$proposalDetail->locations}}</x-form-text>
                 </div>
 
             </div>
@@ -1024,72 +995,43 @@
 
             <!--  Sub Contractor -->
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-sm-3">
                     <x-form-select name="contractor_id"
                                    :items="$contractorsCB"
                                    selected=""
                                    :params="['label' => 'Contractor', 'required' => true]"
                     ></x-form-select>
+                <span id="contractor_overhead"></span>
+                <input type="hidden" name="additive" id="additive" value="">
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-3">
                     <x-form-text name="cost_per_day"
                                  class="check-contact tc"
                                  placeholder="enter value"
                                  id="cost_per_day"
                                  :params="[
-                    'label' => 'Cost',
+                    'label' => 'Contractor Cost',
+                    'required' => true,
                     'iconClass' => 'none',
-                    'value' => '{{$service->cost_per_day}}',
                 ]"
-                    ></x-form-text>
+                    >{{$proposalDetail->cost_per_day}}</x-form-text>
 
                 </div>
-
-            </div>
-
-
-            <div class="row">
                 <div class="col-sm-6">
                     <x-form-textarea name="alt_desc"
                                      class="check-contact tc"
                                      placeholder="enter value"
                                      id="alt_desc"
                                      :params="[
-                    'label' => 'Job Description',
-                    'iconClass' => 'none',
-                    'value' => '{{$service->alt_desc}}',
-                ]"
-                    ></x-form-textarea>
+                                     'label' => 'Job Description',
+                                     'required' => true,
+                                    'iconClass' => 'none',
+                                ]"
+                    >{{$proposalDetail->alt_desc}}</x-form-textarea>
                 </div>
-                <!-- @todo what overhead is this -->
-                <div class="col-sm-3">
-                    <x-form-text name="contractor_overhead"
-                                 class="check-contact tc"
-                                 placeholder="disabled"
-                                 id="contractor_overhead"
-                                 :params="[
-                    'label' => 'Contractor Over Head %',
-                    'iconClass' => 'none',
-                    'value' => '{{$service->overhead}}',
-                ]"
-                    ></x-form-text>
-                </div>
-
-                <div class="col-sm-3">
-                    <x-form-text name="boh"
-                                 class="check-contact tc"
-                                 placeholder="disabled"
-                                 id="boh"
-                                 :params="[
-                'label' => 'Sub Over Head %',
-                'iconClass' => 'none',
-                'value' => '',
-                ]"
-                    ></x-form-text>
-
-                </div>
-
             </div>
+
+
 
         @endif
 
@@ -1566,8 +1508,34 @@
                 if (serviceCategoryId == 5) {
 
                     {{--  Other --}}
+                    var cost_per_day = $("#cost_per_day").val();
+                    var alt_desc = $("#alt_desc").val();
+                    var locations = $("#locations").val();
+                    
+                    if (cost_per_day == parseInt(cost_per_day)) {
+                        materials = 0;
+                        var overhead = 0;//Math.ceil((parseFloat(combinedcost) +  parseFloat(profit)) * 0.3);
+ 
+                        var results = additup(cost_per_day);
+                        if({{$debug_blade}}) {
+                            console.log(results);
+                        }
+                        if (proposaltext == '') {
+                            proposaltext = servicedesc;
+                            tinymce.activeEditor.setContent(proposaltext);
+                        }
 
+                        $("#header_show_materials_cost").text('$' + materials);
+                        $("#x_cost_per_day").val(cost_per_day);
+                        $("#x_material_cost").val(materials);
+                        $("#x_proposal_text").val(proposaltext);
+                        $("#x_alt_desc").val(alt_desc);
+                        $("#x_locations").val(locations);
+                    
+                    }
 
+                    console.log('End Other');
+                    
                 }
                 {{-- end Other --}}
 
@@ -1736,7 +1704,52 @@
                 if (serviceCategoryId == 10) {
 
                     {{--  Sub Contractor --}}
-                    console.log("end sub contractor");
+
+                    var additive = $("#additive").val();  // percent overhead 
+                    var cost_per_day = $("#cost_per_day").val(); // cost to contractor
+                    var alt_desc = $("#alt_desc").val(); // desc of services
+                    var contractor_id = $("#contractor_id>option:selected").val(); // contractor ID
+
+                    if(cost_per_day == parseInt(cost_per_day)) 
+                    {
+                        materials = cost_per_day;
+                        $("#header_show_materials_cost").text(formatCurrency.format(materials));
+
+                        var results = additup(materials);
+                        if({{$debug_blade}})
+                            console.log(results);
+                        }
+                                         
+                        if(additive = parseInt(additive) && additive > 0)
+                        {
+                            var soh = parseFloat(1-(additive / 100));
+                            contractor_overhead = Math.ceil((cost_per_day/soh) - cost_per_day);
+                            contractor_overhead = formatCurrency.format(contractor_overhead)
+                            $("#contractor_overhead").html(contractor_overhead + ' calculated at ' + additive + '%');
+                            
+                        } else // sub has no overhead value use standard
+                        {
+                            var contractor_overhead = Math.ceil((cost_per_day / 0.7) - cost_per_day);
+                            formatted_contractor_overhead = formatCurrency.format(contractor_overhead)
+                            $("#contractor_overhead").html(formatted_contractor_overhead + ' calculated at 30%');
+                        }
+                        console.log(overhead);
+
+
+                    if (proposaltext == '') {
+                        tinymce.activeEditor.setContent(servicedesc);
+                    }
+
+                    
+                    $("#header_show_materials_cost").text(formatCurrency.format(materials));
+                        $("#x_cost_per_day").val(cost_per_day);
+                        $("#x_material_cost").val(materials);
+                        $("#x_additive").val(contractor_overhead);
+                        $("#x_proposal_text").val(proposaltext);
+                        $("#x_contractor_id").val(contractor_id);
+                        $("#x_alt_desc").val(alt_desc);
+    
+                        console.log("end sub contractor");
                 }
 
                 //set these fields for all services
@@ -1784,7 +1797,7 @@
                 data['customercost'] = customercost;
 
                 $("#x_cost").val(customercost);
-                headerElCustomerPrice.text('$' + customercost);
+                headerElCustomerPrice.text(formatCurrency.format(customercost));
 
                 return data;
 
@@ -1807,13 +1820,13 @@
             calculate(cost_form, estimatorForm, serviceId, proposalDetailId, proposalId, serviceCategoryId, 0);
 
             // when you want to calculate and save record 
-            headerCalculateCombinedCostingButton2.on('click', function () {
+            $('#header_calculate_combined_costing_button2').on('click', function () {
 
                 calculate(cost_form, estimatorForm, serviceId, proposalDetailId, proposalId, serviceCategoryId, 1);
 
             });
 
-            headerCalculateCombinedCostingButton3.on('click', function () {
+            $('#header_calculate_combined_costing_button3 ,#header_calculate_combined_costing_button4').on('click', function () {
 
                 calculate(cost_form, estimatorForm, serviceId, proposalDetailId, proposalId, serviceCategoryId, 2);
 

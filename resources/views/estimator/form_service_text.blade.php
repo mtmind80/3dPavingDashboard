@@ -7,8 +7,10 @@
     <div class="row">
 
     <div class="col-lg-6 col-sm-4 ">
+        <h5>@lang('translation.service_description')</h5>
+
         <label class="control-label">Service Description Template</label>
-        <p><span id="service_proposal_text">{!! $service->service_text_en !!}</span></p>
+        <p><span id="service_proposal_text">{!! $service->service_template !!}</span></p>
         <span id="reset_description" class="{{ $site_button_class }}">Reset Description</span>
     </div>
     <div class="col-lg-6 col-sm-4 ">
@@ -17,7 +19,7 @@
                 id="proposaltext"
                 name="proposaltext"
                 class="form-control" disabled
-            >{{ $proposalDetail->proposal_text }}</textarea>
+            >{!! $proposalDetail->proposal_text !!}</textarea>
      </div>
 </div>
 </form>

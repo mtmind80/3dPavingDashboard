@@ -53,6 +53,7 @@
             <input type="hidden" name="loads" id="x_loads" value="{{ $proposalDetail->loads }}">
             <input type="hidden" name="locations" id="x_locations" value="{{ $proposalDetail->locations }}">
             <input type="hidden" name="overhead" id="x_overhead" value="{{ $proposalDetail->overhead }}">
+            <input type="hidden" name="alt_desc" id="x_alt_desc" value="{{ $proposalDetail->alt_desc }}">
 
             <input type="hidden" name="depth" id="x_depth" value="{{ $proposalDetail->depth }}">
             <input type="hidden" name="profit" id="x_profit" value="{{ $proposalDetail->profit }}">
@@ -150,7 +151,6 @@ updated_at
             <div class="card">
                 <div class="card-header alert-light">
                     @include('_partials._alert', ['alertId' => 'service_text_alert'])
-                    <h5>@lang('translation.service_description')</h5>
                     @include('estimator.form_service_text')
                 </div>
             </div>

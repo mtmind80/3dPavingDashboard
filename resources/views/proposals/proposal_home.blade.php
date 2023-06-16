@@ -217,7 +217,14 @@
                                             </tr>
                                             </thead>
                                             <tbody>
+                                            @php
+                                                $totalcost = 0;
+                                            @endphp
                                             @foreach($services as $service)
+                                                @php
+                                                    $totalcost += $service->cost;
+                                                @endphp
+                                                $service->cost
                                                 <tr>
 
                                                     <td>
@@ -322,6 +329,12 @@
                                                 </tr>
 
                                             @endforeach
+                                            <tr>
+                                                <td colspan="4">&nbsp;</td>
+                                            <td class="tc">     {{ \App\Helpers\Currency::format($totalcost ?? '0.0') }}</br>
+                                            </td>
+                                                <td>&nbsp;</td>
+                                            </tr>
                                             </tbody>
                                         </table>
                                     @endif
