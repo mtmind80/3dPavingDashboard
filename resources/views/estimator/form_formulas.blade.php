@@ -122,31 +122,33 @@
                 </div>
                 <br/>
                 <div class="row">
-                    <div class="col-sm-4">
-                        <x-form-show
-                                class="w180 show-check-contact"
-                                :params="[
-                                    'placeholder'=>'calculated',
-                                    'label' => 'Square Yards',
-                                    'name'=>'square_yards',
-                                    'id'=>'square_yards'
-                    ]">{{$proposalDetail->square_yards}}</x-form-show>
 
+                    <div class="col-sm-3">
+                        <x-form-show name="square_yards"
+                                     class="check-contact tc"
+                                     placeholder="enter value"
+                                     id="square_yards"
+                                     :params="[
+                    'label' => 'Square Yards',
+                    'iconClass' => 'none',
+                ]"
+                        >{{$proposalDetail->square_yards}}
+                        </x-form-show>
 
                     </div>
-                    <div class="col-sm-4">
-                        <x-form-show
-                                class="w180 show-check-contact"
-                                :params="[
-                                    'placeholder'=>'calculated',
-                                    'label' => 'Loads',
-                                    'name'=>'loads',
-                                    'id'=>'loads'
-                    ]">{{$proposalDetail->loads}}</x-form-show>
+                    <div class="col-sm-3">
+                        <x-form-show name="loads"
+                                     class="check-contact tc"
+                                     placeholder="enter value"
+                                     id="loads"
+                                     :params="[
+                    'label' => 'loads',
+                    'iconClass' => 'none',
+                ]"
+                        >{{$proposalDetail->loads}}</x-form-show>
                     </div>
 
-                    <div class="col-sm-4">
-                        &nbsp;
+                    <div class="col-sm-6">
                     </div>
 
                 </div>
@@ -619,9 +621,10 @@
                     <div class='check-contact tc' id="tonnage"></div>
                     <x-form-text name="tons" id="tons"
                                  class="check-contact tc"
-                                 placeholder="tons"
+                                 placeholder="enter value"
                                  id="tons"
                                  :params="[
+                             'hint' => 'This field is calculated',
                     'label' => 'Excavate Tons',
                     'iconClass' => 'none',
                 ]"
@@ -682,7 +685,6 @@
                             :params="[
                              'label' => 'Loads',
                              'placeholder'=>'calculated',
-                             'hint' => 'This field is calculated',
                                     'name'=>'loads',
                                     'id'=>'loads'
                     ]">{{$proposalDetail->loads}}
@@ -694,7 +696,6 @@
                             :params="[
                            'placeholder'=>'calculated',
                     'label' => 'Tons',
-                             'hint' => 'This field is calculated',
                     'name'=>'ton',
                     'id'=>'tons'
                     ]">{{$proposalDetail->tons}}
@@ -851,11 +852,10 @@
                     
                     <x-form-show name="sealer"
                                  class="check-contact tc"
-                                 placeholder="calculated"
+                                 placeholder="enter value"
                                  id="sealer"
                                  :params="[
-                                                 'hint' => 'This field is calculated',
-'label' => 'Sealer (gals)',
+                    'label' => 'Sealer (gals)',
                     'iconClass' => 'none',
                 ]"
                     >{{$proposalDetail->sealer}}</x-form-show>
@@ -864,10 +864,9 @@
                 <div class="col-sm-2">
                     <x-form-show name="sand"
                                  class="check-contact tc"
-                                 placeholder="calculated"
+                                 placeholder="enter value"
                                  id="sand"
                                  :params="[
-                             'hint' => 'This field is calculated',
                     'label' => 'Sand',
                     'iconClass' => 'none',
                 ]"
@@ -877,11 +876,9 @@
                 <div class="col-sm-2">
                     <x-form-show name="additive"
                                  class="check-contact tc"
-                                 placeholder="calculated"
+                                 placeholder="enter value"
                                  id="additive"
                                  :params="[
-                                 'hint' => 'This field is calculated',
-
                     'label' => 'Additive (sealer/50)',
                     'iconClass' => 'none',
                 ]"
@@ -929,7 +926,7 @@
                     <div class="col-sm-2">
                         <x-form-show name="SealerCost"
                                      class="check-contact tc"
-                                     placeholder="calculated"
+                                     placeholder="disabled"
                                      id="SealerCost"
                                      :params="[
                     'label' => 'Sealer Cost',
@@ -940,7 +937,7 @@
                     <div class="col-2">
                         <x-form-show name="SandCost"
                                      class="check-contact tc"
-                                     placeholder="calculated"
+                                     placeholder="disabled"
                                      id="SandCost"
                                      :params="[
                     'label' => 'Sand Cost',
@@ -951,7 +948,7 @@
                     <div class="col-2">
                         <x-form-show name="AdditiveCost"
                                      class="check-contact tc"
-                                     placeholder="calculated"
+                                     placeholder="disabled"
                                      id="AdditiveCost"
                                      :params="[
                     'label' => 'Additive Cost',
@@ -962,7 +959,7 @@
                     <div class="col-sm-2">
                         <x-form-show name="PrimerCost"
                                      class="check-contact tc"
-                                     placeholder="calculated"
+                                     placeholder="disabled"
                                      id="PrimerCost"
                                      :params="[
                                     'label' => 'Primer Cost',
@@ -973,7 +970,7 @@
                     <div class="col-sm-2">
                         <x-form-show name="FastSetCost"
                                      class="check-contact tc"
-                                     placeholder="calculated"
+                                     placeholder="disabled"
                                      id="FastSetCost"
                                      :params="[
                                     'label' => 'FastSet Cost',
@@ -1023,7 +1020,7 @@
                 <div class="col-sm-6">
                     <x-form-textarea name="alt_desc"
                                      class="check-contact tc"
-                                     placeholder="enter description"
+                                     placeholder="enter value"
                                      id="alt_desc"
                                      :params="[
                                      'label' => 'Job Description',
@@ -1181,15 +1178,15 @@
                  greater than or equal to a given number.
                 */
 
-                
                 var servicedesc = "{!! $service->service_template !!}";
                 var profit = $("#form_header_profit").val();
                 var overhead = $("#form_header_over_head").val();
                 var breakeven = $("#form_header_break_even").val();
+                var regex = "/^[0-9]+$/";  // numbers only
                 var materials = 0;
                 var proposaltext = tinymce.activeEditor.getContent();
                 var service = {{ $proposalDetail->services_id }};
-                
+
                 //Materials
                 var tackcost = {{$materialsCB[14]}};
                 var curbmix = {{$materialsCB[9]}};
@@ -1217,74 +1214,8 @@
 
                     if (serviceId == 19) {
                         {{-- Asphalt Milling --}}
-                        
-                        var cost_per_day =$("#cost_per_day").val();
-                        var locations =$("#locations").val();
-                        var square_feet =$("#square_feet").val();
-                        var depth =$("#depth").val();
-                        var days =$("#days").val();
 
-                        
-                        if (parseFloat(cost_per_day) == cost_per_day && parseFloat(days) == days && parseFloat(square_feet) == square_feet &&  parseFloat(depth) == depth) 
-                        {
-
-                            var square_yards = Math.ceil(square_feet / 9);
-
-                            $("#square_yards").text(square_yards);
-                            
-                            
-                            //var loads = Math.ceil((form.jordSquareFeet.value * form.jordDepthInInches.value) * (7/2160));
-                            var loads = Math.ceil(((square_feet * depth) / 180) / 20);
-
-                            $("#loads").text(loads);
-                        
-                            var materials = parseFloat(cost_per_day) * parseInt(days);
-
-                            $("#header_show_materials_cost").text('$' + materials);
-
-                            //add it up
-                            var results = additup(materials);
-                            
-                            if({{$debug_blade}}) {
-                                console.log(results);
-                            }
-
-                            //set over head
-                            var otcost = Math.ceil(results['combined'] + parseFloat(profit));
-                            var overhead = Math.ceil((otcost / 0.88) - otcost);
-                            $("#explain").html('calculated at 12%');
-
-                            $("#overhead").val(overhead);
-
-
-                            if (proposaltext == '') {
-                                proposaltext = servicedesc.replace('@@SQFT@@', square_feet);
-                                tinymce.activeEditor.setContent(proposaltext);
-                            }
-
-                            // set all relevant form values for update
-                            $("#x_material_cost").val(materials);
-                            $("#x_square_feet").val(square_feet);
-                            $("#x_square_yards").val(square_yards);
-                            $("#x_depth").val(depth);
-                            $("#x_days").val(days);
-                            $("#x_locations").val(locations);
-                            $("#x_overhead").val(overhead);
-                            $("#x_loads").val(loads);
-                            $("#x_cost_per_day").val(cost_per_day);
-
-                        } else {
-
-                                showInfoAlert('You can only enter numbers for Square Feet, Depth, and Cost.', headerAlert);
-                                return;
-                            
-                            
-                        }
-                            
-
-
-
-                        } else {
+                    } else {
                         {{-- if(sid == 4 || sid == 5 || sid == 22 || sid == 3 --}}
 
 
@@ -1334,7 +1265,7 @@
 
                             if (proposaltext == '') {
                                 proposaltext = servicedesc.replace('@@TONS@@', tons);
-                                tinymce.activeEditor.setContent(proposaltext);
+                                tinymce.activeEditor.setContent('proposaltext');
                             }
                             //add it up
                             var results = additup(materials);
@@ -1422,7 +1353,7 @@
 
                             if (proposaltext == '') {
                                 proposaltext = servicedesc.replace('@@TONS@@', cubic_yards);
-                                tinymce.activeEditor.setContent(proposaltext);
+                                tinymce.activeEditor.setContent('proposaltext');
                             }
 
 
@@ -1476,7 +1407,7 @@
                     
                                 proposaltext = servicedesc.replace('@@TONS@@', cubic_yards);
                                 proposaltext = proposaltext.replace('@@INCHES@@', depth);
-                                tinymce.activeEditor.setContent(proposaltext);
+                                tinymce.activeEditor.setContent('proposaltext');
                             
                             //total up
                             var results = additup(materials);
@@ -1517,38 +1448,7 @@
                 if (serviceCategoryId == 3) {
                     {{--Drainage and Catchbasins--}}
 
-
-                    if(form.jordAdditive.value == parseInt(form.jordAdditive.value) && form.jordCostPerDay.value == parseInt(form.jordCostPerDay.value) && form.jordVendorServiceDescription.value != '')
-                    {
-                        form.mcost.value = form.jordCostPerDay.value;
-                        var profit = form.jordProfit.value;
-                        if (profit =='')
-                        {
-                            profit = 0;
-                        }
-
-                        //total up
-                        var combinedcost = parseFloat($("#POVTotal").val()) + parseFloat($("#POequipTotal").val()) + parseFloat($("#POlaborTotal").val()) + parseFloat($("#POOtherTotal").val()) + parseFloat(form.mcost.value);
-
-                        profit = user input
-                        material cost  = cost
-                        combined cost = all sections = vehicles + equipment + other + subs + labor
-                        combined cost = all sections + materials
-                        overhead = (combined cost / 0.70) - combined cost)  calculated at 30%
-                    Customer cost = Profit + combined cost + overhead
-
-                        var otcost = Math.ceil(parseFloat(combinedcost) + parseFloat(profit));
-                        var overhead = Math.ceil((otcost / 0.7) - otcost);
-                        $("#explain").html('calculated at 30%');
-
-
-                        var str = form.jordProposalText.value;
-                        var newstr = str.replace('@@BASINS@@', form.jordAdditive.value);
-                        form.jordProposalText.value = newstr;
-
-
-                        
-                    }
+                }
 
                 if (serviceCategoryId == 4) {
                     {{-- 4	Excavation --}}
@@ -1580,7 +1480,7 @@
                         $("#header_show_materials_cost").text('$' + materials);
                         if (proposaltext == '') {
                             proposaltext = servicedesc.replace('@@TONS@@', tons);
-                            tinymce.activeEditor.setContent(proposaltext);
+                            tinymce.activeEditor.setContent('proposaltext');
                         }
                         //add it up
                         var results = additup(materials);
@@ -1620,7 +1520,7 @@
                         if({{$debug_blade}}) {
                             console.log(results);
                         }
-                        if (proposaltext == '' || proposaltext == 'proposaltext' ) {
+                        if (proposaltext == '') {
                             proposaltext = servicedesc;
                             tinymce.activeEditor.setContent(proposaltext);
                         }
@@ -1643,59 +1543,7 @@
 
                     {{--  Paver Brick --}}
 
-
-                        var cost_per_day = $("#cost_per_day").val();
-                        var materials = cost_per_day;
-                        var square_feet = $("#square_feet").val();
-                        var tons = $("#tons").val();
-                        var alt_desc = $("#alt_desc");
-
-
-                    if(square_feet == parseInt(square_feet) && cost_per_day == parseInt(cost_per_day) && alt_desc != '')
-                    {
-
-                        materials = parseFloat(materials).toFixed(2);
-
-                        if (proposaltext == '') {
-                            var proposaltext = servicedesc.replace('@@SQFT@@', square_feet);
-                            proposaltext = proposaltext.replace('@@TONS@@', tons);
-                            tinymce.activeEditor.setContent(proposaltext);
-                        }
-
-                        var results = additup(materials);
-                        if({{$debug_blade}}) {
-                            console.log(results);
-                        }
-                        $("#header_show_materials_cost").text('$' + materials);
-
-                        var combined_cost = Math.ceil(results['combined'] + parseFloat(profit));
-                        var overhead = Math.ceil((combined_cost / 0.75) - combined_cost);
-                        $("#explain").html('calculated at 25%');
-
-                        $("#header_show_materials_cost").text('$' + materials);
-                        $("#x_cost_per_day").val(cost_per_day);
-                        $("#x_material_cost").val(materials);
-                        $("#x_proposal_text").val(proposaltext);
-                        $("#x_alt_desc").val(alt_desc);
-                        $("#x_square_feet").val(square_feet);
-                        $("#x_tons").val(tons);
-
-
-
-
-                    } else {
-                        showInfoAlert('You can only enter numbers for square feet and cost and tons.', headerAlert);
-
-                        setTimeout(() => {
-                            closeAlert(headerAlert);
-                        }, 3000);
-
-                        return;
-                        
-                    }
-
-                        
-                    }
+                }
 
                 if (serviceCategoryId == 7) {
                     {{--  Rock --}}
