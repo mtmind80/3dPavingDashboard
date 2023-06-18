@@ -723,4 +723,11 @@ table .td-tt {
   font-weight: bolder;
   color: green; }
 
+.show-proposal-page .page-content {
+  padding-bottom: 10px;
+  background-color: #F1F5F7; }
+.show-proposal-page footer {
+  position: relative;
+  left: 0 !important; }
+
 /*# sourceMappingURL=style-extras.css.map */

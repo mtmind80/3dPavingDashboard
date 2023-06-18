@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Currency;
+use App\Helpers\ExceptionError;
 use App\Models\AcceptedDocuments;
 use App\Models\Contractor;
 use App\Models\Equipment;
@@ -142,21 +143,21 @@ class ProposalDetailController extends Controller
     {
 
         $formfields = $request->all();
-   
+
         $proposal_detail = ProposalDetail::where('id', '=', $formfields['id'])->first();
         unset($formfields['_token']);
         unset ($formfields['id']);
         //unset ($formfields['material_cost']);
 
         //print_r($formfields);
-        //exit(); 
+        //exit();
 
         $proposal_detail->update($formfields);
         \Session::flash('success', 'Service was saved!');
         if($formfields['stayorleave']  =='true')
         {
             return redirect()->route('show_proposal',['id'=> $formfields['proposal_id']]);
-            
+
         }
         return redirect()->back();
 
@@ -997,7 +998,7 @@ class ProposalDetailController extends Controller
         return response()->json($response);
     }
 
-    public function destroy($id)
+    public function destroyOLD($id)
     {
         $service = ProposalDetail::where('id', '=', $id)->first()->toArray();
         if(isset($service['proposal_id'])) {
@@ -1007,7 +1008,25 @@ class ProposalDetailController extends Controller
         }
          return redirect()->back()->with('error', 'Sorry no matching records were found!');
     }
-    
+
+    public function destroy(Request $request)
+    {
+        if (!$item = ProposalDetail::find($request->item_id)) {
+            return redirect()->back()->with('error', 'Service not found.');
+        }
+
+        $name = $item->name;
+        $proposalId = $item->proposal_id;
+
+        try {
+            $item->delete();
+        } catch (Exception $e) {
+            return ExceptionError::handleError($e);
+        }
+
+        return redirect()->route('show_proposal', ['id' => $proposalId])->withSuccess('Service "'. $name .'" deleted.');
+    }
+
     public function newservice($proposalId)
     {
         $data['headername'] = "Add New Service";

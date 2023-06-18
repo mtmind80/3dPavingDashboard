@@ -407,4 +407,5 @@ return [
     "additionalcost" => "Additional Costs",
     "service_description_template" => "Service Description Template",
     "service_description" => "Service Description",
+    "order" => "Order",
 ];
