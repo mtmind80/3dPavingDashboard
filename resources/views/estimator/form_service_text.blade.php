@@ -45,11 +45,19 @@
         $(document).ready(function () {
             var servicedesc = decodeURIComponent(encodeURIComponent("{!! $service->service_template !!}")); 
 
+            var cubic_yards;
+            var square_feet;
+            var depth;
+            var tons;
+            
             if (serviceCategoryId == 1) {
 
                 {{-- asphalt --}}
                 if (proposalDetailId == 19) {
                     {{-- Asphalt Milling --}}
+                    square_feet = $("#square_feet").val();
+                    console.log('sq' + square_feet);
+    
 
                 } else {
 
@@ -72,6 +80,7 @@
                     
                     
                 } else if (serviceId >= 12) {
+
                     cubic_yards = $("#cubic_yards").val();
                     depth = $("#depth").val();
                     servicedesc = servicedesc.replace('@@TONS@@', cubic_yards);
@@ -83,6 +92,9 @@
             if (serviceCategoryId == 3) {
                 {{--Drainage and Catchbasins--}}
 
+                var catchbasins = $("#catchbasins").val();
+                servicedesc = servicedesc.replace('@@BASINS@@', catchbasins);
+            
             }
 
             if (serviceCategoryId == 4) {
@@ -96,6 +108,7 @@
             if (serviceCategoryId == 5) {
 
                 {{--  Other --}}
+                // no changes                
 
 
             }
@@ -104,6 +117,10 @@
             if (serviceCategoryId == 6) {
 
                 {{--  Paver Brick --}}
+                square_feet = $("#square_feet").val();
+                tons = $("#tons").text();
+                servicedesc = servicedesc.replace('@@SQFT@@', square_feet);
+                servicedesc = servicedesc.replace('@@TONS@@', tons);
 
             }
 
