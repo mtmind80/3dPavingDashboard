@@ -723,4 +723,26 @@ table .td-tt {
   font-weight: bolder;
   color: green; }
 
+.show-proposal-page .page-content {
+  padding-bottom: 10px;
+  background-color: #F1F5F7; }
+.show-proposal-page footer {
+  position: relative;
+  left: 0 !important; }
+.show-proposal-page .h-100 {
+  height: 100% !important; }
+.show-proposal-page #sidebar-menu ul li a {
+  padding: 12px 20px; }
+.show-proposal-page #sidebar-menu ul li a i {
+  font-size: 18px;
+  margin-bottom: 4px; }
+.show-proposal-page .logo-lg {
+  display: block;
+  text-align: center; }
+
+.table-bordered > tfoot > tr.no-border > td {
+  font-weight: bold;
+  padding-top: 20px;
+  border: 1px solid transparent; }
+
 /*# sourceMappingURL=style-extras.css.map */

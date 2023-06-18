@@ -20,7 +20,7 @@
 </head>
 @section('body')
 @show
-<body data-sidebar-size="small"  data-sidebar="dark">
+<body data-sidebar-size="small"  data-sidebar="dark" class="{{ $bodyClass ?? null }}">
     <!-- Begin page -->
     <div id="layout-wrapper">
         @include('layouts.topbar')
@@ -53,6 +53,8 @@
     @stack('components-scripts')
 
     <!-- JVC -->
+    @yield('js-plugin-files')
+
     <script src="{{ URL::asset('/js/common-base.min.js')}}"></script>
     <script src="{{ URL::asset('/js/extra-scripts.js')}}"></script>
 
