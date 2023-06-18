@@ -217,7 +217,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('/scehdule/{service_id}', 'ProposalDetailController@schedule')->name('schedule_service');
         // Select service type
         Route::post('/checkform', 'ProposalDetailController@checkform')->name('checkform');
-        
+
         Route::get('/new_service/{proposal_id}', 'ProposalDetailController@newservice')->name('new_service');
         // Start New Service with a service type
         Route::post('/create_service/{proposal_id}', 'ProposalDetailController@create')->name('create_detail');
@@ -226,7 +226,8 @@ Route::group(['middleware' => ['auth']], function() {
 
         Route::post('/update_service/{service_id}', 'ProposalDetailController@update')->name('update_detail');
 
-        Route::post('/remove_service/{service_id}', 'ProposalDetailController@destroy')->name('remove_detail');
+        //Route::post('/remove_service/{service_id}', 'ProposalDetailController@destroy')->name('remove_detail');
+        Route::delete('/', 'ProposalDetailController@destroy')->name('service_delete');
 
         Route::post('/header-calculate-combined-costing', 'ProposalDetailController@ajaxCalculateCombinedCosting')->name('ajax_header_calculate_combined_costing');
 
@@ -249,7 +250,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('/new', 'ProposalController@new')->name('new_proposal');
 
         Route::get('', 'ProposalController@index')->name('proposals');
-        
+
         //update proposal materials pricing
         Route::get('/MaterialPricing/{id}', 'ProposalController@refreshMaterialPricing')->name('refresh_material');
 
@@ -273,6 +274,7 @@ Route::group(['middleware' => ['auth']], function() {
         // get a specific proposal
 
         Route::get('/{id}/show_proposal', 'ProposalController@show')->name('show_proposal');
+        Route::post('/reorder-services', 'ProposalController@reorderServices')->name('services_reorder');
 
         Route::get('/start_proposal/{id}', 'ProposalController@start')->name('start_proposal');
 
