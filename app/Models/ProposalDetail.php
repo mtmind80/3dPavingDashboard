@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\Currency;
 use App\Traits\SearchTrait;
 use App\Traits\SortableTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -193,7 +194,7 @@ class ProposalDetail extends Model
 
     public function getFormattedCostAttribute()
     {
-        return \App\Helpers\Currency::format($this->cost ?? 0);
+        return Currency::format($this->cost ?? 0);
     }
 
     public function getHtmlDsortAttribute()

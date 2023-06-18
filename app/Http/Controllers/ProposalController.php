@@ -471,6 +471,10 @@ class ProposalController extends Controller
             abort(404);
         }
 
+        //dd($proposal->details->sum('cost'), $proposal->total_details_costs, $proposal->currency_total_details_costs);
+
+        $currencyTotalDetailCosts = $proposal->currency_total_details_costs;
+
         $IsEditable = $proposal->IsEditable;
 
         $services = $proposal->details;
@@ -502,6 +506,7 @@ class ProposalController extends Controller
 
         $data['bodyClass'] = 'show-proposal-page';
         $data['selectedTab'] = $request->tab ?? null;
+        $data['currency_total_details_costs'] = $currencyTotalDetailCosts;
 
         return view('proposals.proposal_home', $data);
     }

@@ -315,6 +315,11 @@ class Proposal extends Model
         return $this->getTotalDetailsCosts();
     }
 
+    public function getCurrencyTotalDetailsCostsAttribute()
+    {
+        return Currency::format($this->total_details_costs ?? 0);;
+    }
+
     public function getHtmlDateOneLineAttribute()
     {
         return !empty($this->proposal_date) ? $this->proposal_date->format('m/d/Y') . ' - ' . $this->proposal_date->format('h:i A') : null;

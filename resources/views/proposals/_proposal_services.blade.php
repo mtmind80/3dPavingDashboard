@@ -39,7 +39,7 @@
                     <td class="centered actions">
                         <ul class="nav navbar-nav">
                             <li class="dropdown">
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-angle-down"></i></a>
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="fas fa-angle-down"></i></a>
                                 <ul class="dropdown-menu animated animated-short flipInX" role="menu">
                                     <li>
                                         <a href="javascript:" class="action" data-action="route" data-route="{{ route('edit_service', ['proposal_id' => $service->proposal_id, 'id' => $service->id]) }}">
@@ -64,6 +64,13 @@
                 </tr>
             @endforeach
         </tbody>
+        <tfoot>
+            <tr class="pt10 no-border">
+                <td class="tr" colspan="4">Grand Total:</td>
+                <td class="tc">{{ $currency_total_details_costs }}</td>
+                <td class="tr" colspan="2"></td>
+            </tr>
+        </tfoot>
     </table>
 
     <x-delete-form :url="route('service_delete')"></x-delete-form>
