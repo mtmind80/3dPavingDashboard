@@ -43,7 +43,7 @@
 
     <script>
         $(document).ready(function () {
-            var servicedesc = decodeURIComponent(encodeURIComponent("{!! $service->service_template !!}")); 
+            var servicedesc = "{!! $service->service_template !!}"; 
 
             if (serviceCategoryId == 1) {
 
