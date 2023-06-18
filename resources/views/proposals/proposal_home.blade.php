@@ -217,7 +217,13 @@
                                             </tr>
                                             </thead>
                                             <tbody>
+                                            @php
+                                                $totalcost = 0;
+                                            @endphp
                                             @foreach($services as $service)
+                                                @php
+                                                    $totalcost += $service->cost;
+                                                @endphp
                                                 <tr>
 
                                                     <td>
@@ -268,6 +274,13 @@
                                                                                class="list-group-item-action">
                                                                                 <span class="far fa-eye"></span>
                                                                                 &nbsp; @lang('translation.RefreshMaterials')
+                                                                            </a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <a href="{{route('remove_detail', ['service_id'=>$service->id])}}"
+                                                                               class="list-group-item-action">
+                                                                                <span class="far fa-trash-alt"></span>
+                                                                                &nbsp; @lang('translation.delete')
                                                                             </a>
                                                                         </li>
                                                                     @else
@@ -322,6 +335,12 @@
                                                 </tr>
 
                                             @endforeach
+                                            <tr>
+                                                <td class="tc" colspan="4">Grand Total&nbsp;</td>
+                                            <td class="tc">     {{ \App\Helpers\Currency::format($totalcost ?? '0.0') }}</br>
+                                            </td>
+                                                <td>&nbsp;</td>
+                                            </tr>
                                             </tbody>
                                         </table>
                                     @endif

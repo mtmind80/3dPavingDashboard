@@ -217,7 +217,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('/scehdule/{service_id}', 'ProposalDetailController@schedule')->name('schedule_service');
         // Select service type
         Route::post('/checkform', 'ProposalDetailController@checkform')->name('checkform');
-
+        
         Route::get('/new_service/{proposal_id}', 'ProposalDetailController@newservice')->name('new_service');
         // Start New Service with a service type
         Route::post('/create_service/{proposal_id}', 'ProposalDetailController@create')->name('create_detail');
@@ -249,8 +249,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('/new', 'ProposalController@new')->name('new_proposal');
 
         Route::get('', 'ProposalController@index')->name('proposals');
-        //post to search method show results
-
+        
         //update proposal materials pricing
         Route::get('/MaterialPricing/{id}', 'ProposalController@refreshMaterialPricing')->name('refresh_material');
 

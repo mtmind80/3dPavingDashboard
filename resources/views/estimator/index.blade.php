@@ -23,6 +23,18 @@
     var current_equipment_total =0;
     var current_additional_total =0;
 
+
+
+    // Create our number formatter.
+    const formatCurrency = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        // These options are needed to round to whole numbers if that's what you want.
+        //minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
+        //maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
+    });
+
+
 </script>
     <div class="row estimator-form admin-form">
         <form method="POST" action="{{route('checkform')}}" accept-charfset="UTF-8" id="estimator_form" class="admin-form">
@@ -41,6 +53,7 @@
             <input type="hidden" name="loads" id="x_loads" value="{{ $proposalDetail->loads }}">
             <input type="hidden" name="locations" id="x_locations" value="{{ $proposalDetail->locations }}">
             <input type="hidden" name="overhead" id="x_overhead" value="{{ $proposalDetail->overhead }}">
+            <input type="hidden" name="alt_desc" id="x_alt_desc" value="{{ $proposalDetail->alt_desc }}">
 
             <input type="hidden" name="depth" id="x_depth" value="{{ $proposalDetail->depth }}">
             <input type="hidden" name="profit" id="x_profit" value="{{ $proposalDetail->profit }}">
@@ -55,11 +68,12 @@
             <input type="hidden" name="primer" id="x_primer" value="{{ $proposalDetail->primer }}">
             <input type="hidden" name="phases" id="x_phases" value="{{ $proposalDetail->phases }}">
             <input type="hidden" name="yield" id="x_yield" value="{{ $proposalDetail->yield }}">
-            <input type="hidden" name="fastset" id="x_fastset" value="{{ $proposalDetail->fastset }}">
+            <input type="hidden" name="fast_set" id="x_fast_set" value="{{ $proposalDetail->fast_set }}">
             <input type="hidden" name="location_id" id="x_location_id" value="{{ $proposalDetail->location_id }}">
             <input type="hidden" name="cost" id="x_cost" value="{{ $proposalDetail->cost }}">
+            <input type="hidden" name="material_cost" id="x_material_cost" value="{{ $proposalDetail->material_cost }}">
             <input type="hidden" name='toncost' id='x_toncost' value="{{ $proposalDetail->toncost }}">
-            <input type="hidden" name='tackcost' id='x_tackcost' value="{{ $proposalDetail->tackcost }}">
+
 
             <input type="hidden" name='stayorleave' id='stayorleave' value="false">
             {{-- user will stay  after save --}}
@@ -68,10 +82,61 @@
             <input type="hidden" name="equipment_total_cost" id="estimator_form_equipment_total_cost" value="{{ $proposalDetail->total_cost_equipment }}">
             <input type="hidden" name="labor_total_cost" id="estimator_form_labor_total_cost" value="{{ $proposalDetail->total_cost_labor }}">
             <input type="hidden" name="additional_cost_total_cost" id="estimator_form_additional_cost_total_cost" value="{{ $proposalDetail->total_additional_costs }}">
-            <input type="hidden" name="materials_total_cost" id="estimator_form_materials_total_cost" value="{{ $proposalDetail->cost_per_day }}">
+            <input type="hidden" name="materials_total_cost" id="estimator_form_materials_total_cost" value="{{ $proposalDetail->material_cost }}">
             <input type="hidden" name="subcontractor_total_cost" id="estimator_form_subcontractor_total_cost" value="{{ $proposalDetail->total_cost_subcontractor }}">
         </form>
 
+        {{--id
+proposal_id
+change_order_id
+services_id
+contractor_id
+status_id
+location_id
+fieldmanager_id
+second_fieldmanager_id
+cost
+cost_per_linear_feet
+material_cost
+service_name
+service_desc
+bill_after
+dsort
+linear_feet
+square_feet
+square_yards
+cubic_yards
+tons
+loads
+locations
+depth
+profit
+days
+cost_per_day
+break_even
+primer
+yield
+fast_set
+additive
+sealer
+sand
+phases
+overhead
+catchbasins
+proposal_text
+proposal_note
+proposal_field_note
+created_by
+scheduled_by
+completed_by
+completed_date
+start_date
+end_date
+created_at
+updated_at
+--}}
+
+        
         <div class="col-12">
             @include('_partials._alert')
             <div class="card">
@@ -86,7 +151,6 @@
             <div class="card">
                 <div class="card-header alert-light">
                     @include('_partials._alert', ['alertId' => 'service_text_alert'])
-                    <h5>@lang('translation.service_description')</h5>
                     @include('estimator.form_service_text')
                 </div>
             </div>
@@ -134,7 +198,6 @@
         </div>
     </div>
 
-    @include('estimator.wrapitup')
 
 @endsection
 

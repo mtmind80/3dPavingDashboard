@@ -7,8 +7,10 @@
     <div class="row">
 
     <div class="col-lg-6 col-sm-4 ">
+        <h5>@lang('translation.service_description')</h5>
+
         <label class="control-label">Service Description Template</label>
-        <p><span id="service_proposal_text">{!! $service->service_text_en !!}</span></p>
+        <p><span id="service_proposal_text">{!! $service->service_template !!}</span></p>
         <span id="reset_description" class="{{ $site_button_class }}">Reset Description</span>
     </div>
     <div class="col-lg-6 col-sm-4 ">
@@ -17,7 +19,7 @@
                 id="proposaltext"
                 name="proposaltext"
                 class="form-control" disabled
-            >{{ $proposalDetail->proposal_text }}</textarea>
+            >{!! $proposalDetail->proposal_text !!}</textarea>
      </div>
 </div>
 </form>
@@ -31,7 +33,7 @@
             promotion: false,
             setup: function (editor) {
                 editor.on('init', function (e) {
-                    editor.setContent("{!! $proposalDetail->proposal_text !!}");
+                    editor.setContent('{!! $proposalDetail->proposal_text !!}');
                 });
             },
             height : 300,
@@ -41,7 +43,7 @@
 
     <script>
         $(document).ready(function () {
-            var servicedesc = "{!! $service->service_text_en !!}";
+            var servicedesc = "{!! $service->service_template !!}"; 
 
             if (serviceCategoryId == 1) {
 
@@ -51,6 +53,8 @@
 
                 } else {
 
+                    cubic_yards = $("#cubic_yards").val();
+                    servicedesc = servicedesc.replace('@@TONS@@', cubic_yards);
 
                 }
             }
@@ -61,10 +65,18 @@
                 {{-- concrete --}}
                 {{--IF $details.cmpServiceID < 12- *curb mix* --}}
 
-                if (service_id < 12) {
+                if (serviceId < 12) {
 
-                } else if (service_id >= 12) {
-
+                    cubic_yards = $("#cubic_yards").val();
+                    servicedesc = servicedesc.replace('@@TONS@@', cubic_yards);
+                    
+                    
+                } else if (serviceId >= 12) {
+                    cubic_yards = $("#cubic_yards").val();
+                    depth = $("#depth").val();
+                    servicedesc = servicedesc.replace('@@TONS@@', cubic_yards);
+                    servicedesc = servicedesc.replace('@@INCHES@@', depth);
+                    
                 }
             }
 
@@ -75,7 +87,7 @@
 
             if (serviceCategoryId == 4) {
                 {{-- 4	Excavation --}}
-                $("#tons").text();
+                tons = $("#tons").text();
                 servicedesc = servicedesc.replace('@@TONS@@', tons);
             }
 
@@ -97,7 +109,9 @@
 
             if (serviceCategoryId == 7) {
                 {{--  Rock --}}
-
+                var depth = $("#depth").val();
+                servicedesc = servicedesc.replace('@@INCHES@@', depth);
+                
             }
 
 
@@ -105,6 +119,11 @@
 
                 {{--  Seal Coating  these are the user imput fields that need to be filled in validated--}}
 
+                var square_feet = $("#square_feet").val();
+                var phase = $("#phases").val();
+                servicedesc = servicedesc.replace('@@SQFT@@', square_feet);
+                servicedesc = servicedesc.replace('@@PHASES@@', phases);
+                
 
             }
 
