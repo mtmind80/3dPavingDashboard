@@ -119,13 +119,15 @@ class DashboardController extends Controller
         $totalSalesRevenue = $totalcosts[0]['cost'];
         //$totalSalesRevenue = Currency::format($totalSalesRevenue);
         //show proposals created in this year
-        $query = "Select count(*) as proposals from proposals WHERE YEAR(proposals.proposal_date) = $selectedYear ";
+        $query = "Select COUNT(DISTINCT(id)) as proposals from proposals WHERE YEAR(proposals.proposal_date) = $selectedYear ";
         $query = $query . $addonSQL;
+
+    
         $proposals = DB::select($query);
         $proposals = json_decode(json_encode($proposals, true), true);
 
         //show number of workorders in this year        
-        $query = "Select count(*) as workorders from proposals 
+        $query = "Select COUNT(DISTINCT(id)) as workorders from proposals 
         WHERE proposals.job_master_id is not null 
         AND proposals.proposal_statuses_id <> 7 
         AND YEAR(proposals.sale_date) = $selectedYear";
@@ -376,7 +378,7 @@ class DashboardController extends Controller
                     'work_orders' => $county['workorders'],
                     'sales' => $county['cost'],
                 ];
-                $eries[] = $county['workorders'];  // must be a number
+                $eries[] = (integer)$county['workorders'];  // must be a number
                 $labels[] = $county['county'];
             }
         }
@@ -508,7 +510,7 @@ WHERE YEAR(proposals.sale_date) = $selectedYear
                     'work_orders' => $county['workorders'],
                     'sales' => $county['cost'],
                 ];
-                $eries[] = $county['workorders'];  // must be a number
+                $eries[] = (integer)$county['workorders'];  // must be a number
                 $labels[] = $county['county'];
             }
         }
