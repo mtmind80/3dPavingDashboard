@@ -95,17 +95,17 @@
 
 
         @include('modals.scrollable_modalcity')
-        @endsection
+@endsection
 
-        @section('script')
-            <!-- plugin js -->
-            <script src="{{ URL::asset('assets/libs/apexcharts/apexcharts.min.js')}}"></script>
+@section('script')
+    <!-- plugin js -->
+    <script src="{{ URL::asset('assets/libs/apexcharts/apexcharts.min.js')}}"></script>
 
 
-            <!-- Responsive examples -->
-            <script src="{{ URL::asset('/assets/libs/datatables/datatables.min.js')}}"></script>
+    <!-- Responsive examples -->
+    <script src="{{ URL::asset('/assets/libs/datatables/datatables.min.js')}}"></script>
 
-        @endsection
+@endsection
 
         @section('page-js')
             <script>

@@ -43,7 +43,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="card-title mb-4">@lang('translation.dashboard7')</h4>
-                                <div id="donut_chart_workorders_by_county" class="apex-charts"></div>
+                                <div id="donut_chart_workorders_by_county_7" class="apex-charts"></div>
                             </div>
                         </div>
                     </div>
@@ -91,7 +91,7 @@
                 </div>
             </div>
         </div>
-        
+
         @endsection
 
         @section('script')
@@ -139,8 +139,8 @@
                 };
 
 
-                if ($('#donut_chart_workorders_by_county').html() === "") {
-                    var donutChartWorkordersByCounty = new ApexCharts(document.querySelector('#donut_chart_workorders_by_county'), donutWorkorderByCountyOptions);
+                if ($('#donut_chart_workorders_by_county_7').html() === "") {
+                    var donutChartWorkordersByCounty = new ApexCharts(document.querySelector('#donut_chart_workorders_by_county_7'), donutWorkorderByCountyOptions);
                     donutChartWorkordersByCounty.render();
                 }
 
