@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ExceptionError;
 use App\Http\Requests\SearchRequest;
 use App\Http\Requests\ProposalNoteRequest;
 use App\Models\AcceptedDocuments;
@@ -18,6 +19,7 @@ use App\Models\ProposalDetail;
 use App\Models\ProposalNote;
 use App\Models\ProposalMedia;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Cache;
@@ -304,7 +306,7 @@ class ProposalController extends Controller
         return view('proposals.create_proposal', $data);
 
     }
-    
+
 
     /**
      * Display the specified resource.
@@ -451,50 +453,81 @@ class ProposalController extends Controller
      */
     public function show(Request $request, $id)
     {
+        $orderType = $request->order_type ?? 'ASC';
 
-        $data = array();
-        //what kind of access do i have
-        if(auth()->user()->isAdmin()) {
-            $proposal = Proposal::find($id);
-        } else {
+        $query = Proposal::with(['status', 'details' => function($w) use ($orderType){
+            $w->orderBy('dsort', $orderType);
+        }]);
 
-            $proposal = Proposal::where('id', '=', $id)->where(function($q) {
-                $q->where('salesmanager_id', auth()->user()->id)->orWhere('salesperson_id', auth()->user()->id);
-            })->first();
+        if (! auth()->user()->isAdmin()) {
+            $query->where(function($q) {
+                $q->orWhere('salesmanager_id', auth()->user()->id)
+                    ->orWhere('salesperson_id', auth()->user()->id);
+            });
             // managers only show if I am on the proposal
         }
 
-        if($proposal) {
-            $IsEditable = $proposal->IsEditable;
-            $proposal = $proposal->toArray();
-            $proposal['IsEditable'] = $IsEditable;
-
-            $data['mediatypes'] = MediaType::all()->toArray();
-
-            $accepted_filetypes = AcceptedDocuments::all()->pluck('extension')->toArray();
-            $data['doctypes'] = implode(',', $accepted_filetypes);
-
-            $services = ProposalDetail::where('proposal_id', $id)->get();
-            $notes = ProposalNote::where('proposal_id', $id)->get();
-            $permits = Permit::where('proposal_id', $id)->get();
-            $medias = ProposalMedia::where('proposal_id', $id)->get();
-
-            $hostwithHttp = request()->getSchemeAndHttpHost();
-
-
-            $data['hostwithHttp'] = $hostwithHttp;
-
-            $data['id'] = $id;
-            $data['proposal'] = $proposal;
-            $data['permits'] = $permits;
-            $data['medias'] = $medias;
-            $data['services'] = $services;
-            $data['notes'] = $notes;
-
-            return view('proposals.proposal_home', $data);
-
+        if (!$proposal = $query->find($id)) {
+            abort(404);
         }
-        return view('pages-404');
+
+        $currencyTotalDetailCosts = $proposal->currency_total_details_costs;
+
+        $IsEditable = $proposal->IsEditable;
+
+        $services = $proposal->details;
+
+        $proposal = $proposal->toArray();
+        $proposal['IsEditable'] = $IsEditable;
+
+        $data = [];
+
+        $data['mediatypes'] = MediaType::all()->toArray();
+
+        $accepted_filetypes = AcceptedDocuments::all()->pluck('extension')->toArray();
+        $data['doctypes'] = implode(',', $accepted_filetypes);
+
+        $notes = ProposalNote::where('proposal_id', $id)->get();
+        $permits = Permit::where('proposal_id', $id)->get();
+        $medias = ProposalMedia::where('proposal_id', $id)->get();
+
+        $hostwithHttp = request()->getSchemeAndHttpHost();
+
+        $data['hostwithHttp'] = $hostwithHttp;
+
+        $data['id'] = $id;
+        $data['proposal'] = $proposal;
+        $data['permits'] = $permits;
+        $data['medias'] = $medias;
+        $data['services'] = $services;
+        $data['notes'] = $notes;
+
+        $data['bodyClass'] = 'show-proposal-page';
+        $data['selectedTab'] = $request->tab ?? null;
+        $data['currency_total_details_costs'] = $currencyTotalDetailCosts;
+
+        return view('proposals.proposal_home', $data);
+    }
+
+    public function reorderServices(Request $request)
+    {
+        if (!$request->reorder_str_cid) {
+            return redirect()->back()->withError('New order unknown.');
+        }
+
+        try {
+            DB::transaction(function() use ($request){
+                foreach (explode(',', $request->reorder_str_cid) as $index => $id) {
+                    ProposalDetail::where('proposal_id', $request->proposal_id)->find($id)->update(['dsort' => $index + 1]);
+                }
+            });
+        } catch (Exception $e) {
+            return ExceptionError::handleError($e);
+        }
+
+        $redirectTo = route('show_proposal', ['id' => $request->proposal_id]) . '?tab=servicestab';
+
+        return redirect()->to($redirectTo)->with('success', 'Service order updated.');
     }
 
     /**
@@ -627,7 +660,7 @@ class ProposalController extends Controller
                     return redirect()->route('show_proposal', ['id' => $proposalId]);
                 }
             }
-        
+
         } else {
             //            $contacts = Contact::search($needle)->sortable()->with(['contactType', 'company'])->paginate($perPage);
             //only pending proposals
@@ -766,7 +799,7 @@ class ProposalController extends Controller
             $reminderDate = date('Y-m-d', strtotime($reminderDate));
         }
         try {
-            \DB::transaction(function() use ($request, $reminderDate) {
+            DB::transaction(function() use ($request, $reminderDate) {
                 $data = [
                     'proposal_id' => $request->proposal_id,
                     'created_by' => auth()->user()->id,
