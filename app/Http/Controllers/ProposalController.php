@@ -471,8 +471,6 @@ class ProposalController extends Controller
             abort(404);
         }
 
-        //dd($proposal->details->sum('cost'), $proposal->total_details_costs, $proposal->currency_total_details_costs);
-
         $currencyTotalDetailCosts = $proposal->currency_total_details_costs;
 
         $IsEditable = $proposal->IsEditable;
@@ -801,7 +799,7 @@ class ProposalController extends Controller
             $reminderDate = date('Y-m-d', strtotime($reminderDate));
         }
         try {
-            \DB::transaction(function() use ($request, $reminderDate) {
+            DB::transaction(function() use ($request, $reminderDate) {
                 $data = [
                     'proposal_id' => $request->proposal_id,
                     'created_by' => auth()->user()->id,
