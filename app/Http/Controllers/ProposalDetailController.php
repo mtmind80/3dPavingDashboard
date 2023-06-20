@@ -142,21 +142,21 @@ class ProposalDetailController extends Controller
     {
 
         $formfields = $request->all();
-   
+
         $proposal_detail = ProposalDetail::where('id', '=', $formfields['id'])->first();
         unset($formfields['_token']);
         unset ($formfields['id']);
         //unset ($formfields['material_cost']);
 
         //print_r($formfields);
-        //exit(); 
+        //exit();
 
         $proposal_detail->update($formfields);
         \Session::flash('success', 'Service was saved!');
         if($formfields['stayorleave']  =='true')
         {
             return redirect()->route('show_proposal',['id'=> $formfields['proposal_id']]);
-            
+
         }
         return redirect()->back();
 
@@ -816,14 +816,9 @@ class ProposalDetailController extends Controller
                     'success' => false,
                     'message' => $validator->messages()->first(),
                 ];
-            } else if (!empty($request->accepted) && !$request->hasFile('attached_bid')) {
-                $response = [
-                    'success' => false,
-                    'message' => 'You must attach the bid if the contractor is accepted.',
-                ];
             } else {
                 try {
-                    if(!$contractor = Contractor::find($request->subcontractor_id)) {
+                    if (!$contractor = Contractor::find($request->subcontractor_id)) {
                         $response = [
                             'success' => false,
                             'message' => 'Contractor not found.',
@@ -834,12 +829,8 @@ class ProposalDetailController extends Controller
                             'message' => 'Contractor already exists.',
                         ];
                     } else {
-                        $contractorName = $contractor->name;
                         $overhead = (float)$request->overhead;
                         $cost = (float)$request->cost;
-                        $formattedCost = Currency::format($cost);
-                        $totalCost = $cost * (1 + $overhead / 100);
-                        $formattedTotalCost = Currency::format($totalCost);
                         $accepted = (boolean)$request->accepted;
                         $description = $request->description;
 
@@ -873,13 +864,14 @@ class ProposalDetailController extends Controller
                             }
                         }
 
-                        if (!empty($accepted)) {
-                            ProposalDetailSubcontractor::clearAccepted($request->proposal_detail_id);
-                        }
-
                         ProposalDetailSubcontractor::create($data);
 
                         $proposalDetailSubcontractors = ProposalDetailSubcontractor::where('proposal_detail_id', $request->proposal_detail_id)->get();
+
+                        $totalCost = 0;
+                        foreach ($proposalDetailSubcontractors as $subcontractor) {
+                            $totalCost += (float)$subcontractor->total_cost;
+                        }
 
                         $data = [
                             'partialSubcontractors' => $proposalDetailSubcontractors,
@@ -890,21 +882,9 @@ class ProposalDetailController extends Controller
                             'message' => 'Subcontractor added.'.$uploadError,
                             'data' => [
                                 'grid' => view('estimator._subcontractors_grid', $data)->render(),
-                                /*
-                                'subcontractor_name' => $contractorName,
-
-                                'overhead' => $overhead,
-                                'overhead_in_percent' => round($overhead, 1).'%',
-                                'cost' => $cost,
-                                'formatted_cost' => $formattedCost,
-                                'total_cost' => $totalCost,
-                                'formatted_total_cost' => $formattedTotalCost,
-                                'accepted' => (integer)$accepted,
-                                'formatted_accepted' => !empty($accepted) ? '<i class="fa fa-check color-green"></i>' : '',
-                                'link_attached_bid' => !empty($attachedBid) ? '<a href="'.asset('media/bids/').'/'.$attachedBid.'" target="_blank">'.$attachedBid.'</a>' : '',
-                                */
+                                'totalCost' => $totalCost,
+                                'currencyTotalCost' => Currency::format($totalCost),
                                 'description' => $description,
-                                //'proposal_detail_subcontractor_id' => $proposalDetailSubcontractor->id,
                             ],
                         ];
                     }
@@ -962,13 +942,29 @@ class ProposalDetailController extends Controller
                             }
                         }
 
+                        $proposalDetailId = $proposalDetailSubcontractor->proposal_detail_id;
+
                         $proposalDetailSubcontractor->delete();
+
+                        $proposalDetailSubcontractors = ProposalDetailSubcontractor::where('proposal_detail_id', $proposalDetailId)->get();
+
+                        $totalCost = 0;
+                        foreach ($proposalDetailSubcontractors as $subcontractor) {
+                            $totalCost += (float)$subcontractor->total_cost;
+                        }
+
+                        $data = [
+                            'partialSubcontractors' => $proposalDetailSubcontractors,
+                        ];
 
                         $response = [
                             'success' => true,
                             'message' => 'Subcontractor removed.',
                             'data' => [
-                                'proposal_detail_subcontractor_id' => $request->proposal_detail_subcontractor_id,
+                                'grid' => view('estimator._subcontractors_grid', $data)->render(),
+                                'totalCost' => $totalCost,
+                                'currencyTotalCost' => Currency::format($totalCost),
+                                'description' => $request->description,
                             ],
                         ];
                     }
@@ -1007,7 +1003,7 @@ class ProposalDetailController extends Controller
         }
          return redirect()->back()->with('error', 'Sorry no matching records were found!');
     }
-    
+
     public function newservice($proposalId)
     {
         $data['headername'] = "Add New Service";

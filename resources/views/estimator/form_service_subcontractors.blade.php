@@ -33,10 +33,10 @@
                 </div>
                 <div class="col-sm-3 tc admin-form-item-widget">
                     <x-form-text name="overhead"
-                                 class="check-contact tc"
-                                 placeholder="enter value"
-                                 id="subcontractor_overhead"
-                                 :params="[
+                         class="check-contact tc"
+                         placeholder="enter value"
+                         id="subcontractor_overhead"
+                         :params="[
                             'label' => 'none',
                             'iconClass' => 'none',
                         ]"
@@ -44,10 +44,10 @@
                 </div>
                 <div class="col-sm-3 tc admin-form-item-widget">
                     <x-form-text name="cost"
-                                 class="check-contact tc"
-                                 placeholder="enter value"
-                                 id="subcontractor_cost"
-                                 :params="[
+                         class="check-contact tc"
+                         placeholder="enter value"
+                         id="subcontractor_cost"
+                         :params="[
                             'label' => 'none',
                             'iconClass' => 'none',
                         ]"
@@ -60,9 +60,9 @@
             <div class="row">
                 <div class="col-sm-10 admin-form-item-widget">
                     <x-form-file-upload name="attached_bid"
-                                        class="check-contact tl"
-                                        id="subcontractor_attached_bid"
-                                        :params="[
+                        class="check-contact tl"
+                        id="subcontractor_attached_bid"
+                        :params="[
                             'label' => 'Attach Bid',
                             'hint' => '(allowed ext: '.$allowedFileExtensions.')',
                         ]"
@@ -70,9 +70,9 @@
                 </div>
                 <div class="col-sm-2 tc admin-form-item-widget">
                     <x-form-check-box name="accepted"
-                                      class="check-contact tc mt33"
-                                      id="subcontractor_accepted"
-                                      value="1"
+                          class="check-contact tc mt33"
+                          id="subcontractor_accepted"
+                          value="1"
                     >Accepted</x-form-check-box>
                 </div>
             </div>
@@ -88,9 +88,9 @@
             <div class="row">
                 <div class="col-sm-12 admin-form-item-widget">
                     <x-form-textarea name="description"
-                                     class="check-contact tl h140 pl20"
-                                     id="subcontractor_description"
-                                     :params="[
+                         class="check-contact tl h140 pl20"
+                         id="subcontractor_description"
+                         :params="[
                             'label' => 'none',
                             'iconClass' => 'none',
                         ]"
@@ -237,7 +237,6 @@
                                 showErrorAlert('Critical error has occurred.', subcontractorsAlert);
                             } else if (response.success) {
                                 let data = response.data;
-                                let html  = '';
 
                                 let subcontractorRows = $('.subcontractor-row');
 
@@ -260,9 +259,9 @@
                         },
                         error: function (response, status, error){
                             @if (env('APP_ENV') === 'local')
-                            showErrorAlert(response.responseJSON.message, subcontractorsAlert);
+                                showErrorAlert(response.responseJSON.message, subcontractorsAlert);
                             @else
-                            showErrorAlert(response.message, 'Critical error has occurred.');
+                                showErrorAlert(response.message, 'Critical error has occurred.');
                             @endif
                         }
                     });
@@ -278,7 +277,8 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     data: {
-                        proposal_detail_subcontractor_id: proposal_detail_subcontractor_id
+                        proposal_detail_subcontractor_id: proposal_detail_subcontractor_id,
+                        description: $('#subcontractor_description').val()
                     },
                     type: "POST",
                     url: "{{ route('ajax_subcontractor_remove') }}",
@@ -292,14 +292,15 @@
                         if (!response) {
                             showErrorAlert('Critical error has occurred.', subcontractorsAlert);
                         } else if (response.success) {
-
-                            $('#proposal_detail_subcontractor_id_' + response.data.proposal_detail_subcontractor_id).remove();
+                            let data = response.data;
 
                             let subcontractorRows = $('.subcontractor-row');
 
                             if (subcontractorRows.length === 0) {
                                 subcontractorElRowsHeader.addClass('hidden');
                             }
+
+                            subcontractorElRowsContainer.html(data.grid);
 
                             subcontractorUpdateTotalCost();
 
@@ -325,16 +326,15 @@
                 let subcontractorElRowAccepted = $('.subcontractor-row.subcontractor-accepted');
                 let subcontractorElTotalCost = $('#subcontractor_total_cost');
                 let totalElCost;
-                let totalCost;
-                let currrencyTotalCost;
+                let totalCost = 0;
+                let currrencyTotalCost = '$0.00';
 
-                if (subcontractorElRowAccepted.length === 1) {
-                    totalElCost = subcontractorElRowAccepted.find('.subcontractor-total_cost');
-                    totalCost = totalElCost.data('total_cost');
-                    currrencyTotalCost = totalElCost.html();
-                } else {
-                    totalCost = 0;
-                    currrencyTotalCost = '$0.00';
+                if (subcontractorElRowAccepted.length > 0) {
+                    subcontractorElRowAccepted.each(function(index){
+                        let el = $(this);
+                        totalCost += Number(el.data('total_cost'));
+                    });
+                    currrencyTotalCost = currencyFormat(totalCost);
                 }
 
                 subcontractorElTotalCost.html(currrencyTotalCost);

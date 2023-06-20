@@ -283,18 +283,22 @@ $(document).ready(function () {
         })
     }
 
-    $('#sortable_body').sortable({
-        containment: 'parent',
-        start: function(event, ui){
-            $(ui.item.context).addClass('drag');
-        },
-        stop: function(event, ui){
-            $(ui.item.context).removeClass('drag');
-        },
-        update: function(event, ui){
-            $('#button_update_order').removeClass('hidden');
-        }
-    });
+    var sortableBody = $('#sortable_body');
+
+    if (sortableBody.length !== 0) {
+        $('#sortable_body').sortable({
+            containment: 'parent',
+            start: function(event, ui){
+                $(ui.item.context).addClass('drag');
+            },
+            stop: function(event, ui){
+                $(ui.item.context).removeClass('drag');
+            },
+            update: function(event, ui){
+                $('#button_update_order').removeClass('hidden');
+            }
+        });
+    }
 
     $('#button_update_order').click(function(ev){
         ev.preventDefault();
