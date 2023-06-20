@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ExceptionError;
 use App\Http\Requests\SearchRequest;
 use App\Http\Requests\ProposalNoteRequest;
 use App\Models\AcceptedDocuments;
@@ -18,6 +19,7 @@ use App\Models\ProposalDetail;
 use App\Models\ProposalNote;
 use App\Models\ProposalMedia;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Cache;
@@ -507,6 +509,27 @@ class ProposalController extends Controller
         $data['currency_total_details_costs'] = $currencyTotalDetailCosts;
 
         return view('proposals.proposal_home', $data);
+    }
+
+    public function reorderServices(Request $request)
+    {
+        if (!$request->reorder_str_cid) {
+            return redirect()->back()->withError('New order unknown.');
+        }
+
+        try {
+            DB::transaction(function() use ($request){
+                foreach (explode(',', $request->reorder_str_cid) as $index => $id) {
+                    ProposalDetail::where('proposal_id', $request->proposal_id)->find($id)->update(['dsort' => $index + 1]);
+                }
+            });
+        } catch (Exception $e) {
+            return ExceptionError::handleError($e);
+        }
+
+        $redirectTo = route('show_proposal', ['id' => $request->proposal_id]) . '?tab=servicestab';
+
+        return redirect()->to($redirectTo)->with('success', 'Service order updated.');
     }
 
     /**

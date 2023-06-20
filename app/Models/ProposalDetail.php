@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\Currency;
 use App\Traits\SearchTrait;
 use App\Traits\SortableTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -11,6 +12,58 @@ class ProposalDetail extends Model
     use SortableTrait, SearchTrait;
 
     protected $guarded = ['id'];
+
+    public $fillable = [
+        'proposal_id',
+        'change_order_id',
+        'services_id',
+        'contractor_id',
+        'contractor_bid',
+        'status_id',
+        'location_id',
+        'fieldmanager_id',
+        'second_fieldmanager_id',
+        'cost',
+        'cost_per_linear_feet',
+        'material_cost',
+        'service_name',
+        'service_desc',
+        'bill_after',
+        'dsort',
+        'linear_feet',
+        'square_feet',
+        'square_yards',
+        'cubic_yards',
+        'tons',
+        'loads',
+        'locations',
+        'depth',
+        'profit',
+        'days',
+        'cost_per_day',
+        'break_even',
+        'primer',
+        'yield',
+        'fast_set',
+        'additive',
+        'sealer',
+        'sand',
+        'phases',
+        'overhead',
+        'catchbasins',
+        'proposal_text',
+        'alt_desc',
+        'proposal_note',
+        'proposal_field_note',
+        'created_by',
+        'scheduled_by',
+        'completed_by',
+        'completed_date',
+        'start_date',
+        'end_date',
+        'created_at',
+    ];
+
 
     public $sortable = [
         'proposal_details.proposal_id|proposals.name',
@@ -48,6 +101,15 @@ class ProposalDetail extends Model
 
     ];
 
+    public static function boot()
+    {
+        static::creating(function ($model) {
+            $model->dsort = $model->getMaxDSort() + 1;
+        });
+
+        parent::boot();
+    }
+
     public function sortableColumns()
     {
         return $this->sortable;
@@ -63,6 +125,11 @@ class ProposalDetail extends Model
     public function proposal()
     {
         return $this->belongsTo(Proposal::class);
+    }
+
+    public function status()
+    {
+        return $this->belongsTo(ProposalStatus::class, 'status_id');
     }
 
     public function vehicles()
@@ -100,9 +167,9 @@ class ProposalDetail extends Model
         return $this->hasMany(ProposalDetailSubcontractor::class, 'proposal_detail_id');
     }
 
-    public function acceptedSubcontractor()
+    public function acceptedSubcontractors()
     {
-        return $this->hasOne(ProposalDetailSubcontractor::class, 'proposal_detail_id')->where('accepted', 1);
+        return $this->hasMany(ProposalDetailSubcontractor::class, 'proposal_detail_id')->where('accepted', 1);
     }
 
     public function service()
@@ -125,6 +192,16 @@ class ProposalDetail extends Model
     }
 
     // Mutators and Accessors
+
+    public function getFormattedCostAttribute()
+    {
+        return Currency::format($this->cost ?? 0);
+    }
+
+    public function getHtmlDsortAttribute()
+    {
+        return !empty($this->dsort) ? $this->dsort : null;
+    }
 
     public function getTotalCostVehiclesAttribute()
     {
@@ -184,6 +261,11 @@ class ProposalDetail extends Model
     public function getTotalAdditionalCosts()
     {
         return $this->additionalCosts()->sum('amount');
+    }
+
+    public function getMaxDSort()
+    {
+        return $this->max('d_sort');
     }
 
 }
