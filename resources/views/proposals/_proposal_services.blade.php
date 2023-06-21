@@ -1,20 +1,4 @@
-@if (!empty($services) && $services->count() > 0)
-    <div class="row">
-        <div class="col-md-8 col-sm-6 mb20">
-            @if ($proposal['IsEditable'])
-                <x-href-button url="{{ route('new_service', ['proposal_id' => $proposal['id']]) }}" class="mr10 btn btn-success"><i class="fas fa-plus"></i>Add Service</x-href-button>
-            @endif
-            <x-reorder-button
-                :url="route('services_reorder')"
-                :params="[
-                    'hidden-fields' => [
-                        'proposal_id' => $proposal['id']
-                    ]
-                ]"
-            ></x-reorder-button>
-        </div>
-        <div class="col-md-4 col-sm-6 mb20 xs-hidden"></div>
-    </div>
+
     <table class="list-table table sortable-table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
         <thead>
             <tr>
@@ -74,6 +58,6 @@
     </table>
 
     <x-delete-form :url="route('service_delete')"></x-delete-form>
-@endif
+
 
 
