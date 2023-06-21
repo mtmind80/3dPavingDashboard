@@ -85,57 +85,6 @@
             <input type="hidden" name="materials_total_cost" id="estimator_form_materials_total_cost" value="{{ $proposalDetail->material_cost }}">
             <input type="hidden" name="subcontractor_total_cost" id="estimator_form_subcontractor_total_cost" value="{{ $proposalDetail->total_cost_subcontractor }}">
         </form>
-
-        {{--id
-proposal_id
-change_order_id
-services_id
-contractor_id
-status_id
-location_id
-fieldmanager_id
-second_fieldmanager_id
-cost
-cost_per_linear_feet
-material_cost
-service_name
-service_desc
-bill_after
-dsort
-linear_feet
-square_feet
-square_yards
-cubic_yards
-tons
-loads
-locations
-depth
-profit
-days
-cost_per_day
-break_even
-primer
-yield
-fast_set
-additive
-sealer
-sand
-phases
-overhead
-catchbasins
-proposal_text
-proposal_note
-proposal_field_note
-created_by
-scheduled_by
-completed_by
-completed_date
-start_date
-end_date
-created_at
-updated_at
---}}
-
         
         <div class="col-12">
             @include('_partials._alert')
@@ -198,6 +147,16 @@ updated_at
         </div>
     </div>
 
+
+@endsection
+
+@section('script')
+
+    <!-- jquery.vectormap map -->
+    <script src="{{ URL::asset('/assets/libs/jquery-vectormap/jquery-vectormap.min.js')}}"></script>
+
+    <!-- Responsive examples -->
+    <script src="{{ URL::asset('/assets/libs/datatables/datatables.min.js')}}"></script>
 
 @endsection
 

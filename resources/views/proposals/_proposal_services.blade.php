@@ -58,6 +58,6 @@
     </table>
 
     <x-delete-form :url="route('service_delete')"></x-delete-form>
-@endif
+
 
 
