@@ -473,8 +473,6 @@ class ProposalController extends Controller
 
         $currencyTotalDetailCosts = $proposal->currency_total_details_costs;
 
-
-
         $IsEditable = $proposal->IsEditable;
 
         $services = $proposal->details;
