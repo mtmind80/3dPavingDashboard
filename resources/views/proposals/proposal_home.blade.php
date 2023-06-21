@@ -547,5 +547,17 @@
 
 
     </script>
+
+
+    @section('script')
+
+        <!-- jquery.vectormap map -->
+        <script src="{{ URL::asset('/assets/libs/jquery-vectormap/jquery-vectormap.min.js')}}"></script>
+
+        <!-- Responsive examples -->
+        <script src="{{ URL::asset('/assets/libs/datatables/datatables.min.js')}}"></script>
+
+    @endsection
+    
 @stop
 
