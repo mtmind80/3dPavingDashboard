@@ -127,7 +127,7 @@ class ProposalDetailController extends Controller
             'materialsCB' => $materialsCB,
             'vehiclesCB' => Vehicle::vehiclesCB(['0' => 'Select vehicle']),
             'laborCB' => LaborRate::LaborWithRatesCB(['0' => 'Select labor']),
-            'contractorsCB' => Contractor::contractorsWithOverheadCB(['0' => 'Select contractor']),
+            'contractorsCB' => Contractor::contractorsCB(['0' => 'Select contractor']),
             'contractors' => Contractor::orderBy('name')->get(),
             'allowedFileExtensions' => AcceptedDocuments::extensionsStrCid(),
             'strippingCB' => StripingCost::strippingCB(['0' => 'Select contractor']),

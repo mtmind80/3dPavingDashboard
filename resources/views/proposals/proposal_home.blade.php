@@ -24,29 +24,29 @@
                 <div class="card-body">
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs nav-tabs-custom nav-justified" role="tablist">
-                        <li class="nav-item">
+                        <li class="nav-item no-border">
                             <a class="nav-link active" data-toggle="tab" href="#proposal" role="tab">
                                 <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
-                                <span class="d-none d-sm-block">@lang('translation.proposal')</span>
+                                <span class="d-none d-sm-block h4">@lang('translation.proposal')</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#services" id='servicestab' role="tab">
                                 <span class="d-block d-sm-none"><i class="far fa-envelope"></i></span>
-                                <span class="d-none d-sm-block">@lang('translation.services')</span>
+                                <span class="d-none d-sm-block h4">@lang('translation.services')</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#notes" id="notestab" role="tab">
                                 <span class="d-block d-sm-none"><i class="far fa-user"></i></span>
-                                <span class="d-none d-sm-block">@lang('translation.notes') / @lang('translation.media')</span>
+                                <span class="d-none d-sm-block h4">@lang('translation.notes') / @lang('translation.media')</span>
                             </a>
                         </li>
 
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#crm" id="crmtab" role="tab">
                                 <span class="d-block d-sm-none"><i class="ri-compass-2-line"></i></span>
-                                <span class="d-none d-sm-block">@lang('translation.status') / @lang('translation.letters')</span>
+                                <span class="d-none d-sm-block h4">@lang('translation.status') / @lang('translation.letters')</span>
                             </a>
                         </li>
                     </ul>
