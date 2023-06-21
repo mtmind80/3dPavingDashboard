@@ -191,6 +191,25 @@
                         <div class="tab-pane" id="services" role="tabpanel">
                             <div class="row">
                                 <div id="services_container" class="col-sm-12">
+                                        <div class="row">
+                                            <div class="col-md-8 col-sm-6 mb20">
+                                            @if ($proposal['IsEditable'])
+                                                <x-href-button url="{{ route('new_service', ['proposal_id' => $proposal['id']]) }}" class="mr10 btn btn-success"><i class="fas fa-plus"></i>Add Service</x-href-button>
+                                            @endif
+                                            @if (!empty($services) && $services->count() > 0)
+                                                <x-reorder-button
+                                                        :url="route('services_reorder')"
+                                                        :params="[
+                                                        'hidden-fields' => [
+                                                        'proposal_id' => $proposal['id']
+                                                            ]
+                                                        ]"
+                                                ></x-reorder-button>
+                                            @endif
+                                            </div>
+                                            <div class="col-md-4 col-sm-6 mb20 xs-hidden"></div>
+                                        </div>
+
                                     @include('proposals._proposal_services')
                                 </div>
                             </div>
