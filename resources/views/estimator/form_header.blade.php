@@ -5,10 +5,12 @@
                     <thead>
                     <tr>
                         <th class="w1-6">Customer Price</th>
-                        <th class="w1-6">Profit/Overhead/Breakeven</th>
+                        <th class="w1-6">Combined Cost</th>
                         <th class="w1-6 pr10">Profit <i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></th>
-                        <th class="w1-6 pr10">Over Head <i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i>     <span id="explain"></span></th>
-                        <th class="w1-6 pr10">Breakeven <i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></th>
+                        <th class="w1-6 pr10">Over Head 
+                            <span id="explain"></span>
+                        </th>
+                        <th class="w1-6 pr10">Breakeven</th>
                         <th class="w1-6"></th>
                     </tr>
                     </thead>
@@ -49,34 +51,26 @@
                         </td>
                         <td class="w1-6 pr10">
                             <div class="admin-form-item-widget">
-                                <x-form-text name="overhead"
-                                     class="check-contact"
-                                     placeholder="enter value"
-                                     id="form_header_over_head"
+                                <x-form-show
+                                     class="w180 show-check-contact"
                                      :params="[
-                                        'label' => 'none',
-                                        'iconClass' => 'none',
-
-                                    ]"
-                                >{{$proposalDetail->overhead}}</x-form-text>
+                                        'id' => 'form_header_over_head',
+                                    ]">{{$proposalDetail->overhead}}</x-form-show>
                             
                             </div>
                         </td>
                         <td class="w1-6 pr10">
                             <div class="admin-form-item-widget">
-                                <x-form-text name="break_even"
-                                     class="check-contact"
-                                     placeholder="enter value"
-                                     id="form_header_break_even"
+                                <x-form-show
+                                     class="w180 show-check-contact"
                                      :params="[
-                                        'label' => 'none',
-                                        'iconClass' => 'none',
+                                        'id' => 'form_header_break_even',
                                     ]"
-                                >{{$proposalDetail->break_even}}</x-form-text>
+                                >{{$proposalDetail->break_even}}</x-form-show>
                             </div>
                         </td>
                         <td class="w1-6">
-    &nbsp; </td>
+    &nbsp;                  </td>
                     </tr>
                     </tbody>
                 </table>

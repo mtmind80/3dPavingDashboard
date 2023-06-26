@@ -108,6 +108,7 @@ class ProposalDetailController extends Controller
             return view('pages-404');
         }
 
+
         $contact = $proposalDetail->proposal->contact;
         $asphaltMaterials = ProposalMaterial::where('proposal_id', $proposal_id)->byServiceCategory(1);
         $rockMaterials = ProposalMaterial::where('proposal_id', $proposal_id)->byServiceCategory(7);
@@ -134,7 +135,12 @@ class ProposalDetailController extends Controller
             'strippingCB' => StripingCost::strippingCB(['0' => 'Select contractor']),
             'typesCB' => ['0' => 'Select type', 'Dump Fee' => 'Dump Fee', 'Other' => 'Other'],
         ];
+        // adjust for striping
+        if($proposalDetail->service->id == 18)
+        {
+            return view('estimator.striping', $data);
 
+        }
         return view('estimator.index', $data);
     }
 

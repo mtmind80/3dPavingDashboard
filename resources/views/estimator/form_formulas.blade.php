@@ -1,3 +1,4 @@
+
 <div class="mt20 mb10">
     <form action="#" id="cost_formula_form" class="admin-form">
 
@@ -656,6 +657,7 @@
                                      :params="[
                     'label' => 'Square Feet',
                     'iconClass' => 'none',
+                    'required' => 'true',
                 ]"
                         >{{$proposalDetail->square_feet}}
                         </x-form-text>
@@ -678,7 +680,6 @@
                                 :params="[
                              'label' => 'Loads',
                              'placeholder'=>'calculated',
-                             'hint' => 'This field is calculated',
                                     'name'=>'loads',
                                     'id'=>'loads'
                     ]">{{$proposalDetail->loads}}
@@ -690,7 +691,6 @@
                                 :params="[
                            'placeholder'=>'calculated',
                     'label' => 'Tons',
-                             'hint' => 'This field is calculated',
                     'name'=>'ton',
                     'id'=>'tons'
                     ]">{{$proposalDetail->tons}}
@@ -1189,8 +1189,6 @@
 
                 var servicedesc = "{!! $service->service_template !!}";
                 var profit = $("#form_header_profit").val();
-                var overhead = $("#form_header_over_head").val();
-                var breakeven = $("#form_header_break_even").val();
                 var materials = 0;
                 var proposaltext = tinymce.activeEditor.getContent();
                 var service = {{ $proposalDetail->services_id }};
@@ -1205,8 +1203,8 @@
                 var primercost = {{$materialsCB[4]}};
                 var fastsetcost = {{$materialsCB[5]}};
 
-                if (parseInt(profit) != profit || parseInt(breakeven) != breakeven || parseInt(overhead) != overhead) { // check these are numbers
-                    showInfoAlert('You must only enter numbers for profit, break even and overhead.', headerAlert);
+                if (parseInt(profit) != profit) { // check these are numbers
+                    showInfoAlert('You must only enter numbers for profit.', headerAlert);
 
                     setTimeout(() => {
                         closeAlert(headerAlert);
@@ -1256,9 +1254,13 @@
                             //set over head
                             var otcost = Math.ceil(results['combined'] + parseFloat(profit));
                             var overhead = Math.ceil((otcost / 0.88) - otcost);
+
+                            var breakeven = parseFloat(overhead) + parseFloat(results['combined']);
+                            $("#form_header_break_even").text(formatCurrency.format(breakeven));
+
                             $("#explain").html('calculated at 12%');
 
-                            $("#overhead").val(overhead);
+                            $("#overhead").text(formatCurrency.format(overhead));
 
 
                             if (proposaltext == '') {
@@ -1304,7 +1306,7 @@
                             return;
                         }
 
-                        if (parseFloat(profit) == 'NaN' || parseFloat(overhead) == 'NaN' || parseFloat(breakeven) == 'NaN') {
+                        if (parseFloat(profit) == 'NaN' ) {
                             showInfoAlert('You can only enter numbers for profit, overhead and break even.', headerAlert);
                             return;
                         }
@@ -1345,6 +1347,18 @@
                                 console.log(results);
                             }
 
+                            var otcost = Math.ceil(parseFloat(profit) + results['combined']);
+                            var overhead = Math.ceil((otcost / 0.7) - otcost);
+
+                            var breakeven = parseFloat(overhead) + parseFloat(results['combined']);
+                            $("#form_header_break_even").text(formatCurrency.format(breakeven));
+
+                            $("#x_overhead").val(overhead);
+
+                            $("#form_header_over_head").text(formatCurrency.format(overhead));
+                            $("#explain").html(' 30%');
+
+                            
                             // set all relevant form values for update
                             $("#x_material_cost").val(materials);
                             $("#x_square_feet").val(square_feet);
@@ -1434,8 +1448,14 @@
                             }
                             var otcost = Math.ceil(parseFloat(profit) + results['combined']);
                             var overhead = Math.ceil((otcost / 0.7) - otcost);
+                            
                             $("#x_overhead").val(overhead);
-                            $("#form_header_over_head").val(overhead);
+
+                            var breakeven = parseFloat(overhead) + parseFloat(results['combined']);
+                            $("#form_header_break_even").text(formatCurrency.format(breakeven));
+
+                            
+                            $("#form_header_over_head").text(formatCurrency.format(overhead));
                             $("#explain").html(' 30%');
 
 
@@ -1488,9 +1508,12 @@
                             var otcost = Math.ceil(parseFloat(profit) + results['combined']);
                             var overhead = Math.ceil((otcost / 0.7) - otcost);
 
+                            var breakeven = parseFloat(overhead) + parseFloat(results['combined']);
+                            $("#form_header_break_even").text(formatCurrency.format(breakeven));
 
+                            
                             $("#x_overhead").val(overhead);
-                            $("#form_header_over_head").val(overhead);
+                            $("#form_header_over_head").text(formatCurrency.format(overhead));
                             $("#explain").html(' 30%');
 
                             // set all relevant form values for update
@@ -1538,7 +1561,11 @@
                             var otcost = Math.ceil(results['combined'] + parseFloat(profit));
                             var overhead = Math.ceil((otcost / 0.7) - otcost);
                             $("#explain").html('calculated at 30%');
-    
+                            
+                            var breakeven = parseFloat(overhead) + parseFloat(results['combined']);
+                            $("#form_header_break_even").text(formatCurrency.format(breakeven));
+
+                            
                             if (proposaltext == '') {
                                 proposaltext = servicedesc.replace('@@BASINS@@', catchbasins);
                                 tinymce.activeEditor.setContent(proposaltext);
@@ -1547,6 +1574,7 @@
 
                             // set all relevant form values for update
                             $("#x_material_cost").val(materials);
+                            $("#form_header_over_head").text(overhead);
                             $("#x_overhead").val(overhead);
                             $("#x_catchbasins").val(catchbasins);
                             $("#x_alt_desc").val(alt_desc);
@@ -1573,7 +1601,7 @@
                             return;
                         }
 
-                        if (parseFloat(profit) == 'NaN' || parseFloat(overhead) == 'NaN' || parseFloat(breakeven) == 'NaN') {
+                        if (parseFloat(profit) == 'NaN' ) {
                             showInfoAlert('You can only enter numbers for profit, overhead and break even.', headerAlert);
                             return;
                         }
@@ -1625,18 +1653,28 @@
 
                         if (cost_per_day == parseInt(cost_per_day)) {
                             materials = 0;
-                            var overhead = 0;//Math.ceil((parseFloat(combinedcost) +  parseFloat(profit)) * 0.3);
-
+                            
+                            
                             var results = additup(cost_per_day);
                             if ({{$debug_blade}}) {
                                 console.log(results);
                             }
+
+                            var otcost = Math.ceil(results['combined'] + parseFloat(profit));
+                            var overhead = Math.ceil((otcost / 0.7) - otcost);
+                            $("#explain").html('calculated at 30%');
+
+                            var breakeven = parseFloat(overhead) + parseFloat(results['combined']);
+                            $("#form_header_break_even").text(formatCurrency.format(breakeven));
+
                             if (proposaltext == '' || proposaltext == 'proposaltext') {
                                 proposaltext = servicedesc;
                                 tinymce.activeEditor.setContent(proposaltext);
                             }
 
                             $("#header_show_materials_cost").text('$' + materials);
+                            $("#form_header_over_head").text(formatCurrency.format(overhead));
+                            $("#x_overhead").val(overhead);
                             $("#x_cost_per_day").val(cost_per_day);
                             $("#x_material_cost").val(materials);
                             $("#x_proposal_text").val(proposaltext);
@@ -1676,13 +1714,17 @@
                             if ({{$debug_blade}}) {
                                 console.log(results);
                             }
-                            $("#header_show_materials_cost").text('$' + materials);
 
+
+                            var breakeven = parseFloat(overhead) + parseFloat(results['combined']);
+                            $("#form_header_break_even").text(formatCurrency.format(breakeven));
+                            
                             var combined_cost = Math.ceil(results['combined'] + parseFloat(profit));
                             var overhead = Math.ceil((combined_cost / 0.75) - combined_cost);
                             $("#explain").html('calculated at 25%');
-
-                            $("#header_show_materials_cost").text('$' + materials);
+                            
+                            $("#form_header_over_head").text(formatCurrency.format(overhead));
+                            $("#header_show_materials_cost").text(formatCurrency.format(materials));
                             $("#x_cost_per_day").val(cost_per_day);
                             $("#x_material_cost").val(materials);
                             $("#x_proposal_text").val(proposaltext);
@@ -1814,7 +1856,10 @@
                             var otcost = Math.ceil(parseFloat(profit) + results['combined']);
                             var overhead = Math.ceil((otcost / 0.7) - otcost);
 
-                            $("#form_header_over_head").val(overhead);
+                            var breakeven = parseFloat(overhead) + parseFloat(results['combined']);
+                            $("#form_header_break_even").text(formatCurrency.format(breakeven));
+
+                            $("#form_header_over_head").text(formatCurrency.format(overhead));
                             $("#x_overhead").val(overhead);
                             $("#x_sealer").val(sealer);
                             $("#x_square_feet").val(square_feet);
@@ -1889,8 +1934,7 @@
                             formatted_contractor_overhead = formatCurrency.format(contractor_overhead)
                             $("#contractor_overhead").html(formatted_contractor_overhead + ' calculated at 30%');
                         }
-                        console.log(overhead);
-
+                      
 
                         if (proposaltext == '') {
                             tinymce.activeEditor.setContent(servicedesc);
@@ -1912,13 +1956,17 @@
                     var bill_after = $('input[name="bill_after"]:checked').val();
                     var proposaltext = tinymce.activeEditor.getContent();
 
+                
                     $("#x_proposal_text").val(proposaltext);
                     $("#x_bill_after").val(bill_after);
                     $("#x_profit").val(headerElProfit.val());
                     $("#x_break_even").val(headerElBreakEven.val());
                     $("#x_overhead").val(headerElOverHead.val());
+                    $("#x_break_even").val(breakeven);
 
-                    //then save it
+
+                
+                //then save it
                     if (dosave == 1) {
                         saveit(false);
                     }
@@ -1942,18 +1990,19 @@
                     }
                     var data = [];
                     //profit overhead breakeven
-                    var pob_cost = parseFloat($('#form_header_over_head').val()) + parseFloat($('#form_header_break_even').val()) + parseFloat($('#form_header_profit').val());
+                    var pob_cost = parseFloat($('#form_header_profit').val());
 
                     data['combined'] = parseFloat(combinedcost).toFixed(2);
                     data['pob_cost'] = parseFloat(pob_cost).toFixed(2);
 
-                    headerElCombinedCosting.text('$' + pob_cost.toFixed(2));
                     data['math'] = parseFloat(combinedcost) + '+' + parseFloat(pob_cost);
                     var customercost = (parseFloat(combinedcost) + parseFloat(pob_cost)).toFixed(2);
                     data['customercost'] = customercost;
 
-                    $("#x_cost").val(customercost);
+                    headerElCombinedCosting.text(formatCurrency.format(combinedcost));
                     headerElCustomerPrice.text(formatCurrency.format(customercost));
+                
+                    $("#x_cost").val(customercost);
 
                     return data;
 
