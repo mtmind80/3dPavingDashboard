@@ -35,7 +35,7 @@ class ResourceController extends Controller
         'Vehicle' => ['id', 'vehicle_types_id', 'name', 'description', 'active', 'office_location_id'],
         'VehicleType' => ['id', 'name', 'description','rate'],
         'LaborRate' => ['id', 'name', 'rate'],
-        'StripingCost' => ['id', 'striping_service_id', 'description', 'rate'],
+        'StripingCost' => ['id', 'striping_service_id', 'description', 'cost'],
         'StripingService' => ['id', 'name', 'dsort'],
         'OfficeLocations' => ['id','name', 'address', 'city', 'state', 'zip', 'phone', 'manager'],
         'WebConfig' => ['id', 'key', 'value'],

@@ -17,8 +17,10 @@ class CreateProposalDetailStripingServicesTable extends Migration
             $table->engine = 'InnoDB';
             $table->id();
             $table->unsignedBigInteger('proposal_detail_id');
-            $table->unsignedBigInteger('striping_cost_id');
-            $table->string('description',255);
+            $table->unsignedBigInteger('striping_service_id');
+            $table->string('name',191);
+            $table->string('description',191);
+            $table->integer('dsort')->unsigned()->default(0);
             $table->integer('quantity')->unsigned()->default(0);
             $table->float('cost',8,2, true)->default(0); //money
 

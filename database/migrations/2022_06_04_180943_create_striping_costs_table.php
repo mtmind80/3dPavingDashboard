@@ -18,7 +18,7 @@ class CreateStripingCostsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('striping_service_id');
             $table->string('description',255);
-            $table->float('rate',8,2, true); //money
+            $table->float('cost',8,2, true); //money
             $table->integer('old_id');
         });
     }
