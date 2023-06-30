@@ -13,7 +13,7 @@ class StripingCost extends Model
     protected $fillable = [
         'striping_service_id',
         'description',
-        'rate',
+        'cost',
     ];
 
     public function service()
