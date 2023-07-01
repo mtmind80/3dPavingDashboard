@@ -49,7 +49,7 @@
                                         {{ App\Models\StripingService::find($data['striping_service_id'])->name }}
                                 @endif
                                 <td>{{ $data['description'] }}</td>
-                                <td>{{ \App\Helpers\Currency::format($data['rate'] ?? '0.0') }}</td>
+                                <td>{{ \App\Helpers\Currency::format($data['cost'] ?? '0.0') }}</td>
                             </tr>
                         @endforeach
 

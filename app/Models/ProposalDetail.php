@@ -142,7 +142,7 @@ class ProposalDetail extends Model
         return $this->HasMany(ProposalDetailLabor::class, 'proposal_detail_id');
     }
 
-    public function strippingServices()
+    public function striping()
     {
         return $this->HasMany(ProposalDetailStripingService::class, 'proposal_detail_id');
     }
@@ -265,7 +265,7 @@ class ProposalDetail extends Model
 
     public function getMaxDSort()
     {
-        return $this->max('d_sort');
+        return $this->max('dsort');
     }
 
 }

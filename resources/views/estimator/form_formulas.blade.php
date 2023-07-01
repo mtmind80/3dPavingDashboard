@@ -1,5 +1,5 @@
 <div class="mt20 mb10">
-    <form action="#" id="cost_formula_form" class="admin-form">
+    <form action="#" id="cost_formula_form" class="custom-validation admin-form">
 
 
         {{-- This form is for reference to calculate costs it is never submitted --}}
@@ -58,11 +58,10 @@
                                          placeholder="enter value"
                                          id="square_feet"
                                          :params="[
-                    'label' => 'Size of project in SQ FT',
-                    'iconClass' => 'none',
-                    'required' => 'true',
-                ]"
-                            >{{$proposalDetail->square_feet}}</x-form-text>
+                                    'label' => 'Size of project in SQ FT',
+                                    'iconClass' => 'none',
+                                    'required' => 'true',
+                                ]">{{$proposalDetail->square_feet}}</x-form-text>
                         </div>
                         <div class="col-sm-2">
                             <x-form-text name="depth"
@@ -70,11 +69,10 @@
                                          placeholder="enter value"
                                          id="depth"
                                          :params="[
-                    'label' => 'Depth In Inches',
-                    'iconClass' => 'none',
-                    'required' => 'true',
-                ]"
-                            >{{$proposalDetail->depth}}</x-form-text>
+                                    'label' => 'Depth In Inches',
+                                    'iconClass' => 'none',
+                                    'required' => 'true',
+                                ]">{{$proposalDetail->depth}}</x-form-text>
                         </div>
                         <div class="col-sm-3">
                             <x-form-text name="days"
@@ -82,11 +80,10 @@
                                          placeholder="enter value"
                                          id="days"
                                          :params="[
-                    'label' => 'Days of Milling',
-                    'iconClass' => 'none',
-                    'required' => 'true',
-                ]"
-                            >{{$proposalDetail->days}}</x-form-text>
+                                        'label' => 'Days of Milling',
+                                        'iconClass' => 'none',
+                                        'required' => 'true',
+                                ]">{{$proposalDetail->days}}</x-form-text>
 
                         </div>
 
@@ -96,11 +93,10 @@
                                          placeholder="enter value"
                                          id="cost_per_day"
                                          :params="[
-                    'label' => 'Cost Per Day',
-                    'iconClass' => 'none',
-                    'required' => 'true',
-                ]"
-                            >{{$proposalDetail->cost_per_day}}</x-form-text>
+                                    'label' => 'Cost Per Day',
+                                    'iconClass' => 'none',
+                                    'required' => 'true',
+                                ]">{{$proposalDetail->cost_per_day}}</x-form-text>
 
                         </div>
 
@@ -110,11 +106,10 @@
                                          placeholder="enter value"
                                          id="locations"
                                          :params="[
-                    'label' => 'Locations',
-                    'iconClass' => 'none',
-                    'required' => 'true',
-                ]"
-                            >{{$proposalDetail->locations}}</x-form-text>
+                                    'label' => 'Locations',
+                                    'iconClass' => 'none',
+                                    'required' => 'true',
+                            ]">{{$proposalDetail->locations}}</x-form-text>
 
                         </div>
 
@@ -165,7 +160,7 @@
                                     'label' => 'Square Feet',
                                     'iconClass' => 'none',
                                     'required' => 'true',
-                ]">{{$proposalDetail->square_feet}}
+                            ]">{{$proposalDetail->square_feet}}
                             </x-form-text>
                         </div>
                         <div class="col-sm-3">
@@ -177,8 +172,7 @@
                                     'label' => 'Depth in Inches',
                                     'iconClass' => 'none',
                                     'required' => 'true',
-                ]"
-                            >{{$proposalDetail->depth}}
+                            ]">{{$proposalDetail->depth}}
                             </x-form-text>
                         </div>
 
@@ -186,7 +180,7 @@
                             <label class="control-label">Asphalt Cost <i class="field-required fa fa-asterisk"
                                                                          data-toggle="tooltip"
                                                                          title="@lang('translation.field_required')"></i></label>
-                            <select class="form-control" name="cost_per_day" id="cost_per_day">
+                            <select class="form-control" required name="cost_per_day" id="cost_per_day">
                                 <option value='0'>Select Asphalt Type</option>
                                 @foreach($asphaltMaterials as $materials)
                                     <option value='{{$materials['cost']}}'
@@ -215,12 +209,11 @@
                     <br/>
                     <div class="row">
                         <div class="col-sm-4">
-
                             <x-form-show
                                     class="w180 show-check-contact"
                                     :params="[
-                    'label' => 'Tack Cost (gal)',
-                           'placeholder'=>'0',
+                                    'label' => 'Tack Cost (gal)',
+                                    'placeholder'=>'0',
                                     'name'=>'tack_cost',
                                     'id'=>'tack_cost'
                     ]">{{ \App\Helpers\Currency::format($materialsCB[14] ?? '0.0') }}</x-form-show>
@@ -264,58 +257,47 @@
 
                     <div class="row">
                         <div class="col-sm-3">
-                            <label class="control-label">Length In Feet (linear feet) <i
-                                        class="field-required fa fa-asterisk" data-toggle="tooltip"
-                                        title="@lang('translation.field_required')"></i></label>
                             <x-form-text name="linear_feet"
                                          class="check-contact tc"
                                          placeholder="enter value"
                                          id="linear_feet"
                                          :params="[
-                    'label' => 'none',
-                    'iconClass' => 'none',
-                ]"
-                            >{{$proposalDetail->linear_feet}}</x-form-text>
+                                    'label' => 'Length In Feet (linear feet)',
+                                    'required' => 'true',
+                                    'iconClass' => 'none',
+                                ]">{{$proposalDetail->linear_feet}}</x-form-text>
                         </div>
 
                         <div class="col-sm-3">
-                            <label class="control-label">Locations <i class="field-required fa fa-asterisk"
-                                                                      data-toggle="tooltip"
-                                                                      title="@lang('translation.field_required')"></i></label>
                             <x-form-text name="locations"
                                          class="check-contact tc"
                                          placeholder="enter value"
                                          id="locations"
                                          :params="[
-                    'label' => 'none',
-                    'iconClass' => 'none',
-                ]"
-                            >{{$proposalDetail->locations}}</x-form-text>
+                                    'required' => 'true',
+                                    'label' => 'Locations',
+                                    'iconClass' => 'none',
+                                ]">{{$proposalDetail->locations}}</x-form-text>
                         </div>
                         <div class="col-sm-3">
-                            <label class="control-label">Cubic Yards
-                            </label> &nbsp; </br>
-
                             <x-form-show
                                     class="w180 show-check-contact"
                                     :params="[
                                     'name'=>'cubic_yards',
+                                    'label' => 'Cubic Yards',
                                     'id'=>'cubic_yards'
-                    ]">{{$proposalDetail->cubic_yards}}
+                            ]">{{$proposalDetail->cubic_yards}}
                             </x-form-show>
                         </div>
                         <div class="col-sm-3">
-                            <label class="control-label">Curb Mix (per cubic yard)
-
-                            </label>
                             <x-form-show
                                     class="w180 show-check-contact"
                                     :params="[
+                                    'label' => 'Curb Mix (per cubic yard)',
                                     'name'=>'cost_per_linear_feet',
-                                    'id'=>'cost_per_linear_feet'
-                    ]">{{ \App\Helpers\Currency::format($materialsCB[9] ?? '0.0') }}
+                                    'id'=>'cost_per_linear_feet',
+                        ]">{{ \App\Helpers\Currency::format($materialsCB[9] ?? '0.0') }}
                             </x-form-show>
-                            {{--{$mat['Concrete (Curb Mix) per cubic yard']} --}}
                         </div>
 
                     </div>
@@ -326,73 +308,61 @@
                     <br/>
                     <div class="row">
                         <div class="col-sm-2">
-                            <label class="control-label">Square Feet <i class="field-required fa fa-asterisk"
-                                                                        data-toggle="tooltip"
-                                                                        title="@lang('translation.field_required')"></i></label>
                             <x-form-text name="square_feet"
                                          class="check-contact tc"
                                          placeholder="enter value"
                                          id="square_feet"
                                          :params="[
-                                        'label' => 'none',
+                                        'label' => 'Square Feet',
                                         'iconClass' => 'none',
+                                        'required' => 'true',
                                       ]">{{$proposalDetail->square_feet}}</x-form-text>
                         </div>
                         <div class="col-sm-2">
-                            <label class="control-label">Depth (inches) <i class="field-required fa fa-asterisk"
-                                                                           data-toggle="tooltip"
-                                                                           title="@lang('translation.field_required')"></i></label>
                             <x-form-text name="depth"
                                          class="check-contact tc"
                                          placeholder="enter value"
                                          id="depth"
                                          :params="[
-                                    'label' => 'none',
+                                    'label' => 'Depth (inches)',
                                     'iconClass' => 'none',
+                                    'required' => 'true',
                                     ]"
                             >{{$proposalDetail->depth}}
                             </x-form-text>
                         </div>
                         <div class="col-sm-2">
-                            <label class="control-label">Locations <i class="field-required fa fa-asterisk"
-                                                                      data-toggle="tooltip"
-                                                                      title="@lang('translation.field_required')"></i></label>
                             <x-form-text name="locations"
                                          class="check-contact tc"
                                          placeholder="enter value"
                                          id="locations"
                                          :params="[
-                                        'label' => 'none',
+                                        'label' => 'Locations',
                                         'iconClass' => 'none',
+                                        'required' => 'true',
                                         ]"
                             >{{$proposalDetail->locations}}
                             </x-form-text>
                         </div>
                         <div class="col-sm-3">
-                            <label class="form-field-label">Cubic Yards
-                            </label>
-
                             <x-form-show
                                     class="w180 show-check-contact"
                                     name="cubic_yards"
                                     id="cubic_yards"
                                     :params="[
-                    'label' => 'none',
-                    'iconClass' => 'none',
-                ]"
-                            >{{$proposalDetail->cubic_yards}}</x-form-show>
+                                'label' => 'Cubic Yards',
+                                'iconClass' => 'none',
+                            ]">{{$proposalDetail->cubic_yards}}</x-form-show>
                         </div>
                         <div class="col-sm-3">
-                            <label class="form-field-label">Drum Mix Cost </label>
                             <x-form-show
                                     class="w180 show-check-contact"
                                     name="cost_per_linear_feet"
                                     id="cost_per_linear_feet"
                                     :params="[
-                    'label' => 'none',
-                    'iconClass' => 'none',
-                ]"
-                            >{{ \App\Helpers\Currency::format($materialsCB[10] ?? '0.0') }}</x-form-show>
+                                'label' => 'Drum Mix Cost',
+                                'iconClass' => 'none',
+                            ]">{{ \App\Helpers\Currency::format($materialsCB[10] ?? '0.0') }}</x-form-show>
 
                         </div>
 
@@ -413,11 +383,10 @@
                                      placeholder="enter value"
                                      id="catchbasins"
                                      :params="[
-                    'label' => 'Catchbasins',
-                    'iconClass' => 'none',
-                    'required' => 'true',
-                ]"
-                        >{{$proposalDetail->catchbasins}}</x-form-text>
+                                    'label' => 'Catchbasins',
+                                    'iconClass' => 'none',
+                                    'required' => 'true',
+                                ]">{{$proposalDetail->catchbasins}}</x-form-text>
                     </div>
                     <div class="col-sm-4">
                         <x-form-text name="cost_per_day"
@@ -425,11 +394,10 @@
                                      placeholder="enter value"
                                      id="cost_per_day"
                                      :params="[
-                    'label' => 'Cost Per Day',
-                    'iconClass' => 'none',
-                    'required' => 'true',
-                ]"
-                        >{{$proposalDetail->cost_per_day}}</x-form-text>
+                                    'label' => 'Cost Per Day',
+                                    'iconClass' => 'none',
+                                    'required' => 'true',
+                                ]">{{$proposalDetail->cost_per_day}}</x-form-text>
                     </div>
 
                 </div>
@@ -441,11 +409,10 @@
                                          placeholder="enter value"
                                          id="alt_desc"
                                          :params="[
-                    'label' => 'Job Description',
-                    'iconClass' => 'none',
-                    'required' => 'true',
-                ]"
-                        >{{$proposalDetail->alt_desc}}</x-form-textarea>
+                                    'label' => 'Job Description',
+                                    'iconClass' => 'none',
+                                    'required' => 'true',
+                                ]">{{$proposalDetail->alt_desc}}</x-form-textarea>
                     </div>
                 </div>
 
@@ -457,68 +424,59 @@
 
                 <div class="row">
                     <div class="col-sm-2 admin-form-item-widget">
-                        <label class="control-label">Square Feet <i class="field-required fa fa-asterisk"
-                                                                    data-toggle="tooltip"
-                                                                    title="@lang('translation.field_required')"></i></label>
                         <x-form-text name="square_feet"
                                      class="check-contact"
                                      placeholder="enter value"
                                      id="square_feet"
                                      :params="[
-                    'label' => 'none',
-                    'iconClass' => 'none',
-                ]"
-                        >{{$proposalDetail->square_feet}}</x-form-text>
+                                    'label' => 'Square Feet',
+                                    'iconClass' => 'none',
+                                    'required' => 'true',
+                                ]">{{$proposalDetail->square_feet}}</x-form-text>
                     </div>
 
 
                     <div class="col-sm-2">
-                        <label class='control-label'>Depth in Inches <i class="field-required fa fa-asterisk"
-                                                                        data-toggle="tooltip"
-                                                                        title="@lang('translation.field_required')"></i></label>
-
                         <x-form-text name="depth"
                                      class="check-contact tc"
                                      placeholder="enter value"
                                      id="depth"
                                      :params="[
-                    'label' => 'none',
-                    'iconClass' => 'none',
-                ]"
-                        >{{$proposalDetail->depth}}</x-form-text>
+                                    'label' => 'Depth in Inches',
+                                    'required' => 'true',
+                                    'iconClass' => 'none',
+                                ]">{{$proposalDetail->depth}}</x-form-text>
                     </div>
                     <div class="col-sm-2">
-                        <label class='control-label'>Our Cost<i class="field-required fa fa-asterisk"
-                                                                data-toggle="tooltip"
-                                                                title="@lang('translation.field_required')"></i></label>
                         <x-form-text name="cost_per_day"
                                      class="check-contact tc"
                                      placeholder="enter value"
                                      id="cost_per_day"
                                      :params="[
-                    'label' => 'none',
-                    'iconClass' => 'none',
-                ]"
-                        >{{$proposalDetail->cost_per_day}}</x-form-text>
+                                    'label' => 'Our Cost',
+                                    'required' => 'true',
+                                    'iconClass' => 'none',
+                            ]">{{$proposalDetail->cost_per_day}}</x-form-text>
                     </div>
                     <div class="col-sm-2">
                         <x-form-show
+                                class="check-contact tc"
+                                id='loads'
                                 class="w180 show-check-contact"
                                 :params="[
-                    'label' => 'Loads',
-                           'placeholder'=>'calculated',
-                                    'name'=>'loads',
-                                    'id'=>'loads'
+                                'label' => 'Loads',
+                                'placeholder'=>'calculated',
+                                 'name'=>'loads',
                     ]">{{$proposalDetail->loads}}</x-form-show>
                     </div>
                     <div class="col-sm-2">
                         <x-form-show
+                                id='tons'
                                 class="w180 show-check-contact"
                                 :params="[
                            'placeholder'=>'calculated',
-                    'label' => 'Tons',
-                    'name'=>'ton',
-                    'id'=>'tons'
+                            'label' => 'Tons',
+                            'name'=>'ton',
                     ]">{{$proposalDetail->tons}}
                         </x-form-show>
                     </div>
@@ -544,6 +502,7 @@
                                      placeholder="enter value"
                                      id="cost_per_day"
                                      :params="[
+                    'required' => 'true',
                     'label' => 'Our Cost',
                     'iconClass' => 'none',
                 ]"
@@ -558,6 +517,7 @@
                                      :params="[
                     'label' => 'Locations',
                     'iconClass' => 'none',
+                    'required' => 'true',
                 ]"
                         >{{$proposalDetail->locations}}</x-form-text>
                     </div>
@@ -573,6 +533,7 @@
                                          :params="[
                     'label' => 'Job Description',
                     'iconClass' => 'none',
+                    'required' => 'true',
                 ]"
                         >{{$proposalDetail->alt_desc}}</x-form-textarea>
                     </div>
@@ -595,6 +556,7 @@
                                      id="square_feet"
                                      :params="[
                     'label' => 'Square Feet',
+                    'required' => 'true',
                     'iconClass' => 'none',
                 ]"
                         >{{$proposalDetail->square_feet}}</x-form-text>
@@ -607,6 +569,7 @@
                                      id="cost_per_day"
                                      :params="[
                     'label' => 'Cost',
+                    'required' => 'true',
                     'iconClass' => 'none',
                 ]"
                         >{{$proposalDetail->cost_per_day}}</x-form-text>
@@ -618,10 +581,10 @@
                                      placeholder="tons"
                                      id="tons"
                                      :params="[
-                    'label' => 'Excavate Tons',
-                    'iconClass' => 'none',
-                ]"
-                        >{{$proposalDetail->tons}}</x-form-text>
+                            'required' => 'true',
+                            'label' => 'Excavate Tons',
+                            'iconClass' => 'none',
+                        ]">{{$proposalDetail->tons}}</x-form-text>
                     </div>
 
                 </div>
@@ -635,10 +598,10 @@
                                          placeholder="enter value"
                                          id="alt_desc"
                                          :params="[
-                    'label' => 'Job Description',
-                    'iconClass' => 'none',
-                ]"
-                        >{{$proposalDetail->alt_desc}}</x-form-textarea>
+                                'label' => 'Job Description',
+                                'required' => 'true',
+                                'iconClass' => 'none',
+                                ]">{{$proposalDetail->alt_desc}}</x-form-textarea>
                     </div>
                 </div>
 
@@ -654,10 +617,10 @@
                                      placeholder="enter value"
                                      id="square_feet"
                                      :params="[
-                    'label' => 'Square Feet',
-                    'iconClass' => 'none',
-                ]"
-                        >{{$proposalDetail->square_feet}}
+                                    'label' => 'Square Feet',
+                                    'iconClass' => 'none',
+                                    'required' => 'true',
+                            ]">{{$proposalDetail->square_feet}}
                         </x-form-text>
                     </div>
                     <div class="col-sm-3">
@@ -678,7 +641,6 @@
                                 :params="[
                              'label' => 'Loads',
                              'placeholder'=>'calculated',
-                             'hint' => 'This field is calculated',
                                     'name'=>'loads',
                                     'id'=>'loads'
                     ]">{{$proposalDetail->loads}}
@@ -690,7 +652,6 @@
                                 :params="[
                            'placeholder'=>'calculated',
                     'label' => 'Tons',
-                             'hint' => 'This field is calculated',
                     'name'=>'ton',
                     'id'=>'tons'
                     ]">{{$proposalDetail->tons}}
@@ -803,44 +764,37 @@
 
                 <div class="row">
                     <div class="col-sm-4">
-                        <label class="form-field-label">Primer (gals)<i class="field-required fa fa-asterisk"
-                                                                        data-toggle="tooltip"
-                                                                        title="@lang('translation.field_required')"></i></label>
                         <x-form-text name="primer"
                                      class="check-contact tc"
                                      placeholder="enter value"
                                      id="primer"
                                      :params="[
-                    'label' => 'none',
+                    'label' => 'Oil Spot Primer (gals)',
+                    'required' => 'true',
                     'iconClass' => 'none',
                    ]"
                         >{{$proposalDetail->primer}}</x-form-text>
                     </div>
                     <div class="col-sm-4">
-                        <label class="form-field-label">Fast Set (gals)<i class="field-required fa fa-asterisk"
-                                                                          data-toggle="tooltip"
-                                                                          title="@lang('translation.field_required')"></i></label>
                         <x-form-text name="fast_set"
                                      class="check-contact tc"
                                      placeholder="enter value"
                                      id="fast_set"
                                      :params="[
-                    'label' => 'none',
+                    'label' => 'Fast Set (gals)',
+                    'required' => ' true',
                     'iconClass' => 'none',
                 ]"
                         >{{$proposalDetail->fast_set}}</x-form-text>
                     </div>
                     <div class="col-sm-4">
-                        <label class="form-field-label">Phases<i class="field-required fa fa-asterisk"
-                                                                 data-toggle="tooltip"
-                                                                 title="@lang('translation.field_required')"></i></label>
-
                         <x-form-text name="phases"
                                      class="check-contact tc"
                                      placeholder="enter value"
                                      id="phases"
                                      :params="[
-                    'label' => 'none',
+                    'label' => 'Phases',
+                    'required' => 'true',
                     'iconClass' => 'none',
                 ]"
                         >{{$proposalDetail->phases}}</x-form-text>
@@ -849,64 +803,75 @@
                 </div>
                 <br/>
                 <div class="row">
-                    <div class="col-sm-2">
-                        <label class="control-label">Materials <br/>Needed</label>
+                    <div class="col-lg-3">
+                        <h5>Materials Needed</h5>
                     </div>
-                    <div class="col-sm-2">
-
-
+                    <div class="col-lg-3">
                         <x-form-show name="sealer"
                                      class="check-contact tc"
                                      placeholder="calculated"
                                      id="sealer"
-                                     :params="[
-                                                 'hint' => 'This field is calculated',
-'label' => 'Sealer (gals)',
-                    'iconClass' => 'none',
-                ]"
-                        >{{$proposalDetail->sealer}}</x-form-show>
-
+                                     :params="[                                
+                               'label' => 'Sealer (gals)',
+                               'iconClass' => 'none',
+                        ]">{{$proposalDetail->sealer}}</x-form-show>
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-lg-3">
                         <x-form-show name="sand"
                                      class="check-contact tc"
                                      placeholder="calculated"
                                      id="sand"
                                      :params="[
-                             'hint' => 'This field is calculated',
-                    'label' => 'Sand',
-                    'iconClass' => 'none',
-                ]"
-                        >{{$proposalDetail->sand}}</x-form-show>
-
+                            'label' => 'Sand ',
+                            'iconClass' => 'none',
+                        ]">{{$proposalDetail->sand}}</x-form-show>
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-lg-3">
                         <x-form-show name="additive"
                                      class="check-contact tc"
                                      placeholder="calculated"
                                      id="additive"
                                      :params="[
-                                 'hint' => 'This field is calculated',
-
-                    'label' => 'Additive (sealer/50)',
-                    'iconClass' => 'none',
-                ]"
-                        >{{$proposalDetail->additive}}</x-form-show>
-                    </div>
-                    <div class="col-sm-4">
-                        &nbsp;
+                            'label' => 'Additive (sealer/50)',
+                            'iconClass' => 'none',
+                        ]">{{$proposalDetail->additive}}</x-form-show>
                     </div>
 
                 </div>
 
 
-                <div class="row">
+
+            <div class="row">
+                        <div class="col-2">
+                            <label class="control-label">COST</label>
+                        </div>
+                        <div class="col-sm-2">
+                            <span id="SealerCost">Sealer:{{ \App\Helpers\Currency::format($materialsCB[1] ?? '0.0') }}
+                            </span>
+                        </div>
+                        <div class="col-2">
+                            <span id="SandCost">Sand:{{ \App\Helpers\Currency::format($materialsCB[2] ?? '0.0') }}</span>
+                        </div>
+                        <div class="col-2">
+                            <span id="AdditiveCost">Additive:{{ \App\Helpers\Currency::format($materialsCB[3] ?? '0.0') }}</span>                                         
+                        </div>
+                        <div class="col-sm-2">
+                            <span id="PrimerCost">Primaer:{{ \App\Helpers\Currency::format($materialsCB[4] ?? '0.0') }}</span>                                         
+                        </div>
+                        <div class="col-sm-2">
+                            <span id="FastSetCost">Fast Set:{{ \App\Helpers\Currency::format($materialsCB[5] ?? '0.0') }}</span>
+                            
+                        </div>
+    
+                    </div>
+
+                
+                    <div class="row">
                     <div class="col-2">
                         <label class="control-label">TOTALS </label>
                     </div>
                     <div class="col-2">
                         <label class="control-label">Sealer</label>
-
                         <span class="form-control" id="SealerTotal"></span>
                     </div>
                     <div class="col-2">
@@ -928,77 +893,20 @@
                     </div>
                 </div>
 
-                <!--        
-                        <div class="row">
-                                    <div class="col-2">
-                                        <label class="control-label">COST</label>
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <x-form-show name="SealerCost"
-                                                     class="check-contact tc"
-                                                     placeholder="calculated"
-                                                     id="SealerCost"
-                                                     :params="[
-                                    'label' => 'Sealer Cost',
-                                    'iconClass' => 'none',
-                                  ]"
-                                        ></x-form-show>
-                                    </div>
-                                    <div class="col-2">
-                                        <x-form-show name="SandCost"
-                                                     class="check-contact tc"
-                                                     placeholder="calculated"
-                                                     id="SandCost"
-                                                     :params="[
-                                    'label' => 'Sand Cost',
-                                    'iconClass' => 'none',
-                                ]"
-                                        ></x-form-show>
-                                    </div>
-                                    <div class="col-2">
-                                        <x-form-show name="AdditiveCost"
-                                                     class="check-contact tc"
-                                                     placeholder="calculated"
-                                                     id="AdditiveCost"
-                                                     :params="[
-                                    'label' => 'Additive Cost',
-                                    'iconClass' => 'none',
-                                ]"
-                                        ></x-form-show>
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <x-form-show name="PrimerCost"
-                                                     class="check-contact tc"
-                                                     placeholder="calculated"
-                                                     id="PrimerCost"
-                                                     :params="[
-                                                    'label' => 'Primer Cost',
-                                                    'iconClass' => 'none',
-                                                    'value' => '',
-                                ]"></x-form-show>
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <x-form-show name="FastSetCost"
-                                                     class="check-contact tc"
-                                                     placeholder="calculated"
-                                                     id="FastSetCost"
-                                                     :params="[
-                                                    'label' => 'FastSet Cost',
-                                                    'iconClass' => 'none',
-                                                    'value' => '',
-                                ]"></x-form-show>
-                                    </div>
-                
-                                </div>
-                -->
         </div>
 
         @endif
 
         @if($service->service_category_id == 9)
+            <!-- striping -->
 
-            <!--  striping -->
-            You are on the wrong page!
+
+            @foreach($striping as $stripe)
+                {{$stripe['name']}}
+                {{$stripe['service']['dsort']}} <br/>
+
+            @endforeach
+            
         @endif
 
         @if($service->service_category_id == 10)
@@ -1187,10 +1095,10 @@
                 */
 
 
-                var servicedesc = "{!! $service->service_template !!}";
+                var servicedesc = '{!! $service->service_template !!}';
                 var profit = $("#form_header_profit").val();
-                var overhead = $("#form_header_over_head").val();
-                var breakeven = $("#form_header_break_even").val();
+                var breakeven = '{{$proposalDetail->break_even}}';
+                var overhead = '{{$proposalDetail->overhead}}';
                 var materials = 0;
                 var proposaltext = tinymce.activeEditor.getContent();
                 var service = {{ $proposalDetail->services_id }};
@@ -1205,8 +1113,8 @@
                 var primercost = {{$materialsCB[4]}};
                 var fastsetcost = {{$materialsCB[5]}};
 
-                if (parseInt(profit) != profit || parseInt(breakeven) != breakeven || parseInt(overhead) != overhead) { // check these are numbers
-                    showInfoAlert('You must only enter numbers for profit, break even and overhead.', headerAlert);
+                if (parseInt(profit) != profit) { // check these are numbers
+                    showInfoAlert('You must only enter numbers for profit.', headerAlert);
 
                     setTimeout(() => {
                         closeAlert(headerAlert);
@@ -1228,7 +1136,6 @@
                         var square_feet = $("#square_feet").val();
                         var depth = $("#depth").val();
                         var days = $("#days").val();
-
 
                         if (parseFloat(cost_per_day) == cost_per_day && parseFloat(days) == days && parseFloat(square_feet) == square_feet && parseFloat(depth) == depth) {
 
@@ -1253,12 +1160,15 @@
                                 console.log(results);
                             }
 
-                            //set over head
+                            profit = $("#form_header_profit").val();
                             var otcost = Math.ceil(results['combined'] + parseFloat(profit));
-                            var overhead = Math.ceil((otcost / 0.88) - otcost);
-                            $("#explain").html('calculated at 12%');
 
-                            $("#overhead").val(overhead);
+                            overhead = Math.ceil((otcost / 0.88) - otcost);
+                            $("#form_header_over_head").text(formatCurrency.format(overhead));
+                            $("#explain").html(' 12%');
+
+                            breakeven = parseFloat(overhead) + parseFloat(results['combined']);
+                            $("#form_header_break_even").text(formatCurrency.format(breakeven));
 
 
                             if (proposaltext == '') {
@@ -1273,7 +1183,6 @@
                             $("#x_depth").val(depth);
                             $("#x_days").val(days);
                             $("#x_locations").val(locations);
-                            $("#x_overhead").val(overhead);
                             $("#x_loads").val(loads);
                             $("#x_cost_per_day").val(cost_per_day);
 
@@ -1304,7 +1213,7 @@
                             return;
                         }
 
-                        if (parseFloat(profit) == 'NaN' || parseFloat(overhead) == 'NaN' || parseFloat(breakeven) == 'NaN') {
+                        if (parseFloat(profit) == 'NaN') {
                             showInfoAlert('You can only enter numbers for profit, overhead and break even.', headerAlert);
                             return;
                         }
@@ -1344,6 +1253,19 @@
                             if ({{$debug_blade}}) {
                                 console.log(results);
                             }
+
+                            profit = $("#form_header_profit").val();
+                            var otcost = Math.ceil(results['combined'] + parseFloat(profit));
+
+                            overhead = Math.ceil((otcost / 0.7) - otcost);
+                            $("#form_header_over_head").text(formatCurrency.format(overhead));
+                            $("#explain").html(' 30%');
+
+                            breakeven = parseFloat(overhead) + parseFloat(results['combined']);
+                            $("#form_header_break_even").text(formatCurrency.format(breakeven));
+
+                            console.log(overhead);
+
 
                             // set all relevant form values for update
                             $("#x_material_cost").val(materials);
@@ -1432,11 +1354,16 @@
                             if ({{$debug_blade}}) {
                                 console.log(results);
                             }
-                            var otcost = Math.ceil(parseFloat(profit) + results['combined']);
-                            var overhead = Math.ceil((otcost / 0.7) - otcost);
-                            $("#x_overhead").val(overhead);
-                            $("#form_header_over_head").val(overhead);
+
+                            profit = $("#form_header_profit").val();
+                            var otcost = Math.ceil(results['combined'] + parseFloat(profit));
+
+                            overhead = Math.ceil((otcost / 0.7) - otcost);
+                            $("#form_header_over_head").text(formatCurrency.format(overhead));
                             $("#explain").html(' 30%');
+
+                            breakeven = parseFloat(overhead) + parseFloat(results['combined']);
+                            $("#form_header_break_even").text(formatCurrency.format(breakeven));
 
 
                             $("#x_material_cost").val(materials);
@@ -1485,13 +1412,16 @@
                             if ({{$debug_blade}}) {
                                 console.log(results);
                             }
-                            var otcost = Math.ceil(parseFloat(profit) + results['combined']);
-                            var overhead = Math.ceil((otcost / 0.7) - otcost);
 
+                            profit = $("#form_header_profit").val();
+                            var otcost = Math.ceil(results['combined'] + parseFloat(profit));
 
-                            $("#x_overhead").val(overhead);
-                            $("#form_header_over_head").val(overhead);
+                            overhead = Math.ceil((otcost / 0.7) - otcost);
+                            $("#form_header_over_head").text(formatCurrency.format(overhead));
                             $("#explain").html(' 30%');
+
+                            breakeven = parseFloat(overhead) + parseFloat(results['combined']);
+                            $("#form_header_break_even").text(formatCurrency.format(breakeven));
 
                             // set all relevant form values for update
                             $("#x_material_cost").val(materials);
@@ -1520,475 +1450,543 @@
                     {{--Drainage and Catchbasins--}}
 
                         catchbasins = $("#catchbasins").val();
-                        cost_per_day = $("#cost_per_day").val();
-                        alt_desc = $("#alt_desc").val();
+                    cost_per_day = $("#cost_per_day").val();
+                    alt_desc = $("#alt_desc").val();
 
-                        if (cost_per_day == parseInt(cost_per_day) && catchbasins == parseInt(catchbasins) && alt_desc != '') {
-      
-    
-                            var materials = cost_per_day;
-    
-                            $("#header_show_materials_cost").text('$' + materials);
-                            //total up
-                            var results = additup(materials);
-                            if ({{$debug_blade}}) {
-                                console.log(results);
-                            }
-    
-                            var otcost = Math.ceil(results['combined'] + parseFloat(profit));
-                            var overhead = Math.ceil((otcost / 0.7) - otcost);
-                            $("#explain").html('calculated at 30%');
-    
-                            if (proposaltext == '') {
-                                proposaltext = servicedesc.replace('@@BASINS@@', catchbasins);
-                                tinymce.activeEditor.setContent(proposaltext);
-                            }
+                    if (cost_per_day == parseInt(cost_per_day) && catchbasins == parseInt(catchbasins) && alt_desc != '') {
 
 
-                            // set all relevant form values for update
-                            $("#x_material_cost").val(materials);
-                            $("#x_overhead").val(overhead);
-                            $("#x_catchbasins").val(catchbasins);
-                            $("#x_alt_desc").val(alt_desc);
-                            $("#x_cost_per_day").val(cost_per_day);
-                            
-                            console.log('End of Catchbasins');
-    
-                        } else  {
-                            showInfoAlert('You can only enter numbers for catch basins and cost per day.', headerAlert);
-                            return;
-                            
-                        }
-                    }
-
-                    if (serviceCategoryId == 4) {
-                        {{-- 4	Excavation --}}
-
-                        var square_feet = $("#square_feet").val();
-                        var depth = $("#depth").val();
-                        var ourcost = $("#cost_per_day").val();
-
-                        if (parseFloat(square_feet) == 'NaN' || parseFloat(depth) == 'NaN') { // check these are numbers
-                            showInfoAlert('You can only enter numbers for square feet and depth.', headerAlert);
-                            return;
-                        }
-
-                        if (parseFloat(profit) == 'NaN' || parseFloat(overhead) == 'NaN' || parseFloat(breakeven) == 'NaN') {
-                            showInfoAlert('You can only enter numbers for profit, overhead and break even.', headerAlert);
-                            return;
-                        }
-                        ;
-
-                        if (square_feet > 0 && depth > 0) {
-
-                            var tontimes = (7 / 1080);
-                            var tons = Math.ceil(square_feet * depth * tontimes);
-                            var loads = Math.ceil(tons / 18);
-
-                            $("#loads").text(loads);
-                            $("#tons").text(tons);
-                            var materials = parseFloat(ourcost).toFixed(2);
-                            $("#header_show_materials_cost").text('$' + materials);
-                            if (proposaltext == '') {
-                                proposaltext = servicedesc.replace('@@TONS@@', tons);
-                                tinymce.activeEditor.setContent(proposaltext);
-                            }
-                            //add it up
-                            var results = additup(materials);
-                            if ({{$debug_blade}}) {
-                                console.log(results);
-                            }
-                            // ok so set square_feet, cost, loads, tons, depth, bill_after, profit, break_even, location_id, overhead, toncost, proposal_text
-                            // set all relevant form values for update
-                            $("#x_material_cost").val(materials);
-                            $("#x_square_feet").val(square_feet);
-                            $("#x_depth").val(depth);
-                            $("#x_loads").val(loads);
-                            $("#x_tons").val(tons);
-                            $("#x_toncost").val(0);
-                            $("#x_cost_per_day").val(ourcost);
-                            console.log("end excavation");
-
-                        }
-
-
-                    }
-                    {{-- END	Excavation --}}
-
-
-                    if (serviceCategoryId == 5) {
-
-                        {{--  Other --}}
-                        var cost_per_day = $("#cost_per_day").val();
-                        var alt_desc = $("#alt_desc").val();
-                        var locations = $("#locations").val();
-
-                        if (cost_per_day == parseInt(cost_per_day)) {
-                            materials = 0;
-                            var overhead = 0;//Math.ceil((parseFloat(combinedcost) +  parseFloat(profit)) * 0.3);
-
-                            var results = additup(cost_per_day);
-                            if ({{$debug_blade}}) {
-                                console.log(results);
-                            }
-                            if (proposaltext == '' || proposaltext == 'proposaltext') {
-                                proposaltext = servicedesc;
-                                tinymce.activeEditor.setContent(proposaltext);
-                            }
-
-                            $("#header_show_materials_cost").text('$' + materials);
-                            $("#x_cost_per_day").val(cost_per_day);
-                            $("#x_material_cost").val(materials);
-                            $("#x_proposal_text").val(proposaltext);
-                            $("#x_alt_desc").val(alt_desc);
-                            $("#x_locations").val(locations);
-
-                        }
-
-                        console.log('End Other');
-
-                    }
-                    {{-- end Other --}}
-
-                    if (serviceCategoryId == 6) {
-
-                        {{--  Paver Brick --}}
-
-
-                        var cost_per_day = $("#cost_per_day").val();
                         var materials = cost_per_day;
-                        var square_feet = $("#square_feet").val();
-                        var tons = $("#tons").val();
-                        var alt_desc = $("#alt_desc");
 
-
-                        if (square_feet == parseInt(square_feet) && cost_per_day == parseInt(cost_per_day) && alt_desc != '') {
-
-                            materials = parseFloat(materials).toFixed(2);
-
-                            if (proposaltext == '') {
-                                var proposaltext = servicedesc.replace('@@SQFT@@', square_feet);
-                                proposaltext = proposaltext.replace('@@TONS@@', tons);
-                                tinymce.activeEditor.setContent(proposaltext);
-                            }
-
-                            var results = additup(materials);
-                            if ({{$debug_blade}}) {
-                                console.log(results);
-                            }
-                            $("#header_show_materials_cost").text('$' + materials);
-
-                            var combined_cost = Math.ceil(results['combined'] + parseFloat(profit));
-                            var overhead = Math.ceil((combined_cost / 0.75) - combined_cost);
-                            $("#explain").html('calculated at 25%');
-
-                            $("#header_show_materials_cost").text('$' + materials);
-                            $("#x_cost_per_day").val(cost_per_day);
-                            $("#x_material_cost").val(materials);
-                            $("#x_proposal_text").val(proposaltext);
-                            $("#x_alt_desc").val(alt_desc);
-                            $("#x_square_feet").val(square_feet);
-                            $("#x_tons").val(tons);
-
-
-                        } else {
-                            showInfoAlert('You can only enter numbers for square feet and cost and tons.', headerAlert);
-
-                            setTimeout(() => {
-                                closeAlert(headerAlert);
-                            }, 3000);
-
-                            return;
-
-                        }
-
-
-                    }
-
-                    if (serviceCategoryId == 7) {
-                        {{--  Rock --}}
-
-
-                        var square_feet = $("#square_feet").val();
-                        var depth = $("#depth").val();
-                        var rockcost = $('input[name="cost_per_day"]:checked').val();
+                        $("#header_show_materials_cost").text('$' + materials);
+                        //total up
+                        var results = additup(materials);
                         if ({{$debug_blade}}) {
-                            console.log(rockcost);
-                        }
-                        if (parseInt(square_feet) != square_feet || parseInt(depth) != depth) { // check these are numbers
-                            showInfoAlert('You can only enter numbers for square feet and depth.', headerAlert);
-
-                            setTimeout(() => {
-                                closeAlert(headerAlert);
-                            }, 2000);
-
-                            return;
-                        }
-
-                        if (square_feet > 0 && depth > 0) {
-
-                            var tontimes = (7 / 1080);
-                            var tons = Math.ceil(square_feet * depth * tontimes);
-                            var loads = Math.ceil(tons / 18);
-
-                            $("#loads").text(loads);
-                            $("#tons").text(tons);
-                            var materials = (tons * rockcost);
-                            materials = parseFloat(materials).toFixed(2);
-
-                            if (proposaltext == '') {
-                                var proposaltext = servicedesc.replace('@@INCHES@@', depth);
-                                tinymce.activeEditor.setContent(proposaltext);
-                            }
-
-                            var results = additup(materials);
-                            if ({{$debug_blade}}) {
-                                console.log(results);
-                            }
-                            $("#header_show_materials_cost").text('$' + materials);
-                            $("#x_square_feet").val(square_feet);
-                            $("#x_depth").val(depth);
-                            $("#x_tons").val(tons);
-                            $("#x_cost_per_day").val(rockcost);
-                            $("#x_material_cost").val(materials);
-                            $("#x_loads").val(loads);
-                            console.log("end rock");
-                        }
-
-
-                    }
-
-
-                    if (serviceCategoryId == 8) {
-
-                        {{--  Seal Coating  these are the user imput fields that need to be filled in validated--}}
-
-                        var square_feet = $("#square_feet").val();
-                        var yield = $("#yield>option:selected").val();
-                        var primer = $("#primer").val();
-                        var fastset = $("#fast_set").val();
-                        var phases = $("#phases").val();
-
-                        /*
-                        SEALER  = Size/Yield  = GAL SEALER
-                        AND SAND = GAL SEALER * 2
-                        ADDITIVE = AND GAL SEALER / 50
-                        */
-
-
-                        if (square_feet == parseInt(square_feet) && primer == parseInt(primer) && fastset == parseInt(fastset) && parseInt(yield) > 0) {
-
-
-                            var sealer = Math.ceil(square_feet / yield);
-                            var sand = Math.ceil(sealer * 2);
-                            var additive = Math.ceil(sealer / 50);
-
-                            $("#sealer").val(sealer);
-                            $("#sand").val(sand);
-                            $("#additive").val(additive);
-
-                            var sandtotal = Math.ceil(sandcost * sand);
-                            var fastsettotal = Math.ceil(fastsetcost * fastset);
-                            var primertotal = Math.ceil(primercost * primer);
-                            var additivetotal = Math.ceil(additivecost * additive);
-                            var sealertotal = Math.ceil(sealercost * sealer);
-
-                            $("#SealerTotal").text(formatCurrency.format(sealertotal));
-                            $("#AdditiveTotal").text(formatCurrency.format(additivetotal));
-                            $("#PrimerTotal").text(formatCurrency.format(primertotal));
-                            $("#FastSetTotal").text(formatCurrency.format(fastsettotal));
-                            $("#SandTotal").text(formatCurrency.format(sandtotal));
-
-                            //material cost  total all above
-                            var materials = parseFloat(sandtotal + fastsettotal + primertotal + additivetotal + sealertotal);
-                            materials = Math.ceil(materials);
-                            if ({{$debug_blade}}) {
-                                console.log('materials:' + materials);
-                            }
-                            $("#header_show_materials_cost").text(formatCurrency.format(materials));
-
-
-                            var results = additup(materials);
                             console.log(results);
-
-                            var otcost = Math.ceil(parseFloat(profit) + results['combined']);
-                            var overhead = Math.ceil((otcost / 0.7) - otcost);
-
-                            $("#form_header_over_head").val(overhead);
-                            $("#x_overhead").val(overhead);
-                            $("#x_sealer").val(sealer);
-                            $("#x_square_feet").val(square_feet);
-                            $("#x_fast_set").val(fastset);
-                            $("#x_yield").val(yield);
-                            $("#x_phases").val(phases);
-                            $("#x_primer").val(primer);
-                            $("#x_sand").val(sand);
-                            $("#x_additive").val(additive);
-                            $("#x_material_cost").val(materials);
-
-
-                            $("#explain").html(' 30%');
-                            if (proposaltext == '') {
-                                servicedesc = servicedesc.replace('@@SQFT@@', square_feet);
-                                servicedesc = servicedesc.replace('@@PHASES@@', phases);
-                                tinymce.activeEditor.setContent(servicedesc);
-                            }
-
-
-                        } else {
-
-                            showInfoAlert('You must only enter numbers for Square Feet, Primer and Fast Set, Profit, Break Even and Overhead.', headerAlert);
-
-                            setTimeout(() => {
-                                closeAlert(headerAlert);
-                            }, 2000);
-
-                            return;
-
-
                         }
 
-                        console.log("end sealcoating");
+                        profit = $("#form_header_profit").val();
+                        var otcost = Math.ceil(results['combined'] + parseFloat(profit));
 
-                    }
+                        overhead = Math.ceil((otcost / 0.7) - otcost);
+                        $("#form_header_over_head").text(formatCurrency.format(overhead));
+                        $("#explain").html(' 30%');
 
-                    if (serviceCategoryId == 9) {
-
-                        {{--  striping  not used for this service--}}
-
-                        console.log("end striping");
-                    }
-
-                    if (serviceCategoryId == 10) {
-
-                        {{--  Sub Contractor --}}
-
-                        var additive = $("#additive").val();  // percent overhead 
-                        var cost_per_day = $("#cost_per_day").val(); // cost to contractor
-                        var alt_desc = $("#alt_desc").val(); // desc of services
-                        var contractor_id = $("#contractor_id>option:selected").val(); // contractor ID
-
-                        if (cost_per_day == parseInt(cost_per_day)) {
-                            materials = cost_per_day;
-                            $("#header_show_materials_cost").text(formatCurrency.format(materials));
-
-                            var results = additup(materials);
-                            if ({{$debug_blade}})
-                                console.log(results);
-                        }
-
-                        if (additive = parseInt(additive) && additive > 0) {
-                            var soh = parseFloat(1 - (additive / 100));
-                            contractor_overhead = Math.ceil((cost_per_day / soh) - cost_per_day);
-                            contractor_overhead = formatCurrency.format(contractor_overhead)
-                            $("#contractor_overhead").html(contractor_overhead + ' calculated at ' + additive + '%');
-
-                        } else // sub has no overhead value use standard
-                        {
-                            var contractor_overhead = Math.ceil((cost_per_day / 0.7) - cost_per_day);
-                            formatted_contractor_overhead = formatCurrency.format(contractor_overhead)
-                            $("#contractor_overhead").html(formatted_contractor_overhead + ' calculated at 30%');
-                        }
-                        console.log(overhead);
-
+                        breakeven = parseFloat(overhead) + parseFloat(results['combined']);
+                        $("#form_header_break_even").text(formatCurrency.format(breakeven));
 
                         if (proposaltext == '') {
-                            tinymce.activeEditor.setContent(servicedesc);
+                            proposaltext = servicedesc.replace('@@BASINS@@', catchbasins);
+                            tinymce.activeEditor.setContent(proposaltext);
                         }
+
+
+                        // set all relevant form values for update
+                        $("#x_material_cost").val(materials);
+                        $("#x_catchbasins").val(catchbasins);
+                        $("#x_alt_desc").val(alt_desc);
+                        $("#x_cost_per_day").val(cost_per_day);
+
+                        console.log('End of Catchbasins');
+
+                    } else {
+                        showInfoAlert('You can only enter numbers for catch basins and cost per day.', headerAlert);
+                        return;
+
+                    }
+                }
+
+                if (serviceCategoryId == 4) {
+                    {{-- 4	Excavation --}}
+
+                    var square_feet = $("#square_feet").val();
+                    var depth = $("#depth").val();
+                    var ourcost = $("#cost_per_day").val();
+
+                    if (parseFloat(square_feet) == 'NaN' || parseFloat(depth) == 'NaN') { // check these are numbers
+                        showInfoAlert('You can only enter numbers for square feet and depth.', headerAlert);
+                        return;
+                    }
+
+                    if (parseFloat(profit) == 'NaN') {
+                        showInfoAlert('You can only enter numbers for profit, overhead and break even.', headerAlert);
+                        return;
+                    }
+
+
+                    if (square_feet > 0 && depth > 0) {
+
+                        var tontimes = (7 / 1080);
+                        var tons = Math.ceil(square_feet * depth * tontimes);
+                        var loads = Math.ceil(tons / 18);
+
+                        $("#loads").text(loads);
+                        $("#tons").text(tons);
+                        var materials = parseFloat(ourcost).toFixed(2);
+                        $("#header_show_materials_cost").text('$' + materials);
+                        if (proposaltext == '') {
+                            proposaltext = servicedesc.replace('@@TONS@@', tons);
+                            tinymce.activeEditor.setContent(proposaltext);
+                        }
+                        //add it up
+                        var results = additup(materials);
+                        if ({{$debug_blade}}) {
+                            console.log(results);
+                        }
+
+                        profit = $("#form_header_profit").val();
+                        var otcost = Math.ceil(results['combined'] + parseFloat(profit));
+
+                        overhead = Math.ceil((otcost / 0.7) - otcost);
+                        $("#form_header_over_head").text(formatCurrency.format(overhead));
+                        $("#explain").html(' 30%');
+
+                        breakeven = parseFloat(overhead) + parseFloat(results['combined']);
+                        $("#form_header_break_even").text(formatCurrency.format(breakeven));
+
+
+                        // ok so set square_feet, cost, loads, tons, depth, bill_after, profit, break_even, location_id, overhead, toncost, proposal_text
+                        // set all relevant form values for update
+                        $("#x_material_cost").val(materials);
+                        $("#x_square_feet").val(square_feet);
+                        $("#x_depth").val(depth);
+                        $("#x_loads").val(loads);
+                        $("#x_tons").val(tons);
+                        $("#x_toncost").val(0);
+                        $("#x_cost_per_day").val(ourcost);
+                        console.log("end excavation");
+
+                    }
+
+
+                }
+                {{-- END	Excavation --}}
+
+
+                if (serviceCategoryId == 5) {
+
+                    {{--  Other --}}
+                    var cost_per_day = $("#cost_per_day").val();
+                    var alt_desc = $("#alt_desc").val();
+                    var locations = $("#locations").val();
+
+                    if (cost_per_day == parseInt(cost_per_day)) {
+                        materials = 0;
+
+
+                        var results = additup(cost_per_day);
+                        if ({{$debug_blade}}) {
+                            console.log(results);
+                        }
+
+
+                        profit = $("#form_header_profit").val();
+                        var otcost = Math.ceil(results['combined'] + parseFloat(profit));
+
+                        overhead = Math.ceil((otcost / 0.7) - otcost);
+                        $("#form_header_over_head").text(formatCurrency.format(overhead));
+                        $("#explain").html(' 30%');
+
+                        breakeven = parseFloat(overhead) + parseFloat(results['combined']);
+                        $("#form_header_break_even").text(formatCurrency.format(breakeven));
+
+
+                        if (proposaltext == '' || proposaltext == 'proposaltext') {
+                            proposaltext = servicedesc;
+                            tinymce.activeEditor.setContent(proposaltext);
+                        }
+
+                        $("#header_show_materials_cost").text(formatCurrency.format(materials));
+                        $("#x_cost_per_day").val(cost_per_day);
+                        $("#x_material_cost").val(materials);
+                        $("#x_proposal_text").val(proposaltext);
+                        $("#x_alt_desc").val(alt_desc);
+                        $("#x_locations").val(locations);
+
+                    }
+
+                    console.log('End Other');
+
+                }
+                {{-- end Other --}}
+
+                if (serviceCategoryId == 6) {
+
+                    {{--  Paver Brick --}}
+
+
+                    var cost_per_day = $("#cost_per_day").val();
+                    var materials = cost_per_day;
+                    var square_feet = $("#square_feet").val();
+                    var tons = $("#tons").val();
+                    var alt_desc = $("#alt_desc");
+
+
+                    if (square_feet == parseInt(square_feet) && cost_per_day == parseInt(cost_per_day) && alt_desc != '') {
+
+                        materials = parseFloat(materials).toFixed(2);
+
+                        if (proposaltext == '') {
+                            var proposaltext = servicedesc.replace('@@SQFT@@', square_feet);
+                            proposaltext = proposaltext.replace('@@TONS@@', tons);
+                            tinymce.activeEditor.setContent(proposaltext);
+                        }
+
+                        var results = additup(materials);
+                        if ({{$debug_blade}}) {
+                            console.log(results);
+                        }
+
+                        profit = $("#form_header_profit").val();
+                        var otcost = Math.ceil(results['combined'] + parseFloat(profit));
+
+                        overhead = Math.ceil((otcost / 0.75) - otcost);
+                        $("#form_header_over_head").text(formatCurrency.format(overhead));
+                        $("#explain").html(' 25%');
+
+                        breakeven = parseFloat(overhead) + parseFloat(results['combined']);
+                        $("#form_header_break_even").text(formatCurrency.format(breakeven));
 
 
                         $("#header_show_materials_cost").text(formatCurrency.format(materials));
                         $("#x_cost_per_day").val(cost_per_day);
                         $("#x_material_cost").val(materials);
-                        $("#x_additive").val(contractor_overhead);
                         $("#x_proposal_text").val(proposaltext);
-                        $("#x_contractor_id").val(contractor_id);
                         $("#x_alt_desc").val(alt_desc);
+                        $("#x_square_feet").val(square_feet);
+                        $("#x_tons").val(tons);
 
-                        console.log("end sub contractor");
+
+                    } else {
+                        showInfoAlert('You can only enter numbers for square feet and cost and tons.', headerAlert);
+
+                        setTimeout(() => {
+                            closeAlert(headerAlert);
+                        }, 3000);
+
+                        return;
+
                     }
 
-                    //set these fields for all services
-                    var bill_after = $('input[name="bill_after"]:checked').val();
-                    var proposaltext = tinymce.activeEditor.getContent();
-
-                    $("#x_proposal_text").val(proposaltext);
-                    $("#x_bill_after").val(bill_after);
-                    $("#x_profit").val(headerElProfit.val());
-                    $("#x_break_even").val(headerElBreakEven.val());
-                    $("#x_overhead").val(headerElOverHead.val());
-
-                    //then save it
-                    if (dosave == 1) {
-                        saveit(false);
-                    }
-                    if (dosave == 2) {
-                        saveit(true);
-                    }
 
                 }
 
+                if (serviceCategoryId == 7) {
+                    {{--  Rock --}}
 
-                function additup(materials) {
 
-                    var combinedcost = (parseFloat($('#estimator_form_vehicle_total_cost').val()) +
-                        parseFloat($('#estimator_form_equipment_total_cost').val()) +
-                        parseFloat($('#estimator_form_labor_total_cost').val()) +
-                        parseFloat($('#estimator_form_additional_cost_total_cost').val()) +
-                        parseFloat($('#estimator_form_subcontractor_total_cost').val()) +
-                        parseFloat(materials));
+                    var square_feet = $("#square_feet").val();
+                    var depth = $("#depth").val();
+                    var rockcost = $('input[name="cost_per_day"]:checked').val();
                     if ({{$debug_blade}}) {
-                        console.log('add combined:' + combinedcost);
+                        console.log(rockcost);
                     }
-                    var data = [];
-                    //profit overhead breakeven
-                    var pob_cost = parseFloat($('#form_header_over_head').val()) + parseFloat($('#form_header_break_even').val()) + parseFloat($('#form_header_profit').val());
+                    if (parseInt(square_feet) != square_feet || parseInt(depth) != depth) { // check these are numbers
+                        showInfoAlert('You can only enter numbers for square feet and depth.', headerAlert);
 
-                    data['combined'] = parseFloat(combinedcost).toFixed(2);
-                    data['pob_cost'] = parseFloat(pob_cost).toFixed(2);
+                        setTimeout(() => {
+                            closeAlert(headerAlert);
+                        }, 2000);
 
-                    headerElCombinedCosting.text('$' + pob_cost.toFixed(2));
-                    data['math'] = parseFloat(combinedcost) + '+' + parseFloat(pob_cost);
-                    var customercost = (parseFloat(combinedcost) + parseFloat(pob_cost)).toFixed(2);
-                    data['customercost'] = customercost;
+                        return;
+                    }
 
-                    $("#x_cost").val(customercost);
-                    headerElCustomerPrice.text(formatCurrency.format(customercost));
+                    if (square_feet > 0 && depth > 0) {
 
-                    return data;
+                        var tontimes = (7 / 1080);
+                        var tons = Math.ceil(square_feet * depth * tontimes);
+                        var loads = Math.ceil(tons / 18);
+
+                        $("#loads").text(loads);
+                        $("#tons").text(tons);
+                        var materials = (tons * rockcost);
+                        materials = parseFloat(materials).toFixed(2);
+
+                        if (proposaltext == '') {
+                            var proposaltext = servicedesc.replace('@@INCHES@@', depth);
+                            tinymce.activeEditor.setContent(proposaltext);
+                        }
+
+                        var results = additup(materials);
+                        if ({{$debug_blade}}) {
+                            console.log(results);
+                        }
+
+                        profit = $("#form_header_profit").val();
+                        var otcost = Math.ceil(results['combined'] + parseFloat(profit));
+
+                        overhead = Math.ceil((otcost / 0.7) - otcost);
+                        $("#form_header_over_head").text(formatCurrency.format(overhead));
+                        $("#explain").html(' 30%');
+
+                        breakeven = parseFloat(overhead) + parseFloat(results['combined']);
+                        $("#form_header_break_even").text(formatCurrency.format(breakeven));
+
+
+                        $("#header_show_materials_cost").text('$' + materials);
+                        $("#x_square_feet").val(square_feet);
+                        $("#x_depth").val(depth);
+                        $("#x_tons").val(tons);
+                        $("#x_cost_per_day").val(rockcost);
+                        $("#x_material_cost").val(materials);
+                        $("#x_loads").val(loads);
+                        console.log("end rock");
+                    }
+
 
                 }
 
-                function saveit($leave = false) {
 
-                    if ($leave) {
-                        $("#stayorleave").val("true")  // return to proposal page or service page
+                if (serviceCategoryId == 8) {
+
+                    {{--  Seal Coating  these are the user imput fields that need to be filled in validated--}}
+
+                    var square_feet = $("#square_feet").val();
+                    var yield = $("#yield>option:selected").val();
+                    var primer = $("#primer").val();
+                    var fastset = $("#fast_set").val();
+                    var phases = $("#phases").val();
+
+                    /*
+                    SEALER  = Size/Yield  = GAL SEALER
+                    AND SAND = GAL SEALER * 2
+                    ADDITIVE = AND GAL SEALER / 50
+                    */
+
+
+                    if (square_feet == parseInt(square_feet) && primer == parseInt(primer) && fastset == parseInt(fastset) && parseInt(yield) > 0) {
+
+
+                        var sealer = Math.ceil(square_feet / yield);
+                        var sand = Math.ceil(sealer * 2);
+                        var additive = Math.ceil(sealer / 50);
+
+                        $("#sealer").val(sealer);
+                        $("#sand").val(sand);
+                        $("#additive").val(additive);
+
+                        var sandtotal = Math.ceil(sandcost * sand);
+                        var fastsettotal = Math.ceil(fastsetcost * fastset);
+                        var primertotal = Math.ceil(primercost * primer);
+                        var additivetotal = Math.ceil(additivecost * additive);
+                        var sealertotal = Math.ceil(sealercost * sealer);
+
+                        $("#SealerTotal").text(formatCurrency.format(sealertotal));
+                        $("#AdditiveTotal").text(formatCurrency.format(additivetotal));
+                        $("#PrimerTotal").text(formatCurrency.format(primertotal));
+                        $("#FastSetTotal").text(formatCurrency.format(fastsettotal));
+                        $("#SandTotal").text(formatCurrency.format(sandtotal));
+
+                        //material cost  total all above
+                        var materials = parseFloat(sandtotal + fastsettotal + primertotal + additivetotal + sealertotal);
+                        materials = Math.ceil(materials);
+                        if ({{$debug_blade}}) {
+                            console.log('materials:' + materials);
+                        }
+                        $("#header_show_materials_cost").text(formatCurrency.format(materials));
+
+
+                        var results = additup(materials);
+                        console.log(results);
+
+                        profit = $("#form_header_profit").val();
+                        var otcost = Math.ceil(results['combined'] + parseFloat(profit));
+
+                        overhead = Math.ceil((otcost / 0.7) - otcost);
+                        $("#form_header_over_head").text(formatCurrency.format(overhead));
+                        $("#explain").html(' 30%');
+
+                        breakeven = parseFloat(overhead) + parseFloat(results['combined']);
+                        $("#form_header_break_even").text(formatCurrency.format(breakeven));
+
+
+                        $("#x_sealer").val(sealer);
+                        $("#x_square_feet").val(square_feet);
+                        $("#x_fast_set").val(fastset);
+                        $("#x_yield").val(yield);
+                        $("#x_phases").val(phases);
+                        $("#x_primer").val(primer);
+                        $("#x_sand").val(sand);
+                        $("#x_additive").val(additive);
+                        $("#x_material_cost").val(materials);
+
+
+                        $("#explain").html(' 30%');
+                        if (proposaltext == '') {
+                            servicedesc = servicedesc.replace('@@SQFT@@', square_feet);
+                            servicedesc = servicedesc.replace('@@PHASES@@', phases);
+                            tinymce.activeEditor.setContent(servicedesc);
+                        }
+
+
+                    } else {
+
+                        showInfoAlert('You must only enter numbers for Square Feet, Primer and Fast Set, Profit, Break Even and Overhead.', headerAlert);
+
+                        setTimeout(() => {
+                            closeAlert(headerAlert);
+                        }, 2000);
+
+                        return;
+
 
                     }
 
-                    $("#estimator_form").submit();
+                    console.log("end sealcoating");
 
                 }
 
-                var cost_form = $("#cost_formula_form");  // values to determine cost
-                var estimatorForm = $("#estimator_form"); // form to set values for submit and save
+                if (serviceCategoryId == 9) {
 
-                calculate(cost_form, estimatorForm, serviceId, proposalDetailId, proposalId, serviceCategoryId, 0);
+                    {{--  striping  not used for this service--}}
 
-                // when you want to calculate and save record 
-                $('#header_calculate_combined_costing_button2').on('click', function () {
+                    console.log("end striping");
+                }
 
-                    calculate(cost_form, estimatorForm, serviceId, proposalDetailId, proposalId, serviceCategoryId, 1);
+                if (serviceCategoryId == 10) {
 
-                });
+                    {{--  Sub Contractor --}}
 
-                $('#header_calculate_combined_costing_button3 ,#header_calculate_combined_costing_button4').on('click', function () {
+                    var additive = $("#additive").val();  // percent overhead 
+                    var cost_per_day = $("#cost_per_day").val(); // cost to contractor
+                    var alt_desc = $("#alt_desc").val(); // desc of services
+                    var contractor_id = $("#contractor_id>option:selected").val(); // contractor ID
 
-                    calculate(cost_form, estimatorForm, serviceId, proposalDetailId, proposalId, serviceCategoryId, 2);
+                    if (cost_per_day == parseInt(cost_per_day)) {
+                        materials = cost_per_day;
+                        $("#header_show_materials_cost").text(formatCurrency.format(materials));
 
-                });
+                        var results = additup(materials);
+                        if ({{$debug_blade}})
+                            console.log(results);
+                    }
 
+
+                    profit = $("#form_header_profit").val();
+                    var otcost = Math.ceil(results['combined'] + parseFloat(profit));
+
+                    overhead = Math.ceil((otcost / 0.7) - otcost);
+                    $("#form_header_over_head").text(formatCurrency.format(overhead));
+                    $("#explain").html(' 30%');
+
+                    breakeven = parseFloat(overhead) + parseFloat(results['combined']);
+                    $("#form_header_break_even").text(formatCurrency.format(breakeven));
+
+
+                    if (additive = parseInt(additive) && additive > 0) {
+                        var soh = parseFloat(1 - (additive / 100));
+                        contractor_overhead = Math.ceil((cost_per_day / soh) - cost_per_day);
+                        contractor_overhead = formatCurrency.format(contractor_overhead)
+                        $("#contractor_overhead").html(contractor_overhead + ' calculated at ' + additive + '%');
+
+                    } else // sub has no overhead value use standard
+                    {
+                        var contractor_overhead = Math.ceil((cost_per_day / 0.7) - cost_per_day);
+                        formatted_contractor_overhead = formatCurrency.format(contractor_overhead)
+                        $("#contractor_overhead").html(formatted_contractor_overhead + ' calculated at 30%');
+                    }
+
+
+                    if (proposaltext == '') {
+                        tinymce.activeEditor.setContent(servicedesc);
+                    }
+
+
+                    $("#header_show_materials_cost").text(formatCurrency.format(materials));
+                    $("#x_cost_per_day").val(cost_per_day);
+                    $("#x_material_cost").val(materials);
+                    $("#x_additive").val(contractor_overhead);
+                    $("#x_proposal_text").val(proposaltext);
+                    $("#x_contractor_id").val(contractor_id);
+                    $("#x_alt_desc").val(alt_desc);
+
+                    console.log("end sub contractor");
+                }
+
+                //set these fields for all services
+                var bill_after = $('input[name="bill_after"]:checked').val();
+                $("#x_bill_after").val(bill_after);
+
+                var proposaltext = tinymce.activeEditor.getContent();
+                $("#x_proposal_text").val(proposaltext);
+
+                $("#x_overhead").val(overhead);
+                $("#x_break_even").val(breakeven);
+                $("#x_profit").val(profit);
+
+
+                //then save it
+                if (dosave == 1) {
+                    saveit(false);
+                }
+                if (dosave == 2) {
+                    saveit(true);
+                }
+
+            }
+
+
+            function additup(materials) {
+
+                var combinedcost = (parseFloat($('#estimator_form_vehicle_total_cost').val()) +
+                    parseFloat($('#estimator_form_equipment_total_cost').val()) +
+                    parseFloat($('#estimator_form_labor_total_cost').val()) +
+                    parseFloat($('#estimator_form_additional_cost_total_cost').val()) +
+                    parseFloat($('#estimator_form_subcontractor_total_cost').val()) +
+                    parseFloat(materials));
+                if ({{$debug_blade}}) {
+                    console.log('add combined:' + combinedcost);
+                }
+                var data = [];
+                //profit overhead breakeven
+                var pob_cost = parseFloat($('#form_header_profit').val());
+
+                data['combined'] = parseFloat(combinedcost).toFixed(2);
+                data['pob_cost'] = parseFloat(pob_cost).toFixed(2);
+
+                data['math'] = parseFloat(combinedcost) + '+' + parseFloat(pob_cost);
+                var customercost = (parseFloat(combinedcost) + parseFloat(pob_cost)).toFixed(2);
+                data['customercost'] = customercost;
+
+                headerElCombinedCosting.text(formatCurrency.format(combinedcost));
+                headerElCustomerPrice.text(formatCurrency.format(customercost));
+
+                $("#x_cost").val(customercost);
+
+                return data;
+
+            }
+
+            function saveit($leave = false) {
+
+                if ($leave) {
+                    $("#stayorleave").val("true")  // return to proposal page or service page
+
+                }
+
+                $("#estimator_form").submit();
+
+            }
+
+            var cost_form = $("#cost_formula_form");  // values to determine cost
+            var estimatorForm = $("#estimator_form"); // form to set values for submit and save
+
+            calculate(cost_form, estimatorForm, serviceId, proposalDetailId, proposalId, serviceCategoryId, 0);
+
+            // when you want to calculate and save record 
+            $('#header_calculate_combined_costing_button2').on('click', function () {
+
+                calculate(cost_form, estimatorForm, serviceId, proposalDetailId, proposalId, serviceCategoryId, 1);
 
             });
+
+            $('#header_calculate_combined_costing_button3 ,#header_calculate_combined_costing_button4').on('click', function () {
+
+                calculate(cost_form, estimatorForm, serviceId, proposalDetailId, proposalId, serviceCategoryId, 2);
+
+            });
+
+
+        });
     </script>
 @endpush

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Currency;
+use App\Helpers\ExceptionError;
 use App\Models\AcceptedDocuments;
 use App\Models\Contractor;
 use App\Models\Equipment;
@@ -13,6 +14,7 @@ use App\Models\ProposalDetail;
 use App\Models\ProposalDetailAdditionalCost;
 use App\Models\ProposalDetailEquipment;
 use App\Models\ProposalDetailLabor;
+use App\Models\ProposalDetailStripingService;
 use App\Models\ProposalDetailSubcontractor;
 use App\Models\ProposalDetailVehicle;
 use App\Models\ProposalMaterial;
@@ -39,8 +41,10 @@ class ProposalDetailController extends Controller
 
     public function create(Request $request, $id)
     {
+
         $proposal = Proposal::where('id', $id)->first()->toArray();
         $service = Service::where('id', $request['servicecat'])->first()->toArray();
+        $new_id = 0;
         //create new service on this proposal
         $proposal_detail = new ProposalDetail();
         $proposal_detail->proposal_id = $id;
@@ -49,10 +53,42 @@ class ProposalDetailController extends Controller
         $proposal_detail->location_id = $proposal['location_id'];
         $proposal_detail->service_name = $service['name'];
         $proposal_detail->service_desc = $service['description'];
-        $proposal_detail->dsort = 1;
+        //$proposal_detail->dsort = 1;
         $proposal_detail->created_by = auth()->user()->id;
-        $proposal_detail->save();
 
+            $proposal_detail->save();
+            $new_id = $proposal_detail->id;
+
+            $remove_old = ProposalDetailStripingService::where('proposal_detail_id', '=', $new_id)->delete();
+            
+            if($request['servicecat'] == 18 && $new_id) {
+                $striping = StripingCost::with(['service'])->get()->toArray();
+           
+                foreach($striping as $stripe) {
+                    
+                    $proposal_striping_costs = new ProposalDetailStripingService();
+                    $proposal_striping_costs->proposal_detail_id = $new_id;
+                    $proposal_striping_costs->striping_service_id = $stripe['striping_service_id'];
+                    $proposal_striping_costs->description = $stripe['description'];
+                    $proposal_striping_costs->quantity = 0;
+                    $proposal_striping_costs->name = $stripe['service']['name'];
+                    $proposal_striping_costs->cost = $stripe['cost'];
+                    $proposal_striping_costs->dsort = $stripe['service']['dsort'];
+                try{
+    
+                    $proposal_striping_costs->save();
+
+                } catch(Exception $e) {
+                    Log::debug('Failure to almost save', [$e->getMessage()]);
+                    return back()->withErrors('Striping not saved');
+
+                }
+
+                }
+
+            }
+
+            
         return redirect()->route('edit_service', ['proposal_id' => $id, 'id' => $proposal_detail->id]);
     }
 
@@ -90,6 +126,7 @@ class ProposalDetailController extends Controller
                 $q->with(['contact']);
             },
             'service',
+            'striping',
             'location',
             'vehicles',
             'equipment' => function($w) {
@@ -107,6 +144,7 @@ class ProposalDetailController extends Controller
             return view('pages-404');
         }
 
+
         $contact = $proposalDetail->proposal->contact;
         $asphaltMaterials = ProposalMaterial::where('proposal_id', $proposal_id)->byServiceCategory(1);
         $rockMaterials = ProposalMaterial::where('proposal_id', $proposal_id)->byServiceCategory(7);
@@ -118,9 +156,10 @@ class ProposalDetailController extends Controller
             'proposalDetail' => $proposalDetail,
             'proposal' => $proposalDetail->proposal,
             'contact' => $proposalDetail->proposal->contact,
-            'sealcoatMaterials'  => $sealcoatMaterials,
-            'rockMaterials'  => $rockMaterials,
+            'sealcoatMaterials' => $sealcoatMaterials,
+            'rockMaterials' => $rockMaterials,
             'asphaltMaterials' => $asphaltMaterials,
+            'striping' => $proposalDetail->striping,
             'service' => $proposalDetail->service,
             'service_category_name' => $proposalDetail->service->category->name,
             'equipmentCollection' => Equipment::available()->orderBy('name')->get(),
@@ -130,10 +169,21 @@ class ProposalDetailController extends Controller
             'contractorsCB' => Contractor::contractorsCB(['0' => 'Select contractor']),
             'contractors' => Contractor::orderBy('name')->get(),
             'allowedFileExtensions' => AcceptedDocuments::extensionsStrCid(),
-            'strippingCB' => StripingCost::strippingCB(['0' => 'Select contractor']),
+            //'strippingCB' => StripingCost::strippingCB(['0' => 'Select contractor']),
             'typesCB' => ['0' => 'Select type', 'Dump Fee' => 'Dump Fee', 'Other' => 'Other'],
         ];
 
+
+
+        if($proposalDetail->service->id == 18) {
+
+            $data['striping'] = ProposalDetailStripingService::where('proposal_detail_id', '=', $id)->with('service')->orderBy('dsort')->get()->toArray();
+
+            
+            return view('estimator.striping', $data);
+
+        }
+        
         return view('estimator.index', $data);
     }
 
@@ -153,9 +203,8 @@ class ProposalDetailController extends Controller
 
         $proposal_detail->update($formfields);
         \Session::flash('success', 'Service was saved!');
-        if($formfields['stayorleave']  =='true')
-        {
-            return redirect()->route('show_proposal',['id'=> $formfields['proposal_id']]);
+        if($formfields['stayorleave'] == 'true') {
+            return redirect()->route('show_proposal', ['id' => $formfields['proposal_id']]);
 
         }
         return redirect()->back();
@@ -818,12 +867,12 @@ class ProposalDetailController extends Controller
                 ];
             } else {
                 try {
-                    if (!$contractor = Contractor::find($request->subcontractor_id)) {
+                    if(!$contractor = Contractor::find($request->subcontractor_id)) {
                         $response = [
                             'success' => false,
                             'message' => 'Contractor not found.',
                         ];
-                    } else if (ProposalDetailSubcontractor::where('proposal_detail_id', $request->proposal_detail_id)->where('contractor_id', $request->subcontractor_id)->count() > 0) {
+                    } else if(ProposalDetailSubcontractor::where('proposal_detail_id', $request->proposal_detail_id)->where('contractor_id', $request->subcontractor_id)->count() > 0) {
                         $response = [
                             'success' => false,
                             'message' => 'Contractor already exists.',
@@ -846,10 +895,10 @@ class ProposalDetailController extends Controller
 
                         $uploadError = '';
 
-                        if ($request->hasFile('attached_bid')) {
+                        if($request->hasFile('attached_bid')) {
                             $destinationPath = 'media/bids/';
 
-                            if (
+                            if(
                                 ($result = $this->uploadFile('attached_bid', $destinationPath, [
                                     'unique_name' => true,
                                     'allowed_extensions' => AcceptedDocuments::extensionsStrCid(),
@@ -869,7 +918,7 @@ class ProposalDetailController extends Controller
                         $proposalDetailSubcontractors = ProposalDetailSubcontractor::where('proposal_detail_id', $request->proposal_detail_id)->get();
 
                         $totalCost = 0;
-                        foreach ($proposalDetailSubcontractors as $subcontractor) {
+                        foreach($proposalDetailSubcontractors as $subcontractor) {
                             $totalCost += (float)$subcontractor->total_cost;
                         }
 
@@ -879,7 +928,7 @@ class ProposalDetailController extends Controller
 
                         $response = [
                             'success' => true,
-                            'message' => 'Subcontractor added.'.$uploadError,
+                            'message' => 'Subcontractor added.' . $uploadError,
                             'data' => [
                                 'grid' => view('estimator._subcontractors_grid', $data)->render(),
                                 'totalCost' => $totalCost,
@@ -935,9 +984,9 @@ class ProposalDetailController extends Controller
                             'message' => 'Proposal detail subcontractor not found.',
                         ];
                     } else {
-                        if (!empty($proposalDetailSubcontractor->attached_bid)) {
-                            $fullPathFile = public_path('media/bids/').$proposalDetailSubcontractor->attached_bid;
-                            if (file_exists($fullPathFile)) {
+                        if(!empty($proposalDetailSubcontractor->attached_bid)) {
+                            $fullPathFile = public_path('media/bids/') . $proposalDetailSubcontractor->attached_bid;
+                            if(file_exists($fullPathFile)) {
                                 unlink($fullPathFile);
                             }
                         }
@@ -949,7 +998,7 @@ class ProposalDetailController extends Controller
                         $proposalDetailSubcontractors = ProposalDetailSubcontractor::where('proposal_detail_id', $proposalDetailId)->get();
 
                         $totalCost = 0;
-                        foreach ($proposalDetailSubcontractors as $subcontractor) {
+                        foreach($proposalDetailSubcontractors as $subcontractor) {
                             $totalCost += (float)$subcontractor->total_cost;
                         }
 
@@ -993,7 +1042,7 @@ class ProposalDetailController extends Controller
         return response()->json($response);
     }
 
-    public function destroy($id)
+    public function destroyOLD($id)
     {
         $service = ProposalDetail::where('id', '=', $id)->first()->toArray();
         if(isset($service['proposal_id'])) {
@@ -1001,7 +1050,31 @@ class ProposalDetailController extends Controller
             ProposalDetail::destroy($id);
             return redirect()->back()->with('success', 'Service was deleted!');
         }
-         return redirect()->back()->with('error', 'Sorry no matching records were found!');
+        return redirect()->back()->with('error', 'Sorry no matching records were found!');
+    }
+
+    public function destroy(Request $request)
+    {
+        if(!$item = ProposalDetail::with('service')->find($request->item_id)) {
+            return redirect()->back()->with('error', 'Service not found.');
+        }
+
+        $name = $item->service->name;
+        $proposalId = $item->proposal_id;
+
+        try {
+            $item->delete();
+        } catch(Exception $e) {
+            return ExceptionError::handleError($e);
+        }
+
+        $redirectTo = route('show_proposal', ['id' => $proposalId]);
+
+        if(!empty($request->tab)) {
+            $redirectTo .= '?tab=servicestab';
+        }
+
+        return redirect()->to($redirectTo)->with('success', 'Service "' . $name . '" deleted.');
     }
 
     public function newservice($proposalId)

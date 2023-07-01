@@ -60,7 +60,7 @@
                             <div class="form-group col-lg-4">
                                 <label>@lang('translation.rate')</label>
                                 <div>
-                                    <input name="rate" id="rate" data-parsley-type="number"
+                                    <input name="cost" id="rate" data-parsley-type="number"
                                            type="text"
                                            class="form-control" placeholder="Enter only numbers"
                                            value="0">

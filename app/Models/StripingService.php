@@ -15,4 +15,11 @@ class StripingService extends Model
         'name',
         'dsort',
     ];
+
+
+    public function striping_costs()
+    {
+        return $this->hasMany(StripingCost::class);
+    }
+    
 }

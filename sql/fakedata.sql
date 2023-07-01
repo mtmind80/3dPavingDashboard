@@ -68,74 +68,78 @@ Update proposals set permit_required =1, mot_required=1, nto_required=1, on_aler
 Update proposals Set name = "Test Proposal Name" WHERE id = 10680; 
 UPDATE proposals Set progressive_billing = 1 where id =10680;
 DELETE FROM proposal_details WHERE proposal_id = 10680;
-INSERT INTO `proposal_details` (id, proposal_id, services_id, location_id, created_by) VALUES (33167, 10680, 1, 6196,10);
-INSERT INTO `proposal_details` (id, proposal_id, services_id, location_id, created_by) VALUES (33168, 10680, 2, 6196,10);
-INSERT INTO `proposal_details` (id, proposal_id, services_id, location_id, created_by) VALUES (33169, 10680, 3, 6196,10);
-INSERT INTO `proposal_details` (id, proposal_id, services_id, location_id, created_by) VALUES (33170, 10680, 4, 6196,10);
-INSERT INTO `proposal_details` (id, proposal_id, services_id, location_id, created_by) VALUES (33171, 10680, 5, 6196,10);
-INSERT INTO `proposal_details` (id, proposal_id, services_id, location_id, created_by) VALUES (33172, 10680, 6, 6196,10);
-INSERT INTO `proposal_details` (id, proposal_id, services_id, location_id, created_by) VALUES (33173, 10680, 7, 6196,10);
-INSERT INTO `proposal_details` (id, proposal_id, services_id, location_id, created_by) VALUES (33174, 10680, 8, 6196,10);
-INSERT INTO `proposal_details` (id, proposal_id, services_id, location_id, created_by) VALUES (33175, 10680, 9, 6196,10);
-INSERT INTO `proposal_details` (id, proposal_id, services_id, location_id, created_by) VALUES (33176, 10680, 10, 6196,10);
-INSERT INTO `proposal_details` (id, proposal_id, services_id, location_id, created_by) VALUES (33177, 10680, 11, 6196,10);
-INSERT INTO `proposal_details` (id, proposal_id, services_id, location_id, created_by) VALUES (33178, 10680, 12, 6196,10);
-INSERT INTO `proposal_details` (id, proposal_id, services_id, location_id, created_by) VALUES (33179, 10680, 13, 6196,10);
-INSERT INTO `proposal_details` (id, proposal_id, services_id, location_id, created_by) VALUES (33180, 10680, 14, 6196,10);
-INSERT INTO `proposal_details` (id, proposal_id, services_id, location_id, created_by) VALUES (33181, 10680, 15, 6196,10);
-INSERT INTO `proposal_details` (id, proposal_id, services_id, location_id, created_by) VALUES (33182, 10680, 16, 6196,10);
-INSERT INTO `proposal_details` (id, proposal_id, services_id, location_id, created_by) VALUES (33183, 10680, 17, 6196,10);
-INSERT INTO `proposal_details` (id, proposal_id, services_id, location_id, created_by) VALUES (33184, 10680, 18, 6196,10);
-INSERT INTO `proposal_details` (id, proposal_id, services_id, location_id, created_by) VALUES (33185, 10680, 19, 6196,10);
-INSERT INTO `proposal_details` (id, proposal_id, services_id, location_id, created_by) VALUES (33186, 10680, 20, 6196,10);
-INSERT INTO `proposal_details` (id, proposal_id, services_id, location_id, created_by) VALUES (33187, 10680, 21, 6196,10);
-INSERT INTO `proposal_details` (id, proposal_id, services_id, location_id, created_by) VALUES (33188, 10680, 22, 6196,10);
+INSERT INTO `proposal_details` (proposal_id,services_id,status_id,location_id,service_name,service_desc,created_by)VALUES ( 10680,1, 1, 6196, 'All Excavation', 'All Excavations', 10);
+INSERT INTO `proposal_details` (proposal_id,services_id,status_id,location_id,service_name,service_desc,created_by)VALUES ( 10680, 2, 1, 6196, 'Rock Services', 'Rock Services', 10);
+INSERT INTO `proposal_details` (proposal_id,services_id,status_id,location_id,service_name,service_desc,created_by)VALUES ( 10680,  3,  1, 6196, 'Repairs', 'Repairs', 10);
+INSERT INTO `proposal_details` (proposal_id,services_id,status_id,location_id,service_name,service_desc,created_by)VALUES (10680,  4, 1, 6196, 'Asphalt Paving - (Over 3500 SY)', 'Asphalt Paving - (Over 3500 SY)', 10);
+INSERT INTO `proposal_details` (proposal_id,services_id,status_id,location_id,service_name,service_desc,created_by)VALUES( 10680,  5,  1, 6196, 'Paving (Under 3500 SY)', 'Paving (Under 3500 SY)', 10);
+INSERT INTO `proposal_details` (proposal_id,services_id,status_id,location_id,service_name,service_desc,created_by)VALUES ( 10680, 6, 1, 6196, 'Curb (Extruded)', 'Curb (Extruded)', 10);
+INSERT INTO `proposal_details` (proposal_id,services_id,status_id,location_id,service_name,service_desc,created_by)VALUES ( 10680,  7,  1, 6196, 'Curb (Type D)', 'Curb (Type D)', 10);
+INSERT INTO `proposal_details` (proposal_id,services_id,status_id,location_id,service_name,service_desc,created_by)VALUES (10680,  8,  1, 6196, 'Curb (Type Mod D)', 'Curb (Type Mod D) ', 10);
+
+INSERT INTO `proposal_details` (proposal_id,services_id,status_id,location_id,service_name,service_desc,created_by) VALUES ( 10680,  9,   1, 6196, 'Curb (Type F)', 'Curb (Type F)', 10);
+INSERT INTO `proposal_details` (proposal_id,services_id,status_id,location_id,service_name,service_desc,created_by) VALUES ( 10680, 10, 1, 6196,   'Curb (Valley Gutter)', 'Curb (Valley Gutter)', 10);
+INSERT INTO `proposal_details` (proposal_id,services_id,status_id,location_id,service_name,service_desc,created_by) VALUES ( 10680, 11, 1, 6196, 'Curb (Header) [New or Repairs]', 'Curb (Header) [New or Repairs]', 10);
+INSERT INTO `proposal_details` (proposal_id,services_id,status_id,location_id,service_name,service_desc,created_by) VALUES ( 10680, 12, 1, 6196,   'Slab', 'Slab', 10);
+INSERT INTO `proposal_details` (proposal_id,services_id,status_id,location_id,service_name,service_desc,created_by) VALUES ( 10680, 13, 1, 6196,   'Ramp', 'Ramp', 10);
+INSERT INTO `proposal_details` (proposal_id,services_id,status_id,location_id,service_name,service_desc,created_by) VALUES ( 10680, 14, 1, 6196,   'Sidewalks', 'Sidewalks', 10);
+INSERT INTO `proposal_details` (proposal_id,services_id,status_id,location_id,service_name,service_desc,created_by) VALUES ( 10680, 15, 1, 6196,   'Sealcoating', 'Sealcoating', 10);
+
+INSERT INTO `proposal_details` (proposal_id,services_id,status_id,location_id,service_name,service_desc,created_by) VALUES ( 10680, 16, 1, 6196,  'Other Service', 'Other Service', 10);
+INSERT INTO `proposal_details` (proposal_id,services_id,status_id,location_id,service_name,service_desc,created_by) VALUES ( 10680, 17, 1, 6196,   'Any Sub Contractor', 'Any Sub Contractor', 10);
+INSERT INTO `proposal_details` (proposal_id,services_id,status_id,location_id,service_name,service_desc,created_by) VALUES ( 10680, 18, 1, 6196,  'Pavement Markings', 'Pavement Markings', 10);
+
+INSERT INTO `proposal_details` (proposal_id,services_id,status_id,location_id,service_name,service_desc,created_by) VALUES ( 10680, 19, 1, 6196,   'Milling', 'Milling', 10);
+
+INSERT INTO `proposal_details` (proposal_id,services_id,status_id,location_id,service_name,service_desc,created_by) VALUES ( 10680, 20, 1, 6196,   'Paver Brick', 'Paver Brick', 10);
+INSERT INTO `proposal_details` (proposal_id,services_id,status_id,location_id,service_name,service_desc,created_by) VALUES ( 10680, 21, 1, 6196,   'Drainage and Catchbasins', 'Drainage and Catchbasins', 10);
+
+INSERT INTO `proposal_details` (proposal_id,services_id,status_id,location_id,service_name,service_desc,created_by) VALUES ( 10680, 22, 1, 6196,   'Milling and Paving- (Over 3500 SY)', 'Milling and Paving- (Over 3500 SY)', 10);
+
+
+INSERT INTO `proposal_detail_vehicles` VALUES (16384, 32937, 2, 'NQR', 3, 3, 8, 19.00, 20011, '2023-06-07 18:06:00', '2023-06-07 18:06:00');
+INSERT INTO `proposal_detail_vehicles` VALUES (16385, 32938, 3, ' International ', 1, 1, 8, 15.00, 20011, '2023-06-08 12:19:50', '2023-06-08 12:19:50');
+INSERT INTO `proposal_detail_vehicles` VALUES (16386, 32939, 3, ' International ', 1, 1, 8, 15.00, 20011, '2023-06-13 14:40:29', '2023-06-13 14:40:29');
+INSERT INTO `proposal_detail_vehicles` VALUES (16387, 32940, 5, 'NQR 3', 1, 1, 8, 19.00, 20011, '2023-06-13 14:42:08', '2023-06-13 14:42:08');
+INSERT INTO `proposal_detail_vehicles` VALUES (16388, 32941, 3, ' International ', 2, 2, 8, 15.00, 20011, '2023-06-13 14:49:37', '2023-06-13 14:49:37');
+INSERT INTO `proposal_detail_vehicles` VALUES (16389, 32942, 3, ' International ', 1, 2, 6, 15.00, 20011, '2023-06-13 15:58:34', '2023-06-13 15:58:34');
+INSERT INTO `proposal_detail_vehicles` VALUES (16390, 32943, 3, ' International ', 1, 1, 8, 15.00, 20011, '2023-06-13 16:31:47', '2023-06-13 16:31:47');
+INSERT INTO `proposal_detail_vehicles` VALUES (16391, 32947, 3, ' International ', 3, 3, 8, 15.00, 20011, '2023-06-14 14:45:42', '2023-06-14 14:45:42');
+INSERT INTO `proposal_detail_vehicles` VALUES (16392, 32949, 2, 'NQR', 2, 2, 7, 19.00, 20011, '2023-06-14 17:33:44', '2023-06-14 17:33:44');
+INSERT INTO `proposal_detail_vehicles` VALUES (16393, 32951, 2, 'NQR', 1, 1, 8, 19.00, 20011, '2023-06-15 01:32:41', '2023-06-15 01:32:41');
+INSERT INTO `proposal_detail_vehicles` VALUES (16395, 32955, 5, 'NQR 3', 2, 2, 8, 19.00, 20011, '2023-06-18 14:56:27', '2023-06-18 14:56:27');
+INSERT INTO `proposal_detail_vehicles` VALUES (16394, 32958, 2, 'NQR', 2, 3, 2, 19.00, 20011, '2023-06-17 12:06:41', '2023-06-17 12:06:41');
+
+
+INSERT INTO `proposal_detail_subcontractors` VALUES (16385, 32937, 751, 20011, 3334, 0, 0, 0, '32937_faqs-6522e3.pdf', 'test', '2023-06-07 18:07:21', '2023-06-07 18:07:21');
+INSERT INTO `proposal_detail_subcontractors` VALUES (16386, 32937, 1571, 20011, 2323, 10, 0, 1, '32937_crp-2854-4fd846.xlsx', 'test', '2023-06-07 18:08:02', '2023-06-07 18:08:02');
+INSERT INTO `proposal_detail_subcontractors` VALUES (16387, 32940, 714, 20011, 4333, 10, 0, 1, '32940_skin-6483ae.jpg', 'test', '2023-06-13 14:43:09', '2023-06-13 14:43:09');
+INSERT INTO `proposal_detail_subcontractors` VALUES (16389, 32947, 754, 20011, 3334, 2, 0, 1, '32947_skin-5e0635.jpg', 'test', '2023-06-14 14:47:00', '2023-06-14 14:47:00');
+INSERT INTO `proposal_detail_subcontractors` VALUES (16390, 32949, 751, 20011, 222, 2, 0, 1, '32949_skin-d38891.jpg', 'test', '2023-06-14 17:34:16', '2023-06-14 17:34:16');
+
+INSERT INTO `proposal_detail_labor` VALUES (16384, 32937, 'Base Worker', 26.00, 2, 2, 8, 20011, '2023-06-07 18:19:44', '2023-06-07 18:19:44');
+INSERT INTO `proposal_detail_labor` VALUES (16385, 32939, 'Concrete Cutting, No Skid Steer, Min 1,000', 100.00, 3, 2, 8, 20011, '2023-06-13 14:40:48', '2023-06-13 14:40:48');
+INSERT INTO `proposal_detail_labor` VALUES (16386, 32940, 'Specialty Concrete (Advanced Concrete Cutting)', 50.00, 1, 2, 8, 20011, '2023-06-13 14:42:28', '2023-06-13 14:42:28');
+INSERT INTO `proposal_detail_labor` VALUES (16387, 32944, 'Concrete Cutting, w/ Skid Steer, Min 1,500', 150.00, 1, 1, 8, 20011, '2023-06-13 16:33:53', '2023-06-13 16:33:53');
+INSERT INTO `proposal_detail_labor` VALUES (16388, 32947, 'Base Worker', 26.00, 2, 3, 8, 20011, '2023-06-14 14:46:02', '2023-06-14 14:46:02');
+INSERT INTO `proposal_detail_labor` VALUES (16389, 32948, 'Advanced Concrete Cutting, w/ Bobcat, Min 1,200', 75.00, 2, 2, 8, 20011, '2023-06-14 17:22:21', '2023-06-14 17:22:21');
+INSERT INTO `proposal_detail_labor` VALUES (16390, 32950, 'Base Worker', 26.00, 2, 2, 8, 20011, '2023-06-14 17:35:44', '2023-06-14 17:35:44');
+INSERT INTO `proposal_detail_labor` VALUES (16391, 32951, 'Crew Member', 28.00, 2, 2, 8, 20011, '2023-06-15 01:32:50', '2023-06-15 01:32:50');
+INSERT INTO `proposal_detail_labor` VALUES (16392, 32958, 'Base Worker', 26.00, 2, 2, 8, 20011, '2023-06-17 12:07:27', '2023-06-17 12:07:27');
+
+INSERT INTO `proposal_detail_equipment` VALUES (16384, 32937, 80, 20011, 8, 2, 2, 'per hour', 0.94, '2023-06-07 18:06:09', '2023-06-07 18:06:09');
+INSERT INTO `proposal_detail_equipment` VALUES (16385, 32937, 68, 20011, 8, 1, 1, 'per hour', 0.42, '2023-06-07 18:20:21', '2023-06-07 18:20:21');
+INSERT INTO `proposal_detail_equipment` VALUES (16386, 32938, 79, 20011, 8, 1, 1, 'per hour', 0.26, '2023-06-08 12:20:01', '2023-06-08 12:20:01');
+INSERT INTO `proposal_detail_equipment` VALUES (16387, 32939, 81, 20011, 8, 1, 1, 'per hour', 7.81, '2023-06-13 14:40:52', '2023-06-13 14:40:52');
+INSERT INTO `proposal_detail_equipment` VALUES (16388, 32940, 70, 20011, 8, 1, 1, 'per hour', 7.81, '2023-06-13 14:42:17', '2023-06-13 14:42:17');
+INSERT INTO `proposal_detail_equipment` VALUES (16389, 32944, 68, 20011, 8, 2, 1, 'per hour', 0.42, '2023-06-13 16:32:55', '2023-06-13 16:32:55');
+INSERT INTO `proposal_detail_equipment` VALUES (16390, 32947, 79, 20011, 8, 3, 1, 'per hour', 0.26, '2023-06-14 14:45:51', '2023-06-14 14:45:51');
+INSERT INTO `proposal_detail_equipment` VALUES (16391, 32949, 68, 20011, 8, 2, 2, 'per hour', 0.42, '2023-06-14 17:33:55', '2023-06-14 17:33:55');
 
 
 
-INSERT INTO `proposal_detail_vehicles` VALUES (16384, 33167, 2, 'NQR', 3, 3, 8, 19.00, 20011, '2023-06-07 18:06:00', '2023-06-07 18:06:00');
-INSERT INTO `proposal_detail_vehicles` VALUES (16385, 33168, 3, ' International ', 1, 1, 8, 15.00, 20011, '2023-06-08 12:19:50', '2023-06-08 12:19:50');
-INSERT INTO `proposal_detail_vehicles` VALUES (16386, 33169, 3, ' International ', 1, 1, 8, 15.00, 20011, '2023-06-13 14:40:29', '2023-06-13 14:40:29');
-INSERT INTO `proposal_detail_vehicles` VALUES (16387, 33170, 5, 'NQR 3', 1, 1, 8, 19.00, 20011, '2023-06-13 14:42:08', '2023-06-13 14:42:08');
-INSERT INTO `proposal_detail_vehicles` VALUES (16388, 33171, 3, ' International ', 2, 2, 8, 15.00, 20011, '2023-06-13 14:49:37', '2023-06-13 14:49:37');
-INSERT INTO `proposal_detail_vehicles` VALUES (16389, 33172, 3, ' International ', 1, 2, 6, 15.00, 20011, '2023-06-13 15:58:34', '2023-06-13 15:58:34');
-INSERT INTO `proposal_detail_vehicles` VALUES (16390, 33173, 3, ' International ', 1, 1, 8, 15.00, 20011, '2023-06-13 16:31:47', '2023-06-13 16:31:47');
-INSERT INTO `proposal_detail_vehicles` VALUES (16391, 33177, 3, ' International ', 3, 3, 8, 15.00, 20011, '2023-06-14 14:45:42', '2023-06-14 14:45:42');
-INSERT INTO `proposal_detail_vehicles` VALUES (16392, 33179, 2, 'NQR', 2, 2, 7, 19.00, 20011, '2023-06-14 17:33:44', '2023-06-14 17:33:44');
-INSERT INTO `proposal_detail_vehicles` VALUES (16393, 33181, 2, 'NQR', 1, 1, 8, 19.00, 20011, '2023-06-15 01:32:41', '2023-06-15 01:32:41');
-INSERT INTO `proposal_detail_vehicles` VALUES (16395, 33185, 5, 'NQR 3', 2, 2, 8, 19.00, 20011, '2023-06-18 14:56:27', '2023-06-18 14:56:27');
-INSERT INTO `proposal_detail_vehicles` VALUES (16394, 33188, 2, 'NQR', 2, 3, 2, 19.00, 20011, '2023-06-17 12:06:41', '2023-06-17 12:06:41');
-
-
-INSERT INTO `proposal_detail_subcontractors` VALUES (16385, 33167, 751, 20011, 3334, 0, 0, 0, '33167_faqs-6522e3.pdf', 'test', '2023-06-07 18:07:21', '2023-06-07 18:07:21');
-INSERT INTO `proposal_detail_subcontractors` VALUES (16386, 33167, 1571, 20011, 2323, 10, 0, 1, '33167_crp-2854-4fd846.xlsx', 'test', '2023-06-07 18:08:02', '2023-06-07 18:08:02');
-INSERT INTO `proposal_detail_subcontractors` VALUES (16387, 33170, 714, 20011, 4333, 10, 0, 1, '33170_skin-6483ae.jpg', 'test', '2023-06-13 14:43:09', '2023-06-13 14:43:09');
-INSERT INTO `proposal_detail_subcontractors` VALUES (16389, 33177, 754, 20011, 3334, 2, 0, 1, '33177_skin-5e0635.jpg', 'test', '2023-06-14 14:47:00', '2023-06-14 14:47:00');
-INSERT INTO `proposal_detail_subcontractors` VALUES (16390, 33179, 751, 20011, 222, 2, 0, 1, '33179_skin-d38891.jpg', 'test', '2023-06-14 17:34:16', '2023-06-14 17:34:16');
-
-INSERT INTO `proposal_detail_labor` VALUES (16384, 33167, 'Base Worker', 26.00, 2, 2, 8, 20011, '2023-06-07 18:19:44', '2023-06-07 18:19:44');
-INSERT INTO `proposal_detail_labor` VALUES (16385, 33169, 'Concrete Cutting, No Skid Steer, Min 1,000', 100.00, 3, 2, 8, 20011, '2023-06-13 14:40:48', '2023-06-13 14:40:48');
-INSERT INTO `proposal_detail_labor` VALUES (16386, 33170, 'Specialty Concrete (Advanced Concrete Cutting)', 50.00, 1, 2, 8, 20011, '2023-06-13 14:42:28', '2023-06-13 14:42:28');
-INSERT INTO `proposal_detail_labor` VALUES (16387, 33174, 'Concrete Cutting, w/ Skid Steer, Min 1,500', 150.00, 1, 1, 8, 20011, '2023-06-13 16:33:53', '2023-06-13 16:33:53');
-INSERT INTO `proposal_detail_labor` VALUES (16388, 33177, 'Base Worker', 26.00, 2, 3, 8, 20011, '2023-06-14 14:46:02', '2023-06-14 14:46:02');
-INSERT INTO `proposal_detail_labor` VALUES (16389, 33178, 'Advanced Concrete Cutting, w/ Bobcat, Min 1,200', 75.00, 2, 2, 8, 20011, '2023-06-14 17:22:21', '2023-06-14 17:22:21');
-INSERT INTO `proposal_detail_labor` VALUES (16390, 33180, 'Base Worker', 26.00, 2, 2, 8, 20011, '2023-06-14 17:35:44', '2023-06-14 17:35:44');
-INSERT INTO `proposal_detail_labor` VALUES (16391, 33181, 'Crew Member', 28.00, 2, 2, 8, 20011, '2023-06-15 01:32:50', '2023-06-15 01:32:50');
-INSERT INTO `proposal_detail_labor` VALUES (16392, 33188, 'Base Worker', 26.00, 2, 2, 8, 20011, '2023-06-17 12:07:27', '2023-06-17 12:07:27');
-
-INSERT INTO `proposal_detail_equipment` VALUES (16384, 33167, 80, 20011, 8, 2, 2, 'per hour', 0.94, '2023-06-07 18:06:09', '2023-06-07 18:06:09');
-INSERT INTO `proposal_detail_equipment` VALUES (16385, 33167, 68, 20011, 8, 1, 1, 'per hour', 0.42, '2023-06-07 18:20:21', '2023-06-07 18:20:21');
-INSERT INTO `proposal_detail_equipment` VALUES (16386, 33168, 79, 20011, 8, 1, 1, 'per hour', 0.26, '2023-06-08 12:20:01', '2023-06-08 12:20:01');
-INSERT INTO `proposal_detail_equipment` VALUES (16387, 33169, 81, 20011, 8, 1, 1, 'per hour', 7.81, '2023-06-13 14:40:52', '2023-06-13 14:40:52');
-INSERT INTO `proposal_detail_equipment` VALUES (16388, 33170, 70, 20011, 8, 1, 1, 'per hour', 7.81, '2023-06-13 14:42:17', '2023-06-13 14:42:17');
-INSERT INTO `proposal_detail_equipment` VALUES (16389, 33174, 68, 20011, 8, 2, 1, 'per hour', 0.42, '2023-06-13 16:32:55', '2023-06-13 16:32:55');
-INSERT INTO `proposal_detail_equipment` VALUES (16390, 33177, 79, 20011, 8, 3, 1, 'per hour', 0.26, '2023-06-14 14:45:51', '2023-06-14 14:45:51');
-INSERT INTO `proposal_detail_equipment` VALUES (16391, 33179, 68, 20011, 8, 2, 2, 'per hour', 0.42, '2023-06-14 17:33:55', '2023-06-14 17:33:55');
-
-
-
-INSERT INTO `proposal_detail_additional_costs` VALUES (2049, 33167, 20011, 23.00, 'Other', 'test', '2023-06-07 18:23:00', '2023-06-07 18:23:00');
-INSERT INTO `proposal_detail_additional_costs` VALUES (2052, 33167, 20011, 3243.00, 'Dump Fee', 'test', '2023-06-15 12:18:07', '2023-06-15 12:18:07');
-INSERT INTO `proposal_detail_additional_costs` VALUES (2050, 33170, 20011, 343.00, 'Other', 'test', '2023-06-13 14:42:44', '2023-06-13 14:42:44');
-INSERT INTO `proposal_detail_additional_costs` VALUES (2051, 33177, 20011, 344.00, 'Dump Fee', 'test', '2023-06-14 14:46:12', '2023-06-14 14:46:12');
+INSERT INTO `proposal_detail_additional_costs` VALUES (2049, 32937, 20011, 23.00, 'Other', 'test', '2023-06-07 18:23:00', '2023-06-07 18:23:00');
+INSERT INTO `proposal_detail_additional_costs` VALUES (2052, 32937, 20011, 3243.00, 'Dump Fee', 'test', '2023-06-15 12:18:07', '2023-06-15 12:18:07');
+INSERT INTO `proposal_detail_additional_costs` VALUES (2050, 32940, 20011, 343.00, 'Other', 'test', '2023-06-13 14:42:44', '2023-06-13 14:42:44');
+INSERT INTO `proposal_detail_additional_costs` VALUES (2051, 32947, 20011, 344.00, 'Dump Fee', 'test', '2023-06-14 14:46:12', '2023-06-14 14:46:12');
 
