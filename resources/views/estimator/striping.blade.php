@@ -93,9 +93,11 @@
                     @include('estimator.proposal_header')
                     @include('_partials._alert', ['alertId' => 'header_alert'])
                     @include('estimator.form_header')
-                    @include('estimator.form_formulas')
+                    @include('estimator.form_striping_formulas')
                 </div>
+
             </div>
+
             {{-- Proposal Text --}}
             <div class="card">
                 <div class="card-header alert-light">
@@ -103,62 +105,12 @@
                     @include('estimator.form_service_text')
                 </div>
             </div>
-            <div class="card">
-                <div id="vehicle_section" class="card-header alert-light ptb16">
-                    @include('_partials._alert', ['alertId' => 'vehicle_alert'])
-                    <h5>@lang('translation.vehicle')</h5>
-                    @include('estimator.form_service_vehicles')
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-header alert-light">
-                    @include('_partials._alert', ['alertId' => 'equipment_alert'])
-                    <h5>@lang('translation.equipment')</h5>
-                    @include('estimator.form_service_equipment')
-                    <div id="equipmentList"></div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-header alert-light">
-                    @include('_partials._alert', ['alertId' => 'labor_alert'])
-                    <h5>@lang('translation.labor')</h5>
-                    @include('estimator.form_service_labor')
-                    <div id="laborList"></div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-header alert-light">
-                    @include('_partials._alert', ['alertId' => 'additional_costs_alert'])
-                    <h5>@lang('translation.additionalcost')</h5>
-                    @include('estimator.form_service_additional_costs')
-                    <div id="otherList"></div>
-                </div>
-            </div>
-            @if($proposalDetail->service->service_category_id != 10)
-            <div class="card">
-                <div class="card-header alert-light">
-                    @include('_partials._alert', ['alertId' => 'subcontractors_alert'])
-                    <h5>@lang('translation.subcontractors')</h5>
-                    @include('estimator.form_service_subcontractors')
-                    <div id="subcontractorsList"></div>
-                </div>
-            </div>
-            @endif
         </div>
     </div>
 
 
 @endsection
 
-@section('script')
-
-    <!-- jquery.vectormap map -->
-    <script src="{{ URL::asset('/assets/libs/jquery-vectormap/jquery-vectormap.min.js')}}"></script>
-
-    <!-- Responsive examples -->
-    <script src="{{ URL::asset('/assets/libs/datatables/datatables.min.js')}}"></script>
-
-@endsection
 
 @section('page-js')
     <script>

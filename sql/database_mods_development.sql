@@ -1260,8 +1260,7 @@ striping_service_id,
 quantity,
 cost,
 description,
-name,
-dsort
+name
 )
 SELECT 
 potbljobordermultipricing.jobmultijordID, 
@@ -1269,12 +1268,9 @@ potbljobordermultipricing.jobmultiScatID,
 potbljobordermultipricing.jobmultiQuantity,
 potbljobordermultipricing.jobmultiCost,
 potbljobordermultipricing.jobmultiSERVICE_DESC,
-datatblstripingservices.SERVICE,
-datatblstripingservices.DSORT
+potbljobordermultipricing.jobmultiSERVICE
 FROM
 potbljobordermultipricing
-join datatblstripingservices on datatblstripingservices.service = potbljobordermultipricing.jobmultiSERVICE_DESC 	
-join potbljoborderdetail on potbljoborderdetail.jordID = potbljobordermultipricing.jobmultijordID
 join potbljoborders on potbljoborders.jobID =  potbljoborderdetail.jordJobID
 WHERE YEAR(potbljoborders.jobCreatedDateTime) > 2019;
 

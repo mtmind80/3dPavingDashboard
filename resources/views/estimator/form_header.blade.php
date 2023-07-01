@@ -1,7 +1,18 @@
 <div class="mt20 mb10">
     <div class="row mt20">
+        <div class="col-sm-2">
+            Service Name
+        </div>
+        <div class="col-sm-5">
+            <input class="form-control" type="text" name="service_name" id="service_name" value="{{ $proposalDetail->service_name }}" />
+        </div>
+        <div class="col-sm-5">
+        </div>
+    </div>
+    <div class="row mt20">
         <div class="col-sm-12">
-                <table class="table-centered table-light full-width">
+
+            <table class="table-centered table-light full-width">
                     <thead>
                     <tr>
                         <th class="w1-6">Customer Price</th>

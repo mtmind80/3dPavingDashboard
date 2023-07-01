@@ -88,8 +88,7 @@ class ProposalDetailController extends Controller
 
             }
 
-
-
+            
         return redirect()->route('edit_service', ['proposal_id' => $id, 'id' => $proposal_detail->id]);
     }
 
@@ -173,11 +172,18 @@ class ProposalDetailController extends Controller
             //'strippingCB' => StripingCost::strippingCB(['0' => 'Select contractor']),
             'typesCB' => ['0' => 'Select type', 'Dump Fee' => 'Dump Fee', 'Other' => 'Other'],
         ];
-        // adjust for striping
+
+
+
         if($proposalDetail->service->id == 18) {
+
+            $data['striping'] = ProposalDetailStripingService::where('proposal_detail_id', '=', $id)->with('service')->orderBy('dsort')->get()->toArray();
+
+            
             return view('estimator.striping', $data);
 
         }
+        
         return view('estimator.index', $data);
     }
 

@@ -20,7 +20,6 @@ class CreateProposalDetailStripingServicesTable extends Migration
             $table->unsignedBigInteger('striping_service_id');
             $table->string('name',191);
             $table->string('description',191);
-            $table->integer('dsort')->unsigned()->default(0);
             $table->integer('quantity')->unsigned()->default(0);
             $table->float('cost',8,2, true)->default(0); //money
 
