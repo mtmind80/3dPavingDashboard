@@ -121,5 +121,9 @@
         var proposalId = Number("{{ $proposalDetail->proposal_id }}");
 
     </script>
+
+
+
+
 @stop
 

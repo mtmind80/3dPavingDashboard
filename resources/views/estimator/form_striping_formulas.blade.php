@@ -25,14 +25,19 @@
                     <tr>
                         <td class="tc">{{$stripe['description']}}</td>
                         <td class="tc">{{ \App\Helpers\Currency::format($stripe['cost'] ?? '0.0') }}</td>
-                        <td class="tc"><input type="text" class="form-control"
-                                              onChange="Javascript:$("#{{$stripe['id']}}@@total").val({{$stripe['quantity']}}*{{$stripe['cost']}});"
-                                              id="{{$stripe['id']}}@@quantity" name="{{$stripe['id']}}@@quantity"
-                                              value="{{$stripe['quantity']}}"></td>
-                        <td class="tc"><input type="text"  class="form-control"
-                                              name="{{$stripe['id']}}@@total"
-                                              id="{{$stripe['id']}}@@total"
-                                              value="{{ \App\Helpers\Currency::format(($stripe['cost'] * $stripe['quantity']) ?? '0.0') }}"></td>
+                        <td class="tc">
+                            <input type="text" class="form-control"
+                                              onChange="Javascript:addTotal();"
+                                              id="quantity_{{$stripe['id']}}" 
+                                              name="quantity_{{$stripe['id']}}"
+                                              value="{{$stripe['quantity']}}" />
+                        </td>
+                        <td class="tc">
+                            <input type="text"  class="form-control"
+                                            id="total_{{$stripe['id']}}"
+                                            name="total_{{$stripe['id']}}"
+                                            value="{{ \App\Helpers\Currency::format(($stripe['cost'] * $stripe['quantity']) ?? '0.0') }}"> /
+                        </td>
                     </tr>
                 @endforeach
             </table>
@@ -74,18 +79,21 @@
 
 </div>
 @push('partials-scripts')
-    <script>
+    <script type="text/javascript">
 
         $(document).ready(function () {
+            
+            function addTotal()
+            {
 
-            alert('we are not here');
+                alert("yes");
+            }
             // when the page loads we may need to repeat some calculations to determine total costs
             // and populate other display items on the page
 
-            
+
             function calculate(cost_form, estimatorForm, services_id, proposal_detail_id, proposal_id, serviceCategoryId, dosave) {
 
-                alert('we are here');
                 var servicedesc = '{!! $service->service_template !!}';
                 var profit = $("#form_header_profit").val();
                 var breakeven = '{{$proposalDetail->break_even}}';
@@ -111,6 +119,9 @@
                 //set these fields for all services
                 var bill_after = $('input[name="bill_after"]:checked').val();
                 $("#x_bill_after").val(bill_after);
+
+                var servicename = $("#service_name").val();
+                $("#x_service_name").val(servicename)
 
                 var proposaltext = tinymce.activeEditor.getContent();
                 $("#x_proposal_text").val(proposaltext);
@@ -141,6 +152,9 @@
                 $("#estimator_form").submit();
 
             }
+
+            var cost_form = $("#cost_formula_form");  // values to determine cost
+            var estimatorForm = $("#estimator_form"); // form to set values for submit and save
 
             // when you want to calculate and save record 
             $('#header_calculate_combined_costing_button2').on('click', function () {

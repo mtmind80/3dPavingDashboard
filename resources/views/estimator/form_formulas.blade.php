@@ -1172,7 +1172,7 @@
 
 
                             if (proposaltext == '') {
-                                proposaltext = servicedesc.replace('@@SQFT@@', square_feet);
+                                proposaltext = servicedesc.replace('#SQFT#', square_feet);
                                 tinymce.activeEditor.setContent(proposaltext);
                             }
 
@@ -1244,7 +1244,7 @@
                             $("#header_show_materials_cost").text('$' + materials);
 
                             if (proposaltext == '') {
-                                proposaltext = servicedesc.replace('@@TONS@@', tons);
+                                proposaltext = servicedesc.replace('#TONS#', tons);
                                 tinymce.activeEditor.setContent(proposaltext);
                             }
                             //add it up
@@ -1345,7 +1345,7 @@
 
 
                             if (proposaltext == '') {
-                                proposaltext = servicedesc.replace('@@TONS@@', cubic_yards);
+                                proposaltext = servicedesc.replace('#TONS#', cubic_yards);
                                 tinymce.activeEditor.setContent(proposaltext);
                             }
 
@@ -1403,8 +1403,8 @@
                             }
 
 
-                            proposaltext = servicedesc.replace('@@TONS@@', cubic_yards);
-                            proposaltext = proposaltext.replace('@@INCHES@@', depth);
+                            proposaltext = servicedesc.replace('#TONS#', cubic_yards);
+                            proposaltext = proposaltext.replace('#INCHES#', depth);
                             tinymce.activeEditor.setContent(proposaltext);
 
                             //total up
@@ -1476,7 +1476,7 @@
                         $("#form_header_break_even").text(formatCurrency.format(breakeven));
 
                         if (proposaltext == '') {
-                            proposaltext = servicedesc.replace('@@BASINS@@', catchbasins);
+                            proposaltext = servicedesc.replace('#BASINS#', catchbasins);
                             tinymce.activeEditor.setContent(proposaltext);
                         }
 
@@ -1525,7 +1525,7 @@
                         var materials = parseFloat(ourcost).toFixed(2);
                         $("#header_show_materials_cost").text('$' + materials);
                         if (proposaltext == '') {
-                            proposaltext = servicedesc.replace('@@TONS@@', tons);
+                            proposaltext = servicedesc.replace('#TONS#', tons);
                             tinymce.activeEditor.setContent(proposaltext);
                         }
                         //add it up
@@ -1627,8 +1627,8 @@
                         materials = parseFloat(materials).toFixed(2);
 
                         if (proposaltext == '') {
-                            var proposaltext = servicedesc.replace('@@SQFT@@', square_feet);
-                            proposaltext = proposaltext.replace('@@TONS@@', tons);
+                            var proposaltext = servicedesc.replace('#SQFT#', square_feet);
+                            proposaltext = proposaltext.replace('#TONS#', tons);
                             tinymce.activeEditor.setContent(proposaltext);
                         }
 
@@ -1703,7 +1703,7 @@
                         materials = parseFloat(materials).toFixed(2);
 
                         if (proposaltext == '') {
-                            var proposaltext = servicedesc.replace('@@INCHES@@', depth);
+                            var proposaltext = servicedesc.replace('#INCHES#', depth);
                             tinymce.activeEditor.setContent(proposaltext);
                         }
 
@@ -1813,8 +1813,8 @@
 
                         $("#explain").html(' 30%');
                         if (proposaltext == '') {
-                            servicedesc = servicedesc.replace('@@SQFT@@', square_feet);
-                            servicedesc = servicedesc.replace('@@PHASES@@', phases);
+                            servicedesc = servicedesc.replace('#SQFT#', square_feet);
+                            servicedesc = servicedesc.replace('#PHASES#', phases);
                             tinymce.activeEditor.setContent(servicedesc);
                         }
 
@@ -1907,6 +1907,8 @@
                 var bill_after = $('input[name="bill_after"]:checked').val();
                 $("#x_bill_after").val(bill_after);
 
+                var servicename = $("#service_name").val();
+                $("#x_service_name").val(servicename)
                 var proposaltext = tinymce.activeEditor.getContent();
                 $("#x_proposal_text").val(proposaltext);
 
