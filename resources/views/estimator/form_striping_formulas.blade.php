@@ -78,7 +78,6 @@
 
         $(document).ready(function () {
 
-            alert('we are not here');
             // when the page loads we may need to repeat some calculations to determine total costs
             // and populate other display items on the page
 
