@@ -9,9 +9,9 @@
                 @php($name = '')
 
                 @foreach($striping as $stripe)
-                    @if($name != $stripe['name'])
+                    @if($name != $stripe->name)
                         <tr>
-                            <td class="info" colspan="4'"><h4>{{$stripe['name']}}</h4></td>
+                            <td class="info" colspan="4'"><h4>{{$stripe->name}}</h4></td>
                         </tr>
                         <tr>
                             <td class="tc">Descripton</td>
@@ -19,24 +19,25 @@
                             <td class="tc">Quantity</td>
                             <td class="tc">Total</td>
                         </tr>
-                        @php($name = $stripe['name'])
+                        @php($name = $stripe->name)
                     @endif
 
                     <tr>
-                        <td class="tc">{{$stripe['description']}}</td>
-                        <td class="tc">{{ \App\Helpers\Currency::format($stripe['cost'] ?? '0.0') }}</td>
+                        <td class="tc">{{$stripe->description}}</td>
+                        <td class="tc">{{ \App\Helpers\Currency::format($stripe->cost ?? '0.0') }}</td>
                         <td class="tc">
                             <input type="text" class="form-control"
-                                              onChange="Javascript:addTotal();"
-                                              id="quantity_{{$stripe['id']}}" 
-                                              name="quantity_{{$stripe['id']}}"
-                                              value="{{$stripe['quantity']}}" />
+                                              
+                                              id="quantity_{{$stripe->id}}" 
+                                              name="quantity_{{$stripe->id}}"
+                                              value="{{$stripe->quantity}}"
+                                              onChange="javascript:addTotal({{$stripe->cost}}, this)" />
                         </td>
                         <td class="tc">
                             <input type="text"  class="form-control"
-                                            id="total_{{$stripe['id']}}"
-                                            name="total_{{$stripe['id']}}"
-                                            value="{{ \App\Helpers\Currency::format(($stripe['cost'] * $stripe['quantity']) ?? '0.0') }}"> /
+                                            id="total_{{$stripe->id}}"
+                                            name="total_{{$stripe->id}}"
+                                            value="{{ \App\Helpers\Currency::format(($stripe->cost * $stripe->quantity) ?? '0.0') }}" /> 
                         </td>
                     </tr>
                 @endforeach
@@ -83,10 +84,9 @@
 
         $(document).ready(function () {
             
-            function addTotal()
+            function addTotal(st, field)
             {
-
-                alert("yes");
+                alert("yes" + st);
             }
             // when the page loads we may need to repeat some calculations to determine total costs
             // and populate other display items on the page
@@ -168,8 +168,7 @@
                 calculate(cost_form, estimatorForm, serviceId, proposalDetailId, proposalId, serviceCategoryId, 2);
 
             });
-
-
+            
         });
     </script>
 @endpush
