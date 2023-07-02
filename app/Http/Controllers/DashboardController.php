@@ -42,7 +42,7 @@ class DashboardController extends Controller
         }
 
         //ready to close
-        //SELECT proposal_details.proposal_id, proposals.name FROM proposal_details JOIN proposals ON proposals.id = proposal_details.proposal_id WHERE proposals.proposal_statuses_id = 5 AND proposal_details.status_id > 2 GROUP BY proposal_id
+        //SELECT proposal_details.proposal_id, proposals.name FROM proposal_details JOIN proposals ON proposals.id = proposal_details.proposal_id WHERE proposals.proposal_statuses_id = 5 AND proposal_details.status_id > 2 GROUP BY proposal_id 
 
         $data['readytoclose'] = Proposal::readytoclose()->with('contact')->get();
 
@@ -105,29 +105,31 @@ class DashboardController extends Controller
         //SALES
         $totalSalesRevenue = 0;
         $query = "Select sum(cost) as cost from proposal_details
-        JOIN proposals on proposals.id = proposal_details.proposal_id
-        WHERE
-        proposal_details.status_id < 4
-        AND proposals.proposal_statuses_id <> 7
+        JOIN proposals on proposals.id = proposal_details.proposal_id 
+        WHERE 
+        proposal_details.status_id < 4 
+        AND proposals.proposal_statuses_id <> 7 
         AND YEAR(proposals.sale_date) = $selectedYear
         AND proposals.job_master_id is not null";
         $query = $query . $addonSQL;
-
+        
 
         $services = DB::select($query);
         $totalcosts = json_decode(json_encode($services, true), true);
         $totalSalesRevenue = $totalcosts[0]['cost'];
         //$totalSalesRevenue = Currency::format($totalSalesRevenue);
         //show proposals created in this year
-        $query = "Select count(*) as proposals from proposals WHERE YEAR(proposals.proposal_date) = $selectedYear ";
+        $query = "Select COUNT(DISTINCT(id)) as proposals from proposals WHERE YEAR(proposals.proposal_date) = $selectedYear ";
         $query = $query . $addonSQL;
+
+    
         $proposals = DB::select($query);
         $proposals = json_decode(json_encode($proposals, true), true);
 
-        //show number of workorders in this year
-        $query = "Select count(*) as workorders from proposals
-        WHERE proposals.job_master_id is not null
-        AND proposals.proposal_statuses_id <> 7
+        //show number of workorders in this year        
+        $query = "Select COUNT(DISTINCT(id)) as workorders from proposals 
+        WHERE proposals.job_master_id is not null 
+        AND proposals.proposal_statuses_id <> 7 
         AND YEAR(proposals.sale_date) = $selectedYear";
         $query = $query . $addonSQL;
         $workorders = DB::select($query);
@@ -184,6 +186,7 @@ class DashboardController extends Controller
         return view('dashboard2', $data);
     }
 
+
     public function dashboard3(Request $request)
     {
 
@@ -225,11 +228,11 @@ class DashboardController extends Controller
 
 
         $query = "Select service_categories.name as service, sum(proposal_details.cost) as cost from proposal_details
-        JOIN proposals on proposals.id = proposal_details.proposal_id
-        JOIN services on services.id = proposal_details.services_id
-        JOIN service_categories on service_categories.id = services.service_category_id
+        JOIN proposals on proposals.id = proposal_details.proposal_id 
+        JOIN services on services.id = proposal_details.services_id 
+        JOIN service_categories on service_categories.id = services.service_category_id 
         WHERE YEAR(proposals.sale_date) = $selectedYear
-        AND proposals.job_master_id is not null
+        AND proposals.job_master_id is not null 
         AND proposal_details.status_id < 4
         AND proposals.proposal_statuses_id <> 7";
 
@@ -340,8 +343,8 @@ class DashboardController extends Controller
         }
 
         $query = "Select locations.county, count(distinct(proposals.id)) as workorders, sum(proposal_details.cost) as cost from proposal_details
-            JOIN proposals on proposals.id = proposal_details.proposal_id
-            JOIN locations on locations.id = proposals.location_id
+            JOIN proposals on proposals.id = proposal_details.proposal_id 
+            JOIN locations on locations.id = proposals.location_id 
             WHERE YEAR(proposals.sale_date) = $selectedYear
             AND proposals.job_master_id is not null
             AND proposal_details.status_id < 4
@@ -356,6 +359,7 @@ class DashboardController extends Controller
 
         /**  Donut charts data */
 
+        $counties = [];
         $totalSalesRevenue = 0;
 
         $countys = DB::select($query);
@@ -415,7 +419,7 @@ class DashboardController extends Controller
     {
 
         //ready to close
-        //SELECT proposal_details.proposal_id, proposals.name FROM proposal_details JOIN proposals ON proposals.id = proposal_details.proposal_id WHERE proposals.proposal_statuses_id = 5 AND proposal_details.status_id > 2 GROUP BY proposal_id
+        //SELECT proposal_details.proposal_id, proposals.name FROM proposal_details JOIN proposals ON proposals.id = proposal_details.proposal_id WHERE proposals.proposal_statuses_id = 5 AND proposal_details.status_id > 2 GROUP BY proposal_id 
 
         $data['readytoclose'] = Proposal::readytoclose()->with('contact')->get();
         $data['activelink'] = 5;
@@ -470,13 +474,13 @@ class DashboardController extends Controller
             $workOrders = [];
         }
 
-        $query = "SELECT Sum(proposal_details.cost) as cost, count(distinct(proposals.id)) as workorders, contact_types.type as county from proposal_details
+        $query = "SELECT Sum(proposal_details.cost) as cost, count(distinct(proposals.id)) as workorders, contact_types.type as county from proposal_details 
 JOIN proposals on proposals.id = proposal_details.proposal_id
 JOIN contacts on contacts.id = proposals.contact_id
 JOIN contact_types on contact_types.id = contacts.contact_type_id
 WHERE YEAR(proposals.sale_date) = $selectedYear
             AND proposals.job_master_id is not null
-            AND proposal_details.status_id < 4
+            AND proposal_details.status_id < 4 
             AND proposals.proposal_statuses_id <> 7";
 
 
@@ -516,7 +520,6 @@ WHERE YEAR(proposals.sale_date) = $selectedYear
         ];
 
         // END
-
 
 
         $totalSalesRevenue = Currency::format($totalSalesRevenue);

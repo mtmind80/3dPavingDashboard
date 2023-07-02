@@ -13,12 +13,12 @@ class StripingCost extends Model
     protected $fillable = [
         'striping_service_id',
         'description',
-        'rate',
+        'cost',
     ];
 
     public function service()
     {
-        return $this->belongsTo(StripingService::class);
+        return $this->belongsTo(StripingService::class,'striping_service_id');
     }
 
     static public function strippingCB($default = [])

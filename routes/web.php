@@ -226,7 +226,7 @@ Route::group(['middleware' => ['auth']], function() {
 
         Route::post('/update_service/{service_id}', 'ProposalDetailController@update')->name('update_detail');
 
-        //Route::post('/remove_service/{service_id}', 'ProposalDetailController@destroy')->name('remove_detail');
+        //Route::get('/remove_service/{service_id}', 'ProposalDetailController@destroy')->name('remove_detail');
         Route::delete('/', 'ProposalDetailController@destroy')->name('service_delete');
 
         Route::post('/header-calculate-combined-costing', 'ProposalDetailController@ajaxCalculateCombinedCosting')->name('ajax_header_calculate_combined_costing');
