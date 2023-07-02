@@ -31,7 +31,7 @@
                                               id="quantity_{{$stripe->id}}" 
                                               name="quantity_{{$stripe->id}}"
                                               value="{{$stripe->quantity}}"
-                                              onChange="javascript:addTotal({{$stripe->cost}}, this)" />
+                                              onChange="javascript:addTotal({{$stripe->cost}}, {{$stripe->id}})" />
                         </td>
                         <td class="tc">
                             <input type="text"  class="form-control"
@@ -84,9 +84,13 @@
 
         $(document).ready(function () {
             
-            function addTotal(st, field)
+            function addTotal(cost, service_id)
             {
-                alert("yes" + st);
+                alert("yes" + cost);
+                var quantity = $("#quantity_" . service_id).val();
+                var total = Math.ceil(quantity * cost);
+                $("#total_" . service_id).val(total);
+
             }
             // when the page loads we may need to repeat some calculations to determine total costs
             // and populate other display items on the page
