@@ -177,7 +177,7 @@ class ProposalDetailController extends Controller
 
         if($proposalDetail->service->id == 18) {
 
-            $data['striping'] = ProposalDetailStripingService::where('proposal_detail_id', '=', $id)->with('service')->orderBy('dsort')->get()->toArray();
+            $data['striping'] = ProposalDetailStripingService::where('proposal_detail_id', '=', $id)->with('service')->orderBy('service.dsort')->get()->toArray();
 
             
             return view('estimator.striping', $data);

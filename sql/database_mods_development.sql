@@ -1271,6 +1271,7 @@ potbljobordermultipricing.jobmultiSERVICE_DESC,
 potbljobordermultipricing.jobmultiSERVICE
 FROM
 potbljobordermultipricing
+join potbljoborderdetail on potbljoborderdetail.jordID = potbljobordermultipricing.jobmultijordID
 join potbljoborders on potbljoborders.jobID =  potbljoborderdetail.jordJobID
 WHERE YEAR(potbljoborders.jobCreatedDateTime) > 2019;
 

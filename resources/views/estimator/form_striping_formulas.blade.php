@@ -4,7 +4,7 @@
 
         <div class="row card-body">
 
-            <table class="table fa-border-all">
+            <table class="table table-bordered">
 
                 @php($name = '')
 
