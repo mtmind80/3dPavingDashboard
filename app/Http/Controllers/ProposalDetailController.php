@@ -1092,9 +1092,45 @@ class ProposalDetailController extends Controller
         return view('proposaldetails.select_service', $data);
     }
 
-    public function editservice($id)
+    public function savestriping(Request $request)
     {
         //
+
+        $proposal_text = $_POST['x_proposal_text'];
+        $proposal_detail_id = $_POST['proposal_detail_id'];
+        $profit = $_POST['profit'];
+        $service_name = $request['service_name'];
+        $proposal_id = $request['proposal_id'];
+        $overhead = $request['overhead']; 
+        $bill_after = $request['bill_after']; 
+        //echo 'proposal_id:'.$proposal_id. "<br>";
+        //echo 'name:'.$service_name. "<br>";
+        //echo 'proposal_detail_id:'.$proposal_detail_id. "<br>";
+        //echo 'text:'.$proposal_text. "<br>";
+        $total_cost = 0;
+        foreach($_POST as $key => $value) {
+            //echo $key. "<br/>";
+            if(strpos($key, "quantity") === 0)
+            {
+                $service_id = explode("_", $key);
+                $striping_service_id = $service_id[1];
+                $cost = $request['cost_'. $striping_service_id];
+                $total_cost += $cost; 
+                ProposalDetailStripingService::where('id',$striping_service_id)->update(['quantity'=>$value]);
+                
+            }
+        }
+
+        $data['cost'] = $total_cost;
+        $data['profit'] = $profit;
+        $data['proposal_text'] = $proposal_text;
+        $data['service_name'] = $service_name;
+        $data['bill_after'] = $bill_after;
+        
+        ProposalDetail::where('id',$proposal_detail_id)->update($data);
+        //update proposal_details
+        return back()->withSuccess('Striping saved');
+        
     }
 
 }

@@ -218,6 +218,10 @@ Route::group(['middleware' => ['auth']], function() {
         // Select service type
         Route::post('/checkform', 'ProposalDetailController@checkform')->name('checkform');
 
+        Route::post('/save_striping', 'ProposalDetailController@savestriping')->name('save_striping');
+
+        
+        
         Route::get('/new_service/{proposal_id}', 'ProposalDetailController@newservice')->name('new_service');
         // Start New Service with a service type
         Route::post('/create_service/{proposal_id}', 'ProposalDetailController@create')->name('create_detail');
