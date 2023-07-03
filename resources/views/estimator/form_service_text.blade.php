@@ -1,9 +1,4 @@
 
-
-<form method="POST" action="#" accept-charset="UTF-8" id="service_text_form" class="admin-form">
-    @csrf
-
-
     <div class="row">
 
     <div class="col-lg-6 col-sm-4 ">
@@ -22,7 +17,6 @@
             >{!! $proposalDetail->proposal_text !!}</textarea>
      </div>
 </div>
-</form>
 
 @push('partials-scripts')
     <script src="{{ URL::asset('/assets/js/tinymce/tinymce.min.js')}}"></script>

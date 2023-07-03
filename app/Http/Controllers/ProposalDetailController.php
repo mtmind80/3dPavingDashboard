@@ -56,39 +56,41 @@ class ProposalDetailController extends Controller
         //$proposal_detail->dsort = 1;
         $proposal_detail->created_by = auth()->user()->id;
 
-            $proposal_detail->save();
-            $new_id = $proposal_detail->id;
+        $proposal_detail->save();
+        $new_id = $proposal_detail->id;
+
+
+        if($request['servicecat'] == 18 && $new_id) {
 
             $remove_old = ProposalDetailStripingService::where('proposal_detail_id', '=', $new_id)->delete();
-            
-            if($request['servicecat'] == 18 && $new_id) {
-                $striping = StripingCost::with(['service'])->get()->toArray();
-           
-                foreach($striping as $stripe) {
-                    
-                    $proposal_striping_costs = new ProposalDetailStripingService();
-                    $proposal_striping_costs->proposal_detail_id = $new_id;
-                    $proposal_striping_costs->striping_service_id = $stripe['striping_service_id'];
-                    $proposal_striping_costs->description = $stripe['description'];
-                    $proposal_striping_costs->quantity = 0;
-                    $proposal_striping_costs->name = $stripe['service']['name'];
-                    $proposal_striping_costs->cost = $stripe['cost'];
-                    $proposal_striping_costs->dsort = $stripe['service']['dsort'];
-                try{
-    
+
+            $striping = StripingCost::with(['service'])->get()->toArray();
+
+
+            foreach($striping as $stripe) {
+
+                $proposal_striping_costs = new ProposalDetailStripingService();
+                $proposal_striping_costs->proposal_detail_id = $new_id;
+                $proposal_striping_costs->striping_service_id = $stripe['striping_service_id'];
+                $proposal_striping_costs->description = $stripe['description'];
+                $proposal_striping_costs->quantity = 0;
+                $proposal_striping_costs->name = $stripe['service']['name'];
+                $proposal_striping_costs->cost = $stripe['cost'];
+                try {
+
                     $proposal_striping_costs->save();
 
                 } catch(Exception $e) {
-                    Log::debug('Failure to almost save', [$e->getMessage()]);
+                    Log::error('Failure to almost save', [$e->getMessage()]);
                     return back()->withErrors('Striping not saved');
-
-                }
 
                 }
 
             }
 
-            
+        }
+
+
         return redirect()->route('edit_service', ['proposal_id' => $id, 'id' => $proposal_detail->id]);
     }
 
@@ -174,16 +176,14 @@ class ProposalDetailController extends Controller
         ];
 
 
-
         if($proposalDetail->service->id == 18) {
 
-            $data['striping'] = ProposalDetailStripingService::where('proposal_detail_id', '=', $id)->with('service')->orderBy('dsort')->get()->toArray();
-
-            
+            $sorted = $data['striping']->sortBy('service.dsort');
+            $data['striping'] = $sorted;
             return view('estimator.striping', $data);
 
         }
-        
+
         return view('estimator.index', $data);
     }
 
@@ -1092,9 +1092,45 @@ class ProposalDetailController extends Controller
         return view('proposaldetails.select_service', $data);
     }
 
-    public function editservice($id)
+    public function savestriping(Request $request)
     {
         //
+
+        $proposal_text = $_POST['x_proposal_text'];
+        $proposal_detail_id = $_POST['proposal_detail_id'];
+        $profit = $_POST['profit'];
+        $service_name = $request['service_name'];
+        $proposal_id = $request['proposal_id'];
+        $overhead = $request['overhead']; 
+        $bill_after = $request['bill_after']; 
+        //echo 'proposal_id:'.$proposal_id. "<br>";
+        //echo 'name:'.$service_name. "<br>";
+        //echo 'proposal_detail_id:'.$proposal_detail_id. "<br>";
+        //echo 'text:'.$proposal_text. "<br>";
+        $total_cost = 0;
+        foreach($_POST as $key => $value) {
+            //echo $key. "<br/>";
+            if(strpos($key, "quantity") === 0)
+            {
+                $service_id = explode("_", $key);
+                $striping_service_id = $service_id[1];
+                $cost = $request['cost_'. $striping_service_id];
+                $total_cost += $cost; 
+                ProposalDetailStripingService::where('id',$striping_service_id)->update(['quantity'=>$value]);
+                
+            }
+        }
+
+        $data['cost'] = $total_cost;
+        $data['profit'] = $profit;
+        $data['proposal_text'] = $proposal_text;
+        $data['service_name'] = $service_name;
+        $data['bill_after'] = $bill_after;
+        
+        ProposalDetail::where('id',$proposal_detail_id)->update($data);
+        //update proposal_details
+        return back()->withSuccess('Striping saved');
+        
     }
 
 }
