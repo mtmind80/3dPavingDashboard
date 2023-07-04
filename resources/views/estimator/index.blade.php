@@ -146,8 +146,6 @@
             @endif
         </div>
     </div>
-
-
 @endsection
 
 @section('script')

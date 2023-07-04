@@ -159,8 +159,8 @@
                 });
 
                 if (headerElForm.valid()) {
-
-                    calculate(cost_form, estimatorForm, serviceId, proposalDetailId, proposalId, serviceCategoryId);
+                    var dosave = 1;
+                    calculate(cost_form, estimatorForm, services_id, proposal_detail_id, proposal_id, serviceCategoryId, dosave);
 
                     let formData = headerElForm.serializeObject();
                     let extraFormProperties = {proposal_detail_id: proposalDetailId};

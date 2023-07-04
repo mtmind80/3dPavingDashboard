@@ -1,9 +1,4 @@
 
-
-<form method="POST" action="#" accept-charset="UTF-8" id="service_text_form" class="admin-form">
-    @csrf
-
-
     <div class="row">
 
     <div class="col-lg-6 col-sm-4 ">
@@ -22,7 +17,6 @@
             >{!! $proposalDetail->proposal_text !!}</textarea>
      </div>
 </div>
-</form>
 
 @push('partials-scripts')
     <script src="{{ URL::asset('/assets/js/tinymce/tinymce.min.js')}}"></script>
@@ -43,18 +37,27 @@
 
     <script>
         $(document).ready(function () {
-            var servicedesc = '{!! $service->service_template !!}'; 
+            var servicedesc = '{!! $service->service_template !!}';
+
+            var square_feet = $("#square_feet").val();
+            var cubic_yards = $("#cubic_yards").val();
+            var depth = $("#depth").val();
+            var catchbasins = $("#catchbasins").val();
+            var tons = $("#tons").text();
+            var phase = $("#phases").val();
 
             if (serviceCategoryId == 1) {
 
                 {{-- asphalt --}}
-                if (proposalDetailId == 19) {
+                if (serviceId == 19) {
                     {{-- Asphalt Milling --}}
+                   square_feet = $("#square_feet").val();
+                   servicedesc = servicedesc.replace('#SQFT#', square_feet);
+
 
                 } else {
-
                     cubic_yards = $("#cubic_yards").val();
-                    servicedesc = servicedesc.replace('@@TONS@@', cubic_yards);
+                    servicedesc = servicedesc.replace('#TONS#', cubic_yards);
 
                 }
             }
@@ -66,29 +69,66 @@
                 {{--IF $details.cmpServiceID < 12- *curb mix* --}}
 
                 if (serviceId < 12) {
+                    var linear_feet = $("#linear_feet").val();
+                    var cubic_yards = Math.ceil(linear_feet / 60);
 
-                    cubic_yards = $("#cubic_yards").val();
-                    servicedesc = servicedesc.replace('@@TONS@@', cubic_yards);
+                    /*
+                    6    Concrete    Curb (Extruded) [New or Repairs]  (linear_feet/60)
+                    7    Concrete    Curb (Type D) [New or Repairs]    (linear_feet/21)
+                    8    Concrete    Curb (Type Mod D) [New or Repairs] (linear_feet/30)
+                    9    Concrete    Curb (Type F) [New or Repairs]    (linear_feet/24)
+                    10    Concrete    Curb (Valley Gutter) [New or Repairs] (linear_feet/15)
+                    11    Concrete    Curb (Header) [New or Repairs]    (linear_feet/25)
+                    */
+
+
+                    if (serviceId == 6) {
+                        cubic_yards = Math.ceil(linear_feet / 60);
+                    }
+
+                    if (serviceId == 7) {
+                        cubic_yards = Math.ceil(linear_feet / 21);
+                    }
+                    if (serviceId == 8) {
+                        cubic_yards = Math.ceil(linear_feet / 30);
+                    }
+                    if (serviceId == 9) {
+
+                        cubic_yards = Math.ceil(linear_feet / 15);
+                    }
+                    if (serviceId == 10) {
+
+                        cubic_yards = Math.ceil(linear_feet / 22);
+                    }
+
+                    if (serviceId == 11) {
+                        cubic_yards = Math.ceil(linear_feet / 25);
+                    }
+
+                    
+                    servicedesc = servicedesc.replace('#TONS#', cubic_yards);
                     
                     
                 } else if (serviceId >= 12) {
-                    cubic_yards = $("#cubic_yards").val();
-                    depth = $("#depth").val();
-                    servicedesc = servicedesc.replace('@@TONS@@', cubic_yards);
-                    servicedesc = servicedesc.replace('@@INCHES@@', depth);
+                    var cubic_yards = $("#cubic_yards").val();
+                    var depth = $("#depth").val();
+                    servicedesc = servicedesc.replace('#TONS#', cubic_yards);
+                    servicedesc = servicedesc.replace('#INCHES#', depth);
                     
                 }
             }
 
             if (serviceCategoryId == 3) {
                 {{--Drainage and Catchbasins--}}
+                
+                servicedesc = servicedesc.replace('#BASINS#', catchbasins);
 
+                    
             }
 
             if (serviceCategoryId == 4) {
                 {{-- 4	Excavation --}}
-                tons = $("#tons").text();
-                servicedesc = servicedesc.replace('@@TONS@@', tons);
+                servicedesc = servicedesc.replace('#TONS#', tons);
             }
 
 
@@ -104,13 +144,15 @@
             if (serviceCategoryId == 6) {
 
                 {{--  Paver Brick --}}
+                servicedesc = servicedesc.replace('#SQFT#', square_feet);
+                servicedesc = servicedesc.replace('#TONS#', tons);
+
 
             }
 
             if (serviceCategoryId == 7) {
                 {{--  Rock --}}
-                var depth = $("#depth").val();
-                servicedesc = servicedesc.replace('@@INCHES@@', depth);
+                    servicedesc = servicedesc.replace('#INCHES#', depth);
                 
             }
 
@@ -119,10 +161,8 @@
 
                 {{--  Seal Coating  these are the user imput fields that need to be filled in validated--}}
 
-                var square_feet = $("#square_feet").val();
-                var phase = $("#phases").val();
-                servicedesc = servicedesc.replace('@@SQFT@@', square_feet);
-                servicedesc = servicedesc.replace('@@PHASES@@', phases);
+                servicedesc = servicedesc.replace('#SQFT#', square_feet);
+                servicedesc = servicedesc.replace('#PHASES#', phases);
                 
 
             }

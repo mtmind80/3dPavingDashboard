@@ -1,49 +1,5 @@
-<div class="mt20 mb10">
-    <form action="#" id="cost_formula_form" class="custom-validation admin-form">
 
-
-        <div class="row card-body">
-
-            <table class="table table-bordered">
-
-                @php($name = '')
-
-                @foreach($striping as $stripe)
-                    @if($name != $stripe->name)
-                        <tr>
-                            <td class="info" colspan="4'"><h4>{{$stripe->name}}</h4></td>
-                        </tr>
-                        <tr>
-                            <td class="tc">Descripton</td>
-                            <td class="tc">Cost</td>
-                            <td class="tc">Quantity</td>
-                            <td class="tc">Total</td>
-                        </tr>
-                        @php($name = $stripe->name)
-                    @endif
-
-                    <tr>
-                        <td class="tc">{{$stripe->description}}</td>
-                        <td class="tc">{{ \App\Helpers\Currency::format($stripe->cost ?? '0.0') }}</td>
-                        <td class="tc">
-                            <input type="text" class="form-control"
-                                              
-                                              id="quantity_{{$stripe->id}}" 
-                                              name="quantity_{{$stripe->id}}"
-                                              value="{{$stripe->quantity}}"
-                                              onChange="javascript:addTotal({{$stripe->cost}}, {{$stripe->id}})" />
-                        </td>
-                        <td class="tc">
-                            <input type="text"  class="form-control"
-                                            id="total_{{$stripe->id}}"
-                                            name="total_{{$stripe->id}}"
-                                            value="{{ \App\Helpers\Currency::format(($stripe->cost * $stripe->quantity) ?? '0.0') }}" /> 
-                        </td>
-                    </tr>
-                @endforeach
-            </table>
-        </div>
-
+    <div class="mt20 mb10">
 
         @if($proposal->progressive_billing)
             <div class="row card-body">
@@ -67,7 +23,7 @@
         @else
             <input type="hidden" name="bill_after" value="0">
         @endif
-
+     
         <a id="header_calculate_combined_costing_button2" href="javascript:" class="{{ $site_button_class }} ">Save This
             Service and Stay</a>
 
@@ -76,37 +32,83 @@
         <a id="header_calculate_combined_costing_button3" class="{{ $site_button_class }}" href="javascript:">Save and
             Return To Proposal</a>
 
-    </form>
+    
+
+        <div class="row card-body">
+            
+            <table class="table table-bordered">
+
+                @php($name = '')
+                @php($cost_total = 0)
+
+                @foreach($striping as $stripe)
+                    @if($name != $stripe->name)
+                        <tr>
+                            <td class="info" colspan="4'"><h4>{{$stripe->name}}</h4></td>
+                        </tr>
+                        <tr>
+                            <td class="tc">Descripton</td>
+                            <td class="tc">Cost</td>
+                            <td class="tc">Quantity</td>
+                            <td class="tc">Total</td>
+                        </tr>
+                        @php($name = $stripe->name)
+                    @endif
+
+                    <tr>
+                        <td class="tc">{{$stripe->description}}</td>
+                        <td class="tc">{{ \App\Helpers\Currency::format($stripe->cost ?? '0.0') }}</td>
+                        <td class="tc">
+                            <input type="hidden" value="{{$stripe->cost}}"  name="cost_{{$stripe->id}}" />
+                            <input type="text" class="form-control" 
+                                   id="quantity_{{$stripe->id}}" 
+                                   name="quantity_{{$stripe->id}}" 
+                                   value="{{$stripe->quantity}}" 
+                                   onChange="javascript:addRowTotal({{$stripe->cost}}, {{$stripe->id}})" />
+                            @php($cost_total += $stripe->cost)
+
+                        </td>
+                        <td class="tc">
+                            <span class="form-control" id="total_{{$stripe->id}}">{{ \App\Helpers\Currency::format(($stripe->cost * $stripe->quantity) ?? '0.0') }}</span>
+                        </td>
+                    </tr>
+                @endforeach
+            </table>
+        </div>
+
+
 
 </div>
 @push('partials-scripts')
+
+    <script src="{{ URL::asset('/js/sweetalert2.min.js')}}"></script>
+    <link rel="stylesheet" href="{{ URL::asset('/css/sweetalert2.min.css')}}">
+    
     <script type="text/javascript">
 
+        function addRowTotal(cost, service_id)
+        {
+            var quantity = $("#quantity_" + service_id).val();
+            var total = Math.ceil(quantity * cost);
+            $("#total_" + service_id).text(formatCurrency.format(total));
+
+        }
+
+
+        var servicedesc = '{!! $service->service_template !!}';
+        
         $(document).ready(function () {
             
-            function addTotal(cost, service_id)
-            {
-                alert("yes" + cost);
-                var quantity = $("#quantity_" . service_id).val();
-                var total = Math.ceil(quantity * cost);
-                $("#total_" . service_id).val(total);
-
-            }
+            
             // when the page loads we may need to repeat some calculations to determine total costs
             // and populate other display items on the page
+            headerElCombinedCosting.val({{$cost_total}});
 
+            function calculate(stay) {
 
-            function calculate(cost_form, estimatorForm, services_id, proposal_detail_id, proposal_id, serviceCategoryId, dosave) {
-
-                var servicedesc = '{!! $service->service_template !!}';
-                var profit = $("#form_header_profit").val();
-                var breakeven = '{{$proposalDetail->break_even}}';
-                var overhead = '{{$proposalDetail->overhead}}';
-                var materials = 0;
-                var proposaltext = tinymce.activeEditor.getContent();
-                var service = {{ $proposalDetail->services_id }};
-
-
+                
+                var profit =$("#form_header_profit").val();
+                
                 if (parseInt(profit) != profit) { // check these are numbers
                     showInfoAlert('You must only enter numbers for profit.', headerAlert);
 
@@ -117,15 +119,31 @@
                     return;
                 }
 
+                
+                var profit = $("#form_header_profit").val();
+                var breakeven = '{{$proposalDetail->break_even}}';
+                var overhead = '{{$proposalDetail->overhead}}';
+                var materials = 0;
+                
+                var service = {{ $proposalDetail->services_id }};
+
+                var otcost = {{$proposalDetail->cost}};
+                var proposaltext = tinymce.activeEditor.getContent();
+
+                if (proposaltext == '') {
+                    proposaltext = servicedesc;
+                }
+                $("#x_proposal_text").val(proposaltext);
+                overhead = Math.ceil((otcost / 0.7) - otcost);
+                $("#form_header_over_head").text(formatCurrency.format(overhead));
+                $("#explain").html(' 30%');
+
+                breakeven = parseFloat(overhead) + {{$proposalDetail->cost}};
+                $("#form_header_break_even").text(formatCurrency.format(breakeven));
+                
+
 
                 console.log("end striping");
-
-                //set these fields for all services
-                var bill_after = $('input[name="bill_after"]:checked').val();
-                $("#x_bill_after").val(bill_after);
-
-                var servicename = $("#service_name").val();
-                $("#x_service_name").val(servicename)
 
                 var proposaltext = tinymce.activeEditor.getContent();
                 $("#x_proposal_text").val(proposaltext);
@@ -134,42 +152,41 @@
                 $("#x_break_even").val(breakeven);
                 $("#x_profit").val(profit);
 
-
-                //then save it
-                if (dosave == 1) {
-                    saveit(false);
-                }
-                if (dosave == 2) {
-                    saveit(true);
-                }
-
+                saveit(stay);
+              
             }
 
 
-            function saveit($leave = false) {
+            function saveit($stay = false) {
 
-                if ($leave) {
+                if ($stay) {
                     $("#stayorleave").val("true")  // return to proposal page or service page
 
                 }
 
                 $("#estimator_form").submit();
 
+                Swal.fire({
+                    title: 'Be Patient',
+                    text: 'Saving your estimate.',
+                    icon: 'success',
+                    showConfirmButton: false,
+                    
+                })
             }
 
-            var cost_form = $("#cost_formula_form");  // values to determine cost
             var estimatorForm = $("#estimator_form"); // form to set values for submit and save
 
             // when you want to calculate and save record 
             $('#header_calculate_combined_costing_button2').on('click', function () {
 
-                calculate(cost_form, estimatorForm, serviceId, proposalDetailId, proposalId, serviceCategoryId, 1);
+                calculate(false);
 
             });
 
             $('#header_calculate_combined_costing_button3 ,#header_calculate_combined_costing_button4').on('click', function () {
 
-                calculate(cost_form, estimatorForm, serviceId, proposalDetailId, proposalId, serviceCategoryId, 2);
+                calculate(true);
 
             });
             
