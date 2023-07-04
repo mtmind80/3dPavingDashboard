@@ -1076,8 +1076,14 @@
 </div>
 
 @push('partials-scripts')
+    <script src="{{ URL::asset('/js/sweetalert2.min.js')}}"></script>
+    <link rel="stylesheet" href="{{ URL::asset('/css/sweetalert2.min.css')}}">
+    
+    
     <script>
 
+
+    
         $(document).ready(function () {
 
             // when the page loads we may need to repeat some calculations to determine total costs
@@ -1449,7 +1455,7 @@
                 if (serviceCategoryId == 3) {
                     {{--Drainage and Catchbasins--}}
 
-                        catchbasins = $("#catchbasins").val();
+                    catchbasins = $("#catchbasins").val();
                     cost_per_day = $("#cost_per_day").val();
                     alt_desc = $("#alt_desc").val();
 
@@ -1904,6 +1910,10 @@
                 }
 
                 //set these fields for all services
+
+                service_name = $("#service_name").val();
+                $("#x_service_name").val(service_name);
+                
                 var bill_after = $('input[name="bill_after"]:checked').val();
                 $("#x_bill_after").val(bill_after);
 
@@ -1967,6 +1977,16 @@
                 }
 
                 $("#estimator_form").submit();
+
+                Swal.fire({
+                    title: 'Be Patient',
+                    text: 'Saving your estimate.',
+                    icon: 'success',
+                    showConfirmButton: false,
+
+                })
+
+                
 
             }
 

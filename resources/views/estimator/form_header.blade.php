@@ -52,7 +52,7 @@
                                 <x-form-text name="profit"
                                      class="check-contact"
                                      placeholder="enter value"
-                                     id="profit"
+                                     id="form_header_profit"
                                      :params="[
                                         'label' => 'none',
                                         'iconClass' => 'none',
@@ -105,7 +105,13 @@
         var headerCalculateCombinedCostingButton2 = $('#header_calculate_combined_costing_button2');
         var headerCalculateCombinedCostingButton3 = $('#header_calculate_combined_costing_button3');
         var headerCalculateCombinedCostingButton4 = $('#header_calculate_combined_costing_button4');
-        
+
+        var headerElVehiclesCost = $('#header_show_vehicles_cost');
+        var headerElEquipmentCost = $('#header_show_equipment_cost');
+        var headerElMaterialsCost = $('#header_show_materials_cost');
+        var headerElLaborCost = $('#header_show_labor_cost');
+        var headerElAdditionalCost = $('#header_show_additional_cost');
+        var headerElSubcontractorCost = $('#header_show_subcontractor_cost');
 
         var headerElTotalCost = $('#header_total_cost');
         var headerElEstimatorFormFieldTotalCost = $('#estimator_form_header_total_cost');

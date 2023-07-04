@@ -1129,6 +1129,13 @@ class ProposalDetailController extends Controller
         
         ProposalDetail::where('id',$proposal_detail_id)->update($data);
         //update proposal_details
+
+        if($request['stayorleave'] == 'true') {
+            return redirect()->route('show_proposal', ['id' => $proposal_id]);
+
+        }
+
+        
         return back()->withSuccess('Striping saved');
         
     }

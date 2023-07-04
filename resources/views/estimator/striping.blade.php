@@ -40,9 +40,10 @@
         <form method="POST" action="{{route('save_striping')}}" id="estimator_form" class="custom-validation admin-form">
 
             @csrf
+            <input type="hidden" name='stayorleave' id='stayorleave' value="true">
             <input type="hidden" name="proposal_detail_id" value="{{$proposalDetail->id}}">
-                <input type="hidden" name="x_proposal_text" value="{{$proposalDetail->proposal_text}}">
-                 <input type="hidden" name="proposal_id" value="{{$proposalDetail->proposal_id}}">
+            <input type="hidden" name="x_proposal_text" value="{{$proposalDetail->proposal_text}}">
+            <input type="hidden" name="proposal_id" value="{{$proposalDetail->proposal_id}}">
         <div class="col-12">
             @include('_partials._alert')
             <div class="card">
