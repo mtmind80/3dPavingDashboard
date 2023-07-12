@@ -200,7 +200,7 @@
                                          :params="[
                                     'label' => 'Locations',
                                     'iconClass' => 'none',
-                                    'required' => 'true',                    
+                                    'required' => 'true',
                 ]"
                             >{{$proposalDetail->locations}}</x-form-text>
 
@@ -812,7 +812,7 @@
                                      class="check-contact tc"
                                      placeholder="calculated"
                                      id="sealer"
-                                     :params="[                                
+                                     :params="[
                                'label' => 'Sealer (gals)',
                                'iconClass' => 'none',
                         ]">{{$proposalDetail->sealer}}</x-form-show>
@@ -854,19 +854,19 @@
                             <span id="SandCost">Sand:{{ \App\Helpers\Currency::format($materialsCB[2] ?? '0.0') }}</span>
                         </div>
                         <div class="col-2">
-                            <span id="AdditiveCost">Additive:{{ \App\Helpers\Currency::format($materialsCB[3] ?? '0.0') }}</span>                                         
+                            <span id="AdditiveCost">Additive:{{ \App\Helpers\Currency::format($materialsCB[3] ?? '0.0') }}</span>
                         </div>
                         <div class="col-sm-2">
-                            <span id="PrimerCost">Primaer:{{ \App\Helpers\Currency::format($materialsCB[4] ?? '0.0') }}</span>                                         
+                            <span id="PrimerCost">Primaer:{{ \App\Helpers\Currency::format($materialsCB[4] ?? '0.0') }}</span>
                         </div>
                         <div class="col-sm-2">
                             <span id="FastSetCost">Fast Set:{{ \App\Helpers\Currency::format($materialsCB[5] ?? '0.0') }}</span>
-                            
+
                         </div>
-    
+
                     </div>
 
-                
+
                     <div class="row">
                     <div class="col-2">
                         <label class="control-label">TOTALS </label>
@@ -907,7 +907,7 @@
                 {{$stripe['service']['dsort']}} <br/>
 
             @endforeach
-            
+
         @endif
 
         @if($service->service_category_id == 10)
@@ -1079,12 +1079,12 @@
 @push('partials-scripts')
     <script src="{{ URL::asset('/js/sweetalert2.min.js')}}"></script>
     <link rel="stylesheet" href="{{ URL::asset('/css/sweetalert2.min.css')}}">
-    
-    
+
+
     <script>
 
 
-    
+
         $(document).ready(function () {
 
             // when the page loads we may need to repeat some calculations to determine total costs
@@ -1303,7 +1303,7 @@
 
                         var linear_feet = $("#linear_feet").val();
                         var locations = $("#locations").val();
-                        var cost_per_linear_feet = {{$materialsCB[9]}}; // curbmix default 
+                        var cost_per_linear_feet = {{$materialsCB[9]}}; // curbmix default
 
 
                         //linear feet
@@ -1854,7 +1854,7 @@
 
                     {{--  Sub Contractor --}}
 
-                    var additive = $("#additive").val();  // percent overhead 
+                    var additive = $("#additive").val();  // percent overhead
                     var cost_per_day = $("#cost_per_day").val(); // cost to contractor
                     var alt_desc = $("#alt_desc").val(); // desc of services
                     var contractor_id = $("#contractor_id>option:selected").val(); // contractor ID
@@ -1914,7 +1914,7 @@
 
                 service_name = $("#service_name").val();
                 $("#x_service_name").val(service_name);
-                
+
                 var bill_after = $('input[name="bill_after"]:checked').val();
                 $("#x_bill_after").val(bill_after);
 
@@ -1987,7 +1987,7 @@
 
                 })
 
-                
+
 
             }
 
@@ -1996,7 +1996,7 @@
 
             calculate(cost_form, estimatorForm, serviceId, proposalDetailId, proposalId, serviceCategoryId, 0);
 
-            // when you want to calculate and save record 
+            // when you want to calculate and save record
             $('#header_calculate_combined_costing_button2').on('click', function () {
 
                 calculate(cost_form, estimatorForm, serviceId, proposalDetailId, proposalId, serviceCategoryId, 1);

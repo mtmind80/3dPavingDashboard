@@ -39,9 +39,10 @@
     <div class="row estimator-form admin-form">
         <form method="POST" action="{{route('checkform')}}" accept-charfset="UTF-8" id="estimator_form" class="admin-form">
             @csrf
-            <input type="hidden" name="id" id="x_id" value="{{ $proposalDetail->id }}">
+            <input type="hidden" name="proposal_detail_id" id="x_id" value="{{ $proposalDetail->id }}">
             <input type="hidden" name="service_name" id="x_service_name" value="{{ $proposalDetail->service_name }}">
             <input type="hidden" name="services_id" id="x_services_id" value="{{ $proposalDetail->services_id }}">
+            <input type="hidden" name="service_category_id" id="x_service_category_id" value="{{ $proposalDetail->service->service_category_id }}">
             <input type="hidden" name="proposal_id" id="x_proposal_id" value="{{ $proposalDetail->proposal_id }}">
             <input type="hidden" name="catchbasins" id="x_catchbasins" value="{{ $proposalDetail->catchbasins }}">
             <input type="hidden" name="linear_feet" id="x_linear_feet" value="{{ $proposalDetail->linear_feet }}">
@@ -74,7 +75,6 @@
             <input type="hidden" name="material_cost" id="x_material_cost" value="{{ $proposalDetail->material_cost }}">
             <input type="hidden" name='toncost' id='x_toncost' value="{{ $proposalDetail->toncost }}">
 
-
             <input type="hidden" name='stayorleave' id='stayorleave' value="false">
             {{-- user will stay  after save --}}
 
@@ -85,7 +85,7 @@
             <input type="hidden" name="materials_total_cost" id="estimator_form_materials_total_cost" value="{{ $proposalDetail->material_cost }}">
             <input type="hidden" name="subcontractor_total_cost" id="estimator_form_subcontractor_total_cost" value="{{ $proposalDetail->total_cost_subcontractor }}">
         </form>
-        
+
         <div class="col-12">
             @include('_partials._alert')
             <div class="card">
@@ -166,6 +166,62 @@
         var serviceCategoryName = "{{ $service_category_name }}";
         var proposalId = Number("{{ $proposalDetail->proposal_id }}");
 
+        var estimatorForm = $('#estimator_form');
+
+        $(document).ready(function(){
+
+            // Add estimator-form-submit-button class to any button intended for submitting the estimator form
+
+            $('body').on('click', '.estimator-form-submit-button', function(){
+
+                if (estimatorForm.valid()) {
+                    let formData = estimatorForm.serializeObject();
+
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        data: formData,
+                        type: "POST",
+                        url: "{{ route('ajax_proposal_details_update') }}",
+                        beforeSend: function (request){
+                            showSpinner();
+                        },
+                        complete: function (){
+                            hideSpinner();
+                        },
+                        success: function (response){
+                            if (!response) {
+                                showErrorAlert('Critical error has occurred.', headerAlert);
+                            } else if (response.success) {
+                                let data = response.data;
+
+                                headerElCombinedCosting.html(data.formated_combined_costing);
+                                headerElCombinedCosting.data('combined_costing_total_cost', data.combined_costing);
+
+                                // headerResetForm();
+
+                                if (response.message) {
+                                    showSuccessAlert(response.message, headerAlert);
+                                }
+                            } else {
+                                showErrorAlert(response.message, headerAlert);
+                            }
+                        },
+                        error: function (response){
+                            @if (env('APP_ENV') === 'local')
+                            showErrorAlert(response.responseJSON.message, headerAlert);
+                            @else
+                            showErrorAlert(response.message, 'Critical error has occurred.');
+                            @endif
+                        }
+                    });
+                }
+            });
+
+
+
+        });
     </script>
 @stop
 

@@ -212,6 +212,208 @@ class ProposalDetailController extends Controller
 
     }
 
+    // Update from estimator form
+
+    public function ajaxUpdate(Request $request)
+    {
+        if (! $request->isMethod('post') || ! $request->ajax()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid request.',
+            ]);
+
+        }
+        $validator = Validator::make(
+            $request->only(['proposal_detail_id', 'services_id', 'service_category_id']), [
+                'proposal_detail_id' => 'required|positive',
+                'services_id' => 'required|positive',
+                'service_category_id' => 'required|positive',
+            ]
+        );
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->messages()->first(),
+            ]);
+        }
+
+        if (!$proposalDetail = ProposalDetail::find($request->proposal_detail_id)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Proposal details not found.',
+            ]);
+        }
+
+        $servicesId = (int)$request->services_id;
+        $serviceCategoryId = (int)$request->service_category_id;
+        $inputs = null;
+
+        switch ($serviceCategoryId) {
+            // Asphalt
+            case 1:
+                if ($servicesId === 19) {
+                    $inputs = $request->only(['cost_per_day', 'square_feet', 'depth', 'days']);
+                    $validator = Validator::make(
+                        $inputs, [
+                            'cost_per_day' => 'required|float',
+                            'square_feet' => 'required|float',
+                            'depth' => 'required|float',
+                            'days' => 'required|float',
+                        ]
+                    );
+                } else {    // 3, 4, 5 or 22
+                    $inputs = $request->only(['square_feet', 'depth', 'toncost']);
+                    $validator = Validator::make(
+                        $inputs, [
+                            'square_feet' => 'required|float',
+                            'depth' => 'required|float',
+                            'toncost' => 'required|float',
+                        ]
+                    );
+                }
+                break;
+
+            case 2:
+                if ($servicesId < 12) {
+                    $inputs = $request->only(['linear_feet', 'cost_per_linear_feet']);
+                    $validator = Validator::make(
+                        $inputs, [
+                            'linear_feet' => 'required|float',
+                            'cost_per_linear_feet' => 'required|float',
+                        ]
+                    );
+                } else {    // > 12
+                    $inputs = $request->only(['square_feet', 'depth', 'cost_per_linear_feet']);
+                    $validator = Validator::make(
+                        $inputs, [
+                            'square_feet' => 'required|float',
+                            'depth' => 'required|float',
+                            'cost_per_linear_feet' => 'required|float',
+                        ]
+                    );
+                }
+                break;
+
+            // Drainage and Catchbasins
+            case 3:
+                $inputs = $request->only(['catchbasins', 'cost_per_day', 'alt_desc']);
+                $validator = Validator::make(
+                    $inputs, [
+                        'catchbasins' => 'required|integer',
+                        'cost_per_day' => 'required|float',
+                        'alt_desc' => 'required|float',
+                    ]
+                );
+                break;
+
+            // Excavation
+            case 4:
+                $inputs = $request->only(['square_feet', 'depth']);
+                $validator = Validator::make(
+                    $inputs, [
+                        'square_feet' => 'required|float',
+                        'depth' => 'required|float',
+                    ]
+                );
+                break;
+
+            // Other
+            case 5:
+                $inputs = $request->only(['cost_per_day', 'alt_desc']);
+                $validator = Validator::make(
+                    $inputs, [
+                        'cost_per_day' => 'required|float',
+                        'alt_desc' => 'required|float',
+                    ]
+                );
+                break;
+
+            // Paver Brick
+            case 6:
+                $inputs = $request->only(['cost_per_day', 'square_feet', 'tons', 'alt_desc']);
+                $validator = Validator::make(
+                    $inputs, [
+                        'cost_per_day' => 'required|float',
+                        'square_feet' => 'required|float',
+                        'tons' => 'required|float',
+                        'alt_desc' => 'required|float',
+                    ]
+                );
+                break;
+
+            // Rock
+            case 7:
+                $inputs = $request->only(['square_feet', 'depth', 'rockcost']);
+                $validator = Validator::make(
+                    $inputs, [
+                        'square_feet' => 'required|float',
+                        'depth' => 'required|float',
+                        'rockcost' => 'required|float',
+                    ]
+                );
+                break;
+
+            // Seal Coating  these are the user input fields that need to be filled in validated
+            case 8:
+                $inputs = $request->only(['square_feet', 'yield', 'primer', 'fast_set', 'phases']);
+                $validator = Validator::make(
+                    $inputs, [
+                        'square_feet' => 'required|float',
+                        'yield' => 'required|float',
+                        'primer' => 'required|float',
+                        'fast_set' => 'required|float',
+                        'phases' => 'required|float',
+                    ]
+                );
+                break;
+
+            // Striping  not used for this servic
+            case 9:
+                //
+                break;
+
+            // Sub Contractor
+            case 10:
+                $inputs = $request->only(['additive', 'cost_per_day', 'alt_desc', 'contractor_id']);
+                $validator = Validator::make(
+                    $inputs, [
+                        'additive' => 'required|float',
+                        'cost_per_day' => 'required|float',
+                        'alt_desc' => 'required|float',
+                        'contractor_id' => 'required|float',
+                    ]
+                );
+                break;
+        }
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->messages()->first(),
+            ]);
+        }
+
+        if (is_null($inputs)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Nothing to update.',
+            ]);
+        }
+
+        try {
+            $proposalDetail->update($inputs);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Proposal detail updated.',
+            ]);
+
+        } catch(Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => app()->environment() === 'local' ? $e->getMessage() : 'Exception error',
+            ]);
+        }
+    }
 
     // To be updated
 
@@ -226,7 +428,6 @@ class ProposalDetailController extends Controller
                     'break_even' => 'required|float',
                 ]
             );
-
             if($validator->fails()) {
                 $response = [
                     'success' => false,
@@ -249,7 +450,7 @@ class ProposalDetailController extends Controller
                         ],
                     ];
                 } catch(Exception $e) {
-                    if(env('APP_ENV') === 'local') {
+                    if (env('APP_ENV') === 'local') {
                         $response = [
                             'success' => false,
                             'message' => $e->getMessage(),
@@ -1102,8 +1303,8 @@ class ProposalDetailController extends Controller
         $profit = $_POST['profit'];
         $service_name = $request['service_name'];
         $proposal_id = $request['proposal_id'];
-        $overhead = $request['overhead']; 
-        $bill_after = $request['bill_after']; 
+        $overhead = $request['overhead'];
+        $bill_after = $request['bill_after'];
         //echo 'proposal_id:'.$proposal_id. "<br>";
         //echo 'name:'.$service_name. "<br>";
         //echo 'proposal_detail_id:'.$proposal_detail_id. "<br>";
@@ -1116,9 +1317,9 @@ class ProposalDetailController extends Controller
                 $service_id = explode("_", $key);
                 $striping_service_id = $service_id[1];
                 $cost = $request['cost_'. $striping_service_id];
-                $total_cost += $cost; 
+                $total_cost += $cost;
                 ProposalDetailStripingService::where('id',$striping_service_id)->update(['quantity'=>$value]);
-                
+
             }
         }
 
@@ -1127,7 +1328,7 @@ class ProposalDetailController extends Controller
         $data['proposal_text'] = $proposal_text;
         $data['service_name'] = $service_name;
         $data['bill_after'] = $bill_after;
-        
+
         ProposalDetail::where('id',$proposal_detail_id)->update($data);
         //update proposal_details
 
@@ -1136,9 +1337,9 @@ class ProposalDetailController extends Controller
 
         }
 
-        
+
         return back()->withSuccess('Striping saved');
-        
+
     }
 
 }
