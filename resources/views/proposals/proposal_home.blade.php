@@ -62,8 +62,8 @@
                                             <td>
                                                 <a href="{{route('edit_proposal',['id'=> $proposal['id']])}}"
                                                    title="@lang('translation.edit') @lang('translation.proposal')"
-                                                   class="{{$site_button_class}}"><i
-                                                            class="fas fa-plus"></i>@lang('translation.edit') @lang('translation.proposal')
+                                                   class="{{$site_button_class}}">
+                                                    <i class="fas fa-plus"></i> @lang('translation.edit') @lang('translation.proposal')
                                                 </a>
 
                                             </td>

@@ -1,5 +1,5 @@
 <div class="mt20 mb10">
-    <form action="#" id="cost_formula_form" class="custom-validation admin-form">
+    <form action="#" id="cost_formula_form" class="custom-validation" >
 
 
         {{-- This form is for reference to calculate costs it is never submitted --}}
@@ -56,6 +56,7 @@
                             <x-form-text name="square_feet"
                                          class="check-contact tc"
                                          placeholder="enter value"
+                                         data-parsley-type="number"
                                          id="square_feet"
                                          :params="[
                                     'label' => 'Size of project in SQ FT',
@@ -1455,9 +1456,9 @@
                 if (serviceCategoryId == 3) {
                     {{--Drainage and Catchbasins--}}
 
-                    catchbasins = $("#catchbasins").val();
-                    cost_per_day = $("#cost_per_day").val();
-                    alt_desc = $("#alt_desc").val();
+                    var catchbasins = $("#catchbasins").val();
+                    var cost_per_day = $("#cost_per_day").val();
+                    var alt_desc = $("#alt_desc").val();
 
                     if (cost_per_day == parseInt(cost_per_day) && catchbasins == parseInt(catchbasins) && alt_desc != '') {
 

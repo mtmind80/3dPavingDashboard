@@ -53,6 +53,7 @@ class ProposalDetailController extends Controller
         $proposal_detail->location_id = $proposal['location_id'];
         $proposal_detail->service_name = $service['name'];
         $proposal_detail->service_desc = $service['description'];
+        $proposal_detail->proposal_text = $service['service_text_en'];
         //$proposal_detail->dsort = 1;
         $proposal_detail->created_by = auth()->user()->id;
 
