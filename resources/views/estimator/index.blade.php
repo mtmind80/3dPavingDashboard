@@ -39,6 +39,7 @@
     <div class="row estimator-form admin-form">
         <form method="POST" action="{{route('checkform')}}" accept-charfset="UTF-8" id="estimator_form" class="admin-form">
             @csrf
+            <input type="hidden" name="id" id="x_id" value="{{ $proposalDetail->id }}">
             <input type="hidden" name="proposal_detail_id" id="x_id" value="{{ $proposalDetail->id }}">
             <input type="hidden" name="service_name" id="x_service_name" value="{{ $proposalDetail->service_name }}">
             <input type="hidden" name="services_id" id="x_services_id" value="{{ $proposalDetail->services_id }}">
