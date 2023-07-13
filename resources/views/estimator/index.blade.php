@@ -180,11 +180,11 @@
             // Add estimator-form-submit-button class to any button intended for submitting the estimator form
 
             $('body').on('click', '.estimator-form-submit-button', function(){
-                ajaxEstimatorFGormSubmit();
+                ajaxEstimatorFormSubmit();
             });
         });
 
-        function ajaxEstimatorFGormSubmit()
+        function ajaxEstimatorFormSubmit()
         {
             let estimatorForm = $('#estimator_form');
             let formData = estimatorForm.serializeObject();
