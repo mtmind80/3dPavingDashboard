@@ -1558,7 +1558,6 @@
                         $("#x_depth").val(depth);
                         $("#x_loads").val(loads);
                         $("#x_tons").val(tons);
-                        $("#x_toncost").val(0);
                         $("#x_cost_per_day").val(ourcost);
                         console.log("end excavation");
 
