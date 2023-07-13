@@ -252,22 +252,24 @@ class ProposalDetailController extends Controller
             // Asphalt
             case 1:
                 if ($servicesId === 19) {
-                    $inputs = $request->only(['cost_per_day', 'square_feet', 'depth', 'days']);
+                    $inputs = $request->only(['cost_per_day', 'locations', 'square_feet', 'depth', 'days']);
                     $validator = Validator::make(
                         $inputs, [
                             'cost_per_day' => 'required|float',
+                            'locations' => 'required|float',
                             'square_feet' => 'required|float',
                             'depth' => 'required|float',
                             'days' => 'required|float',
                         ]
                     );
                 } else {    // 3, 4, 5 or 22
-                    $inputs = $request->only(['square_feet', 'depth', 'toncost']);
+                    $inputs = $request->only(['square_feet', 'depth', 'cost_per_day', 'locations']);
                     $validator = Validator::make(
                         $inputs, [
                             'square_feet' => 'required|float',
                             'depth' => 'required|float',
-                            'toncost' => 'required|float',
+                            'cost_per_day' => 'required|float',
+                            'locations' => 'required|float',
                         ]
                     );
                 }
@@ -275,19 +277,21 @@ class ProposalDetailController extends Controller
 
             case 2:
                 if ($servicesId < 12) {
-                    $inputs = $request->only(['linear_feet', 'cost_per_linear_feet']);
+                    $inputs = $request->only(['linear_feet', 'locations', 'cost_per_linear_feet']);
                     $validator = Validator::make(
                         $inputs, [
                             'linear_feet' => 'required|float',
+                            'locations' => 'required|float',
                             'cost_per_linear_feet' => 'required|float',
                         ]
                     );
                 } else {    // > 12
-                    $inputs = $request->only(['square_feet', 'depth', 'cost_per_linear_feet']);
+                    $inputs = $request->only(['square_feet', 'depth', 'locations', 'cost_per_linear_feet']);
                     $validator = Validator::make(
                         $inputs, [
                             'square_feet' => 'required|float',
                             'depth' => 'required|float',
+                            'locations' => 'required|float',
                             'cost_per_linear_feet' => 'required|float',
                         ]
                     );
@@ -319,11 +323,12 @@ class ProposalDetailController extends Controller
 
             // Other
             case 5:
-                $inputs = $request->only(['cost_per_day', 'alt_desc']);
+                $inputs = $request->only(['cost_per_day', 'alt_desc', 'locations']);
                 $validator = Validator::make(
                     $inputs, [
                         'cost_per_day' => 'required|float',
                         'alt_desc' => 'required|float',
+                        'locations' => 'required|float',
                     ]
                 );
                 break;
@@ -343,12 +348,12 @@ class ProposalDetailController extends Controller
 
             // Rock
             case 7:
-                $inputs = $request->only(['square_feet', 'depth', 'rockcost']);
+                $inputs = $request->only(['square_feet', 'depth', 'cost_per_day']);
                 $validator = Validator::make(
                     $inputs, [
                         'square_feet' => 'required|float',
                         'depth' => 'required|float',
-                        'rockcost' => 'required|float',
+                        'cost_per_day' => 'required|float',
                     ]
                 );
                 break;

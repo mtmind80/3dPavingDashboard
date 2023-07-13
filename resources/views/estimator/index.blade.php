@@ -87,6 +87,13 @@
             <input type="hidden" name="subcontractor_total_cost" id="estimator_form_subcontractor_total_cost" value="{{ $proposalDetail->total_cost_subcontractor }}">
         </form>
 
+        <!-- to be removed -->
+        @if (env('APP_ENV') === 'local')
+            <div class="row pl25 pb20">
+                <a class="btn btn-outline-info estimator-form-submit-button" href="javascript:">Test Ajax Submission</a>
+            </div>
+        @endif
+
         <div class="col-12">
             @include('_partials._alert')
             <div class="card">
@@ -166,63 +173,57 @@
         var serviceCategoryId = Number("{{ $proposalDetail->service->service_category_id }}");
         var serviceCategoryName = "{{ $service_category_name }}";
         var proposalId = Number("{{ $proposalDetail->proposal_id }}");
-
-        var estimatorForm = $('#estimator_form');
+        var mainAlert = $('#alert');
 
         $(document).ready(function(){
 
             // Add estimator-form-submit-button class to any button intended for submitting the estimator form
 
             $('body').on('click', '.estimator-form-submit-button', function(){
+                ajaxEstimatorFGormSubmit();
+            });
+        });
 
-                if (estimatorForm.valid()) {
-                    let formData = estimatorForm.serializeObject();
+        function ajaxEstimatorFGormSubmit()
+        {
+            let estimatorForm = $('#estimator_form');
+            let formData = estimatorForm.serializeObject();
 
-                    $.ajax({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        data: formData,
-                        type: "POST",
-                        url: "{{ route('ajax_proposal_details_update') }}",
-                        beforeSend: function (request){
-                            showSpinner();
-                        },
-                        complete: function (){
-                            hideSpinner();
-                        },
-                        success: function (response){
-                            if (!response) {
-                                showErrorAlert('Critical error has occurred.', headerAlert);
-                            } else if (response.success) {
-                                let data = response.data;
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: formData,
+                type: "POST",
+                url: "{{ route('ajax_proposal_details_update') }}",
+                beforeSend: function (request){
+                    showSpinner();
+                },
+                complete: function (){
+                    hideSpinner();
+                },
+                success: function (response){
+                    if (!response) {
+                        showErrorAlert('Critical error has occurred.', mainAlert);
+                    } else if (response.success) {
+                        let data = response.data;
 
-                                headerElCombinedCosting.html(data.formated_combined_costing);
-                                headerElCombinedCosting.data('combined_costing_total_cost', data.combined_costing);
-
-                                // headerResetForm();
-
-                                if (response.message) {
-                                    showSuccessAlert(response.message, headerAlert);
-                                }
-                            } else {
-                                showErrorAlert(response.message, headerAlert);
-                            }
-                        },
-                        error: function (response){
-                            @if (env('APP_ENV') === 'local')
-                            showErrorAlert(response.responseJSON.message, headerAlert);
-                            @else
-                            showErrorAlert(response.message, 'Critical error has occurred.');
-                            @endif
+                        if (response.message) {
+                            showSuccessAlert(response.message, mainAlert);
                         }
-                    });
+                    } else {
+                        showErrorAlert(response.message, mainAlert);
+                    }
+                },
+                error: function (response){
+                    @if (env('APP_ENV') === 'local')
+                        showErrorAlert(response.responseJSON.message, mainAlert);
+                    @else
+                        showErrorAlert(response.message, 'Critical error has occurred.', mainAlert);
+                    @endif
                 }
             });
-
-
-
-        });
+        }
     </script>
 @stop
 

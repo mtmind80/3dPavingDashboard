@@ -253,7 +253,7 @@
                             @if (env('APP_ENV') === 'local')
                                 showErrorAlert(response.responseJSON.message, laborAlert);
                             @else
-                                showErrorAlert(response.message, 'Critical error has occurred.');
+                                showErrorAlert('Critical error has occurred.', laborAlert);
                             @endif
                         }
                     });
@@ -305,7 +305,7 @@
                         @if (env('APP_ENV') === 'local')
                             showErrorAlert(response.responseJSON.message, laborAlert);
                         @else
-                            showErrorAlert(response.message, 'Critical error has occurred.');
+                            showErrorAlert('Critical error has occurred.', laborAlert);
                         @endif
                     }
                 });
