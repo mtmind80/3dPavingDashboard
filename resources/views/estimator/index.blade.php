@@ -54,6 +54,7 @@
             <input type="hidden" name="locations" id="x_locations" value="{{ $proposalDetail->locations }}">
             <input type="hidden" name="overhead" id="x_overhead" value="{{ $proposalDetail->overhead }}">
             <input type="hidden" name="alt_desc" id="x_alt_desc" value="{{ $proposalDetail->alt_desc }}">
+            <input type="hidden" name="contractor_id" id="x_contractor_id" value="{{ $proposalDetail->contractor_id }}">
 
             <input type="hidden" name="depth" id="x_depth" value="{{ $proposalDetail->depth }}">
             <input type="hidden" name="profit" id="x_profit" value="{{ $proposalDetail->profit }}">
