@@ -1279,7 +1279,6 @@
                             $("#x_square_feet").val(square_feet);
                             $("#x_depth").val(depth);
                             $("#x_locations").val(locations);
-                            $("#x_toncost").val(toncost);
                             $("#x_cost_per_day").val(toncost);
 
                             $("#x_curbmix").val(curbmix);

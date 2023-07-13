@@ -72,7 +72,6 @@
             <input type="hidden" name="location_id" id="x_location_id" value="{{ $proposalDetail->location_id }}">
             <input type="hidden" name="cost" id="x_cost" value="{{ $proposalDetail->cost }}">
             <input type="hidden" name="material_cost" id="x_material_cost" value="{{ $proposalDetail->material_cost }}">
-            <input type="hidden" name='toncost' id='x_toncost' value="{{ $proposalDetail->toncost }}">
 
 
             <input type="hidden" name='stayorleave' id='stayorleave' value="false">
