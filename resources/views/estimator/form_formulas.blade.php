@@ -1279,7 +1279,6 @@
                             $("#x_square_feet").val(square_feet);
                             $("#x_depth").val(depth);
                             $("#x_locations").val(locations);
-                            $("#x_toncost").val(toncost);
                             $("#x_cost_per_day").val(toncost);
 
                             $("#x_curbmix").val(curbmix);
@@ -1559,7 +1558,6 @@
                         $("#x_depth").val(depth);
                         $("#x_loads").val(loads);
                         $("#x_tons").val(tons);
-                        $("#x_toncost").val(0);
                         $("#x_cost_per_day").val(ourcost);
                         console.log("end excavation");
 
