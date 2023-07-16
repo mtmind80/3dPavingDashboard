@@ -740,11 +740,6 @@ table .td-tt {
   display: block;
   text-align: center; }
 
-@media (min-width: 480px) {
-  .show-proposal-page .navbar-header {
-    float: none; }
-  .show-proposal-page .clearfix::before, .show-proposal-page .clearfix::after, .show-proposal-page .dl-horizontal dd::before, .show-proposal-page .dl-horizontal dd::after, .show-proposal-page .container::before, .show-proposal-page .container::after, .show-proposal-page .container-fluid::before, .show-proposal-page .container-fluid::after, .show-proposal-page .row::before, .show-proposal-page .row::after, .show-proposal-page .form-horizontal .form-group::before, .show-proposal-page .form-horizontal .form-group::after, .show-proposal-page .btn-toolbar::before, .show-proposal-page .btn-toolbar::after, .show-proposal-page .btn-group-vertical > .btn-group::before, .show-proposal-page .btn-group-vertical > .btn-group::after, .show-proposal-page .nav::before, .show-proposal-page .nav::after, .show-proposal-page .navbar::before, .show-proposal-page .navbar::after, .show-proposal-page .navbar-header::before, .show-proposal-page .navbar-header::after, .show-proposal-page .navbar-collapse::before, .show-proposal-page .navbar-collapse::after, .show-proposal-page .pager::before, .show-proposal-page .pager::after, .show-proposal-page .panel-body::before, .show-proposal-page .panel-body::after, .show-proposal-page .modal-footer::before, .show-proposal-page .modal-footer::after, .show-proposal-page #topbar::before, .show-proposal-page #topbar::after {
-    content: none; } }
 .table-bordered > tfoot > tr.no-border > td {
   font-weight: bold;
   padding-top: 20px;

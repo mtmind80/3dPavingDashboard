@@ -64,7 +64,6 @@ class ProposalDetail extends Model
         'created_at',
     ];
 
-
     public $sortable = [
         'proposal_details.proposal_id|proposals.name',
         'proposal_details.services_id|services.name',
@@ -142,7 +141,7 @@ class ProposalDetail extends Model
         return $this->HasMany(ProposalDetailLabor::class, 'proposal_detail_id');
     }
 
-    public function striping()
+    public function strippingServices()
     {
         return $this->HasMany(ProposalDetailStripingService::class, 'proposal_detail_id');
     }
@@ -167,9 +166,9 @@ class ProposalDetail extends Model
         return $this->hasMany(ProposalDetailSubcontractor::class, 'proposal_detail_id');
     }
 
-    public function acceptedSubcontractors()
+    public function acceptedSubcontractor()
     {
-        return $this->hasMany(ProposalDetailSubcontractor::class, 'proposal_detail_id')->where('accepted', 1);
+        return $this->hasOne(ProposalDetailSubcontractor::class, 'proposal_detail_id')->where('accepted', 1);
     }
 
     public function service()
@@ -265,7 +264,7 @@ class ProposalDetail extends Model
 
     public function getMaxDSort()
     {
-        return $this->max('dsort');
+        return $this->max('d_sort');
     }
 
 }

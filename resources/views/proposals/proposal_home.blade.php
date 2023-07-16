@@ -24,29 +24,29 @@
                 <div class="card-body">
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs nav-tabs-custom nav-justified" role="tablist">
-                        <li class="nav-item no-border">
+                        <li class="nav-item">
                             <a class="nav-link active" data-toggle="tab" href="#proposal" role="tab">
                                 <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
-                                <span class="d-none d-sm-block h4">@lang('translation.proposal')</span>
+                                <span class="d-none d-sm-block">@lang('translation.proposal')</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#services" id='servicestab' role="tab">
                                 <span class="d-block d-sm-none"><i class="far fa-envelope"></i></span>
-                                <span class="d-none d-sm-block h4">@lang('translation.services')</span>
+                                <span class="d-none d-sm-block">@lang('translation.services')</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#notes" id="notestab" role="tab">
                                 <span class="d-block d-sm-none"><i class="far fa-user"></i></span>
-                                <span class="d-none d-sm-block h4">@lang('translation.notes') / @lang('translation.media')</span>
+                                <span class="d-none d-sm-block">@lang('translation.notes') / @lang('translation.media')</span>
                             </a>
                         </li>
 
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#crm" id="crmtab" role="tab">
                                 <span class="d-block d-sm-none"><i class="ri-compass-2-line"></i></span>
-                                <span class="d-none d-sm-block h4">@lang('translation.status') / @lang('translation.letters')</span>
+                                <span class="d-none d-sm-block">@lang('translation.status') / @lang('translation.letters')</span>
                             </a>
                         </li>
                     </ul>
@@ -57,159 +57,140 @@
                             <div class="row">
                                 <div class="col-sm-12">
                                     <table width="100%" class="table-centered table-bordered font-size-20">
-                                    <tr>
-                                    @if($proposal['IsEditable'])
-                                            <td>
-                                                <a href="{{route('edit_proposal',['id'=> $proposal['id']])}}"
-                                                   title="@lang('translation.edit') @lang('translation.proposal')"
-                                                   class="{{$site_button_class}}"><i
+                                        <tr>
+                                            @if($proposal['IsEditable'])
+                                                <td>
+                                                    <a href="{{route('edit_proposal',['id'=> $proposal['id']])}}"
+                                                       title="@lang('translation.edit') @lang('translation.proposal')"
+                                                       class="{{$site_button_class}}"><i
                                                             class="fas fa-plus"></i>@lang('translation.edit') @lang('translation.proposal')
-                                                </a>
+                                                    </a>
 
+                                                </td>
+
+                                            @else
+
+                                                <td class="alert-sucess">
+                                                    <strong>Services are not editable.</strong>
+                                                </td>
+                                            @endif
+
+                                            <td class="tc">
+                                                STATUS: {{ App\Models\ProposalStatus::find($proposal['proposal_statuses_id'])->status }}
                                             </td>
 
-                                    @else
-
-                                            <td class="alert-sucess">
-                                                <strong>Services are not editable.</strong>
+                                        </tr>
+                                        <tr>
+                                            <td><b>@lang('translation.proposalname')</b></td>
+                                            <td>{{$proposal['name']}}
+                                                @if($proposal['job_master_id'])
+                                                    <br/>Work Order ID:{{$proposal['job_master_id']}}
+                                                @endif
                                             </td>
-                                    @endif
+                                        </tr>
 
-                                        <td class="tc">
-                                            STATUS: {{ App\Models\ProposalStatus::find($proposal['proposal_statuses_id'])->status }}
-                                        </td>
+                                        <tr>
+                                            <td>@lang('translation.location')</td>
+                                            <td>
+                                                @if($proposal['location_id'])
+                                                    {!! App\Models\Location::find($proposal['location_id'])->FullLocationTwoLines !!}
+                                                @endif
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>@lang('translation.proposaldate')</td>
+                                            <td>{{ \Carbon\Carbon::parse($proposal['proposal_date'])->format('m/d/yy') }}</td>
+                                        </tr>
 
-                                    </tr>
-                                    <tr>
-                                        <td><b>@lang('translation.proposalname')</b></td>
-                                        <td>{{$proposal['name']}}
-                                            @if($proposal['job_master_id'])
-                                                <br/>Work Order ID:{{$proposal['job_master_id']}}
-                                            @endif
-                                        </td>
-                                    </tr>
+                                        <tr>
+                                            <td>@lang('translation.salesmanager')</td>
+                                            <td>
+                                                @if($proposal['salesmanager_id'])
+                                                    {{ App\Models\User::find($proposal['salesmanager_id'])->FullName }}
+                                                @endif
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>@lang('translation.salesperson')</td>
+                                            <td>
+                                                @if($proposal['salesperson_id'])
+                                                    {{ App\Models\User::find($proposal['salesperson_id'])->FullName }}
+                                                @endif
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>@lang('translation.client')</td>
+                                            <td>
+                                                @if($proposal['contact_id'])
+                                                    <a href="{{route('contact_details',['contact'=>$proposal['contact_id']])}}">{{ App\Models\Contact::find($proposal['contact_id'])->FullName }}</a>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>@lang('translation.proposalclient')</td>
+                                            <td>
+                                                @if($proposal['customer_staff_id'])
+                                                    <a href="{{route('contact_details',['contact'=>$proposal['customer_staff_id']])}}">{{ App\Models\Contact::find($proposal['customer_staff_id'])->FullName }}</a>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>@lang('translation.progressivebilling')</td>
+                                            <td>@if($proposal['progressive_billing'])
+                                                    YES
+                                                @else
+                                                    NO
+                                                @endif
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>@lang('translation.permit') @lang('translation.required')</td>
+                                            <td>@if($proposal['permit_required'])
+                                                    YES
+                                                @else
+                                                    NO
+                                                @endif
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>@lang('translation.mot') @lang('translation.required')</td>
+                                            <td>@if($proposal['mot_required'])
+                                                    YES
+                                                @else
+                                                    NO
+                                                @endif
+                                            </td>
+                                        </tr>
 
-                                    <tr>
-                                        <td>@lang('translation.location')</td>
-                                        <td>
-                                            @if($proposal['location_id'])
-                                                {!! App\Models\Location::find($proposal['location_id'])->FullLocationTwoLines !!}
-                                            @endif
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>@lang('translation.proposaldate')</td>
-                                        <td>{{ \Carbon\Carbon::parse($proposal['proposal_date'])->format('m/d/yy') }}</td>
-                                    </tr>
+                                        <tr>
+                                            <td>@lang('translation.on_alert')</td>
+                                            <td>@if($proposal['on_alert'])
+                                                    YES
 
-                                    <tr>
-                                        <td>@lang('translation.salesmanager')</td>
-                                        <td>
-                                            @if($proposal['salesmanager_id'])
-                                                {{ App\Models\User::find($proposal['salesmanager_id'])->FullName }}
-                                            @endif
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>@lang('translation.salesperson')</td>
-                                        <td>
-                                            @if($proposal['salesperson_id'])
-                                                {{ App\Models\User::find($proposal['salesperson_id'])->FullName }}
-                                            @endif
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>@lang('translation.client')</td>
-                                        <td>
-                                            @if($proposal['contact_id'])
-                                                <a href="{{route('contact_details',['contact'=>$proposal['contact_id']])}}">{{ App\Models\Contact::find($proposal['contact_id'])->FullName }}</a>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>@lang('translation.proposalclient')</td>
-                                        <td>
-                                            @if($proposal['customer_staff_id'])
-                                                <a href="{{route('contact_details',['contact'=>$proposal['customer_staff_id']])}}">{{ App\Models\Contact::find($proposal['customer_staff_id'])->FullName }}</a>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>@lang('translation.progressivebilling')</td>
-                                        <td>@if($proposal['progressive_billing'])
-                                                YES
-                                            @else
-                                                NO
-                                            @endif
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>@lang('translation.permit') @lang('translation.required')</td>
-                                        <td>@if($proposal['permit_required'])
-                                                YES
-                                            @else
-                                                NO
-                                            @endif
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>@lang('translation.mot') @lang('translation.required')</td>
-                                        <td>@if($proposal['mot_required'])
-                                                YES
-                                            @else
-                                                NO
-                                            @endif
-                                        </td>
-                                    </tr>
+                                                @else
+                                                    NO
+                                                @endif
+                                            </td>
+                                        </tr>
 
-                                    <tr>
-                                        <td>@lang('translation.on_alert')</td>
-                                        <td>@if($proposal['on_alert'])
-                                                YES
-
-                                            @else
-                                                NO
-                                            @endif
-                                        </td>
-                                    </tr>
-
-<!--
+                                        <!--
                                     <tr>
                                         <td>@lang('translation.nto') @lang('translation.sent') </td>
                                         <td>@if($proposal['nto_required'])
-                                                YES
-                                            @else
-                                                NO
-                                            @endif
+                                            YES
+@else
+                                            NO
+@endif
                                         </td>
                                     </tr>
                                     -->
-                                </table>
+                                    </table>
                                 </div>
                             </div>
                         </div>
                         <div class="tab-pane" id="services" role="tabpanel">
                             <div class="row">
                                 <div id="services_container" class="col-sm-12">
-                                    <div class="row">
-                                        <div class="col-md-8 col-sm-6 mb20">
-                                        @if ($proposal['IsEditable'])
-                                            <x-href-button url="{{ route('new_service', ['proposal_id' => $proposal['id']]) }}" class="mr10 btn btn-success"><i class="fas fa-plus"></i>Add Service</x-href-button>
-                                        @endif
-                                        @if (!empty($services) && $services->count() > 0)
-                                            <x-reorder-button
-                                                :url="route('services_reorder')"
-                                                :params="[
-                                                'hidden-fields' => [
-                                                'proposal_id' => $proposal['id']
-                                                    ]
-                                                ]"
-                                            ></x-reorder-button>
-                                        @endif
-                                        </div>
-                                        <div class="col-md-4 col-sm-6 mb20 xs-hidden"></div>
-                                    </div>
-
                                     @include('proposals._proposal_services')
                                 </div>
                             </div>
@@ -324,7 +305,6 @@
                             <div class="row">
                                 <div class="col-sm-12">
                                     <h3>@lang('translation.status')</h3>
-
                                     <ul>
                                         <li>Set Alert</li>
                                         <li>Change Status</li>
@@ -334,7 +314,6 @@
                             <div class="row">
                                 <div class="col-sm-12">
                                     <h3>@lang('translation.letters')</h3>
-
                                     <ul>
                                         <li>Thank You For Signing</li>
                                         <li>Change Order</li>
@@ -355,6 +334,7 @@
     @include('modals.form_media_modal2')
 
     @include('modals.form_proposal_note_modal')
+
 @stop
 
 @section('css-files')
@@ -371,15 +351,7 @@
 
         $(document).ready(function () {
             if (selectedTab !== "") {
-                let a = $('#'+selectedTab);
-                let li = a.closest('li');
-                let ul = li.closest('ul');
-
-                ul.find('li').removeClass('no-border');
-                ul.find('a').removeClass('active');
-
-                li.addClass('no-border');
-                a.addClass('active').click();
+                $('#'+selectedTab).click();
             }
 
             if(document.referrer.includes('proposaldetails/edit')) {
@@ -555,17 +527,5 @@
 
 
     </script>
-
-
-    @section('script')
-
-        <!-- jquery.vectormap map -->
-        <script src="{{ URL::asset('/assets/libs/jquery-vectormap/jquery-vectormap.min.js')}}"></script>
-
-        <!-- Responsive examples -->
-        <script src="{{ URL::asset('/assets/libs/datatables/datatables.min.js')}}"></script>
-
-    @endsection
-    
 @stop
 
