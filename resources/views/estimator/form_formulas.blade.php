@@ -1,5 +1,5 @@
 <div class="mt20 mb10">
-    <form action="#" id="cost_formula_form" class="custom-validation" >
+    <form action="#" id="cost_formula_form" class="custom-validation">
 
 
         {{-- This form is for reference to calculate costs it is never submitted --}}
@@ -842,32 +842,32 @@
 
 
 
-            <div class="row">
-                        <div class="col-2">
-                            <label class="control-label">COST</label>
-                        </div>
-                        <div class="col-sm-2">
+                <div class="row">
+                    <div class="col-2">
+                        <label class="control-label">COST</label>
+                    </div>
+                    <div class="col-sm-2">
                             <span id="SealerCost">Sealer:{{ \App\Helpers\Currency::format($materialsCB[1] ?? '0.0') }}
                             </span>
-                        </div>
-                        <div class="col-2">
-                            <span id="SandCost">Sand:{{ \App\Helpers\Currency::format($materialsCB[2] ?? '0.0') }}</span>
-                        </div>
-                        <div class="col-2">
-                            <span id="AdditiveCost">Additive:{{ \App\Helpers\Currency::format($materialsCB[3] ?? '0.0') }}</span>
-                        </div>
-                        <div class="col-sm-2">
-                            <span id="PrimerCost">Primaer:{{ \App\Helpers\Currency::format($materialsCB[4] ?? '0.0') }}</span>
-                        </div>
-                        <div class="col-sm-2">
-                            <span id="FastSetCost">Fast Set:{{ \App\Helpers\Currency::format($materialsCB[5] ?? '0.0') }}</span>
-
-                        </div>
+                    </div>
+                    <div class="col-2">
+                        <span id="SandCost">Sand:{{ \App\Helpers\Currency::format($materialsCB[2] ?? '0.0') }}</span>
+                    </div>
+                    <div class="col-2">
+                        <span id="AdditiveCost">Additive:{{ \App\Helpers\Currency::format($materialsCB[3] ?? '0.0') }}</span>
+                    </div>
+                    <div class="col-sm-2">
+                        <span id="PrimerCost">Primaer:{{ \App\Helpers\Currency::format($materialsCB[4] ?? '0.0') }}</span>
+                    </div>
+                    <div class="col-sm-2">
+                        <span id="FastSetCost">Fast Set:{{ \App\Helpers\Currency::format($materialsCB[5] ?? '0.0') }}</span>
 
                     </div>
 
+                </div>
 
-                    <div class="row">
+
+                <div class="row">
                     <div class="col-2">
                         <label class="control-label">TOTALS </label>
                     </div>
@@ -1084,7 +1084,6 @@
     <script>
 
 
-
         $(document).ready(function () {
 
             // when the page loads we may need to repeat some calculations to determine total costs
@@ -1208,10 +1207,7 @@
 
                         var square_feet = $("#square_feet").val();
                         var depth = $("#depth").val();
-                        var toncost = $("#cost_per_day>option:selected").val();
-                        //alert(toncost);
-                        //$("select[name='cost_per_day'").find('option:selected').val();
-                        //$('#cost_per_day').find(":selected").val();;
+                        var cost_per_day = $("#cost_per_day>option:selected").val();
                         var locations = $("#locations").val();
 
 
@@ -1242,16 +1238,16 @@
                                 var tackamount = Math.ceil(square_feet / 108);
 
                             }
-                            var totaltack = tackcost * tackamount;
-                            var totaltons = toncost * tonamount;
+                            var totaltackcost = tackcost * tackamount;
+                            var totaltonscost = cost_per_day * tonamount;
 
-                            var materials = parseFloat(totaltack + totaltons);
+                            var materials = parseFloat(totaltackcost + totaltonscost);
 
                             //set display value for materials
                             $("#header_show_materials_cost").text('$' + materials);
 
                             if (proposaltext == '') {
-                                proposaltext = servicedesc.replace('#TONS#', tons);
+                                proposaltext = servicedesc.replace('#TONS#', tonamount);
                                 tinymce.activeEditor.setContent(proposaltext);
                             }
                             //add it up
@@ -1271,15 +1267,12 @@
                             breakeven = parseFloat(overhead) + parseFloat(results['combined']);
                             $("#form_header_break_even").text(formatCurrency.format(breakeven));
 
-                            console.log(overhead);
-
-
                             // set all relevant form values for update
                             $("#x_material_cost").val(materials);
                             $("#x_square_feet").val(square_feet);
                             $("#x_depth").val(depth);
                             $("#x_locations").val(locations);
-                            $("#x_cost_per_day").val(toncost);
+                            $("#x_cost_per_day").val(cost_per_day);
 
                             $("#x_curbmix").val(curbmix);
                             $("#x_drummix").val(drummix);
@@ -1332,8 +1325,7 @@
                             }
                             if (serviceId == 9) {
 
-                                var cost_per_linear_feet = drummix;
-
+                                cost_per_linear_feet = drummix;
                                 cubic_yards = Math.ceil(linear_feet / 15);
                             }
                             if (serviceId == 10) {
@@ -1507,7 +1499,7 @@
 
                     var square_feet = $("#square_feet").val();
                     var depth = $("#depth").val();
-                    var ourcost = $("#cost_per_day").val();
+                    var cost_per_day = $("#cost_per_day").val();
 
                     if (parseFloat(square_feet) == 'NaN' || parseFloat(depth) == 'NaN') { // check these are numbers
                         showInfoAlert('You can only enter numbers for square feet and depth.', headerAlert);
@@ -1522,13 +1514,13 @@
 
                     if (square_feet > 0 && depth > 0) {
 
-                        var tontimes = (7 / 1080);
-                        var tons = Math.ceil(square_feet * depth * tontimes);
+                        var multiplyer = (7 / 1080);
+                        var tons = Math.ceil(square_feet * depth * multiplyer);
                         var loads = Math.ceil(tons / 18);
 
                         $("#loads").text(loads);
                         $("#tons").text(tons);
-                        var materials = parseFloat(ourcost).toFixed(2);
+                        var materials = parseFloat(cost_per_day).toFixed(2);
                         $("#header_show_materials_cost").text('$' + materials);
                         if (proposaltext == '') {
                             proposaltext = servicedesc.replace('#TONS#', tons);
@@ -1558,7 +1550,7 @@
                         $("#x_depth").val(depth);
                         $("#x_loads").val(loads);
                         $("#x_tons").val(tons);
-                        $("#x_cost_per_day").val(ourcost);
+                        $("#x_cost_per_day").val(cost_per_day);
                         console.log("end excavation");
 
                     }
@@ -1698,8 +1690,8 @@
 
                     if (square_feet > 0 && depth > 0) {
 
-                        var tontimes = (7 / 1080);
-                        var tons = Math.ceil(square_feet * depth * tontimes);
+                        var multiplyer = (7 / 1080);
+                        var tons = Math.ceil(square_feet * depth * multiplyer);
                         var loads = Math.ceil(tons / 18);
 
                         $("#loads").text(loads);
@@ -1984,7 +1976,6 @@
                     showConfirmButton: false,
 
                 })
-
 
 
             }
