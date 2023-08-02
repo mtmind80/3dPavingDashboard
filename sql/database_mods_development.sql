@@ -1638,6 +1638,7 @@ DROP TABLE locations2;
 #load fake data
 #Build Actions
 #Build MaxIDs
+#Fix contact types
 
 
 
