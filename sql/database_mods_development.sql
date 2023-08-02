@@ -1236,7 +1236,7 @@ Set datatblmultivendorpricing.service_id = striping_services.id;
 INSERT INTO striping_costs
 (striping_service_id,
 description, 
-rate, 
+cost, 
 old_id
 )
 SELECT 
@@ -1256,17 +1256,19 @@ UPDATE striping_costs set id = old_id;
 INSERT INTO proposal_detail_striping_services
 (
 proposal_detail_id,
-striping_cost_id,
+striping_service_id,
 quantity,
 cost,
-description
+description,
+name
 )
 SELECT 
-jobmultijordID, 
-jobmultiScatID,
-jobmultiQuantity,
-jobmultiCost,
-jobmultiSERVICE_DESC
+potbljobordermultipricing.jobmultijordID, 
+potbljobordermultipricing.jobmultiScatID,
+potbljobordermultipricing.jobmultiQuantity,
+potbljobordermultipricing.jobmultiCost,
+potbljobordermultipricing.jobmultiSERVICE_DESC,
+potbljobordermultipricing.jobmultiSERVICE
 FROM
 potbljobordermultipricing
 join potbljoborderdetail on potbljoborderdetail.jordID = potbljobordermultipricing.jobmultijordID

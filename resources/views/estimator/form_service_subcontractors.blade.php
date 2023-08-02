@@ -261,7 +261,7 @@
                             @if (env('APP_ENV') === 'local')
                                 showErrorAlert(response.responseJSON.message, subcontractorsAlert);
                             @else
-                                showErrorAlert(response.message, 'Critical error has occurred.');
+                                showErrorAlert('Critical error has occurred.', subcontractorsAlert);
                             @endif
                         }
                     });
@@ -313,9 +313,9 @@
                     },
                     error: function (response){
                         @if (env('APP_ENV') === 'local')
-                        showErrorAlert(response.responseJSON.message, subcontractorsAlert);
+                            showErrorAlert(response.responseJSON.message, subcontractorsAlert);
                         @else
-                        showErrorAlert(response.message, 'Critical error has occurred.');
+                            showErrorAlert('Critical error has occurred.', subcontractorsAlert);
                         @endif
                     }
                 });
