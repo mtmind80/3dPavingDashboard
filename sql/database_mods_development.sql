@@ -760,8 +760,7 @@ Update contacts set postal_code = '33255' WHERE postal_code ='33258';
 Update contacts set postal_code = '33431' where city ='Boca Raton' and postal_code ='33343';
 Update contacts set postal_code = '33431' where city ='Boca Raton' and postal_code ='33341';
 Update contacts set postal_code = '33441' where city ='Deerfield Beach' and postal_code ='33341';
- 
- 
+
 #update counties in contacts
 UPDATE contacts p JOIN counties c on c.zip = p.postal_code Set p.county = c.county; 
 
@@ -1186,7 +1185,8 @@ WHERE YEAR(potbljoborders.jobCreatedDateTime) > 2019;
 
 
 
-
+ 
+ 
 #CREATE LOOKUPS vehicles, Material Costs
 
 
@@ -1638,7 +1638,7 @@ DROP TABLE locations2;
 #load fake data
 #Build Actions
 #Build MaxIDs
-
+#Build New Contact types
 
 
 /*
