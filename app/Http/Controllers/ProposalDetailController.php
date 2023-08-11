@@ -19,6 +19,7 @@ use App\Models\ProposalDetailSubcontractor;
 use App\Models\ProposalDetailVehicle;
 use App\Models\ProposalMaterial;
 use App\Models\Service;
+use App\Models\ServiceCategory;
 use App\Models\StripingCost;
 use App\Models\Vehicle;
 use Exception;
@@ -66,7 +67,6 @@ class ProposalDetailController extends Controller
             $remove_old = ProposalDetailStripingService::where('proposal_detail_id', '=', $new_id)->delete();
 
             $striping = StripingCost::with(['service'])->get()->toArray();
-
 
             foreach($striping as $stripe) {
 
@@ -154,6 +154,9 @@ class ProposalDetailController extends Controller
         $sealcoatMaterials = ProposalMaterial::where('proposal_id', $proposal_id)->byServiceCategory(8);
         $materialsCB = ProposalMaterial::where('proposal_id', $proposal_id)->pluck('cost', 'material_id')->toArray();
 
+
+        $color = ServiceCategory::where('id','=', $proposalDetail->service->service_category_id)->first();
+
         $data = [
             'header_name' => 'Build Service Estimate',
             'proposalDetail' => $proposalDetail,
@@ -164,6 +167,7 @@ class ProposalDetailController extends Controller
             'asphaltMaterials' => $asphaltMaterials,
             'striping' => $proposalDetail->striping,
             'service' => $proposalDetail->service,
+            'color' => $color,
             'service_category_name' => $proposalDetail->service->category->name,
             'equipmentCollection' => Equipment::available()->orderBy('name')->get(),
             'materialsCB' => $materialsCB,

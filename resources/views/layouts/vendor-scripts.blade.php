@@ -5,7 +5,7 @@
  <script src="{{ URL::asset('/assets/libs/simplebar/simplebar.min.js')}}"></script>
  <script src="{{ URL::asset('/assets/libs/node-waves/node-waves.min.js')}}"></script>
 
- <script src="{{ URL::asset('/assets/libs/parsleyjs/parsleyjs.min.js')}}"></script>
+ <script src="{{ URL::asset('/assets/libs/parsleyjs/parsleyjs.min.js')}}" defer></script>
  <script src="{{ URL::asset('/assets/js/pages/form-validation.init.js')}}"></script>
 
  @yield('script')
