@@ -16,12 +16,12 @@
                     <thead>
                     <tr>
                         <th class="w1-6">Customer Price</th>
-                        <th class="w1-6">Combined Cost</th>
                         <th class="w1-6 pr10">Profit <i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></th>
-                        <th class="w1-6 pr10">Over Head 
+                        <th class="w1-6 pr10">Breakeven</th>
+                        <th class="w1-6">Combined Cost</th>
+                        <th class="w1-6 pr10">Over Head
                             <span id="explain"></span>
                         </th>
-                        <th class="w1-6 pr10">Breakeven</th>
                         <th class="w1-6"></th>
                     </tr>
                     </thead>
@@ -34,16 +34,6 @@
                                     :params="[
                                         'id' => 'header_show_customer_price',
                                     ]">{{$proposalDetail->cost}}
-                                </x-form-show>
-                            </div>
-                        </td>
-                        <td class="w1-6 td-tt pr10">
-                            <div class="admin-form-item-widget">
-                                <x-form-show
-                                    class="w180 show-check-contact"
-                                    :params="[
-                                        'id' => 'header_show_combined_costing',
-                                    ]">
                                 </x-form-show>
                             </div>
                         </td>
@@ -63,11 +53,21 @@
                         <td class="w1-6 pr10">
                             <div class="admin-form-item-widget">
                                 <x-form-show
-                                     class="w180 show-check-contact"
-                                     :params="[
-                                        'id' => 'form_header_over_head',
-                                    ]">{{$proposalDetail->overhead}}</x-form-show>
-                            
+                                    class="w180 show-check-contact"
+                                    :params="[
+                                        'id' => 'form_header_break_even',
+                                    ]"
+                                >{{$proposalDetail->break_even}}</x-form-show>
+                            </div>
+                        </td>
+                        <td class="w1-6 td-tt pr10">
+                            <div class="admin-form-item-widget">
+                                <x-form-show
+                                    class="w180 show-check-contact"
+                                    :params="[
+                                        'id' => 'header_show_combined_costing',
+                                    ]">
+                                </x-form-show>
                             </div>
                         </td>
                         <td class="w1-6 pr10">
@@ -75,9 +75,9 @@
                                 <x-form-show
                                      class="w180 show-check-contact"
                                      :params="[
-                                        'id' => 'form_header_break_even',
-                                    ]"
-                                >{{$proposalDetail->break_even}}</x-form-show>
+                                        'id' => 'form_header_over_head',
+                                    ]">{{$proposalDetail->overhead}}</x-form-show>
+
                             </div>
                         </td>
                         <td class="w1-6">

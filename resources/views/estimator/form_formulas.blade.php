@@ -209,18 +209,29 @@
                     </div>
                     <br/>
                     <div class="row">
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <x-form-show
-                                    class="w180 show-check-contact"
-                                    :params="[
-                                    'label' => 'Tack Cost (gal)',
+                                class="w180 show-check-contact"
+                                :params="[
+                                    'label' => 'Tack Cost',
                                     'placeholder'=>'0',
                                     'name'=>'tack_cost',
-                                    'id'=>'tack_cost'
-                    ]">{{ \App\Helpers\Currency::format($materialsCB[14] ?? '0.0') }}</x-form-show>
+                                    'id'=>'TackCost'
+                    ]"></x-form-show>
 
                         </div>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
+                            <x-form-show
+                                class="w180 show-check-contact"
+                                :params="[
+                                    'label' => 'Asphalt Cost',
+                                    'placeholder'=>'0',
+                                    'name'=>'asphalt_cost',
+                                    'id'=>'TonCost'
+                    ]"></x-form-show>
+
+                        </div>
+                        <div class="col-sm-3">
                             <x-form-show
                                     class="w180 show-check-contact"
                                     :params="[
@@ -231,7 +242,7 @@
                     ]">{{$proposalDetail->square_yards}}</x-form-show>
 
                         </div>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <x-form-show
                                     class="w180 show-check-contact"
                                     :params="[
@@ -461,23 +472,22 @@
                     </div>
                     <div class="col-sm-2">
                         <x-form-show
-                                class="check-contact tc"
-                                id='loads'
-                                class="w180 show-check-contact"
+                                class="w180 check-contact tc"
                                 :params="[
+                                'id'=>'loads',
                                 'label' => 'Loads',
                                 'placeholder'=>'calculated',
-                                 'name'=>'loads',
+                                'name'=>'loads',
                     ]">{{$proposalDetail->loads}}</x-form-show>
                     </div>
                     <div class="col-sm-2">
                         <x-form-show
-                                id='tons'
-                                class="w180 show-check-contact"
-                                :params="[
-                           'placeholder'=>'calculated',
-                            'label' => 'Tons',
-                            'name'=>'ton',
+                            class="w180 check-contact tc"
+                            :params="[
+                                'id'=>'tons',
+                                'placeholder'=>'calculated',
+                                'label' => 'Tons',
+                                'name'=>'tons',
                     ]">{{$proposalDetail->tons}}
                         </x-form-show>
                     </div>
@@ -638,6 +648,17 @@
                     </div>
                     <div class="col-sm-3">
                         <x-form-show
+                            class="w180 show-check-contact"
+                            :params="[
+                           'placeholder'=>'calculated',
+                    'label' => 'Tons',
+                    'name'=>'ton',
+                    'id'=>'tons'
+                    ]">{{$proposalDetail->tons}}
+                        </x-form-show>
+                    </div>
+                    <div class="col-sm-3">
+                        <x-form-show
                                 class="w180 show-check-contact"
                                 :params="[
                              'label' => 'Loads',
@@ -645,17 +666,6 @@
                                     'name'=>'loads',
                                     'id'=>'loads'
                     ]">{{$proposalDetail->loads}}
-                        </x-form-show>
-                    </div>
-                    <div class="col-sm-3">
-                        <x-form-show
-                                class="w180 show-check-contact"
-                                :params="[
-                           'placeholder'=>'calculated',
-                    'label' => 'Tons',
-                    'name'=>'ton',
-                    'id'=>'tons'
-                    ]">{{$proposalDetail->tons}}
                         </x-form-show>
                     </div>
 
@@ -1166,15 +1176,19 @@
                                 console.log(results);
                             }
 
+
+                            var combinedcost = results['combined'];
+
                             profit = $("#form_header_profit").val();
-                            var otcost = Math.ceil(results['combined'] + parseFloat(profit));
+                            var otcost = Math.ceil(parseFloat(combinedcost) + parseFloat(profit));
 
                             overhead = Math.ceil((otcost / 0.88) - otcost);
                             $("#form_header_over_head").text(formatCurrency.format(overhead));
                             $("#explain").html(' 12%');
 
-                            breakeven = parseFloat(overhead) + parseFloat(results['combined']);
                             $("#form_header_break_even").text(formatCurrency.format(breakeven));
+                            breakeven = parseFloat(overhead) + parseFloat(combinedcost);
+                            $("#header_show_customer_price").text(formatCurrency.format(breakeven + profit));
 
 
                             if (proposaltext == '') {
@@ -1239,7 +1253,13 @@
 
                             }
                             var totaltackcost = tackcost * tackamount;
+                            $("#TackCost").text(formatCurrency.format(totaltackcost));
+
                             var totaltonscost = cost_per_day * tonamount;
+                            $("#TonCost").text(formatCurrency.format(totaltonscost));
+
+                            $("#form_header_over_head").text(formatCurrency.format(overhead));
+
 
                             var materials = parseFloat(totaltackcost + totaltonscost);
 
@@ -1256,16 +1276,19 @@
                             if ({{$debug_blade}}) {
                                 console.log(results);
                             }
+                            var combinedcost = results['combined'];
 
                             profit = $("#form_header_profit").val();
-                            var otcost = Math.ceil(results['combined'] + parseFloat(profit));
+                            var otcost = Math.ceil(parseFloat(combinedcost) + parseFloat(profit));
 
                             overhead = Math.ceil((otcost / 0.7) - otcost);
                             $("#form_header_over_head").text(formatCurrency.format(overhead));
                             $("#explain").html(' 30%');
 
-                            breakeven = parseFloat(overhead) + parseFloat(results['combined']);
+                            breakeven = parseFloat(overhead) + parseFloat(combinedcost);
                             $("#form_header_break_even").text(formatCurrency.format(breakeven));
+
+                            $("#header_show_customer_price").text(formatCurrency.format(breakeven + profit));
 
                             // set all relevant form values for update
                             $("#x_material_cost").val(materials);
@@ -1353,16 +1376,18 @@
                                 console.log(results);
                             }
 
+                            var combinedcost = results['combined'];
+
                             profit = $("#form_header_profit").val();
-                            var otcost = Math.ceil(results['combined'] + parseFloat(profit));
+                            var otcost = Math.ceil(parseFloat(combinedcost) + parseFloat(profit));
 
                             overhead = Math.ceil((otcost / 0.7) - otcost);
                             $("#form_header_over_head").text(formatCurrency.format(overhead));
                             $("#explain").html(' 30%');
 
-                            breakeven = parseFloat(overhead) + parseFloat(results['combined']);
+                            breakeven = parseFloat(overhead) + parseFloat(combinedcost);
                             $("#form_header_break_even").text(formatCurrency.format(breakeven));
-
+                            $("#header_show_customer_price").text(formatCurrency.format(breakeven + profit));
 
                             $("#x_material_cost").val(materials);
                             $("#x_linear_feet").val(linear_feet);
@@ -1411,15 +1436,18 @@
                                 console.log(results);
                             }
 
+                            var combinedcost = results['combined'];
+
                             profit = $("#form_header_profit").val();
-                            var otcost = Math.ceil(results['combined'] + parseFloat(profit));
+                            var otcost = Math.ceil(parseFloat(combinedcost) + parseFloat(profit));
 
                             overhead = Math.ceil((otcost / 0.7) - otcost);
                             $("#form_header_over_head").text(formatCurrency.format(overhead));
                             $("#explain").html(' 30%');
 
-                            breakeven = parseFloat(overhead) + parseFloat(results['combined']);
+                            breakeven = parseFloat(overhead) + parseFloat(combinedcost);
                             $("#form_header_break_even").text(formatCurrency.format(breakeven));
+                            $("#header_show_customer_price").text(formatCurrency.format(breakeven + profit));
 
                             // set all relevant form values for update
                             $("#x_material_cost").val(materials);
@@ -1463,15 +1491,19 @@
                             console.log(results);
                         }
 
+                        var combinedcost = results['combined'];
+
                         profit = $("#form_header_profit").val();
-                        var otcost = Math.ceil(results['combined'] + parseFloat(profit));
+                        var otcost = Math.ceil(parseFloat(combinedcost) + parseFloat(profit));
 
                         overhead = Math.ceil((otcost / 0.7) - otcost);
                         $("#form_header_over_head").text(formatCurrency.format(overhead));
                         $("#explain").html(' 30%');
 
-                        breakeven = parseFloat(overhead) + parseFloat(results['combined']);
+                        breakeven = parseFloat(overhead) + parseFloat(combinedcost);
                         $("#form_header_break_even").text(formatCurrency.format(breakeven));
+
+                        $("#header_show_customer_price").text(formatCurrency.format(breakeven + profit));
 
                         if (proposaltext == '') {
                             proposaltext = servicedesc.replace('#BASINS#', catchbasins);
@@ -1501,13 +1533,13 @@
                     var depth = $("#depth").val();
                     var cost_per_day = $("#cost_per_day").val();
 
-                    if (parseFloat(square_feet) == 'NaN' || parseFloat(depth) == 'NaN') { // check these are numbers
-                        showInfoAlert('You can only enter numbers for square feet and depth.', headerAlert);
+                    if (parseFloat(square_feet) == 'NaN' || parseFloat(depth) == 'NaN' || parseFloat(cost_per_day) == 'NaN') { // check these are numbers
+                        showInfoAlert('You can only enter numbers for square feet and depth and cost.', headerAlert);
                         return;
                     }
 
                     if (parseFloat(profit) == 'NaN') {
-                        showInfoAlert('You can only enter numbers for profit, overhead and break even.', headerAlert);
+                        showInfoAlert('You can only enter numbers for profit.', headerAlert);
                         return;
                     }
 
@@ -1531,17 +1563,21 @@
                         if ({{$debug_blade}}) {
                             console.log(results);
                         }
+                        var combinedcost = results['combined'];
 
                         profit = $("#form_header_profit").val();
-                        var otcost = Math.ceil(results['combined'] + parseFloat(profit));
+
+                        var otcost = Math.ceil(parseFloat(combinedcost) + parseFloat(profit));
 
                         overhead = Math.ceil((otcost / 0.7) - otcost);
+
                         $("#form_header_over_head").text(formatCurrency.format(overhead));
                         $("#explain").html(' 30%');
 
-                        breakeven = parseFloat(overhead) + parseFloat(results['combined']);
+                        breakeven = parseFloat(overhead) + parseFloat(combinedcost);
                         $("#form_header_break_even").text(formatCurrency.format(breakeven));
 
+                        $("#header_show_customer_price").text(formatCurrency.format(breakeven + profit));
 
                         // ok so set square_feet, cost, loads, tons, depth, bill_after, profit, break_even, location_id, overhead, toncost, proposal_text
                         // set all relevant form values for update
@@ -1576,17 +1612,19 @@
                             console.log(results);
                         }
 
+                        var combinedcost = results['combined'];
 
                         profit = $("#form_header_profit").val();
-                        var otcost = Math.ceil(results['combined'] + parseFloat(profit));
+                        var otcost = Math.ceil(parseFloat(combinedcost) + parseFloat(profit));
 
                         overhead = Math.ceil((otcost / 0.7) - otcost);
                         $("#form_header_over_head").text(formatCurrency.format(overhead));
                         $("#explain").html(' 30%');
 
-                        breakeven = parseFloat(overhead) + parseFloat(results['combined']);
+                        breakeven = parseFloat(overhead) + parseFloat(combinedcost);
                         $("#form_header_break_even").text(formatCurrency.format(breakeven));
 
+                        $("#header_show_customer_price").text(formatCurrency.format(breakeven + profit));
 
                         if (proposaltext == '' || proposaltext == 'proposaltext') {
                             proposaltext = servicedesc;
@@ -1634,16 +1672,18 @@
                             console.log(results);
                         }
 
+                        var combinedcost = results['combined'];
+
                         profit = $("#form_header_profit").val();
-                        var otcost = Math.ceil(results['combined'] + parseFloat(profit));
+                        var otcost = Math.ceil(parseFloat(combinedcost) + parseFloat(profit));
 
                         overhead = Math.ceil((otcost / 0.75) - otcost);
                         $("#form_header_over_head").text(formatCurrency.format(overhead));
                         $("#explain").html(' 25%');
 
-                        breakeven = parseFloat(overhead) + parseFloat(results['combined']);
+                        breakeven = parseFloat(overhead) + parseFloat(combinedcost);
                         $("#form_header_break_even").text(formatCurrency.format(breakeven));
-
+                        $("#header_show_customer_price").text(formatCurrency.format(breakeven + profit));
 
                         $("#header_show_materials_cost").text(formatCurrency.format(materials));
                         $("#x_cost_per_day").val(cost_per_day);
@@ -1697,7 +1737,7 @@
                         $("#loads").text(loads);
                         $("#tons").text(tons);
                         var materials = (tons * rockcost);
-                        materials = parseFloat(materials).toFixed(2);
+                        //materials = parseFloat(materials);
 
                         if (proposaltext == '') {
                             var proposaltext = servicedesc.replace('#INCHES#', depth);
@@ -1709,18 +1749,20 @@
                             console.log(results);
                         }
 
+                        var combinedcost = results['combined'];
                         profit = $("#form_header_profit").val();
-                        var otcost = Math.ceil(results['combined'] + parseFloat(profit));
+                        var otcost = Math.ceil(parseFloat(combinedcost) + parseFloat(profit));
 
                         overhead = Math.ceil((otcost / 0.7) - otcost);
                         $("#form_header_over_head").text(formatCurrency.format(overhead));
                         $("#explain").html(' 30%');
 
-                        breakeven = parseFloat(overhead) + parseFloat(results['combined']);
+                        breakeven = parseFloat(overhead) + parseFloat(combinedcost);
                         $("#form_header_break_even").text(formatCurrency.format(breakeven));
 
+                        $("#header_show_customer_price").text(formatCurrency.format(parseFloat(breakeven) + parseFloat(profit)));
 
-                        $("#header_show_materials_cost").text('$' + materials);
+                        $("#header_show_materials_cost").text(formatCurrency.format(materials));
                         $("#x_square_feet").val(square_feet);
                         $("#x_depth").val(depth);
                         $("#x_tons").val(tons);
@@ -1785,17 +1827,18 @@
 
                         var results = additup(materials);
                         console.log(results);
+                        var combinedcost = results['combined'];
 
                         profit = $("#form_header_profit").val();
-                        var otcost = Math.ceil(results['combined'] + parseFloat(profit));
+                        var otcost = Math.ceil(parseFloat(combinedcost) + parseFloat(profit));
 
                         overhead = Math.ceil((otcost / 0.7) - otcost);
                         $("#form_header_over_head").text(formatCurrency.format(overhead));
                         $("#explain").html(' 30%');
 
-                        breakeven = parseFloat(overhead) + parseFloat(results['combined']);
+                        breakeven = parseFloat(overhead) + parseFloat(combinedcost);
                         $("#form_header_break_even").text(formatCurrency.format(breakeven));
-
+                        $("#header_show_customer_price").text(formatCurrency.format(breakeven + profit));
 
                         $("#x_sealer").val(sealer);
                         $("#x_square_feet").val(square_feet);
@@ -1857,18 +1900,19 @@
                         if ({{$debug_blade}})
                             console.log(results);
                     }
+                    var combinedcost = results['combined'];
 
 
                     profit = $("#form_header_profit").val();
-                    var otcost = Math.ceil(results['combined'] + parseFloat(profit));
+                    var otcost = Math.ceil(parseFloat(combinedcost) + parseFloat(profit));
 
                     overhead = Math.ceil((otcost / 0.7) - otcost);
                     $("#form_header_over_head").text(formatCurrency.format(overhead));
                     $("#explain").html(' 30%');
 
-                    breakeven = parseFloat(overhead) + parseFloat(results['combined']);
+                    breakeven = parseFloat(overhead) + parseFloat(combinedcost);
                     $("#form_header_break_even").text(formatCurrency.format(breakeven));
-
+                    $("#header_show_customer_price").text(formatCurrency.format(breakeven + profit));
 
                     if (additive = parseInt(additive) && additive > 0) {
                         var soh = parseFloat(1 - (additive / 100));
@@ -1917,6 +1961,11 @@
                 $("#x_break_even").val(breakeven);
                 $("#x_profit").val(profit);
 
+                var customercost = parseFloat(breakeven) + parseFloat(profit);
+                headerElCombinedCosting.text(formatCurrency.format(combinedcost));
+                headerElCustomerPrice.text(formatCurrency.format(customercost));
+
+                $("#x_cost").val(customercost);
 
                 //then save it
                 if (dosave == 1) {
@@ -1941,21 +1990,7 @@
                     console.log('add combined:' + combinedcost);
                 }
                 var data = [];
-                //profit overhead breakeven
-                var pob_cost = parseFloat($('#form_header_profit').val());
-
                 data['combined'] = parseFloat(combinedcost).toFixed(2);
-                data['pob_cost'] = parseFloat(pob_cost).toFixed(2);
-
-                data['math'] = parseFloat(combinedcost) + '+' + parseFloat(pob_cost);
-                var customercost = (parseFloat(combinedcost) + parseFloat(pob_cost)).toFixed(2);
-                data['customercost'] = customercost;
-
-                headerElCombinedCosting.text(formatCurrency.format(combinedcost));
-                headerElCustomerPrice.text(formatCurrency.format(customercost));
-
-                $("#x_cost").val(customercost);
-
                 return data;
 
             }

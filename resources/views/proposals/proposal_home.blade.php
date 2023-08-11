@@ -173,6 +173,20 @@
                                         </td>
                                     </tr>
 
+                                        <tr>
+                                            <td>Create Change Order</td>
+                                            <td>
+                                                <a href="{{route('contact_details',['contact'=>$proposal['customer_staff_id']])}}">Change Order</a>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>CLone Proposal</td>
+                                            <td>
+                                                <a href="{{route('contact_details',['contact'=>$proposal['customer_staff_id']])}}">Clone Proposal</a>
+
+                                            </td>
+                                        </tr>
 <!--
                                     <tr>
                                         <td>@lang('translation.nto') @lang('translation.sent') </td>
