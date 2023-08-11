@@ -161,7 +161,7 @@ class User extends Authenticatable
 
     public function isOffice()  //office only functions
     {
-        return in_array($this->role_id, [2,3,4,7]);
+        return in_array($this->role_id, [1,2,3,4,7]);
     }
 
     public function isSuperAdmin() //can do most anything

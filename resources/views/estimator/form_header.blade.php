@@ -16,12 +16,12 @@
                     <thead>
                     <tr>
                         <th class="w1-6">Customer Price</th>
-                        <th class="w1-6">Combined Cost</th>
                         <th class="w1-6 pr10">Profit <i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></th>
-                        <th class="w1-6 pr10">Over Head 
+                        <th class="w1-6 pr10">Breakeven</th>
+                        <th class="w1-6">Combined Cost</th>
+                        <th class="w1-6 pr10">Over Head
                             <span id="explain"></span>
                         </th>
-                        <th class="w1-6 pr10">Breakeven</th>
                         <th class="w1-6"></th>
                     </tr>
                     </thead>
@@ -37,6 +37,29 @@
                                 </x-form-show>
                             </div>
                         </td>
+                        <td class="w1-6 pr10">
+                            <div class="admin-form-item-widget">
+                                <x-form-text name="profit"
+                                     class="check-contact"
+                                     placeholder="enter value"
+                                     id="form_header_profit"
+                                     :params="[
+                                        'label' => 'none',
+                                        'iconClass' => 'none',
+                                    ]"
+                                >{{$proposalDetail->profit}}</x-form-text>
+                            </div>
+                        </td>
+                        <td class="w1-6 pr10">
+                            <div class="admin-form-item-widget">
+                                <x-form-show
+                                    class="w180 show-check-contact"
+                                    :params="[
+                                        'id' => 'form_header_break_even',
+                                    ]"
+                                >{{$proposalDetail->break_even}}</x-form-show>
+                            </div>
+                        </td>
                         <td class="w1-6 td-tt pr10">
                             <div class="admin-form-item-widget">
                                 <x-form-show
@@ -49,35 +72,12 @@
                         </td>
                         <td class="w1-6 pr10">
                             <div class="admin-form-item-widget">
-                                <x-form-text name="profit"
-                                     class="check-contact"
-                                     placeholder="enter value"
-                                     id="profit"
-                                     :params="[
-                                        'label' => 'none',
-                                        'iconClass' => 'none',
-                                    ]"
-                                >{{$proposalDetail->profit}}</x-form-text>
-                            </div>
-                        </td>
-                        <td class="w1-6 pr10">
-                            <div class="admin-form-item-widget">
                                 <x-form-show
                                      class="w180 show-check-contact"
                                      :params="[
                                         'id' => 'form_header_over_head',
                                     ]">{{$proposalDetail->overhead}}</x-form-show>
-                            
-                            </div>
-                        </td>
-                        <td class="w1-6 pr10">
-                            <div class="admin-form-item-widget">
-                                <x-form-show
-                                     class="w180 show-check-contact"
-                                     :params="[
-                                        'id' => 'form_header_break_even',
-                                    ]"
-                                >{{$proposalDetail->break_even}}</x-form-show>
+
                             </div>
                         </td>
                         <td class="w1-6">
@@ -105,7 +105,13 @@
         var headerCalculateCombinedCostingButton2 = $('#header_calculate_combined_costing_button2');
         var headerCalculateCombinedCostingButton3 = $('#header_calculate_combined_costing_button3');
         var headerCalculateCombinedCostingButton4 = $('#header_calculate_combined_costing_button4');
-        
+
+        var headerElVehiclesCost = $('#header_show_vehicles_cost');
+        var headerElEquipmentCost = $('#header_show_equipment_cost');
+        var headerElMaterialsCost = $('#header_show_materials_cost');
+        var headerElLaborCost = $('#header_show_labor_cost');
+        var headerElAdditionalCost = $('#header_show_additional_cost');
+        var headerElSubcontractorCost = $('#header_show_subcontractor_cost');
 
         var headerElTotalCost = $('#header_total_cost');
         var headerElEstimatorFormFieldTotalCost = $('#estimator_form_header_total_cost');

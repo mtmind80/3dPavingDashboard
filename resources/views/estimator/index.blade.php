@@ -40,8 +40,10 @@
         <form method="POST" action="{{route('checkform')}}" accept-charfset="UTF-8" id="estimator_form" class="admin-form">
             @csrf
             <input type="hidden" name="id" id="x_id" value="{{ $proposalDetail->id }}">
+            <input type="hidden" name="proposal_detail_id" id="x_id" value="{{ $proposalDetail->id }}">
             <input type="hidden" name="service_name" id="x_service_name" value="{{ $proposalDetail->service_name }}">
             <input type="hidden" name="services_id" id="x_services_id" value="{{ $proposalDetail->services_id }}">
+            <input type="hidden" name="service_category_id" id="x_service_category_id" value="{{ $proposalDetail->service->service_category_id }}">
             <input type="hidden" name="proposal_id" id="x_proposal_id" value="{{ $proposalDetail->proposal_id }}">
             <input type="hidden" name="catchbasins" id="x_catchbasins" value="{{ $proposalDetail->catchbasins }}">
             <input type="hidden" name="linear_feet" id="x_linear_feet" value="{{ $proposalDetail->linear_feet }}">
@@ -54,6 +56,7 @@
             <input type="hidden" name="locations" id="x_locations" value="{{ $proposalDetail->locations }}">
             <input type="hidden" name="overhead" id="x_overhead" value="{{ $proposalDetail->overhead }}">
             <input type="hidden" name="alt_desc" id="x_alt_desc" value="{{ $proposalDetail->alt_desc }}">
+            <input type="hidden" name="contractor_id" id="x_contractor_id" value="{{ $proposalDetail->contractor_id }}">
 
             <input type="hidden" name="depth" id="x_depth" value="{{ $proposalDetail->depth }}">
             <input type="hidden" name="profit" id="x_profit" value="{{ $proposalDetail->profit }}">
@@ -72,8 +75,6 @@
             <input type="hidden" name="location_id" id="x_location_id" value="{{ $proposalDetail->location_id }}">
             <input type="hidden" name="cost" id="x_cost" value="{{ $proposalDetail->cost }}">
             <input type="hidden" name="material_cost" id="x_material_cost" value="{{ $proposalDetail->material_cost }}">
-            <input type="hidden" name='toncost' id='x_toncost' value="{{ $proposalDetail->toncost }}">
-
 
             <input type="hidden" name='stayorleave' id='stayorleave' value="false">
             {{-- user will stay  after save --}}
@@ -85,7 +86,14 @@
             <input type="hidden" name="materials_total_cost" id="estimator_form_materials_total_cost" value="{{ $proposalDetail->material_cost }}">
             <input type="hidden" name="subcontractor_total_cost" id="estimator_form_subcontractor_total_cost" value="{{ $proposalDetail->total_cost_subcontractor }}">
         </form>
-        
+
+        <!-- to be removed -->
+        @if (env('APP_ENV') === 'local')
+            <div class="row pl25 pb20">
+                <a class="btn btn-outline-info estimator-form-submit-button" href="javascript:">Test Ajax Submission</a>
+            </div>
+        @endif
+
         <div class="col-12">
             @include('_partials._alert')
             <div class="card">
@@ -146,8 +154,6 @@
             @endif
         </div>
     </div>
-
-
 @endsection
 
 @section('script')
@@ -167,7 +173,57 @@
         var serviceCategoryId = Number("{{ $proposalDetail->service->service_category_id }}");
         var serviceCategoryName = "{{ $service_category_name }}";
         var proposalId = Number("{{ $proposalDetail->proposal_id }}");
+        var mainAlert = $('#alert');
 
+        $(document).ready(function(){
+
+            // Add estimator-form-submit-button class to any button intended for submitting the estimator form
+
+            $('body').on('click', '.estimator-form-submit-button', function(){
+                ajaxEstimatorFormSubmit();
+            });
+        });
+
+        function ajaxEstimatorFormSubmit()
+        {
+            let estimatorForm = $('#estimator_form');
+            let formData = estimatorForm.serializeObject();
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: formData,
+                type: "POST",
+                url: "{{ route('ajax_proposal_details_update') }}",
+                beforeSend: function (request){
+                    showSpinner();
+                },
+                complete: function (){
+                    hideSpinner();
+                },
+                success: function (response){
+                    if (!response) {
+                        showErrorAlert('Critical error has occurred.', mainAlert);
+                    } else if (response.success) {
+                        let data = response.data;
+
+                        if (response.message) {
+                            showSuccessAlert(response.message, mainAlert);
+                        }
+                    } else {
+                        showErrorAlert(response.message, mainAlert);
+                    }
+                },
+                error: function (response){
+                    @if (env('APP_ENV') === 'local')
+                        showErrorAlert(response.responseJSON.message, mainAlert);
+                    @else
+                        showErrorAlert(response.message, 'Critical error has occurred.', mainAlert);
+                    @endif
+                }
+            });
+        }
     </script>
 @stop
 

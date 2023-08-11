@@ -218,6 +218,10 @@ Route::group(['middleware' => ['auth']], function() {
         // Select service type
         Route::post('/checkform', 'ProposalDetailController@checkform')->name('checkform');
 
+        Route::post('/save_striping', 'ProposalDetailController@savestriping')->name('save_striping');
+
+
+
         Route::get('/new_service/{proposal_id}', 'ProposalDetailController@newservice')->name('new_service');
         // Start New Service with a service type
         Route::post('/create_service/{proposal_id}', 'ProposalDetailController@create')->name('create_detail');
@@ -226,7 +230,7 @@ Route::group(['middleware' => ['auth']], function() {
 
         Route::post('/update_service/{service_id}', 'ProposalDetailController@update')->name('update_detail');
 
-        //Route::post('/remove_service/{service_id}', 'ProposalDetailController@destroy')->name('remove_detail');
+        //Route::get('/remove_service/{service_id}', 'ProposalDetailController@destroy')->name('remove_detail');
         Route::delete('/', 'ProposalDetailController@destroy')->name('service_delete');
 
         Route::post('/header-calculate-combined-costing', 'ProposalDetailController@ajaxCalculateCombinedCosting')->name('ajax_header_calculate_combined_costing');
@@ -241,6 +245,8 @@ Route::group(['middleware' => ['auth']], function() {
         Route::post('/ajax-additional-cost-remove', 'ProposalDetailController@ajaxAdditionalCostRemove')->name('ajax_additional_cost_remove');
         Route::post('/ajax-subcontractor-add-new', 'ProposalDetailController@ajaxSubcontractorAddNew')->name('ajax_subcontractor_add_new');
         Route::post('/ajax-subcontractor-remove', 'ProposalDetailController@ajaxSubcontractorRemove')->name('ajax_subcontractor_remove');
+
+        Route::post('/ajax-proposal-details-update', 'ProposalDetailController@ajaxUpdate')->name('ajax_proposal_details_update');
     });
     /** END Proposal Details */
 

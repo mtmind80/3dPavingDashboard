@@ -278,9 +278,9 @@
                         },
                         error: function (response){
                             @if (env('APP_ENV') === 'local')
-                            showErrorAlert(response.responseJSON.message, equipmentAlert);
+                                showErrorAlert(response.responseJSON.message, equipmentAlert);
                             @else
-                            showErrorAlert(response.message, 'Critical error has occurred.');
+                                showErrorAlert('Critical error has occurred.', equipmentAlert);
                             @endif
                         }
                     });
@@ -330,9 +330,9 @@
                     },
                     error: function (response){
                         @if (env('APP_ENV') === 'local')
-                        showErrorAlert(response.responseJSON.message, equipmentAlert);
+                            showErrorAlert(response.responseJSON.message, equipmentAlert);
                         @else
-                        showErrorAlert(response.message, 'Critical error has occurred.');
+                            showErrorAlert('Critical error has occurred.', equipmentAlert);
                         @endif
                     }
                 });

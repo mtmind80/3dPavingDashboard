@@ -75,7 +75,7 @@
         "select2": "^4.0.13",
         "simplebar": "^4.2.3",
         "summernote": "0.8.18",
-        "sweetalert2": "^9.10.12",
+        "sweetalert2": "^9.17.4",
         "tinymce": "^5.2.2",
         "toastr": "^2.1.4",
         "twitter-bootstrap-wizard": "^1.2.0"
