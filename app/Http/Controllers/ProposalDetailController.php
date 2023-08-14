@@ -1333,6 +1333,7 @@ class ProposalDetailController extends Controller
         }
 
         $data['cost'] = $total_cost;
+        $data['overhead'] = $overhead;
         $data['profit'] = $profit;
         $data['proposal_text'] = $proposal_text;
         $data['service_name'] = $service_name;

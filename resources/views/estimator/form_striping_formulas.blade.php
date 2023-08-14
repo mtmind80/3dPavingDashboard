@@ -99,7 +99,6 @@
 
         $(document).ready(function () {
 
-
             // when the page loads we may need to repeat some calculations to determine total costs
             // and populate other display items on the page
             headerElCombinedCosting.val({{$cost_total}});
@@ -132,23 +131,26 @@
                 }
                 $("#x_proposal_text").val(proposaltext);
                 overhead = Math.ceil((otcost / 0.7) - otcost);
+                console.log(overhead);
                 $("#form_header_over_head").text(formatCurrency.format(overhead));
                 $("#explain").html(' 30%');
 
                 breakeven = (parseFloat(overhead) + parseFloat(otcost));
+                console.log(breakeven);
                 $("#form_header_break_even").text(formatCurrency.format(breakeven));
-
-
-                console.log("end striping");
-
+                var total_cost = parseFloat(breakeven + profit);
                 var proposaltext = tinymce.activeEditor.getContent();
                 $("#x_proposal_text").val(proposaltext);
+                $("#x_cost").val(total_cost);
 
                 $("#x_overhead").val(overhead);
                 $("#x_break_even").val(breakeven);
                 $("#x_profit").val(profit);
 
                 saveit(stay);
+
+                console.log("end striping");
+
 
             }
 
