@@ -1,12 +1,23 @@
 <div class="mt20 mb10">
+    <div class="row justify-content-lg-center" style="background:{{$color->color}};">
+        <h3>{{$color->name}}</h3>
+    </div>
     <div class="row mt20">
-        <div class="col-sm-2">
+    <div class="col-sm-2">
             Service Name
         </div>
-        <div class="col-sm-5">
+        <div class="col-sm-6">
             <input class="form-control" type="text" name="service_name" id="service_name" value="{{ $proposalDetail->service_name }}" />
         </div>
-        <div class="col-sm-5">
+        <div class="col-sm-2">
+            Cost Per
+        </div>
+        <div class="col-sm-2">
+            <x-form-show
+                class="w180 show-check-contact"
+                :params="[
+                    'id' => 'form_cost_per'
+                    ]">NA</x-form-show>
         </div>
     </div>
     <div class="row mt20">

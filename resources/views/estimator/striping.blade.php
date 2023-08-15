@@ -42,20 +42,21 @@
             @csrf
             <input type="hidden" name='stayorleave' id='stayorleave' value="true">
             <input type="hidden" name="proposal_detail_id" value="{{$proposalDetail->id}}">
-            <input type="hidden" name="x_proposal_text" value="{{$proposalDetail->proposal_text}}">
+            <input type="hidden" name="profit" id="x_profit" value="{{$proposalDetail->profit}}">
+            <input type="hidden" name="x_proposal_text" id="x_proposal_text" value="{{$proposalDetail->proposal_text}}">
+            <input type="hidden" name="cost" id="x_cost" value="{{$proposalDetail->cost}}">
             <input type="hidden" name="proposal_id" value="{{$proposalDetail->proposal_id}}">
+            <input type="hidden" name="overhead" id="x_overhead" value="{{ $proposalDetail->overhead }}">
         <div class="col-12">
             @include('_partials._alert')
             <div class="card">
                 <div class="card-header alert-light">
-                    @include('estimator.proposal_header')
+                    @include('estimator.striping_proposal_header')
                     @include('_partials._alert', ['alertId' => 'header_alert'])
-                    @include('estimator.form_header')
-                    @include('estimator.form_striping_formulas')
+                    @include('estimator.striping_form_header')
                 </div>
 
             </div>
-
             {{-- Proposal Text --}}
             <div class="card">
                 <div class="card-header alert-light">
@@ -63,9 +64,17 @@
                     @include('estimator.form_service_text')
                 </div>
             </div>
-        </div>
+            <div class="card">
+                <div class="card-header alert-light">
+                    @include('estimator.form_striping_formulas')
+                </div>
 
+            </div>
+
+
+        </div>
         </form>
+
     </div>
 
 

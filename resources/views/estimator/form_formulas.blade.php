@@ -930,7 +930,7 @@
                                    selected=""
                                    :params="['label' => 'Contractor', 'required' => true]"
                     ></x-form-select>
-                    <span id="contractor_overhead"></span>
+                    <!-- <span id="contractor_overhead"></span> -->
                     <input type="hidden" name="additive" id="additive" value="">
                 </div>
                 <div class="col-sm-3">
@@ -1118,7 +1118,7 @@
                 var materials = 0;
                 var proposaltext = tinymce.activeEditor.getContent();
                 var service = {{ $proposalDetail->services_id }};
-
+                var square_feet = 0;
                 //Materials
                 var tackcost = {{$materialsCB[14]}};
                 var curbmix = {{$materialsCB[9]}};
@@ -1281,9 +1281,19 @@
                             profit = $("#form_header_profit").val();
                             var otcost = Math.ceil(parseFloat(combinedcost) + parseFloat(profit));
 
-                            overhead = Math.ceil((otcost / 0.7) - otcost);
+                            if(serviceId == 4 || serviceId == 22) {
+                                var overhead = Math.ceil((otcost / 0.8) - otcost);
+                                $("#explain").html('calculated at 20%');
+                            }
+                            else
+                            {
+                                var overhead = Math.ceil((otcost / 0.7) - otcost);
+                                $("#explain").html('calculated at 30%');
+
+                            }
+
                             $("#form_header_over_head").text(formatCurrency.format(overhead));
-                            $("#explain").html(' 30%');
+
 
                             breakeven = parseFloat(overhead) + parseFloat(combinedcost);
                             $("#form_header_break_even").text(formatCurrency.format(breakeven));
@@ -1338,6 +1348,7 @@
 
                             if (serviceId == 6) {
                                 cubic_yards = Math.ceil(linear_feet / 60);
+
                             }
 
                             if (serviceId == 7) {
@@ -1359,7 +1370,6 @@
                             if (serviceId == 11) {
                                 cubic_yards = Math.ceil(linear_feet / 25);
                             }
-
 
                             materials = Math.ceil(cubic_yards * cost_per_linear_feet);
                             $("#header_show_materials_cost").text('$' + materials);
@@ -1915,10 +1925,11 @@
                     $("#header_show_customer_price").text(formatCurrency.format(breakeven + profit));
 
                     if (additive = parseInt(additive) && additive > 0) {
+                        // we currently are going with a straight 30% and ignoraing any contractor overhead
                         var soh = parseFloat(1 - (additive / 100));
                         contractor_overhead = Math.ceil((cost_per_day / soh) - cost_per_day);
                         contractor_overhead = formatCurrency.format(contractor_overhead)
-                        $("#contractor_overhead").html(contractor_overhead + ' calculated at ' + additive + '%');
+                        //$("#contractor_overhead").html(contractor_overhead + ' calculated at ' + additive + '%');
 
                     } else // sub has no overhead value use standard
                     {
@@ -1966,6 +1977,27 @@
                 headerElCustomerPrice.text(formatCurrency.format(customercost));
 
                 $("#x_cost").val(customercost);
+
+                var zcost = Math.ceil( parseFloat(combinedcost) +  parseFloat(profit) +  parseFloat(overhead));
+
+                if (serviceCategoryId == 10)
+                {
+                    zcost = customercost;
+                }
+                if(square_feet > 0)
+                {
+                    zcost = (zcost/square_feet).toFixed(2);
+                }
+                else
+                {
+                    zcost = 'NA';
+                }
+
+                if($.isNumeric(zcost))
+                {
+                    formatCurrency.format(zcost)
+                }
+                $("#form_cost_per").text(zcost);
 
                 //then save it
                 if (dosave == 1) {
