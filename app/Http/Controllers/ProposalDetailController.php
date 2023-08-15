@@ -62,15 +62,16 @@ class ProposalDetailController extends Controller
         $new_id = $proposal_detail->id;
 
 
-        if($request['servicecat'] == 18 && $new_id) {
+        if($request['servicecat'] == 18 && $new_id) { // save base striping costs for this proposal detail
 
-            $remove_old = ProposalDetailStripingService::where('proposal_detail_id', '=', $new_id)->delete();
+            //$remove_old = ProposalDetailStripingService::where('proposal_detail_id', '=', $new_id)->delete();
 
             $striping = StripingCost::with(['service'])->get()->toArray();
 
             foreach($striping as $stripe) {
 
                 $proposal_striping_costs = new ProposalDetailStripingService();
+
                 $proposal_striping_costs->proposal_detail_id = $new_id;
                 $proposal_striping_costs->striping_service_id = $stripe['striping_service_id'];
                 $proposal_striping_costs->description = $stripe['description'];
@@ -181,9 +182,9 @@ class ProposalDetailController extends Controller
         ];
 
 
-        if($proposalDetail->service->id == 18) {
+        if($proposalDetail->service->id == 18) { // striping costs
 
-            $sorted = $data['striping']->sortBy('service.dsort');
+            $sorted = $data['striping']->sortBy(['service.dsort','description']);
             $data['striping'] = $sorted;
             return view('estimator.striping', $data);
 
@@ -1307,6 +1308,7 @@ class ProposalDetailController extends Controller
     {
         //
 
+        $materials = $_POST['x_materials'];
         $proposal_text = $_POST['x_proposal_text'];
         $proposal_detail_id = $_POST['proposal_detail_id'];
         $profit = $_POST['profit'];
@@ -1337,6 +1339,7 @@ class ProposalDetailController extends Controller
         $data['profit'] = $profit;
         $data['proposal_text'] = $proposal_text;
         $data['service_name'] = $service_name;
+        $data['material_cost'] = $materials;
         $data['bill_after'] = $bill_after;
 
         ProposalDetail::where('id',$proposal_detail_id)->update($data);

@@ -65,11 +65,13 @@
                                    name="quantity_{{$stripe->id}}"
                                    value="{{$stripe->quantity}}"
                                    onChange="javascript:addRowTotal({{$stripe->cost}}, {{$stripe->id}})" />
-                            @php($cost_total += $stripe->cost)
 
                         </td>
                         <td class="tc">
                             <span class="form-control" id="total_{{$stripe->id}}">{{ \App\Helpers\Currency::format(($stripe->cost * $stripe->quantity) ?? '0.0') }}</span>
+                            @php($cost_total += ($stripe->cost * $stripe->quantity))
+                            <input type="hidden" name="hidden_{{$stripe->id}}" id="hidden_total_{{$stripe->id}}" value="{{$stripe->cost * $stripe->quantity}}">
+
                         </td>
                     </tr>
                 @endforeach
@@ -94,6 +96,12 @@
 
         }
 
+        function total_current_selections()
+        {
+            var current_total= 0;
+
+            return current_total;
+        }
 
         var servicedesc = '{!! $service->service_template !!}';
 
@@ -101,15 +109,21 @@
 
             // when the page loads we may need to repeat some calculations to determine total costs
             // and populate other display items on the page
-            headerElCombinedCosting.val({{$cost_total}});
 
-            function calculate(stay) {
+            var cost_total = {{$cost_total}};
 
+            headerElCombinedCosting.text(cost_total);
+
+            function calcme()
+            {
 
                 var profit =$("#form_header_profit").val();
+                var materials = headerElCombinedCosting.val();
+                var service = {{ $proposalDetail->services_id }};
+                var combinedcost = 0;
 
-                if (parseInt(profit) != profit) { // check these are numbers
-                    showInfoAlert('You must only enter numbers for profit.', headerAlert);
+                if (parseInt(profit) != profit || parseFloat(materials) != materials)  { // check these are numbers
+                    showInfoAlert('You must only enter numbers for profit and additional costs.', headerAlert);
 
                     setTimeout(() => {
                         closeAlert(headerAlert);
@@ -119,34 +133,67 @@
                 }
 
 
+                $("input[type='hidden']").each(function() {
+                    var res = $(this).attr('name').substring(0, 7);
+                    if(res == "hidden_")
+                    {
+                        if(parseFloat(this.value) == this.value)
+                        {
+                            combinedcost = combinedcost + parseFloat(this.value);
+                        }
+                    }
 
-                var materials = 0;
-                var service = {{ $proposalDetail->services_id }};
+                });
 
-                var otcost = {{$proposalDetail->cost}};
+                $("#x_materials").val(combinedcost);
+
+                //what was cost_total
+                //what is combinedcost;
+                var otcost = combinedcost;
+
+                console.log('combined:' + combinedcost);
+
                 var proposaltext = tinymce.activeEditor.getContent();
 
                 if (proposaltext == '') {
                     proposaltext = servicedesc;
                 }
                 $("#x_proposal_text").val(proposaltext);
+
                 overhead = Math.ceil((otcost / 0.7) - otcost);
-                console.log(overhead);
+
+                console.log('overhead:' +overhead);
+
                 $("#form_header_over_head").text(formatCurrency.format(overhead));
+
                 $("#explain").html(' 30%');
 
                 breakeven = (parseFloat(overhead) + parseFloat(otcost));
-                console.log(breakeven);
+
+                console.log('breakeven:' + breakeven);
+
                 $("#form_header_break_even").text(formatCurrency.format(breakeven));
-                var total_cost = parseFloat(breakeven + profit);
-                var proposaltext = tinymce.activeEditor.getContent();
-                $("#x_proposal_text").val(proposaltext);
+
+                var total_cost = (parseFloat(breakeven) + parseFloat(profit));
+
+                $("#header_show_customer_price").text(formatCurrency.format(total_cost));
+
+                console.log('total: ' + total_cost);
+
                 $("#x_cost").val(total_cost);
 
+                $("#x_material_cost").val(materials);
                 $("#x_overhead").val(overhead);
                 $("#x_break_even").val(breakeven);
                 $("#x_profit").val(profit);
 
+
+            }
+
+
+            function calculate(stay) {
+
+                calcme();
                 saveit(stay);
 
                 console.log("end striping");
@@ -155,12 +202,9 @@
             }
 
 
-            function saveit($stay = false) {
+            function saveit(stay = false) {
 
-                if ($stay) {
-                    $("#stayorleave").val("true")  // return to proposal page or service page
-
-                }
+                $("#stayorleave").val(stay)  // return to proposal page or service page
 
                 $("#estimator_form").submit();
 
@@ -188,6 +232,9 @@
 
             });
 
+            headerElCombinedCosting.val({{$cost_total}});
+
+            calcme();
         });
     </script>
 @endpush
