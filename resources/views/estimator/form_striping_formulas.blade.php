@@ -23,7 +23,7 @@
         @else
             <input type="hidden" name="bill_after" value="0">
         @endif
-     
+
         <a id="header_calculate_combined_costing_button2" href="javascript:" class="{{ $site_button_class }} ">Save This
             Service and Stay</a>
 
@@ -32,10 +32,10 @@
         <a id="header_calculate_combined_costing_button3" class="{{ $site_button_class }}" href="javascript:">Save and
             Return To Proposal</a>
 
-    
+
 
         <div class="row card-body">
-            
+
             <table class="table table-bordered">
 
                 @php($name = '')
@@ -60,16 +60,18 @@
                         <td class="tc">{{ \App\Helpers\Currency::format($stripe->cost ?? '0.0') }}</td>
                         <td class="tc">
                             <input type="hidden" value="{{$stripe->cost}}"  name="cost_{{$stripe->id}}" />
-                            <input type="text" class="form-control" 
-                                   id="quantity_{{$stripe->id}}" 
-                                   name="quantity_{{$stripe->id}}" 
-                                   value="{{$stripe->quantity}}" 
+                            <input type="text" class="form-control"
+                                   id="quantity_{{$stripe->id}}"
+                                   name="quantity_{{$stripe->id}}"
+                                   value="{{$stripe->quantity}}"
                                    onChange="javascript:addRowTotal({{$stripe->cost}}, {{$stripe->id}})" />
-                            @php($cost_total += $stripe->cost)
 
                         </td>
                         <td class="tc">
                             <span class="form-control" id="total_{{$stripe->id}}">{{ \App\Helpers\Currency::format(($stripe->cost * $stripe->quantity) ?? '0.0') }}</span>
+                            @php($cost_total += ($stripe->cost * $stripe->quantity))
+                            <input type="hidden" name="hidden_{{$stripe->id}}" id="hidden_total_{{$stripe->id}}" value="{{$stripe->cost * $stripe->quantity}}">
+
                         </td>
                     </tr>
                 @endforeach
@@ -83,7 +85,7 @@
 
     <script src="{{ URL::asset('/js/sweetalert2.min.js')}}"></script>
     <link rel="stylesheet" href="{{ URL::asset('/css/sweetalert2.min.css')}}">
-    
+
     <script type="text/javascript">
 
         function addRowTotal(cost, service_id)
@@ -94,23 +96,47 @@
 
         }
 
+        function total_current_selections()
+        {
+            var current_total= 0;
+
+            return current_total;
+        }
 
         var servicedesc = '{!! $service->service_template !!}';
-        
+
         $(document).ready(function () {
-            
-            
+
             // when the page loads we may need to repeat some calculations to determine total costs
             // and populate other display items on the page
-            headerElCombinedCosting.val({{$cost_total}});
 
-            function calculate(stay) {
+            var cost_total = {{$cost_total}};
 
-                
-                var profit =$("#form_header_profit").val();
-                
-                if (parseInt(profit) != profit) { // check these are numbers
-                    showInfoAlert('You must only enter numbers for profit.', headerAlert);
+            headerElCombinedCosting.text(cost_total);
+
+            function calcme()
+            {
+
+
+
+/*
+                var headerElCustomerPrice = $('#header_show_customer_price'); //customer final price (cost)
+                var headerElCombinedCosting= $('#header_show_combined_costing'); // striping + additional
+
+                var headerElForm = $('#estimator_form');
+                var headerElProfit = $('#form_header_profit');
+                var headerElOverHead= $('#form_header_over_head'); //determined by formula
+                var headerElBreakEven= $('#form_header_break_even'); // striping cost + overhead
+                var headerElMaterialsCost = $('#header_show_materials_cost'); //additional costs
+                */
+
+                var profit = headerElProfit.val();
+                var materials =headerElMaterialsCost.val(); // additional costs
+                var service = {{ $proposalDetail->services_id }};
+                var combinedcost = 0;
+
+                if (parseInt(profit) != profit || parseFloat(materials) != materials)  { // check these are numbers
+                    showInfoAlert('You must only enter numbers for profit and additional costs.', headerAlert);
 
                     setTimeout(() => {
                         closeAlert(headerAlert);
@@ -119,50 +145,77 @@
                     return;
                 }
 
-                
-                var profit = $("#form_header_profit").val();
-                var breakeven = '{{$proposalDetail->break_even}}';
-                var overhead = '{{$proposalDetail->overhead}}';
-                var materials = 0;
-                
-                var service = {{ $proposalDetail->services_id }};
 
-                var otcost = {{$proposalDetail->cost}};
+                $("input[type='hidden']").each(function() {
+                    var res = $(this).attr('name').substring(0, 7);
+                    if(res == "hidden_")
+                    {
+                        if(parseFloat(this.value) == this.value)
+                        {
+                            combinedcost = combinedcost + parseFloat(this.value);
+                        }
+                    }
+
+                });
+
+
+                headerElCombinedCosting.val(combinedcost);
+
+                console.log('combined:' + combinedcost);
+
                 var proposaltext = tinymce.activeEditor.getContent();
 
                 if (proposaltext == '') {
                     proposaltext = servicedesc;
                 }
-                $("#x_proposal_text").val(proposaltext);
+
+                otcost = parseFloat(combinedcost) + parseFloat(materials);  // combined striping cost + other cost
+
                 overhead = Math.ceil((otcost / 0.7) - otcost);
-                $("#form_header_over_head").text(formatCurrency.format(overhead));
+
+                console.log('30% of striping costs overhead:' + overhead);
+
+                headerElOverHead.text(formatCurrency.format(overhead));
+
                 $("#explain").html(' 30%');
 
-                breakeven = parseFloat(overhead) + {{$proposalDetail->cost}};
-                $("#form_header_break_even").text(formatCurrency.format(breakeven));
-                
+                breakeven = (parseFloat(overhead) + parseFloat(otcost));
 
+                console.log('breakeven:' + breakeven);
 
-                console.log("end striping");
+                headerElBreakEven.text(formatCurrency.format(breakeven));
 
-                var proposaltext = tinymce.activeEditor.getContent();
+                var total_cost = parseFloat(breakeven) + parseFloat(profit);
+
+                headerElCustomerPrice.text(formatCurrency.format(total_cost));
+
+                console.log('total: ' + total_cost);
+
                 $("#x_proposal_text").val(proposaltext);
-
+                $("#x_cost").val(total_cost);
+                $("#x_material_cost").val(materials);
                 $("#x_overhead").val(overhead);
                 $("#x_break_even").val(breakeven);
                 $("#x_profit").val(profit);
 
-                saveit(stay);
-              
+
             }
 
 
-            function saveit($stay = false) {
+            function calculate(stay) {
 
-                if ($stay) {
-                    $("#stayorleave").val("true")  // return to proposal page or service page
+                calcme();
+                saveit(stay);
 
-                }
+                console.log("end striping");
+
+
+            }
+
+
+            function saveit(stay = false) {
+
+                $("#stayorleave").val(stay)  // return to proposal page or service page
 
                 $("#estimator_form").submit();
 
@@ -171,13 +224,13 @@
                     text: 'Saving your estimate.',
                     icon: 'success',
                     showConfirmButton: false,
-                    
+
                 })
             }
 
             var estimatorForm = $("#estimator_form"); // form to set values for submit and save
 
-            // when you want to calculate and save record 
+            // when you want to calculate and save record
             $('#header_calculate_combined_costing_button2').on('click', function () {
 
                 calculate(false);
@@ -189,7 +242,9 @@
                 calculate(true);
 
             });
-            
+
+
+            calcme();
         });
     </script>
 @endpush

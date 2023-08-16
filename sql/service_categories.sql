@@ -1,0 +1,10 @@
+INSERT INTO `service_categories` (`id`, `name`, `color`) VALUES (1, 'Asphalt', '#F08080');
+INSERT INTO `service_categories` (`id`, `name`, `color`) VALUES (2, 'Concrete', '#DDC0FF');
+INSERT INTO `service_categories` (`id`, `name`, `color`) VALUES (3, 'Drainage and Catchbasins', '#F9E49E');
+INSERT INTO `service_categories` (`id`, `name`, `color`) VALUES (4, 'Excavation', '#EBEB93');
+INSERT INTO `service_categories` (`id`, `name`, `color`) VALUES (5, 'Other', '#BDF3DF');
+INSERT INTO `service_categories` (`id`, `name`, `color`) VALUES (6, 'Paver Brick', '#e3e3e3');
+INSERT INTO `service_categories` (`id`, `name`, `color`) VALUES (7, 'Rock', '#F6C78A');
+INSERT INTO `service_categories` (`id`, `name`, `color`) VALUES (8, 'Seal Coating', '#F78F7E');
+INSERT INTO `service_categories` (`id`, `name`, `color`) VALUES (9, 'Striping', '#0088EE');
+INSERT INTO `service_categories` (`id`, `name`, `color`) VALUES (10, 'Sub Contractor', '#AED6F1');

@@ -19,6 +19,7 @@ use App\Models\ProposalDetailSubcontractor;
 use App\Models\ProposalDetailVehicle;
 use App\Models\ProposalMaterial;
 use App\Models\Service;
+use App\Models\ServiceCategory;
 use App\Models\StripingCost;
 use App\Models\Vehicle;
 use Exception;
@@ -61,16 +62,16 @@ class ProposalDetailController extends Controller
         $new_id = $proposal_detail->id;
 
 
-        if($request['servicecat'] == 18 && $new_id) {
+        if($request['servicecat'] == 18 && $new_id) { // save base striping costs for this proposal detail
 
-            $remove_old = ProposalDetailStripingService::where('proposal_detail_id', '=', $new_id)->delete();
+            //$remove_old = ProposalDetailStripingService::where('proposal_detail_id', '=', $new_id)->delete();
 
             $striping = StripingCost::with(['service'])->get()->toArray();
-
 
             foreach($striping as $stripe) {
 
                 $proposal_striping_costs = new ProposalDetailStripingService();
+
                 $proposal_striping_costs->proposal_detail_id = $new_id;
                 $proposal_striping_costs->striping_service_id = $stripe['striping_service_id'];
                 $proposal_striping_costs->description = $stripe['description'];
@@ -154,6 +155,9 @@ class ProposalDetailController extends Controller
         $sealcoatMaterials = ProposalMaterial::where('proposal_id', $proposal_id)->byServiceCategory(8);
         $materialsCB = ProposalMaterial::where('proposal_id', $proposal_id)->pluck('cost', 'material_id')->toArray();
 
+
+        $color = ServiceCategory::where('id','=', $proposalDetail->service->service_category_id)->first();
+
         $data = [
             'header_name' => 'Build Service Estimate',
             'proposalDetail' => $proposalDetail,
@@ -164,6 +168,7 @@ class ProposalDetailController extends Controller
             'asphaltMaterials' => $asphaltMaterials,
             'striping' => $proposalDetail->striping,
             'service' => $proposalDetail->service,
+            'color' => $color,
             'service_category_name' => $proposalDetail->service->category->name,
             'equipmentCollection' => Equipment::available()->orderBy('name')->get(),
             'materialsCB' => $materialsCB,
@@ -177,9 +182,9 @@ class ProposalDetailController extends Controller
         ];
 
 
-        if($proposalDetail->service->id == 18) {
+        if($proposalDetail->service->id == 18) { // striping costs
 
-            $sorted = $data['striping']->sortBy('service.dsort');
+            $sorted = $data['striping']->sortBy(['service.dsort','description']);
             $data['striping'] = $sorted;
             return view('estimator.striping', $data);
 
@@ -1303,6 +1308,9 @@ class ProposalDetailController extends Controller
     {
         //
 
+        $cost = $_POST['cost'];
+
+        $material_cost = $_POST['material_cost'];
         $proposal_text = $_POST['x_proposal_text'];
         $proposal_detail_id = $_POST['proposal_detail_id'];
         $profit = $_POST['profit'];
@@ -1321,17 +1329,19 @@ class ProposalDetailController extends Controller
             {
                 $service_id = explode("_", $key);
                 $striping_service_id = $service_id[1];
-                $cost = $request['cost_'. $striping_service_id];
+                $service_cost = $request['cost_'. $striping_service_id];
                 $total_cost += $cost;
                 ProposalDetailStripingService::where('id',$striping_service_id)->update(['quantity'=>$value]);
 
             }
         }
 
-        $data['cost'] = $total_cost;
+        $data['cost'] = $cost;
+        $data['overhead'] = $overhead;
         $data['profit'] = $profit;
         $data['proposal_text'] = $proposal_text;
         $data['service_name'] = $service_name;
+        $data['material_cost'] = $material_cost;
         $data['bill_after'] = $bill_after;
 
         ProposalDetail::where('id',$proposal_detail_id)->update($data);

@@ -50,7 +50,15 @@
                             </a>
                         </li>
                     </ul>
-
+                    <table class="bg-light table-centered w-100 font-size-24 p10">
+                        <tr>
+                            <td>
+                                {{$proposal['name']}}
+                            <td class="tc">
+                                STATUS: {{ App\Models\ProposalStatus::find($proposal['proposal_statuses_id'])->status }}
+                            </td>
+                        </tr>
+                    </table>
                     <!-- Tab panes -->
                     <div class="tab-content plr0 pt30 pb0 text-muted">
                         <div class="tab-pane active" id="proposal" role="tabpanel">
@@ -76,7 +84,8 @@
                                     @endif
 
                                         <td class="tc">
-                                            STATUS: {{ App\Models\ProposalStatus::find($proposal['proposal_statuses_id'])->status }}
+
+                                        &nbsp;
                                         </td>
 
                                     </tr>
@@ -122,7 +131,7 @@
                                         <td>@lang('translation.client')</td>
                                         <td>
                                             @if($proposal['contact_id'])
-                                                <a href="{{route('contact_details',['contact'=>$proposal['contact_id']])}}">{{ App\Models\Contact::find($proposal['contact_id'])->FullName }}</a>
+                                                <a href="{{route('contact_details',['contact'=>$proposal['contact_id']])}}" title="find contact">{{ App\Models\Contact::find($proposal['contact_id'])->FullName }}</a>
                                             @endif
                                         </td>
                                     </tr>
@@ -130,7 +139,7 @@
                                         <td>@lang('translation.proposalclient')</td>
                                         <td>
                                             @if($proposal['customer_staff_id'])
-                                                <a href="{{route('contact_details',['contact'=>$proposal['customer_staff_id']])}}">{{ App\Models\Contact::find($proposal['customer_staff_id'])->FullName }}</a>
+                                                <a href="{{route('contact_details',['contact'=>$proposal['customer_staff_id']])}}"  title="find staff">{{ App\Models\Contact::find($proposal['customer_staff_id'])->FullName }}</a>
                                             @endif
                                         </td>
                                     </tr>
@@ -176,14 +185,14 @@
                                         <tr>
                                             <td>Create Change Order</td>
                                             <td>
-                                                <a href="{{route('contact_details',['contact'=>$proposal['customer_staff_id']])}}">Change Order</a>
+                                                <a href="{{route('contact_details',['contact'=>$proposal['customer_staff_id']])}}"  title="create change order">Change Order</a>
 
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>CLone Proposal</td>
                                             <td>
-                                                <a href="{{route('contact_details',['contact'=>$proposal['customer_staff_id']])}}">Clone Proposal</a>
+                                                <a href="{{route('contact_details',['contact'=>$proposal['customer_staff_id']])}}" title="clone this proposal">Clone Proposal</a>
 
                                             </td>
                                         </tr>

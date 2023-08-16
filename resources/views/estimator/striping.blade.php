@@ -12,18 +12,10 @@
             <a href="{{route('show_proposal',['id'=> $proposalDetail->proposal_id])}}">@lang('translation.proposal')</a>
         @endslot
         @slot('li_3')
-            @lang('translation.estimator') Striping
+            @lang('translation.estimator') Striping Pavement Markings
         @endslot
     @endcomponent
 <script>
-    //globals
-    var current_subContractor_total =0;
-    var current_labor_total =0;
-    var current_vehicle_total =0;
-    var current_equipment_total =0;
-    var current_additional_total =0;
-
-
 
     // Create our number formatter.
     const formatCurrency = new Intl.NumberFormat('en-US', {
@@ -36,26 +28,30 @@
 
 
 </script>
-    <div class="row estimator-form admin-form">
-        <form method="POST" action="{{route('save_striping')}}" id="estimator_form" class="custom-validation admin-form">
+    <div class="row">
 
-            @csrf
-            <input type="hidden" name='stayorleave' id='stayorleave' value="true">
-            <input type="hidden" name="proposal_detail_id" value="{{$proposalDetail->id}}">
-            <input type="hidden" name="x_proposal_text" value="{{$proposalDetail->proposal_text}}">
-            <input type="hidden" name="proposal_id" value="{{$proposalDetail->proposal_id}}">
-        <div class="col-12">
-            @include('_partials._alert')
+        <form method="POST" action="{{route('save_striping')}}" id="estimator_form" class="custom-validation admin-form w-100">
+
+        <div class="col-12 w-100">
+
+                @csrf
+                <input type="hidden" name='stayorleave' id='stayorleave' value="">
+                <input type="hidden" name="proposal_detail_id" value="{{$proposalDetail->id}}">
+                <input type="hidden" name="profit" id="x_profit" value="{{$proposalDetail->profit}}">
+                <input type="hidden" name="x_proposal_text" id="x_proposal_text" value="{{$proposalDetail->proposal_text}}">
+                <input type="hidden" name="material_cost" id="x_materials" value="{{$proposalDetail->material_cost}}">
+                <input type="hidden" name="cost" id="x_cost" value="{{$proposalDetail->cost}}">
+                <input type="hidden" name="proposal_id" value="{{$proposalDetail->proposal_id}}">
+                <input type="hidden" name="overhead" id="x_overhead" value="{{ $proposalDetail->overhead }}">
+                @include('_partials._alert')
             <div class="card">
                 <div class="card-header alert-light">
-                    @include('estimator.proposal_header')
+                    @include('estimator.striping_proposal_header')
                     @include('_partials._alert', ['alertId' => 'header_alert'])
-                    @include('estimator.form_header')
-                    @include('estimator.form_striping_formulas')
+                    @include('estimator.striping_form_header')
                 </div>
 
             </div>
-
             {{-- Proposal Text --}}
             <div class="card">
                 <div class="card-header alert-light">
@@ -63,9 +59,17 @@
                     @include('estimator.form_service_text')
                 </div>
             </div>
-        </div>
+            <div class="card">
+                <div class="card-header alert-light">
+                    @include('estimator.form_striping_formulas')
+                </div>
 
+            </div>
+
+
+        </div>
         </form>
+
     </div>
 
 
