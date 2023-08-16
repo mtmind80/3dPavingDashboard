@@ -20,12 +20,13 @@
                     <tr>
                         <th class="w1-6">Customer Price</th>
                         <th class="w1-6 pr10">Profit <i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></th>
-                        <th class="w1-6">Additional Cost <i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></th>
-                        <th class="w1-6">Striping Cost</th>
                         <th class="w1-6 pr10">Breakeven</th>
+                        <th class="w1-6">Striping Cost</th>
                         <th class="w1-6 pr10">Over Head
                             <span id="explain"></span>
                         </th>
+                        <th class="w1-6">Additional Cost <i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></th>
+
                     </tr>
                     </thead>
                     <tbody>
@@ -55,15 +56,12 @@
                         </td>
                         <td class="w1-6 pr10">
                             <div class="admin-form-item-widget">
-                                <x-form-text name="material_cost"
-                                             class="check-contact"
-                                             placeholder="enter value"
-                                             id="header_show_materials_cost"
-                                             :params="[
-                                        'label' => 'none',
-                                        'iconClass' => 'none',
+                                <x-form-show
+                                    class="w180 show-check-contact"
+                                    :params="[
+                                        'id' => 'form_header_break_even',
                                     ]"
-                                >{{$proposalDetail->material_cost}}</x-form-text>
+                                >{{$proposalDetail->break_even}}</x-form-show>
                             </div>
                         </td>
                         <td class="w1-6 td-tt pr10">
@@ -79,16 +77,6 @@
                         <td class="w1-6 pr10">
                             <div class="admin-form-item-widget">
                                 <x-form-show
-                                    class="w180 show-check-contact"
-                                    :params="[
-                                        'id' => 'form_header_break_even',
-                                    ]"
-                                >{{$proposalDetail->break_even}}</x-form-show>
-                            </div>
-                        </td>
-                        <td class="w1-6 pr10">
-                            <div class="admin-form-item-widget">
-                                <x-form-show
                                      class="w180 show-check-contact"
                                      :params="[
                                         'id' => 'form_header_over_head',
@@ -96,6 +84,20 @@
 
                             </div>
                         </td>
+                        <td class="w1-6 pr10">
+                            <div class="admin-form-item-widget">
+                                <x-form-text name="material_cost"
+                                             class="check-contact"
+                                             placeholder="enter value"
+                                             id="header_show_materials_cost"
+                                             :params="[
+                                        'label' => 'none',
+                                        'iconClass' => 'none',
+                                    ]"
+                                >{{$proposalDetail->material_cost}}</x-form-text>
+                            </div>
+                        </td>
+
                     </tr>
                     </tbody>
                 </table>
@@ -107,14 +109,23 @@
     <script>
 
 
-        var headerElCustomerPrice = $('#header_show_customer_price');
-        var headerElCombinedCosting= $('#header_show_combined_costing');
+/*
+        Customer Price =header_show_customer_price
+        Profit =form_header_profit
+        Breakeven  =form_header_break_even
+        Striping Cost =header_show_combined_costing
+        Over Head = form_header_over_head
+        Additional Cost =header_show_materials_cost
+  */
+
+        var headerElCustomerPrice = $('#header_show_customer_price'); //customer final price (cost)
+        var headerElCombinedCosting= $('#header_show_combined_costing'); // striping
 
         var headerElForm = $('#estimator_form');
         var headerElProfit = $('#form_header_profit');
-        var headerElOverHead= $('#form_header_over_head');
-        var headerElBreakEven= $('#form_header_break_even');
-        var headerElMaterialsCost = $('#header_show_materials_cost');
+        var headerElOverHead= $('#form_header_over_head'); //determined by formula
+        var headerElBreakEven= $('#form_header_break_even'); // striping cost + overhead
+        var headerElMaterialsCost = $('#header_show_materials_cost'); //additional costs
 
 
         var headerCalculateCombinedCostingButton = $('#header_calculate_combined_costing_button');
@@ -123,7 +134,6 @@
         var headerCalculateCombinedCostingButton4 = $('#header_calculate_combined_costing_button4');
 
 
-        var headerElTotalCost = $('#header_total_cost');
         var headerAlert = $('#header_alert');
 
         $(document).ready(function () {

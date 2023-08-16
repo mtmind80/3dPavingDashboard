@@ -39,7 +39,7 @@
                 <input type="hidden" name="proposal_detail_id" value="{{$proposalDetail->id}}">
                 <input type="hidden" name="profit" id="x_profit" value="{{$proposalDetail->profit}}">
                 <input type="hidden" name="x_proposal_text" id="x_proposal_text" value="{{$proposalDetail->proposal_text}}">
-                <input type="hidden" name="x_materials" id="x_materials" value="{{$proposalDetail->material_cost}}">
+                <input type="hidden" name="material_cost" id="x_materials" value="{{$proposalDetail->material_cost}}">
                 <input type="hidden" name="cost" id="x_cost" value="{{$proposalDetail->cost}}">
                 <input type="hidden" name="proposal_id" value="{{$proposalDetail->proposal_id}}">
                 <input type="hidden" name="overhead" id="x_overhead" value="{{ $proposalDetail->overhead }}">
