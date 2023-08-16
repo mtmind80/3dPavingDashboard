@@ -478,6 +478,7 @@ class ProposalController extends Controller
         $services = $proposal->details;
 
         $proposal = $proposal->toArray();
+
         $proposal['IsEditable'] = $IsEditable;
 
         $data = [];

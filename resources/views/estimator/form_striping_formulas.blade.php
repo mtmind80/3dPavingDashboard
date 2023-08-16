@@ -117,8 +117,21 @@
             function calcme()
             {
 
-                var profit =$("#form_header_profit").val();
-                var materials = headerElCombinedCosting.val();
+
+
+/*
+                var headerElCustomerPrice = $('#header_show_customer_price'); //customer final price (cost)
+                var headerElCombinedCosting= $('#header_show_combined_costing'); // striping + additional
+
+                var headerElForm = $('#estimator_form');
+                var headerElProfit = $('#form_header_profit');
+                var headerElOverHead= $('#form_header_over_head'); //determined by formula
+                var headerElBreakEven= $('#form_header_break_even'); // striping cost + overhead
+                var headerElMaterialsCost = $('#header_show_materials_cost'); //additional costs
+                */
+
+                var profit = headerElProfit.val();
+                var materials =headerElMaterialsCost.val(); // additional costs
                 var service = {{ $proposalDetail->services_id }};
                 var combinedcost = 0;
 
@@ -145,11 +158,8 @@
 
                 });
 
-                $("#x_materials").val(combinedcost);
 
-                //what was cost_total
-                //what is combinedcost;
-                var otcost = combinedcost;
+                headerElCombinedCosting.val(combinedcost);
 
                 console.log('combined:' + combinedcost);
 
@@ -158,13 +168,14 @@
                 if (proposaltext == '') {
                     proposaltext = servicedesc;
                 }
-                $("#x_proposal_text").val(proposaltext);
+
+                otcost = parseFloat(combinedcost) + parseFloat(materials);  // combined striping cost + other cost
 
                 overhead = Math.ceil((otcost / 0.7) - otcost);
 
-                console.log('overhead:' +overhead);
+                console.log('30% of striping costs overhead:' + overhead);
 
-                $("#form_header_over_head").text(formatCurrency.format(overhead));
+                headerElOverHead.text(formatCurrency.format(overhead));
 
                 $("#explain").html(' 30%');
 
@@ -172,16 +183,16 @@
 
                 console.log('breakeven:' + breakeven);
 
-                $("#form_header_break_even").text(formatCurrency.format(breakeven));
+                headerElBreakEven.text(formatCurrency.format(breakeven));
 
-                var total_cost = (parseFloat(breakeven) + parseFloat(profit));
+                var total_cost = parseFloat(breakeven) + parseFloat(profit);
 
-                $("#header_show_customer_price").text(formatCurrency.format(total_cost));
+                headerElCustomerPrice.text(formatCurrency.format(total_cost));
 
                 console.log('total: ' + total_cost);
 
+                $("#x_proposal_text").val(proposaltext);
                 $("#x_cost").val(total_cost);
-
                 $("#x_material_cost").val(materials);
                 $("#x_overhead").val(overhead);
                 $("#x_break_even").val(breakeven);
@@ -232,7 +243,6 @@
 
             });
 
-            headerElCombinedCosting.val({{$cost_total}});
 
             calcme();
         });

@@ -1308,7 +1308,9 @@ class ProposalDetailController extends Controller
     {
         //
 
-        $materials = $_POST['x_materials'];
+        $cost = $_POST['cost'];
+
+        $material_cost = $_POST['material_cost'];
         $proposal_text = $_POST['x_proposal_text'];
         $proposal_detail_id = $_POST['proposal_detail_id'];
         $profit = $_POST['profit'];
@@ -1327,19 +1329,19 @@ class ProposalDetailController extends Controller
             {
                 $service_id = explode("_", $key);
                 $striping_service_id = $service_id[1];
-                $cost = $request['cost_'. $striping_service_id];
+                $service_cost = $request['cost_'. $striping_service_id];
                 $total_cost += $cost;
                 ProposalDetailStripingService::where('id',$striping_service_id)->update(['quantity'=>$value]);
 
             }
         }
 
-        $data['cost'] = $total_cost;
+        $data['cost'] = $cost;
         $data['overhead'] = $overhead;
         $data['profit'] = $profit;
         $data['proposal_text'] = $proposal_text;
         $data['service_name'] = $service_name;
-        $data['material_cost'] = $materials;
+        $data['material_cost'] = $material_cost;
         $data['bill_after'] = $bill_after;
 
         ProposalDetail::where('id',$proposal_detail_id)->update($data);
