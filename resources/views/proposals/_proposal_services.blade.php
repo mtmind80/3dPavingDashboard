@@ -17,7 +17,7 @@
                 <td class="tc">{{ $service->status->status ?? 'No Status' }}</td>
                 <td class="tc">{!! $service->location->full_location_two_lines ?? 'No Location Specified' !!}</td>
                 <td class="tc">{{ $service->fieldmanager->full_name ?? 'No Manager Assigned' }}</td>
-                <td class="tc">{{ $service->cost }}</td>
+                <td class="tc">{{ \App\Helpers\Currency::format($service->cost ?? '0.0') }}</td>
                 <td class="tc">{{ $service->html_dsort }}</td>
                 <td class="centered actions">
                     <ul class="nav navbar-nav">
