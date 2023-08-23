@@ -250,7 +250,19 @@ Route::group(['middleware' => ['auth']], function() {
     });
     /** END Proposal Details */
 
-    //Proposals
+
+
+    //Printing PDF
+    Route::group(['prefix' => 'print'], function() {
+
+        //Print report
+        Route::get('/proposal/{proposal_id}', 'PrintingController@proposal')->name('proposal_print');
+
+
+    });
+    /** END Print */
+
+
     Route::group(['prefix' => 'proposals'], function() {
 
         Route::get('/new', 'ProposalController@new')->name('new_proposal');
