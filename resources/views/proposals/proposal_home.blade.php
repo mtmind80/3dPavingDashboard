@@ -190,14 +190,7 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td>Print Proposal</td>
-                                            <td>
-                                                <a href="{{route('proposal_print',['proposal_id'=>$proposal['id']])}}"  title="Print Proposal">Print Proposal</a>
-
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Clone Proposal</td>
+                                            <td>CLone Proposal</td>
                                             <td>
                                                 <a href="{{route('contact_details',['contact'=>$proposal['customer_staff_id']])}}" title="clone this proposal">Clone This Proposal</a>
 
