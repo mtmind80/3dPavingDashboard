@@ -12,4 +12,27 @@ class VehicleType extends Model
         'name',
     ];
 
+    public function getNameRateAttribute()
+    {
+        return $this->nameRate();
+
+    }
+
+    public function nameRate() {
+        return $this->name. ' - $' . $this->rate;
+
+    }
+    static public function vehiclestypesCB($default = [])
+    {
+        $items = self::orderBy('name')->pluck('name', 'id')->toArray();
+
+        if (!empty($default)) {
+            return $default + $items;
+        }
+
+        return $items;
+    }
+
+
+
 }
