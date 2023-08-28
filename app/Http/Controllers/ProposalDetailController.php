@@ -22,6 +22,7 @@ use App\Models\Service;
 use App\Models\ServiceCategory;
 use App\Models\StripingCost;
 use App\Models\Vehicle;
+use App\Models\VehicleType;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -148,7 +149,6 @@ class ProposalDetailController extends Controller
             return view('pages-404');
         }
 
-
         $contact = $proposalDetail->proposal->contact;
         $asphaltMaterials = ProposalMaterial::where('proposal_id', $proposal_id)->byServiceCategory(1);
         $rockMaterials = ProposalMaterial::where('proposal_id', $proposal_id)->byServiceCategory(7);
@@ -172,7 +172,7 @@ class ProposalDetailController extends Controller
             'service_category_name' => $proposalDetail->service->category->name,
             'equipmentCollection' => Equipment::available()->orderBy('name')->get(),
             'materialsCB' => $materialsCB,
-            'vehiclesCB' => Vehicle::vehiclesCB(['0' => 'Select vehicle']),
+            'vehiclesCB' => VehicleType::get(),
             'laborCB' => LaborRate::LaborWithRatesCB(['0' => 'Select labor']),
             'contractorsCB' => Contractor::contractorsCB(['0' => 'Select contractor']),
             'contractors' => Contractor::orderBy('name')->get(),
@@ -181,6 +181,7 @@ class ProposalDetailController extends Controller
             'typesCB' => ['0' => 'Select type', 'Dump Fee' => 'Dump Fee', 'Other' => 'Other'],
         ];
 
+//            'vehiclesCB' => Vehicle::vehiclesCB(['0' => 'Select vehicle']),
 
         if($proposalDetail->service->id == 18) { // striping costs
 
@@ -504,13 +505,13 @@ class ProposalDetailController extends Controller
                 ];
             } else {
                 try {
-                    if(!$vehicle = Vehicle::with(['type'])->find($request->vehicle_id)) {
+                    if(!$vehicle = VehicleType::find($request->vehicle_id)) {
                         $response = [
                             'success' => false,
                             'message' => 'Vehicle not found.',
                         ];
                     } else {
-                        $ratePerHour = (float)($vehicle->type->rate ?? 0);
+                        $ratePerHour = (float)($vehicle->rate ?? 0);
                         $vehicleName = $vehicle->name;
                         $numberOfVehicles = (integer)$request->number_of_vehicles;
                         $days = (float)$request->days;
