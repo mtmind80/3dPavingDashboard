@@ -15,6 +15,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
+use Barryvdh\DomPDF\Facade\Pdf;
+
 class LeadsController extends Controller
 {
     public function index(Request $request)
