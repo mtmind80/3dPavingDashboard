@@ -24,7 +24,7 @@ class PrintingController extends Controller
     public function index($proposal_id)
     {
         $data =[];
-        return view("printing.index", $data);
+        return view("pdf.index", $data);
 
     }
 
