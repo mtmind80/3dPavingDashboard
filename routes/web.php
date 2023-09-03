@@ -134,346 +134,351 @@ Route::group(['middleware' => ['auth']], function() {
     /** END Workorders */
 
 
-    /*************** Permits  ***************/
-
-    Route::group(['prefix' => 'permits'], function() {
-        Route::get('/', 'PermitsController@index')->name('permits');
-        Route::match(['get', 'post'], '/search', 'PermitsController@search')->name('permit_search');
-        Route::get('/{permit}/show', 'PermitsController@details')->name('permit_show');
-        Route::post('/{permit}/add-note', 'PermitsController@storeNote')->name('permit_note_add');
-        Route::post('/{permit}/change-status', 'PermitsController@changeStatus')->name('permit_status_change');
-        Route::get('/{permit}/edit', 'PermitsController@edit')->name('permit_edit');
-        Route::patch('/{permit}', 'PermitsController@update')->name('permit_update');
-        Route::post('ajax-note-list', 'PermitsController@noteList')->name('ajax_permit_note_list');
-    });
-    /** END Permits */
-
-
-    //users
-    Route::group(['prefix' => 'users'], function() {
-
-
-        //User manager
-        Route::get('', 'UserController@index')->name('users');
-        //show all active and inactive users
-        Route::get('/allusers', 'UserController@indexAll')->name('allusers');
-        //present new user form
-        Route::get('/newuser', 'UserController@new')->name('new_user');
-        //search active users
-        Route::post('/searchuser', 'UserController@search')->name('search_user');
-        //search all users
-        Route::post('/searchuserall', 'UserController@searchall')->name('search_userall');
-        //show user
-        Route::get('/getuser/{id}', 'UserController@show')->name('show_user');
-        //show edit the user form
-        Route::get('/edituser/{id}', 'UserController@edit')->name('edit_user');
-        //delete user
-        Route::post('/deleteeuser{id}', 'UserController@destroy')->name('destroy_user');
-        //add new user
-        Route::post('/createuser', 'UserController@store')->name('create_user');
-        //update user
-        Route::post('/updateuser/{id}', 'UserController@update')->name('update_user');
-
-    });
-    /** END users */
-    //contractors
-    Route::group(['prefix' => 'contractors'], function() {
-        //grid
-        Route::get('', 'ContractorController@index')->name('contractor_list');
-        //show form
-        Route::get('/new', 'ContractorController@new')->name('new_contractor');
-        //get record show form
-        Route::get('/{id}', 'ContractorController@edit')->name('edit_contractor');
-        //save or update
-        Route::post('/{id}', 'ContractorController@store')->name('save_contractor');
-        //search active contractors
-        Route::match(['get', 'post'], '/searchcontractor', 'ContractorController@search')->name('search_contractor');
+/*************** Permits  ***************/
+
+Route::group(['prefix' => 'permits'], function() {
+    Route::get('/', 'PermitsController@index')->name('permits');
+    Route::match(['get', 'post'], '/search', 'PermitsController@search')->name('permit_search');
+    Route::get('/{permit}/show', 'PermitsController@details')->name('permit_show');
+    Route::post('/{permit}/add-note', 'PermitsController@storeNote')->name('permit_note_add');
+    Route::post('/{permit}/change-status', 'PermitsController@changeStatus')->name('permit_status_change');
+    Route::get('/{permit}/edit', 'PermitsController@edit')->name('permit_edit');
+    Route::patch('/{permit}', 'PermitsController@update')->name('permit_update');
+    Route::post('ajax-note-list', 'PermitsController@noteList')->name('ajax_permit_note_list');
+});
+/** END Permits */
+
+
+//users
+Route::group(['prefix' => 'users'], function() {
+
+
+    //User manager
+    Route::get('', 'UserController@index')->name('users');
+    //show all active and inactive users
+    Route::get('/allusers', 'UserController@indexAll')->name('allusers');
+    //present new user form
+    Route::get('/newuser', 'UserController@new')->name('new_user');
+    //search active users
+    Route::post('/searchuser', 'UserController@search')->name('search_user');
+    //search all users
+    Route::post('/searchuserall', 'UserController@searchall')->name('search_userall');
+    //show user
+    Route::get('/getuser/{id}', 'UserController@show')->name('show_user');
+    //show edit the user form
+    Route::get('/edituser/{id}', 'UserController@edit')->name('edit_user');
+    //delete user
+    Route::post('/deleteeuser{id}', 'UserController@destroy')->name('destroy_user');
+    //add new user
+    Route::post('/createuser', 'UserController@store')->name('create_user');
+    //update user
+    Route::post('/updateuser/{id}', 'UserController@update')->name('update_user');
+
+});
+/** END users */
+//contractors
+Route::group(['prefix' => 'contractors'], function() {
+    //grid
+    Route::get('', 'ContractorController@index')->name('contractor_list');
+    //show form
+    Route::get('/new', 'ContractorController@new')->name('new_contractor');
+    //get record show form
+    Route::get('/{id}', 'ContractorController@edit')->name('edit_contractor');
+    //save or update
+    Route::post('/{id}', 'ContractorController@store')->name('save_contractor');
+    //search active contractors
+    Route::match(['get', 'post'], '/searchcontractor', 'ContractorController@search')->name('search_contractor');
 
-    });
-    /** END contractors */
+});
+/** END contractors */
 
-    //vendors
-    Route::group(['prefix' => 'vendors'], function() {
-        //grid
-        Route::get('', 'VendorController@index')->name('vendor_list');
-        //show form
-        Route::get('/new', 'VendorController@new')->name('new_vendor');
-        //get record show form
-        Route::get('/edit_vendor/{id}', 'VendorController@edit')->name('edit_vendor');
-        //save or update
-        Route::post('/save/{id}', 'VendorController@store')->name('save_vendor');
-        //search active Vendors
-        Route::match(['get', 'post'], '/searchVendor', 'VendorController@search')->name('search_vendor');
+//vendors
+Route::group(['prefix' => 'vendors'], function() {
+    //grid
+    Route::get('', 'VendorController@index')->name('vendor_list');
+    //show form
+    Route::get('/new', 'VendorController@new')->name('new_vendor');
+    //get record show form
+    Route::get('/edit_vendor/{id}', 'VendorController@edit')->name('edit_vendor');
+    //save or update
+    Route::post('/save/{id}', 'VendorController@store')->name('save_vendor');
+    //search active Vendors
+    Route::match(['get', 'post'], '/searchVendor', 'VendorController@search')->name('search_vendor');
 
-    });
-    /** END Vendors */
+});
+/** END Vendors */
 
-    //Proposals Details
-    Route::group(['prefix' => 'proposaldetails'], function() {
+//Proposals Details
+Route::group(['prefix' => 'proposaldetails'], function() {
 
-        // get details to  display or edit
-        Route::get('/edit/{proposal_id}/{id}', 'ProposalDetailController@edit')->name('edit_service');
-        // Schedule a service
-        Route::get('/scehdule/{service_id}', 'ProposalDetailController@schedule')->name('schedule_service');
-        // Select service type
-        Route::post('/checkform', 'ProposalDetailController@checkform')->name('checkform');
+    // get details to  display or edit
+    Route::get('/edit/{proposal_id}/{id}', 'ProposalDetailController@edit')->name('edit_service');
+    // Schedule a service
+    Route::get('/scehdule/{service_id}', 'ProposalDetailController@schedule')->name('schedule_service');
+    // Select service type
+    Route::post('/checkform', 'ProposalDetailController@checkform')->name('checkform');
 
-        Route::post('/save_striping', 'ProposalDetailController@savestriping')->name('save_striping');
+    Route::post('/save_striping', 'ProposalDetailController@savestriping')->name('save_striping');
 
 
 
-        Route::get('/new_service/{proposal_id}', 'ProposalDetailController@newservice')->name('new_service');
-        // Start New Service with a service type
-        Route::post('/create_service/{proposal_id}', 'ProposalDetailController@create')->name('create_detail');
+    Route::get('/new_service/{proposal_id}', 'ProposalDetailController@newservice')->name('new_service');
+    // Start New Service with a service type
+    Route::post('/create_service/{proposal_id}', 'ProposalDetailController@create')->name('create_detail');
 
-        Route::post('/save_service/{proposal_id}', 'ProposalDetailController@saveservice')->name('save_detail');
+    Route::post('/save_service/{proposal_id}', 'ProposalDetailController@saveservice')->name('save_detail');
 
-        Route::post('/update_service/{service_id}', 'ProposalDetailController@update')->name('update_detail');
+    Route::post('/update_service/{service_id}', 'ProposalDetailController@update')->name('update_detail');
 
-        //Route::get('/remove_service/{service_id}', 'ProposalDetailController@destroy')->name('remove_detail');
-        Route::delete('/', 'ProposalDetailController@destroy')->name('service_delete');
+    //Route::get('/remove_service/{service_id}', 'ProposalDetailController@destroy')->name('remove_detail');
+    Route::delete('/', 'ProposalDetailController@destroy')->name('service_delete');
 
-        Route::post('/header-calculate-combined-costing', 'ProposalDetailController@ajaxCalculateCombinedCosting')->name('ajax_header_calculate_combined_costing');
+    Route::post('/header-calculate-combined-costing', 'ProposalDetailController@ajaxCalculateCombinedCosting')->name('ajax_header_calculate_combined_costing');
 
-        Route::post('/ajax-vehicle-add-new', 'ProposalDetailController@ajaxVehicleAddNew')->name('ajax_vehicle_add_new');
-        Route::post('/ajax-vehicle-remove', 'ProposalDetailController@ajaxVehicleRemove')->name('ajax_vehicle_remove');
-        Route::post('/ajax-equipment-add-new', 'ProposalDetailController@ajaxEquipmentAddNew')->name('ajax_equipment_add_new');
-        Route::post('/ajax-equipment-remove', 'ProposalDetailController@ajaxEquipmentRemove')->name('ajax_equipment_remove');
-        Route::post('/ajax-labor-add-new', 'ProposalDetailController@ajaxLaborAddNew')->name('ajax_labor_add_new');
-        Route::post('/ajax-labor-remove', 'ProposalDetailController@ajaxLaborRemove')->name('ajax_labor_remove');
-        Route::post('/ajax-additional-cost-add-new', 'ProposalDetailController@ajaxAdditionalCostAddNew')->name('ajax_additional_cost_add_new');
-        Route::post('/ajax-additional-cost-remove', 'ProposalDetailController@ajaxAdditionalCostRemove')->name('ajax_additional_cost_remove');
-        Route::post('/ajax-subcontractor-add-new', 'ProposalDetailController@ajaxSubcontractorAddNew')->name('ajax_subcontractor_add_new');
-        Route::post('/ajax-subcontractor-remove', 'ProposalDetailController@ajaxSubcontractorRemove')->name('ajax_subcontractor_remove');
+    Route::post('/ajax-vehicle-add-new', 'ProposalDetailController@ajaxVehicleAddNew')->name('ajax_vehicle_add_new');
+    Route::post('/ajax-vehicle-remove', 'ProposalDetailController@ajaxVehicleRemove')->name('ajax_vehicle_remove');
+    Route::post('/ajax-equipment-add-new', 'ProposalDetailController@ajaxEquipmentAddNew')->name('ajax_equipment_add_new');
+    Route::post('/ajax-equipment-remove', 'ProposalDetailController@ajaxEquipmentRemove')->name('ajax_equipment_remove');
+    Route::post('/ajax-labor-add-new', 'ProposalDetailController@ajaxLaborAddNew')->name('ajax_labor_add_new');
+    Route::post('/ajax-labor-remove', 'ProposalDetailController@ajaxLaborRemove')->name('ajax_labor_remove');
+    Route::post('/ajax-additional-cost-add-new', 'ProposalDetailController@ajaxAdditionalCostAddNew')->name('ajax_additional_cost_add_new');
+    Route::post('/ajax-additional-cost-remove', 'ProposalDetailController@ajaxAdditionalCostRemove')->name('ajax_additional_cost_remove');
+    Route::post('/ajax-subcontractor-add-new', 'ProposalDetailController@ajaxSubcontractorAddNew')->name('ajax_subcontractor_add_new');
+    Route::post('/ajax-subcontractor-remove', 'ProposalDetailController@ajaxSubcontractorRemove')->name('ajax_subcontractor_remove');
 
-        Route::post('/ajax-proposal-details-update', 'ProposalDetailController@ajaxUpdate')->name('ajax_proposal_details_update');
-    });
-    /** END Proposal Details */
+    Route::post('/ajax-proposal-details-update', 'ProposalDetailController@ajaxUpdate')->name('ajax_proposal_details_update');
+});
+/** END Proposal Details */
 
 
 
-    //Printing PDF
-    Route::group(['prefix' => 'print'], function() {
+//Printing PDF
+Route::group(['prefix' => 'print'], function() {
 
-        //Print report
-        Route::get('/proposal/{proposal_id}', 'PrintingController@proposal')->name('proposal_print');
+    //Print report
+    Route::get('/proposal/{proposal_id}', 'PrintingController@proposal')->name('proposal_print');
 
 
-    });
-    /** END Print */
+});
+/** END Print */
 
 
-    Route::group(['prefix' => 'proposals'], function() {
+Route::group(['prefix' => 'proposals'], function() {
 
-        Route::get('/new', 'ProposalController@new')->name('new_proposal');
+    Route::get('/new', 'ProposalController@new')->name('new_proposal');
 
-        Route::get('', 'ProposalController@index')->name('proposals');
+    Route::get('', 'ProposalController@index')->name('proposals');
 
-        //update proposal materials pricing
-        Route::get('/MaterialPricing/{id}', 'ProposalController@refreshMaterialPricing')->name('refresh_material');
+    //update proposal materials pricing
+    Route::get('/MaterialPricing/{id}', 'ProposalController@refreshMaterialPricing')->name('refresh_material');
 
-        // close get ready to bill specific proposal
-        Route::get('/close/{id}', 'ProposalController@closeproposal')->name('close_proposal');
+    // close get ready to bill specific proposal
+    Route::get('/close/{id}', 'ProposalController@closeproposal')->name('close_proposal');
 
-        Route::get('/clone_proposal/{id}', 'ProposalController@clone')->name('clone_proposal');
+    Route::get('/clone_proposal/{id}', 'ProposalController@clone')->name('clone_proposal');
 
-        Route::get('/fromlead/{lead}', 'ProposalController@startWithLead')->name('start_from_lead');
+    Route::get('/fromlead/{lead}', 'ProposalController@startWithLead')->name('start_from_lead');
 
-        Route::get('/fromcontact/{contact}', 'ProposalController@startWithContact')->name('start_from_contact');
+    Route::get('/fromcontact/{contact}', 'ProposalController@startWithContact')->name('start_from_contact');
 
-        Route::post('/createproposal', 'ProposalController@create')->name('create_proposal');
+    Route::post('/createproposal', 'ProposalController@create')->name('create_proposal');
 
-        Route::get('/inactive_proposals', 'ProposalController@inactive')->name('inactive_proposals');
+    Route::get('/inactive_proposals', 'ProposalController@inactive')->name('inactive_proposals');
 
-        Route::post('/inactive_search_proposals', 'ProposalController@inactivesearch')->name('inactiveproposal_search');
-        // get a specific proposal
+    Route::post('/inactive_search_proposals', 'ProposalController@inactivesearch')->name('inactiveproposal_search');
+    // get a specific proposal
 
-        Route::post('/search_proposals', 'ProposalController@search')->name('search_proposals');
-        // get a specific proposal
+    Route::post('/search_proposals', 'ProposalController@search')->name('search_proposals');
+    // get a specific proposal
 
-        Route::get('/{id}/show_proposal', 'ProposalController@show')->name('show_proposal');
-        Route::post('/reorder-services', 'ProposalController@reorderServices')->name('services_reorder');
+    Route::get('/{id}/show_proposal', 'ProposalController@show')->name('show_proposal');
+    Route::post('/reorder-services', 'ProposalController@reorderServices')->name('services_reorder');
 
-        Route::get('/start_proposal/{id}', 'ProposalController@start')->name('start_proposal');
+    Route::get('/start_proposal/{id}', 'ProposalController@start')->name('start_proposal');
 
-        //  show alert
-        Route::get('/alert/{id}', 'ProposalController@alertproposal')->name('alert_proposal');
+    //  show alert
+    Route::get('/alert/{id}', 'ProposalController@alertproposal')->name('alert_proposal');
 
-        //  bill specific proposal
-        Route::get('/bill/{id}', 'ProposalController@billproposal')->name('bill_proposal');
+    //  bill specific proposal
+    Route::get('/bill/{id}', 'ProposalController@billproposal')->name('bill_proposal');
 
-        Route::post('/{proposal}/add-note', 'ProposalController@storeNote')->name('proposal_note_store');
+    Route::post('/{proposal}/add-note', 'ProposalController@storeNote')->name('proposal_note_store');
 
-        // get a specific proposal
-        Route::get('/edit_proposal/{id}', 'ProposalController@edit')->name('edit_proposal');
-        // update a specific proposal
-        Route::post('/update_proposal/{id}', 'ProposalController@update')->name('update_proposal');
+    // get a specific proposal
+    Route::get('/edit_proposal/{id}', 'ProposalController@edit')->name('edit_proposal');
+    // update a specific proposal
+    Route::post('/update_proposal/{id}', 'ProposalController@update')->name('update_proposal');
 
 
-    });
-    /** END Proposals */
+});
+/** END Proposals */
 
-    //uplaod  create: role_id 1,2,3
-    Route::group(['prefix' => 'upload'], function() {
-        Route::get('/{proposal_id}/{proposal_detail_id}', 'UploadController@showuploadform')->name('media');
+//uplaod  create: role_id 1,2,3
+Route::group(['prefix' => 'upload'], function() {
+    Route::get('/{proposal_id}/{proposal_detail_id}', 'UploadController@showuploadform')->name('media');
 
-        Route::get('/workordermedia/{proposal_id}/{proposal_detail_id}', 'UploadController@showworkorderuploadform')->name('workordermedia');
+    Route::get('/workordermedia/{proposal_id}/{proposal_detail_id}', 'UploadController@showworkorderuploadform')->name('workordermedia');
 
-        Route::post('/doupload', 'UploadController@doupload')->name('doupload');
+    Route::post('/doupload', 'UploadController@doupload')->name('doupload');
 
-        Route::post('/ajaxupload/{proposal}', 'UploadController@ajaxupload')->name('proposal_media_store');
+    Route::post('/ajaxupload/{proposal}', 'UploadController@ajaxupload')->name('proposal_media_store');
 
-        Route::post('/workorderupload', 'UploadController@doworkorderupload')->name('doworkorderupload');
+    Route::post('/workorderupload', 'UploadController@doworkorderupload')->name('doworkorderupload');
 
 
-    });
-    // END Upload
+});
+// END Upload
 
 
-    /**  Reports */
+/**  Reports */
 
-    Route::group(['prefix' => 'reports'], function() {
-        Route::prefix('sales')
-            ->name('sales_report_')
-            ->group(function() {
-                Route::get('/', 'Reports\SalesReportController@index')->name('index');
-                Route::post('/ajax-view', 'Reports\SalesReportController@ajaxView')->name('ajax_view');
-                Route::post('/export', 'Reports\SalesReportController@export')->name('export');
-            });
-
-        Route::prefix('activity-by-status')
-            ->name('activity_by_status_report_')
-            ->group(function() {
-                Route::get('/', 'Reports\ActivityByStatusReportController@index')->name('index');
-                Route::post('/ajax-view', 'Reports\ActivityByStatusReportController@ajaxView')->name('ajax_view');
-                Route::post('/export', 'Reports\ActivityByStatusReportController@export')->name('export');
-            });
-
-        Route::prefix('activity-by-contact-type')
-            ->name('activity_by_contact_type_report_')
-            ->group(function() {
-                Route::get('/', 'Reports\ActivityByContactTypesReportController@index')->name('index');
-                Route::post('/ajax-view', 'Reports\ActivityByContactTypesReportController@ajaxView')->name('ajax_view');
-                Route::post('/export', 'Reports\ActivityByContactTypesReportController@export')->name('export');
-            });
-
-        Route::prefix('leads')
-            ->name('leads_report_')
-            ->group(function() {
-                Route::get('/', 'Reports\LeadsReportController@index')->name('index');
-                Route::post('/ajax-view', 'Reports\LeadsReportController@ajaxView')->name('ajax_view');
-                Route::post('/export', 'Reports\LeadsReportController@export')->name('export');
-            });
-
-        Route::get('/', 'Reports\ReportsController@index')->name('reports');
-        Route::get('/{name}', 'Reports\ReportsController@showForm')->name('showreport');
-    });
-    /** END Reports */
-
-
-    //Resources
-    Route::group(['prefix' => 'resources'], function() {
-
-        Route::get('', 'ResourceController@index')->name('resources');
-
-        Route::get('/getmodel/{model}', 'ResourceController@getmodel')->name('getmodel');
-        //edit resource
-        Route::get('/{model}/{id}', 'ResourceController@editresource')->name('edit_resource');
-        //new resource
-        Route::get('/{model}', 'ResourceController@newresource')->name('new_resource');
-        //save resource
-        Route::post('/{model}/{id}', 'ResourceController@store')->name('save_resource');
-
-        Route::get('/destroy/{model}/{id}', 'ResourceController@destroy')->name('destroy_resource');
-
-
-    });
-    /** END Resources */
-
-
-    /*************** Contacts  ***************/
-
-    Route::group(['prefix' => 'contacts', 'middleware' => 'admin'], function() {
-
-        Route::match(['get', 'post'], '/search', 'ContactsController@search')->name('contact_search');
-
-        Route::get('/', 'ContactsController@index')->name('contact_list');
-
-        // create new contact form
-        Route::get('/create', 'ContactsController@create')->name('contact_create');
-        // show contact details
-        Route::get('/{contact}', 'ContactsController@details')->name('contact_details');
-        //edi contact form
-        Route::get('/{contact}/edit', 'ContactsController@edit')->name('contact_edit');
-
-        Route::get('/{contact}/restore', 'ContactsController@restore')->name('contact_restore');
-        Route::get('/{contact}/toggle', 'ContactsController@toggleStatus')->name('contact_toggle_status');
-
-        //save contact update
-        Route::patch('/{contact}', 'ContactsController@update')->name('contact_update');
-        //save new contact
-        Route::post('/', 'ContactsController@store')->name('contact_store');
-
-        Route::post('/{contact}/update-note', 'ContactsController@updateNote')->name('contact_field_note_update');
-        Route::post('/{contact}/add-note', 'ContactsController@addNote')->name('contact_note_add');
-
-        Route::post('/ajax-check-if-contact-exists', 'ContactsController@ajaxCheckIfContactExists')->name('ajax_check_if_contact_exists');
-
-        Route::post('/detach-from-company', 'ContactsController@detachFromCompany')->name('contact_detach_from_company');
-        Route::post('/{contact}/add-staff', 'ContactsController@addStaff')->name('contact_add_staff');
-        Route::post('/{contact}/add-newstaff', 'ContactsController@addNewStaff')->name('contact_add_new_staff');
-        Route::post('/{contact}/remove-staff', 'ContactsController@removeStaff')->name('contact_remove_staff');
-
-        //soft delete contact
-        Route::delete('/', 'ContactsController@destroy')->name('contact_delete');
-
-        /***************  Staff ***************/
-
-        Route::group(['prefix' => 'staff'], function() {
-            Route::get('/{contact_id}', 'StaffController@index')->name('staff_list');
-            Route::match(['get', 'post'], '/search/{contact_id}', 'StaffController@search')->name('staff_search');
-            Route::get('/{contact_id}/add', 'StaffController@add')->name('staff_add');
-            Route::get('/{contact_id}/remove', 'StaffController@remnove')->name('staff_remove');
+Route::group(['prefix' => 'reports'], function() {
+    Route::prefix('sales')
+        ->name('sales_report_')
+        ->group(function() {
+            Route::get('/', 'Reports\SalesReportController@index')->name('index');
+            Route::post('/ajax-view', 'Reports\SalesReportController@ajaxView')->name('ajax_view');
+            Route::post('/export', 'Reports\SalesReportController@export')->name('export');
         });
-        /** END Staff */
+
+    Route::prefix('activity-by-status')
+        ->name('activity_by_status_report_')
+        ->group(function() {
+            Route::get('/', 'Reports\ActivityByStatusReportController@index')->name('index');
+            Route::post('/ajax-view', 'Reports\ActivityByStatusReportController@ajaxView')->name('ajax_view');
+            Route::post('/export', 'Reports\ActivityByStatusReportController@export')->name('export');
+        });
+
+    Route::prefix('activity-by-contact-type')
+        ->name('activity_by_contact_type_report_')
+        ->group(function() {
+            Route::get('/', 'Reports\ActivityByContactTypesReportController@index')->name('index');
+            Route::post('/ajax-view', 'Reports\ActivityByContactTypesReportController@ajaxView')->name('ajax_view');
+            Route::post('/export', 'Reports\ActivityByContactTypesReportController@export')->name('export');
+        });
+
+    Route::prefix('leads')
+        ->name('leads_report_')
+        ->group(function() {
+            Route::get('/', 'Reports\LeadsReportController@index')->name('index');
+            Route::post('/ajax-view', 'Reports\LeadsReportController@ajaxView')->name('ajax_view');
+            Route::post('/export', 'Reports\LeadsReportController@export')->name('export');
+        });
+
+    Route::get('/', 'Reports\ReportsController@index')->name('reports');
+    Route::get('/{name}', 'Reports\ReportsController@showForm')->name('showreport');
+});
+/** END Reports */
+
+
+//Resources
+Route::group(['prefix' => 'resources'], function() {
+
+    Route::get('', 'ResourceController@index')->name('resources');
+
+    Route::get('/getmodel/{model}', 'ResourceController@getmodel')->name('getmodel');
+    //edit resource
+    Route::get('/{model}/{id}', 'ResourceController@editresource')->name('edit_resource');
+    //new resource
+    Route::get('/{model}', 'ResourceController@newresource')->name('new_resource');
+    //save resource
+    Route::post('/{model}/{id}', 'ResourceController@store')->name('save_resource');
+
+    Route::get('/destroy/{model}/{id}', 'ResourceController@destroy')->name('destroy_resource');
+
+
+});
+/** END Resources */
+
+
+/*************** Contacts  ***************/
+
+Route::group(['prefix' => 'contacts', 'middleware' => 'admin'], function() {
+
+    Route::match(['get', 'post'], '/search', 'ContactsController@search')->name('contact_search');
+
+    Route::get('/', 'ContactsController@index')->name('contact_list');
+
+    // create new contact form
+    Route::get('/create', 'ContactsController@create')->name('contact_create');
+    // show contact details
+    Route::get('/{contact}', 'ContactsController@details')->name('contact_details');
+    //edi contact form
+    Route::get('/{contact}/edit', 'ContactsController@edit')->name('contact_edit');
+
+    Route::get('/{contact}/restore', 'ContactsController@restore')->name('contact_restore');
+    Route::get('/{contact}/toggle', 'ContactsController@toggleStatus')->name('contact_toggle_status');
+
+    //save contact update
+    Route::patch('/{contact}', 'ContactsController@update')->name('contact_update');
+    //save new contact
+    Route::post('/', 'ContactsController@store')->name('contact_store');
+
+    Route::post('/{contact}/update-note', 'ContactsController@updateNote')->name('contact_field_note_update');
+    Route::post('/{contact}/add-note', 'ContactsController@addNote')->name('contact_note_add');
+
+    Route::post('/ajax-check-if-contact-exists', 'ContactsController@ajaxCheckIfContactExists')->name('ajax_check_if_contact_exists');
+
+    Route::post('/detach-from-company', 'ContactsController@detachFromCompany')->name('contact_detach_from_company');
+    Route::post('/{contact}/add-staff', 'ContactsController@addStaff')->name('contact_add_staff');
+    Route::post('/{contact}/add-newstaff', 'ContactsController@addNewStaff')->name('contact_add_new_staff');
+    Route::post('/{contact}/remove-staff', 'ContactsController@removeStaff')->name('contact_remove_staff');
+
+    //soft delete contact
+    Route::delete('/', 'ContactsController@destroy')->name('contact_delete');
+
+    /***************  Staff ***************/
+
+    Route::group(['prefix' => 'staff'], function() {
+        Route::get('/{contact_id}', 'StaffController@index')->name('staff_list');
+        Route::match(['get', 'post'], '/search/{contact_id}', 'StaffController@search')->name('staff_search');
+        Route::get('/{contact_id}/add', 'StaffController@add')->name('staff_add');
+        Route::get('/{contact_id}/remove', 'StaffController@remnove')->name('staff_remove');
     });
-    /** END Contacts */
+    /** END Staff */
+});
+/** END Contacts */
 
 
-    /*************** ContactNotes  ***************/
+/*************** ContactNotes  ***************/
 
-    Route::group(['prefix' => 'contact-notes'], function() {
-        Route::get('/', 'ContactNotesController@index')->name('contact_note_list');
-        Route::match(['get', 'post'], '/search', 'ContactNotesController@search')->name('contact_note_search');
-        Route::get('/create', 'ContactNotesController@create')->name('contact_note_create');
-        Route::post('/', 'ContactNotesController@store')->name('contact_note_store');
-        Route::get('/{contact_note}/edit', 'ContactNotesController@edit')->name('contact_note_edit');
-        Route::get('/{contact_note}/toggle', 'ContactNotesController@toggleStatus')->name('contact_note_toggle_status');
-        Route::patch('/{contact_note}', 'ContactNotesController@update')->name('contact_note_update');
-        Route::delete('/', 'ContactNotesController@destroy')->name('contact_note_delete');
-        /** END Staff */
-    });
-    /** END ContactNotes */
+Route::group(['prefix' => 'contact-notes'], function() {
+    Route::get('/', 'ContactNotesController@index')->name('contact_note_list');
+    Route::match(['get', 'post'], '/search', 'ContactNotesController@search')->name('contact_note_search');
+    Route::get('/create', 'ContactNotesController@create')->name('contact_note_create');
+    Route::post('/', 'ContactNotesController@store')->name('contact_note_store');
+    Route::get('/{contact_note}/edit', 'ContactNotesController@edit')->name('contact_note_edit');
+    Route::get('/{contact_note}/toggle', 'ContactNotesController@toggleStatus')->name('contact_note_toggle_status');
+    Route::patch('/{contact_note}', 'ContactNotesController@update')->name('contact_note_update');
+    Route::delete('/', 'ContactNotesController@destroy')->name('contact_note_delete');
+    /** END Staff */
+});
+/** END ContactNotes */
 
 
-    /*************** Leads  ***************/
+/*************** Leads  ***************/
 
-    Route::group(['prefix' => 'leads'], function() {
-        Route::model('lead', \App\Models\Lead::class);
+Route::group(['prefix' => 'leads'], function() {
+    Route::model('lead', \App\Models\Lead::class);
 
-        Route::get('/', 'LeadsController@index')->name('lead_list');
-        Route::match(['get', 'post'], '/search', 'LeadsController@search')->name('lead_search');
-        Route::get('/{lead}/details', 'LeadsController@details')->name('lead_details');
-        Route::get('/create', 'LeadsController@create')->name('lead_create')->middleware('admin');
-        Route::post('/', 'LeadsController@store')->name('lead_store')->middleware('admin');
-        Route::get('/{lead}/edit', 'LeadsController@edit')->name('lead_edit');
-        Route::get('/{lead}/toggle', 'LeadsController@toggleStatus')->name('lead_toggle_status');
-        Route::patch('/{lead}', 'LeadsController@update')->name('lead_update');
-        Route::post('/{lead}/add-note', 'LeadsController@storeNote')->name('lead_field_note_store');
-        Route::post('/{lead}/assign-to', 'LeadsController@assignTo')->name('lead_assign_to');
-        Route::get('/{lead}/archive', 'LeadsController@archive')->name('lead_archive');
-        Route::post('/ajax-check-if-lead-exists', 'LeadsController@ajaxCheckIfLeadExists')->name('ajax_check_if_lead_exists');
-    });
-    /** END Leads */
+    Route::get('/', 'LeadsController@index')->name('lead_list');
+    Route::match(['get', 'post'], '/search', 'LeadsController@search')->name('lead_search');
+    Route::get('/{lead}/details', 'LeadsController@details')->name('lead_details');
+    Route::get('/create', 'LeadsController@create')->name('lead_create')->middleware('admin');
+    Route::post('/', 'LeadsController@store')->name('lead_store')->middleware('admin');
+    Route::get('/{lead}/edit', 'LeadsController@edit')->name('lead_edit');
+    Route::get('/{lead}/toggle', 'LeadsController@toggleStatus')->name('lead_toggle_status');
+    Route::patch('/{lead}', 'LeadsController@update')->name('lead_update');
+    Route::post('/{lead}/add-note', 'LeadsController@storeNote')->name('lead_field_note_store');
+    Route::post('/{lead}/assign-to', 'LeadsController@assignTo')->name('lead_assign_to');
+    Route::get('/{lead}/archive', 'LeadsController@archive')->name('lead_archive');
+    Route::post('/ajax-check-if-lead-exists', 'LeadsController@ajaxCheckIfLeadExists')->name('ajax_check_if_lead_exists');
+});
+/** END Leads */
+
+
+/**** example of printing a pdf with background image */
+
+Route::get('/print-example-pdf', 'PrintingController@printExamplePdfWithBAckgroundImage');
 
 

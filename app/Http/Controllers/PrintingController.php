@@ -47,4 +47,23 @@ class PrintingController extends Controller
         //return $pdf->download($pdfname);
 
     }
+
+    public function printExamplePdfWithBAckgroundImage()
+    {
+        $users = \App\Models\User::get();
+
+        $imgContent = file_get_contents(public_path().'/images/bg-img.jpg');
+        $type = 'jpg';
+        $img64 = 'data:image/'.$type.';base64,'.base64_encode($imgContent);
+
+        $data = [
+            'users' => $users,
+            'img64' => $img64,
+        ];
+
+        $pdf = Pdf::loadView('pdf.example_report', $data);
+
+        return $pdf->download('example_report.pdf');
+    }
+
 }
