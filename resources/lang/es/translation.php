@@ -303,7 +303,6 @@ return [
     "proposalservices" => "Servicios de la propuesta",
     "workorderservices" => "Servicios de la Trabajo",
     "contractors" => "Contratistas",
-    "fieldmanager" => "Gerente externo",
     "date" => "Fecha",
     "createdby" => "Creado por",
     "sales_by_service_type" => "Ventas por tipo de servicio",
@@ -400,5 +399,7 @@ return [
     "service_description_template" => "Plantilla de Descripción de Servicio",
     "service_description" => "Service Description",
     "order" => "Orden",
+    "set" => "Definir",
+    "alert" => "Alerta",
     "print" => "Imprimir",
     ];

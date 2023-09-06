@@ -304,6 +304,7 @@ return [
     "workorderservices" => "Work Order Services",
     "contractors" => "Contractors",
     "fieldmanager" => "Field Manager",
+    "fieldmanager" => "Field Manager",
     "date" => "Date",
     "createdby" => "Created by",
     "download" => "Download",
@@ -406,6 +407,8 @@ return [
     "additionalcost" => "Additional Costs",
     "service_description_template" => "Service Description Template",
     "service_description" => "Service Description",
+    "set" => "Set",
+    "alert" => "Alert",
     "order" => "Order",
     "print" => "Print",
 ];
