@@ -1,37 +1,9 @@
 <!DOCTYPE html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-    <style>
-        @page {
-            margin: 0;
-        }
-        body {
-            margin: 0;
-            padding: 250px 30px 160px 45px;
-            background-image: url({{ $img64 }});
-            background-size: cover;
-        }
-        table {
-            width: 100%;
-        }
-        thead tr {
-            background-color: #ffffff;
-            color: #000000;
-        }
-        thead tr td {
-            color: #000000;
-        }
-        th,
-        td {
-            vertical-align: middle;
-            text-align: center;
-        }
-        th.tl,
-        td.tl {
-            text-align: left;
-        }
-    </style>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    @include('layouts.print_head')
+
 </head>
 <body>
 

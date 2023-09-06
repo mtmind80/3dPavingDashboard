@@ -43,11 +43,12 @@ class PrintingController extends Controller
         $pdfname = '3DPaving_' . $datestamp . '_'. $proposal_id .'.pdf';
 
 
-        $imgContent = file_get_contents(public_path().'/images/bg-img.jpg');
+        $imgContent = file_get_contents(public_path().'/images/cover_page.jpg');
         $type = 'jpg';
         $img64 = 'data:image/'.$type.';base64,'.base64_encode($imgContent);
-
-        $orderType = 'ASC';
+print_r($img64);
+exit();
+$orderType = 'ASC';
 
         $query = Proposal::with(['status', 'details' => function($w) use ($orderType){
             $w->orderBy('dsort', $orderType);
@@ -72,7 +73,6 @@ class PrintingController extends Controller
         $data = [
                 'title' => $pdfname,
                 'date' => date('m/d/Y'),
-                'img64' => $img64,
                 'hostwithHttp' => $hostwithHttp,
                 'id' => $proposal_id,
                 'proposal' => $proposal,
