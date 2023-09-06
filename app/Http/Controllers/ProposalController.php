@@ -13,6 +13,7 @@ use App\Models\Permit;
 use App\Models\Proposal;
 use App\Models\Contact;
 use App\Models\Lead;
+use App\Models\ProposalActions;
 use App\Models\ServiceCategory;
 use App\Models\State;
 use App\Models\ProposalDetail;
@@ -24,6 +25,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Validator;
 
 class ProposalController extends Controller
 {
@@ -825,6 +827,86 @@ class ProposalController extends Controller
         } else {
             return redirect()->back()->with('success', 'Proposal note added.');
         }
+    }
+
+    public function setAlert(Request $request)
+    {
+        $validator = Validator::make(
+            $request->only(['proposal_id', 'alert_reason']), [
+                'proposal_id' => 'required|positive',
+                'alert_reason' => 'required|text|max:255',
+            ]
+        );
+        if ($validator->fails()) {
+            return redirect()->back()->with('error', $validator->messages()->first());
+        }
+
+        if (!$proposal = Proposal::find($request->proposal_id)) {
+            return redirect()->back()->with('error', 'Proposal not found.');
+        }
+
+        if (!empty($proposal->on_alert)) {
+            redirect()->back()->with('error', 'Proposal has an alert already.');
+        }
+
+        try {
+            DB::transaction(function () use ($request, & $proposal) {
+                $proposal->on_alert = true;
+                $proposal->alert_reason = $request->alert_reason;
+                $proposal->save();
+
+                $proposalAction = new ProposalActions;
+                $proposalAction->proposal_id = $proposal->id;
+                $proposalAction->action_id = 6;     // set alert
+                $proposalAction->created_by = auth()->user()->id;
+                $proposalAction->note = $proposal->alert_reason;
+                $proposalAction->save();
+            });
+        } catch (Exception $e) {
+            redirect()->back()->with('error', $e->getMessage());
+        }
+
+        return redirect()->back()->with('success', 'Alert set.');
+    }
+
+    public function resetAlert($proposal_id)
+    {
+        $validator = Validator::make([
+                'proposal_id' => $proposal_id,
+            ], [
+                'proposal_id' => 'required|positive',
+            ]
+        );
+        if ($validator->fails()) {
+            return redirect()->back()->with('error', $validator->messages()->first());
+        }
+
+        if (!$proposal = Proposal::find($proposal_id)) {
+            return redirect()->back()->with('error', 'Proposal not found.');
+        }
+
+        if (empty($proposal->on_alert)) {
+            return redirect()->back()->with('error', 'Proposal does not have an alert.');
+        }
+
+        try {
+            DB::transaction(function () use (& $proposal) {
+                $proposal->on_alert = false;
+                $proposal->alert_reason = null;
+                $proposal->save();
+
+                $proposalAction = new ProposalActions;
+                $proposalAction->proposal_id = $proposal->id;
+                $proposalAction->action_id = 7;     // remove alert
+                $proposalAction->created_by = auth()->user()->id;
+                $proposalAction->note = null;
+                $proposalAction->save();
+            });
+        } catch (Exception $e) {
+            redirect()->back()->with('error', $e->getMessage());
+        }
+
+        return redirect()->back()->with('success', 'Alert removed.');
     }
 
 }

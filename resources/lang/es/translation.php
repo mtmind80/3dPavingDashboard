@@ -399,4 +399,6 @@ return [
     "service_description_template" => "Plantilla de Descripción de Servicio",
     "service_description" => "Service Description",
     "order" => "Orden",
+    "set" => "Definir",
+    "alert" => "Alerta",
 ];
