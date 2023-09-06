@@ -36,6 +36,9 @@ class Controller extends BaseController
                 return $data;
             });
 
+            $today = date("Y-m-d H:i:s"); //mysql date format
+            view()->share('today', $today);
+
             view()->share('debug_blade', 'true');
             view()->share('web_config', $web_config);
             session(['web_config'=> $web_config]);
@@ -59,10 +62,10 @@ class Controller extends BaseController
             if($lockout) {
               //  return redirect()->route('lockout');
             }
-            
+
             $site_button_class ="btn  btn-outline-info";
             view()->share('site_button_class', $site_button_class);
-            
+
             view()->share('authuser', json_decode(json_encode(auth()->user()),true));
             return $next($request);
         });

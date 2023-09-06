@@ -1,0 +1,30 @@
+/** for printing only */
+@page {
+    margin: 0;
+}
+body {
+    margin: 0;
+    padding: 250px 30px 160px 45px;
+    background-image: url('img');
+    background-size: cover;
+}
+table {
+    width: 100%;
+}
+thead tr {
+    background-color: #3a7bea;
+    color: #fff;
+}
+thead tr td {
+    color: #fff;
+}
+th,
+td {
+    vertical-align: middle;
+    text-align: center;
+}
+th.tl,
+td.tl {
+    text-align: left;
+}
+
