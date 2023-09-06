@@ -20,6 +20,7 @@ class Vehicle extends Model
 
     // Relationships:
 
+
     public function type()
     {
         return $this->belongsTo(VehicleType::class, 'vehicle_types_id');

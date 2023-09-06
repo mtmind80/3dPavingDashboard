@@ -185,14 +185,14 @@
                                         <tr>
                                             <td>Create Change Order</td>
                                             <td>
-                                                <a href="{{route('contact_details',['contact'=>$proposal['customer_staff_id']])}}"  title="create change order">Change Order</a>
+                                                <a href="{{route('contact_details',['contact'=>$proposal['customer_staff_id']])}}"  title="create change order">New Change Order</a>
 
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>CLone Proposal</td>
                                             <td>
-                                                <a href="{{route('contact_details',['contact'=>$proposal['customer_staff_id']])}}" title="clone this proposal">Clone Proposal</a>
+                                                <a href="{{route('contact_details',['contact'=>$proposal['customer_staff_id']])}}" title="clone this proposal">Clone This Proposal</a>
 
                                             </td>
                                         </tr>

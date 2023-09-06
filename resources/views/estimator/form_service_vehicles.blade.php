@@ -21,14 +21,12 @@
     @csrf
     <div class="row">
         <div class="col-sm-3 admin-form-item-widget">
-            <x-form-select name="vehicle_id"
-                :items="$vehiclesCB"
-                selected="0"
-                :params="[
-                    'id' => 'vehicle_id',
-                    'iconClass' => 'none',
-                ]"
-            ></x-form-select>
+            <select name="vehicle_id" id="vehicle_id" class="form-control">
+            <option value="0">Select a Vehicle</option>
+            @foreach ($vehiclesCB as $v)
+                <option value="{{$v->id}}">{{$v->NameRate}}</option>
+            @endforeach
+            </select>
         </div>
         <div class="col-sm-3 xs-hidden"></div>
         <div class="col-sm-2 tc admin-form-item-widget">

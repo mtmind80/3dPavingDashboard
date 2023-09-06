@@ -169,7 +169,7 @@
                     proposaltext = servicedesc;
                 }
 
-                otcost = parseFloat(combinedcost) + parseFloat(materials);  // combined striping cost + other cost
+                otcost = parseFloat(combinedcost) + parseFloat(materials) + + parseFloat(profit);  // combined striping cost + other cost
 
                 overhead = Math.ceil((otcost / 0.7) - otcost);
 
