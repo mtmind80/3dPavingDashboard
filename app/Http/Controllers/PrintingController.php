@@ -46,9 +46,12 @@ class PrintingController extends Controller
         $imgContent = file_get_contents(public_path().'/images/cover_page.jpg');
         $type = 'jpg';
         $img64 = 'data:image/'.$type.';base64,'.base64_encode($imgContent);
-print_r($img64);
-exit();
-$orderType = 'ASC';
+
+        print_r($img64);
+        exit();
+
+
+        $orderType = 'ASC';
 
         $query = Proposal::with(['status', 'details' => function($w) use ($orderType){
             $w->orderBy('dsort', $orderType);
@@ -88,6 +91,23 @@ $orderType = 'ASC';
 
 
     }
+
+
+
+    public function coversheet()
+    {
+
+        //return view('pdf.proposal',$data);
+
+        $pdfname = 'coversheet.pdf';
+        $pdf = PDF::loadView('pdf.proposal_coversheet');
+
+        return $pdf->download($pdfname);
+
+
+    }
+
+
 
 
     public function printExamplePdfWithBAckgroundImage()
