@@ -11,6 +11,21 @@ body {
 table {
     width: 100%;
 }
+.headline {
+    font-family: Tahoma, Verdana, Arial, Helvetica;
+    font-size: 45px;
+    color: #000000;
+}
+.small_normal {
+    font-family: Tahoma, Verdana, Arial, Helvetica;
+    font-size: 10px;
+    color: #000000;
+}
+.normaltext {
+    font-family: Tahoma, Verdana, Arial, Helvetica;
+    font-size: 20px;
+    color: #000000;
+}
 thead tr {
     background-color: #ffffff;
     color: #000000;
@@ -26,4 +41,13 @@ td {
 th.tl,
 td.tl {
     text-align: left;
+    vertical-align: top;
 }
+th.tr,
+td.tr {
+    vertical-align: top;
+    text-align: right;
+}
+
+p.pb {page-break-after: always;}
+

@@ -7,12 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 class Location extends Model
 {
 
+    protected $appends = [
+        'full_location_one_line',
+        'full_location_two_lines',
+        'short_location_two_lines',
+    ];
+
     // Relationships:
     public function locationType()
     {
         return $this->belongsTo(LocationType::class);
     }
-    
+
     // Scopes:
 
     // Mutators and Accessors
@@ -24,7 +30,7 @@ class Location extends Model
 
     public function getFullLocationTwoLinesAttribute()
     {
-        return self::buildFullAddress($this->address_line1, $this->city, $this->county, $this->state, $this->postal_code, '<br>', $this->parcel_number );
+        return self::buildFullAddress($this->address_line1, $this->city, $this->county, $this->state, $this->postal_code, '</br>', $this->parcel_number );
     }
 
     public function getShortLocationTwoLinesAttribute()
@@ -44,7 +50,7 @@ class Location extends Model
         return self::where('county', $county)->whereNotNull('city')->pluck('id')->toArray();
     }
 
-    
+
     static public function countiesCB($default = [])
     {
         $types = self::distinct('county')->orderBy('county')->pluck('county', 'county')->toArray();
