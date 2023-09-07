@@ -401,4 +401,5 @@ return [
     "order" => "Orden",
     "set" => "Definir",
     "alert" => "Alerta",
-];
+    "print" => "Imprimir",
+    ];

@@ -86,7 +86,11 @@
 
                                         <td class="tc">
 
-                                        &nbsp;
+                                            <a href="{{route('print_proposal',['proposal_id'=> $proposal['id']])}}"
+                                               title="@lang('translation.print') @lang('translation.proposal')"
+                                               class="{{$site_button_class}}">
+                                                <i class="fas fa-plus"></i> @lang('translation.print') @lang('translation.proposal')
+                                            </a>
                                         </td>
 
                                     </tr>

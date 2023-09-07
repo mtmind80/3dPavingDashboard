@@ -409,4 +409,6 @@ return [
     "service_description" => "Service Description",
     "set" => "Set",
     "alert" => "Alert",
+    "order" => "Order",
+    "print" => "Print",
 ];
