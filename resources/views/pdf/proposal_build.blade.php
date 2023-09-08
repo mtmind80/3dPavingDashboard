@@ -5,7 +5,7 @@
     @include('layouts.print_head')
 
 </head>
-<body>
+<span>
 &nbsp;<p>&nbsp;</p>
 &nbsp;<p>&nbsp;</p>
 <table>
@@ -49,16 +49,72 @@
 <!-- Service Listings -->
 <p class="pb">
 </p>
-Service Listings
-<!-- Service Summary -->
+<h2>Service Listings</h2>
+@foreach ($services as $service)
+    {{$service->service_name}}
+    {{ \App\Helpers\Currency::format($service->cost ?? '0.0') }}
+    {!!$service->proposal_text!!}
+    <hr>
+    <br/>
+@endforeach
 <p class="pb">
 </p>
-Service Summary
-<!-- Service Disclaimers -->
+<h3>Service Summary</h3>
+<table>
+
+@foreach ($services as $service)
+    <tr>
+        <td class="small_normal tl">
+            {{$service->service_name}}
+        </td>
+        <td class="small_normal tl">
+            {{ \App\Helpers\Currency::format($service->cost ?? '0.0') }}
+        </td>
+    </tr>
+
+
+@endforeach
+    <tr class='totalcolor'>
+    <td class="small_normal tl">
+        Total
+    </td>
+    <td class="small_normal tl">
+    {{$currency_total_details_costs}}
+    </td>
+    </tr>
+</table>
 <p class="pb">
 </p>
-Signature Page
-<!-- General Terms -->
+<span class="brushscript">Signature Page</span>
+
+<div class="headerclass">Acceptances of proposal</div>
+<br/>
+<br/>
+    We would like to thank you for the opportunity to visit your property and the possibility to earn your
+business. We are committed to providing our customers with great service and workmanship on all
+of our projects. Our commitment to customers is why we always warranty our projects and stand
+behind our work.
+<br/>
+<br/>
+    To proceed with our proposal please execute below and return to 3-D Paving and Sealcoating, LLC
+via e-mail. Upon execution this proposal becomes a binding contract. Customer acknowledges it
+has read this entire document including "General Terms and Conditions" and "Service Terms and
+Conditions".
+<br/>
+<br/>
+    Payment Terms: 40% Deposit Due Upon Signed Contract, 60% Due Upon Completion.
+This proposal expires thirty (30) days from the date hereof, but may be accepted at any later date
+at the sole option of 3-D Paving.
+    <br/>
+    <table>
+            <tr>
+    <td class="tl">
+        <font class="brushscript">Manager</font>
+    </td>
+    <td class="tl">Client
+    </td>
+    </tr>
+</table>
 <p class="pb">
 </p>
 <h1>General Terms</h1>
@@ -75,23 +131,26 @@ Signature Page
         </td>
     </tr>
 </table>
-<!-- Service Terms -->
+
 <p class="pb">
 </p>
+
 
 <h1>Service Terms and Conditions</h1>
 <table>
     <tr>
         <td class="small_normal tl">
-            @foreach($terms as $term)
-                @if($loop->even && $loop->index > 1)
-        </td><td class="small_normal tl">
-            @endif
-            <strong style="color:#585657;"><u>{{$term['title']}}:</u></strong> <br /><br />
-            {!!$term['text']!!}
+            @foreach($ServiceTerms as $sterm)
+                @if($loop->index ==2 )
+                     </td><td class="small_normal tl">
+                @endif
+            <strong style="color:#585657;"><u>{{$sterm['title']}}:</u></strong> <br />
+            {!!$sterm['text']!!}
             @endforeach
         </td>
     </tr>
 </table>
+
+
 </body>
 </html>

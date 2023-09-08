@@ -9,6 +9,7 @@ use App\Models\Proposal;
 use App\Models\ProposalMedia;
 use App\Models\ProposalNote;
 use App\Models\Term;
+use App\Models\TermsOfService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
 use PDF;
@@ -56,7 +57,6 @@ class PrintingController extends Controller
             abort(404);
         }
 
-
         $currencyTotalDetailCosts = $proposal->currency_total_details_costs;
 
         $services = $proposal->details;
@@ -64,6 +64,9 @@ class PrintingController extends Controller
         $proposal = $proposal->toArray();
 
         $hostwithHttp = request()->getSchemeAndHttpHost();
+
+        $TermsOfService = TermsOfService::orderBy('section')->get()->toArray();
+
         $terms = Term::orderBy('section')->get()->toArray();
 
         //echo "<pre>";
@@ -73,6 +76,7 @@ class PrintingController extends Controller
         $data = [
             'title' => $pdfname,
             'terms' => $terms,
+            'ServiceTerms' => $TermsOfService,
             'date' => date('m/d/Y'),
             'hostwithHttp' => $hostwithHttp,
             'id' => $proposal_id,
