@@ -86,7 +86,7 @@
 
                                         <td class="tc">
 
-                                            <a id='printproposal' href="{{route('print_proposal',['proposal_id'=> $proposal['id']])}}"
+                                            <a  href="{{route('print_proposal',['proposal_id'=> $proposal['id']])}}"
                                                title="@lang('translation.print') @lang('translation.proposal')"
                                                class="{{$site_button_class}}">
                                                 <i class="fas fa-plus"></i> @lang('translation.print') @lang('translation.proposal')
@@ -482,16 +482,6 @@
             var mediaModal = $('#formMediaModal');
             var mediaForm = $('#admin_form_media_modal');
             var file = $('#file');
-
-            $('#printproposal').click(function(){
-
-                Swal.fire({
-                    title: 'Be Patient',
-                    text: 'Printing your proposal.',
-                    icon: 'success',
-                    showConfirmButton: false,
-
-                })
 
             $('#addmediabutton').click(function(){
 
