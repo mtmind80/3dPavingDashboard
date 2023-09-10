@@ -87,6 +87,7 @@
             <input type="hidden" name="subcontractor_total_cost" id="estimator_form_subcontractor_total_cost" value="{{ $proposalDetail->total_cost_subcontractor }}">
         </form>
 
+        <div class="font-weight-semibold"></div>
         <!-- to be removed -->
         @if (env('APP_ENV') === 'local')
             <div class="row pl25 pb20">
