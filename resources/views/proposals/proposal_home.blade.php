@@ -89,12 +89,13 @@
                                             <button id="printproposal"  class="{{$site_button_class}}">
                                                 <i class="fas fa-plus"></i> @lang('translation.print') @lang('translation.proposal')
                                             </button>
-
+<!--
                                             <a  href="{{route('print_proposal',['proposal_id'=> $proposal['id']])}}"
                                                title="@lang('translation.print') @lang('translation.proposal')"
                                                class="{{$site_button_class}}">
                                                 <i class="fas fa-plus"></i> @lang('translation.print') @lang('translation.proposal')
                                             </a>
+-->
                                         </td>
 
                                     </tr>
@@ -230,7 +231,11 @@
                                         <div class="col-md-8 col-sm-6 mb20">
                                         @if ($proposal['IsEditable'])
                                             <x-href-button url="{{ route('new_service', ['proposal_id' => $proposal['id']]) }}" class="mr10 btn btn-success"><i class="fas fa-plus"></i>Add Service</x-href-button>
-                                        @endif
+                                            &nbsp;&nbsp;
+                                            <x-href-button url="{{ route('refresh_material', ['id' => $proposal['id']]) }}" class="mr10 btn btn-success"><i class="fas fa-plus"></i>@lang('translation.RefreshMaterials')</x-href-button>
+
+                                            @endif
+
                                         @if (!empty($services) && $services->count() > 0)
                                             <x-reorder-button
                                                 :url="route('services_reorder')"
@@ -412,7 +417,16 @@
             $("#printproposal").click(function(){
 
 
-                alert("We are here");
+                Swal.fire({
+                    title: 'Be Patient',
+                    text: 'Preparing your proposal for download. /n This can take a few minutes!',
+                    icon: 'info',
+                    showConfirmButton: true,
+
+                })
+
+                window.location.href="{{route('print_proposal',['proposal_id'=> $proposal['id']])}}";
+
                 return;
 
             })

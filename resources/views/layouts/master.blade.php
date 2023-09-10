@@ -58,6 +58,10 @@
     <script src="{{ URL::asset('/js/common-base.min.js')}}"></script>
     <script src="{{ URL::asset('/js/extra-scripts.js')}}"></script>
 
+    <script src="{{ URL::asset('/js/sweetalert2.min.js')}}"></script>
+    <link rel="stylesheet" href="{{ URL::asset('/css/sweetalert2.min.css')}}">
+
+
     <script>
         var controllerName = "{{ \App\Helpers\RouteAction::getControllerName() }}";
         var functionName = "{{ \App\Helpers\RouteAction::getFunctionName() }}";

@@ -12,8 +12,10 @@ class Material extends Model
     protected $fillable = [
         'name',
         'cost',
-        'alt_cost',
+        'service_category_id',
     ];
+
+    protected $table ='materials';
 
     static public function materialsCB($default = [])
     {
@@ -31,5 +33,5 @@ class Material extends Model
     {
         return $query->where('service_category_id', '=',$service_category_id);
     }
-    
+
 }
