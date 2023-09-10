@@ -86,6 +86,10 @@
 
                                         <td class="tc">
 
+                                            <button id="printproposal"  class="{{$site_button_class}}">
+                                                <i class="fas fa-plus"></i> @lang('translation.print') @lang('translation.proposal')
+                                            </button>
+
                                             <a  href="{{route('print_proposal',['proposal_id'=> $proposal['id']])}}"
                                                title="@lang('translation.print') @lang('translation.proposal')"
                                                class="{{$site_button_class}}">
@@ -178,11 +182,12 @@
 
                                     <tr>
                                         <td>@lang('translation.on_alert')</td>
-                                        <td>
                                             @if($proposal['on_alert'])
-                                                YES
-                                                <x-href-button url="{{ route('proposal_alert_reset', ['proposal_id' => $proposal['id']]) }}" class="btn-danger ptb2 fr"><i class="fas fa-times"></i>Reset Alert</x-href-button>
+                                            <td class="bg-alert">
+                                                YES  &nbsp;&nbsp; Reason: {{$proposal['alert_reason']}}
+                                                <x-href-button url="{{ route('proposal_alert_reset', ['proposal_id' => $proposal['id']]) }}" class="btn-danger ptb2 fr"><i class="fas fa-times"></i>Remove Alert</x-href-button>
                                             @else
+                                            <td>
                                                 NO
                                                 <x-href-button id="set_alert_button" class="btn-success ptb2 fr"><i class="fas fa-check"></i>Set Alert</x-href-button>
                                             @endif
@@ -402,6 +407,17 @@
         var selectedTab = "{{ $selectedTab ?? '' }}"
 
         $(document).ready(function () {
+
+
+            $("#printproposal").click(function(){
+
+
+                alert("We are here");
+                return;
+
+            })
+
+
             if (selectedTab !== "") {
                 let a = $('#'+selectedTab);
                 let li = a.closest('li');
