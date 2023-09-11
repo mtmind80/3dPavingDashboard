@@ -29,11 +29,12 @@
                                         <span class="far fa-edit mr4"></span>@lang('translation.edit')
                                     </a>
                                 </li>
-                                <li>
+    <!--                            <li>
                                     <a href="javascript:" class="action" data-action="route" data-route="{{ route('refresh_material', ['id' => $service->proposal_id]) }}">
                                         <span class="far fa-eye mr4"></span>@lang('translation.RefreshMaterials')
                                     </a>
                                 </li>
+   -->
                                 <li class="menu-separator"></li>
                                 <li>
                                     <a href="javascript:" class="action" data-action="delete" data-id="{{ $service->id }}">

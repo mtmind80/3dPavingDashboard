@@ -66,7 +66,7 @@
                     Vendors we use to purchase materials.
                 </td>
             </tr>
-            
+
             <tr>
                 <td class="tc">
                     <a class="resourceLink"
@@ -76,7 +76,7 @@
                     These are subs we contract with for special purposes and services.
                 </td>
             </tr>
-            
+
             <tr>
                 <td class="tc">
                     <a class="resourceLink"
@@ -156,7 +156,7 @@
             </tr>
             <tr>
                 <td class="tc">
-                    <a class="resourceLink" href="Javascript:alert('Coming Soon');">"Restore" Web
+                    <a class="resourceLink" href="Javascript:AREYOUSURE('This action will restore all web configurations to their original settings!\nAre you sure?', "");">"Restore" Web
                         Configurations</a><br/>
                 </td>
                 <td class="tc">
@@ -172,9 +172,36 @@
                     Edit the Global Terms and Conditions used in all proposals.
                 </td>
             </tr>
+
+            <tr>
+                <td class="tc">
+                    <a class="resourceLink"
+                       href="{{ route('getmodel', ['model' => 'Service'], false) }}">@lang('translation.services')</a><br/>
+                </td>
+                <td class="tc">
+                    Edit the current overhead percentage for each service.
+                </td>
+            </tr>
+
         </table>
 
     </div>
 
 @endsection
 
+@push('partials-scripts')
+
+    <script>
+
+        function AREYOUSURE(memo, Durl){
+
+            var doit = confirm(memo);
+            if(doit){
+                window.location.href=Durl;
+            }
+            return false;
+        }
+
+
+    </script>
+@endpush
