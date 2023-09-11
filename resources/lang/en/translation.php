@@ -402,4 +402,6 @@ return [
     "alert" => "Alert",
     "order" => "Order",
     "print" => "Print",
+    "overhead" => "Overhead",
+    "percentage" => "Percentage",
 ];

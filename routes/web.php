@@ -398,6 +398,8 @@ Route::group(['prefix' => 'resources'], function() {
 
     Route::get('/destroy/{model}/{id}', 'ResourceController@destroy')->name('destroy_resource');
 
+    Route::get('/restore_config/', 'ResourceController@restore_web_config')->name('restore_config');
+
 
 });
 /** END Resources */
