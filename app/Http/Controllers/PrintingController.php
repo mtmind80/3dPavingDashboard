@@ -10,6 +10,7 @@ use App\Models\ProposalMedia;
 use App\Models\ProposalNote;
 use App\Models\Term;
 use App\Models\TermsOfService;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
 use PDF;
@@ -69,6 +70,9 @@ class PrintingController extends Controller
 
         $terms = Term::orderBy('section')->get()->toArray();
 
+        $sales = User::where('id','=',$proposal['salesperson_id'])->first()->toArray();
+        $manager = User::where('id','=',$proposal['salesmanager_id'])->first()->toArray();
+
         //echo "<pre>";
         //print_r($proposal['location']);
         //exit();
@@ -80,6 +84,8 @@ class PrintingController extends Controller
             'date' => date('m/d/Y'),
             'hostwithHttp' => $hostwithHttp,
             'id' => $proposal_id,
+            'sales' => $sales,
+            'manager' => $manager,
             'proposal' => $proposal,
             'services' => $services,
             'currency_total_details_costs' => $currencyTotalDetailCosts,

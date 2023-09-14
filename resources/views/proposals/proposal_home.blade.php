@@ -418,24 +418,22 @@
 
                 let timerInterval
 
-
-
                 Swal.fire({
                     title: 'Be Patient',
                     html: 'Preparing your proposal for download. </br>This can take a few minutes!</br>I will close automatically in <strong>10</strong> seconds.<br/><br/>',
                     icon: 'info',
+                    heightAuto: false,
                     timerProgressBar : true,
                     timer: 10000,
                     customClass: {
-                        title: 'info font-size-22',
-                        htmlContainer: 'fs-3',
-                        timerProgressBar: 'alert',
-                        footer:"font-size-22 font-weight-semibold",
+                        title: 'info font-size-44',
+                        htmlContainer: 'fs-55',
+                        timerProgressBar: 'fs-22',
+                        footer:"font-size-44 font-weight-semibold",
                     },
                     width: '90em',
                     footer : "Thank you for your patience.",
                     showConfirmButton: false,
-
                 })
 
                 window.location.href="{{route('print_proposal',['proposal_id'=> $proposal['id']])}}";

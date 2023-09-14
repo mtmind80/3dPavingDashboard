@@ -4,8 +4,14 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     @include('layouts.print_head')
 
+    <style type="text/css">
+        @font-face {
+            font-family: Pacifico;
+            src: url('{{ public_path('fonts/Pacifico-Regular.tff') }}');
+        }
+    </style>
 </head>
-<span>
+
 &nbsp;<p>&nbsp;</p>
 &nbsp;<p>&nbsp;</p>
 <table>
@@ -50,18 +56,30 @@
 <p class="pb">
 </p>
 <h2>Service Listings</h2>
-@foreach ($services as $service)
-    {{$service->service_name}}
-    {{ \App\Helpers\Currency::format($service->cost ?? '0.0') }}
-    {!!$service->proposal_text!!}
-    <hr>
-    <br/>
+<table>
+
+          @php
+              $totalcost = 0;
+          @endphp
+    @foreach ($services as $service)
+        @php
+            $totalcost += $service->cost;
+        @endphp
+
+        <tr>
+        <td class="tl fw-bolder">{{$service->service_name}}</td>
+        <td class="tr fw-bolder">{{ \App\Helpers\Currency::format($service->cost ?? '0.0') }}
+        </td>
+        </tr>
+        <tr>
+        <td colspan='2' class="tl">{!!$service->proposal_text!!} </td>
+        </tr>
 @endforeach
+</table>
 <p class="pb">
 </p>
 <h3>Service Summary</h3>
 <table>
-
 @foreach ($services as $service)
     <tr>
         <td class="small_normal tl">
@@ -85,8 +103,6 @@
 </table>
 <p class="pb">
 </p>
-<span class="brushscript">Signature Page</span>
-
 <div class="headerclass">Acceptances of proposal</div>
 <br/>
 <br/>
@@ -106,10 +122,22 @@ Conditions".
 This proposal expires thirty (30) days from the date hereof, but may be accepted at any later date
 at the sole option of 3-D Paving.
     <br/>
-    <table>
-            <tr>
-    <td class="tl">
-        <font class="brushscript">Manager</font>
+    <table class="w-100">
+        <tr class='totalcolor'>
+            <td class="tl">
+                Services Estimated Total
+            </td>
+            <td class="tl">
+                {{$currency_total_details_costs}}
+            </td>
+        </tr>
+        <tr>
+        </table>
+<table style="width:100%;border:2px;">
+    <td class="PavingSignature tl">
+        <div>Managers</div>
+
+    {{$sales['fname']}} {{$sales['lname']}}
     </td>
     <td class="tl">Client
     </td>
