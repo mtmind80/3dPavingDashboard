@@ -22,6 +22,7 @@ class CreateServicesTable extends Migration
             $table->mediumText('service_template')->nullable();
             $table->mediumText('service_text_en')->nullable();
             $table->mediumText('service_text_es')->nullable();
+            $table->integer('percent_overhead')->unsigned(true)->default(30);
             $table->float('min_cost',8,2, true)->default(0);
             $table->string('old_service_cat', 100);
             $table->unsignedBigInteger('old_id')->default(0);

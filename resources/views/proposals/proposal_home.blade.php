@@ -21,6 +21,7 @@
 
         <div class="col-12">
             <div class="card">
+
                 <div class="card-body">
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs nav-tabs-custom nav-justified" role="tablist">
@@ -85,7 +86,16 @@
 
                                         <td class="tc">
 
-                                        &nbsp;
+                                            <button id="printproposal"  class="{{$site_button_class}}">
+                                                <i class="fas fa-plus"></i> @lang('translation.print') @lang('translation.proposal')
+                                            </button>
+<!--
+                                            <a  href="{{route('print_proposal',['proposal_id'=> $proposal['id']])}}"
+                                               title="@lang('translation.print') @lang('translation.proposal')"
+                                               class="{{$site_button_class}}">
+                                                <i class="fas fa-plus"></i> @lang('translation.print') @lang('translation.proposal')
+                                            </a>
+-->
                                         </td>
 
                                     </tr>
@@ -173,11 +183,14 @@
 
                                     <tr>
                                         <td>@lang('translation.on_alert')</td>
-                                        <td>@if($proposal['on_alert'])
-                                                YES
-
+                                            @if($proposal['on_alert'])
+                                            <td class="bg-alert">
+                                                YES  &nbsp;&nbsp; Reason: {{$proposal['alert_reason']}}
+                                                <x-href-button url="{{ route('proposal_alert_reset', ['proposal_id' => $proposal['id']]) }}" class="btn-danger ptb2 fr"><i class="fas fa-times"></i>Remove Alert</x-href-button>
                                             @else
+                                            <td>
                                                 NO
+                                                <x-href-button id="set_alert_button" class="btn-success ptb2 fr"><i class="fas fa-check"></i>Set Alert</x-href-button>
                                             @endif
                                         </td>
                                     </tr>
@@ -218,7 +231,11 @@
                                         <div class="col-md-8 col-sm-6 mb20">
                                         @if ($proposal['IsEditable'])
                                             <x-href-button url="{{ route('new_service', ['proposal_id' => $proposal['id']]) }}" class="mr10 btn btn-success"><i class="fas fa-plus"></i>Add Service</x-href-button>
-                                        @endif
+                                            &nbsp;&nbsp;
+                                            <x-href-button url="{{ route('refresh_material', ['id' => $proposal['id']]) }}" class="mr10 btn btn-success"><i class="fas fa-plus"></i>@lang('translation.RefreshMaterials')</x-href-button>
+
+                                            @endif
+
                                         @if (!empty($services) && $services->count() > 0)
                                             <x-reorder-button
                                                 :url="route('services_reorder')"
@@ -378,6 +395,8 @@
     @include('modals.form_media_modal2')
 
     @include('modals.form_proposal_note_modal')
+
+    @include('modals.form_proposal_alert_reason_modal')
 @stop
 
 @section('css-files')
@@ -393,6 +412,102 @@
         var selectedTab = "{{ $selectedTab ?? '' }}"
 
         $(document).ready(function () {
+
+
+            $("#printproposal").click(function(){
+
+                let timerInterval
+
+                Swal.fire({
+                    title: 'Be Patient',
+                    html: 'Preparing your proposal for download. </br>This can take a few minutes!</br>I will close automatically in <strong>10</strong> seconds.<br/><br/>',
+                    icon: 'info',
+                    heightAuto: false,
+                    timerProgressBar : true,
+                    timer: 10000,
+                    customClass: {
+                        title: 'info font-size-44',
+                        htmlContainer: 'fs-55',
+                        timerProgressBar: 'fs-22',
+                        footer:"font-size-44 font-weight-semibold",
+                    },
+                    width: '90em',
+                    footer : "Thank you for your patience.",
+                    showConfirmButton: false,
+                })
+
+                window.location.href="{{route('print_proposal',['proposal_id'=> $proposal['id']])}}";
+
+/*
+                Swal.fire({
+                    title: 'Auto close alert!',
+                    html:
+                        'I will close in <strong></strong> seconds.<br/><br/>' +
+                        '<button id="increase" class="btn btn-warning">' +
+                        'I need 5 more seconds!' +
+                        '</button><br/><br/>' +
+                        '<button id="stop" class="btn btn-danger">' +
+                        'Please stop the timer!!' +
+                        '</button><br/><br/>' +
+                        '<button id="resume" class="btn btn-success" disabled>' +
+                        'Phew... you can restart now!' +
+                        '</button><br/><br/>' +
+                        '<button id="toggle" class="btn btn-primary">' +
+                        'Toggle' +
+                        '</button>',
+                    timer: 10000,
+                    didOpen: () => {
+                        const content = Swal.getHtmlContainer()
+                        const $ = content.querySelector.bind(content)
+
+                        const stop = $('#stop')
+                        const resume = $('#resume')
+                        const toggle = $('#toggle')
+                        const increase = $('#increase')
+
+                        Swal.showLoading()
+
+                        function toggleButtons () {
+                            stop.disabled = !Swal.isTimerRunning()
+                            resume.disabled = Swal.isTimerRunning()
+                        }
+
+                        stop.addEventListener('click', () => {
+                            Swal.stopTimer()
+                            toggleButtons()
+                        })
+
+                        resume.addEventListener('click', () => {
+                            Swal.resumeTimer()
+                            toggleButtons()
+                        })
+
+                        toggle.addEventListener('click', () => {
+                            Swal.toggleTimer()
+                            toggleButtons()
+                        })
+
+                        increase.addEventListener('click', () => {
+                            Swal.increaseTimer(5000)
+                        })
+
+                        timerInterval = setInterval(() => {
+                            Swal.getHtmlContainer().querySelector('strong')
+                                .textContent = (Swal.getTimerLeft() / 1000)
+                                .toFixed(0)
+                        }, 100)
+                    },
+                    willClose: () => {
+                        clearInterval(timerInterval)
+                    }
+                })
+
+                */
+                return;
+
+            })
+
+
             if (selectedTab !== "") {
                 let a = $('#'+selectedTab);
                 let li = a.closest('li');
@@ -574,6 +689,48 @@
                 }
             });
 
+            var alertModal = $('#formAlertReasonModal');
+            var alertForm = $('#admin_form_alert_reason_modal');
+            var alertReason = $('#form_alert_reason_alert_reason');
+
+
+            $('#set_alert_button').click(function(){
+                alertModal.modal('show');
+            });
+
+            alertModal.on('show.bs.modal', function(){
+                alertForm.find('em.state-error').remove();
+                alertForm.find('.field.state-error').removeClass('state-error');
+                alertReason.val('');
+            })
+
+            alertModal.on('hidden.bs.modal', function(){
+                alertForm.find('em.state-error').remove();
+                alertForm.find('.field.state-error').removeClass('state-error');
+                alertReason.val('');
+            })
+
+            alertForm.validate({
+                rules: {
+                    alert_reason: {
+                        required: true,
+                        text: true
+                    }
+                },
+                messages: {
+                    alert_reason: {
+                        required : "@lang('translation.field_required')",
+                        text: "@lang('translation.invalid_entry')"
+                    }
+                },
+                submitHandler: function(form){
+                    let errors = false;
+
+                    if (!errors) {
+                        alertForm.submit();
+                    }
+                }
+            });
         });
 
 

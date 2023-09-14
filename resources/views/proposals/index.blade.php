@@ -129,7 +129,7 @@
                         <div class="row">
 
                             <div class="form-group col-lg-4">
-                               
+
                                 <input class="checkbox-inline" type="checkbox" value="1" id="showall" name="showall">
                                 <label>@lang('translation.showall') </label>
                             </div>
@@ -165,7 +165,7 @@
                         </th>
                         </thead>
                         <tbody>
-                        
+
                         @if($proposalcount)
                         @foreach ($proposals as $proposal)
                             <tr>
@@ -181,7 +181,7 @@
                                     @endif
                                 </td>
                                 <td class="tc">{{$proposal['proposal_date']}}</td>
-                                
+
                             </tr>
                         @endforeach
 @else
@@ -192,7 +192,7 @@
 @endif
                         </tbody>
                     </table>
-                    
+
                 </div>
             </div>
         </div>
@@ -203,12 +203,12 @@
     <script type="text/javascript">
 
         $(document).ready(function () {
-            
+
 
             $("#submitbutton").click(function (event) {
                 form = $("#searchform");
                 checkit(form);
-                
+
             });
 
             function checkit(form) {
@@ -261,11 +261,20 @@
                     return;
 
                 }
-                alert("You must fill out or select some criteria for your query. You cannot leave all the fields blank");
+
+                Swal.fire({
+                    title: 'Search Form',
+                    text: 'You must select some criteria for your search.',
+                    icon: 'error',
+                    showConfirmButton: true,
+
+                })
+
+//                alert("You must fill out or select some criteria for your query. You cannot leave all the fields blank");
 
             }
 
-            
+
         });
 
     </script>
