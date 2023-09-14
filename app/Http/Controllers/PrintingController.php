@@ -8,6 +8,7 @@ use App\Models\Permit;
 use App\Models\Proposal;
 use App\Models\ProposalMedia;
 use App\Models\ProposalNote;
+use App\Models\Service;
 use App\Models\Term;
 use App\Models\TermsOfService;
 use App\Models\User;
@@ -62,6 +63,8 @@ class PrintingController extends Controller
 
         $services = $proposal->details;
 
+        $service_overhead = Service::all()->toArray();
+
         $proposal = $proposal->toArray();
 
         $hostwithHttp = request()->getSchemeAndHttpHost();
@@ -80,6 +83,7 @@ class PrintingController extends Controller
         $data = [
             'title' => $pdfname,
             'terms' => $terms,
+            'service_overhead' => $service_overhead,
             'ServiceTerms' => $TermsOfService,
             'date' => date('m/d/Y'),
             'hostwithHttp' => $hostwithHttp,
