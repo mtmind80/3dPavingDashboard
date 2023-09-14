@@ -83,8 +83,6 @@
 </div>
 @push('partials-scripts')
 
-    <script src="{{ URL::asset('/js/sweetalert2.min.js')}}"></script>
-    <link rel="stylesheet" href="{{ URL::asset('/css/sweetalert2.min.css')}}">
 
     <script type="text/javascript">
 
@@ -130,6 +128,7 @@
                 var headerElMaterialsCost = $('#header_show_materials_cost'); //additional costs
                 */
 
+                var percent_overhead ={{ $service->percent_overhead }};
                 var profit = headerElProfit.val();
                 var materials =headerElMaterialsCost.val(); // additional costs
                 var service = {{ $proposalDetail->services_id }};
@@ -171,13 +170,15 @@
 
                 otcost = parseFloat(combinedcost) + parseFloat(materials) + + parseFloat(profit);  // combined striping cost + other cost
 
-                overhead = Math.ceil((otcost / 0.7) - otcost);
+                //percent_overhead percentage of service
+                overhead = Math.ceil((percent_overhead * 100) / otcost);
+                $("#explain").html(percent_overhead + '%');
 
-                console.log('30% of striping costs overhead:' + overhead);
+
+                console.log(percent_overhead + '%: = ' + overhead);
 
                 headerElOverHead.text(formatCurrency.format(overhead));
 
-                $("#explain").html(' 30%');
 
                 breakeven = (parseFloat(overhead) + parseFloat(otcost));
 
