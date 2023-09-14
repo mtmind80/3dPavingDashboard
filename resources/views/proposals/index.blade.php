@@ -261,7 +261,16 @@
                     return;
 
                 }
-                alert("You must fill out or select some criteria for your query. You cannot leave all the fields blank");
+
+                Swal.fire({
+                    title: 'Search Form',
+                    text: 'You must select some criteria for your search.',
+                    icon: 'error',
+                    showConfirmButton: true,
+
+                })
+
+//                alert("You must fill out or select some criteria for your query. You cannot leave all the fields blank");
 
             }
 
