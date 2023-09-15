@@ -424,7 +424,7 @@
                     icon: 'info',
                     heightAuto: false,
                     timerProgressBar : true,
-                    timer: 10000,
+                    timer: 4000,
                     customClass: {
                         title: 'info font-size-44',
                         htmlContainer: 'fs-55',
