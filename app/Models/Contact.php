@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 use App\Traits\SortableTrait;
 use App\Traits\SearchTrait;
+use Illuminate\Notifications\Notifiable;
 
 class Contact extends Model
 {
-    use SortableTrait, SearchTrait;
+    use SortableTrait, SearchTrait, Notifiable;
 
     protected $dates = ['deleted_at'];
 
