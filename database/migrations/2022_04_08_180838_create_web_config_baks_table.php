@@ -16,8 +16,9 @@ class CreateWebConfigBaksTable extends Migration
         Schema::create('web_config_bak', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->id();
-            $table->string('key','50');
+            $table->string('key','50')->index('pkdex_key')->unique();
             $table->string('value','255');
+            $table->string('description','255')->nullable()->default('');
 
         });
     }

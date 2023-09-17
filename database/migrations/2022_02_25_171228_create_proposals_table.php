@@ -25,7 +25,7 @@ class CreateProposalsTable extends Migration
             $table->unsignedBigInteger('last_updated_by')->nullable()->default(null);
             $table->unsignedBigInteger('contact_id')->index();
             $table->unsignedBigInteger('customer_staff_id')->nullable()->default(null);
-            $table->unsignedBigInteger('salesmanager_id')->nullable()->default(null)->index();
+            $table->unsignedBigInteger('salesmanager_id')->nullable()->default(10)->index();
             $table->unsignedBigInteger('salesperson_id')->nullable()->default(null)->index();
             $table->unsignedBigInteger('location_id')->nullable()->default(null);
             $table->unsignedBigInteger('lead_id')->nullable()->default(null);
