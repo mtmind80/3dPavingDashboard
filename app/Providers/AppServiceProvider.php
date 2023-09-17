@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 
+use Mail;
 use Validator;
 
 class AppServiceProvider extends ServiceProvider
@@ -29,6 +30,9 @@ class AppServiceProvider extends ServiceProvider
        // fix for old versions of mysql
         Schema::defaultStringLength(191);
 
+        if (env('SEND_LOCAL_EMAIL_TO') && app()->environment('local')) {
+            Mail::alwaysTo(env('SEND_LOCAL_EMAIL_TO'));
+        }
 
         /**
          *  Custom validation rules:
