@@ -2,13 +2,21 @@
 
 namespace App\Models;
 
-
 use Illuminate\Database\Eloquent\Model;
 
 class ProposalNote extends Model
 {
-
     protected $table = 'proposal_notes';
-    protected $guarded=[
-        'id'];
+
+    protected $guarded=['id'];
+
+    protected $casts = [
+        'reminder_date' => 'date',
+    ];
+
+    public function proposal()
+    {
+        return $this->belongsTo(Proposal::class);
+    }
+
 }
