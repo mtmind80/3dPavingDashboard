@@ -2,21 +2,19 @@
 
 namespace App\Notifications;
 
-use App\Models\Proposal;
+use App\Models\ProposalNote;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class OldProposalNotification extends Notification
+class ProposalNoteNotification extends Notification
 {
-    use Queueable;
+    protected ProposalNote $proposalNote;
 
-    protected Proposal $proposal;
-
-    public function __construct($proposal)
+    public function __construct($proposalNote)
     {
-        $this->proposal = $proposal;
+        $this->proposalNote = $proposalNote;
     }
 
     public function via($notifiable)
@@ -26,13 +24,15 @@ class OldProposalNotification extends Notification
 
     public function toMail($notifiable)
     {
-        $proposal = $this->proposal;
+        $proposalNote = $this->proposalNote;
 
-        $subject = 'Proposal older than 60 days.';
+        $subject = 'Proposal note reminder.';
 
         $content = '<p>Hello, '.$notifiable->fname.'</p>';
-        $content .= '<p>We have sent this notification because you have a proposal older than 60 days.</p>';
-        $content .= '<p>Proposal name is: '.$proposal->name.'.</p>';
+        $content .= '<p>We have sent this notification because you have a proposal note with a reminder set for today.</p>';
+        $content .= '<p>Proposal name is: '.$proposalNote->proposal->name.'.</p>';
+        $content .= '<p>Proposal note is:<br>';
+        $content .= $proposalNote->note.'.</p>';
         $signer = '<p>System Admin</p>';
 
         $tags = [
