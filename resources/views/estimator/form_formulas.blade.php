@@ -1266,10 +1266,11 @@
                             //set display value for materials
                             $("#header_show_materials_cost").text('$' + materials);
 
-                            if (proposaltext == '') {
+                            alert(depth);
+                            
                                 proposaltext = servicedesc.replace('#TONS#', tonamount);
+                                proposaltext = proposaltext.replace('#INCHES#', depth);
                                 tinymce.activeEditor.setContent(proposaltext);
-                            }
                             //add it up
                             var results = additup(materials);
 
