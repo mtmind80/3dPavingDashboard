@@ -76,9 +76,7 @@ class PrintingController extends Controller
         $sales = User::where('id','=',$proposal['salesperson_id'])->first()->toArray();
         $manager = User::where('id','=',$proposal['salesmanager_id'])->first()->toArray();
 
-        //echo "<pre>";
-        //print_r($proposal['location']);
-        //exit();
+        \Debugbar::disable();
 
         $data = [
             'title' => $pdfname,
@@ -102,8 +100,11 @@ class PrintingController extends Controller
             unlink($this->storage_path . $pdfname);
         }
 
+        //return view('pdf.proposal_build', $data);
+
         //create the new pdf
         $pdf = PDF::loadView('pdf.proposal_build', $data);
+
         //save the file to local disk
         $pdf->save($this->storage_path . $pdfname);
 

@@ -79,7 +79,7 @@ ALTER TABLE datatblmultivendorpricing ADD `service_id` INT NOT NULL AFTER `SERVI
 INSERT INTO web_configs (`KEY`,`VALUE`) SELECT `cfgKey`,`cfgValue` FROM `syswebconfig`;
 #setup backup for config
 INSERT INTO web_config_bak (`KEY`,`VALUE`) SELECT `cfgKey`,`cfgValue` FROM `syswebconfig`;
-INSERT INTO web_configs (`KEY`,`VALUE`) VALUES('webSitetitle','3-DPaving.com');
+#INSERT INTO web_configs (`KEY`,`VALUE`) VALUES('webSitetitle','3-DPaving.com');
 
 # Update new employee id to use 
 UPDATE crmtblcontacts c inner join users u on c.cntId = u.old_id set c.user_id = u.id;
