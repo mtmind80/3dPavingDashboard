@@ -408,6 +408,7 @@ Route::group(['prefix' => 'resources'], function() {
 /*************** Contacts  ***************/
 
 Route::group(['prefix' => 'contacts', 'middleware' => 'admin'], function() {
+    Route::model('contact', \App\Models\Contact::class);
 
     Route::match(['get', 'post'], '/search', 'ContactsController@search')->name('contact_search');
 

@@ -60,13 +60,17 @@ i.field-required {
 }
 
 /** actions column and dropdown **/
-.admin-form .list-table .order{
+.admin-form .list-table .order {
     text-align: center;
     width: 100px !important;
 }
+.admin-form .list-table .person-name {
+    text-align: center;
+    width: 260px !important;
+}
 .admin-form .list-table .actions {
     text-align: center;
-    width: 80px !important;
+    width: 100px !important;
 }
 .admin-form .list-table tbody tr td.actions ul {
     float: none;
