@@ -23,19 +23,22 @@
                             <x-search :needle="$needle" search-route="{{ route('workorder_search') }}" cancel-route="{{ route('workorders') }}" ></x-search>
                         </div>
                     </div>
+
+                    @inject('SortableTrait', \App\Models\Proposal::class)
+
                     <div class="row">
                         <table id='proposaltable'
                                class="table list-table table-bordered dt-responsive nowrap table-striped"
-                               style="border-collapse: collapse; border-spacing: 0; width: 100%;"
-                        >
+                               style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                             <thead class="table-light">
                                 <tr>
-                                    <th class="sorting_disabled tc"  style="width: 32px;" >@lang('translation.view')</th>
-                                    <th class="sorting_disabled tc" style="width: 60px;">@lang('translation.client')</th>
-                                    <th class="sorting_disabled tc"  style="width: 67px;" >@lang('translation.manager')</th>
-                                    <th class="sorting_disabled tc"  style="width: 128px;" >@lang('translation.location')</th>
-                                    <th class="sorting_disabled tc"  style="width: 32px;" >@lang('translation.status')</th>
-                                    <th class="actions w100">@lang('translation.actions')</th>
+                                    <th class="tc w140">{!! $SortableTrait->alink('job_master_id', __('translation.workorderid')) !!}</th>
+                                    <th class="sorting_disabled tc">{!! $SortableTrait->alink('name', __('translation.name')) !!}</th>
+                                    <th class="tc">{!! $SortableTrait->alink('proposals.contact_id|contacts.first_name', __('translation.Customer')) !!}</th>
+                                    <th class="sorting_disabled tc person-name">{!! $SortableTrait->alink('proposals.salesperson_id|users.fname', __('translation.SalesPerson')) !!}</th>
+                                    <th class="sorting_disabled tc">@lang('translation.location')</th>
+                                    <th class="sorting_disabled tc w180">{!! $SortableTrait->alink('proposals.proposal_statuses_id|proposal_statuses.status', __('translation.status')) !!}</th>
+                                    <th class="actions">@lang('translation.actions')</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -48,17 +51,18 @@
                                 @else
                                     @foreach ($workorders as $workorder)
                                         <tr>
+                                            <td class="tc text-dark fw-bold">{{ $workorder->job_master_id }}</td>
                                             <td class="tc">
                                                 <a href="{{ route('show_workorder',['id'=>$workorder->id]) }}" title="@lang('translation.view')">
-                                                    {{ $workorder->name }}</a>
-                                                    <br/>ID: {{ $workorder->job_master_id }}
+                                                    {{ $workorder->name }}
+                                                </a>
                                             </td>
                                             <td class="tc">
                                                 <a href="{{ route('contact_details', ['contact'=>$workorder->contact_id]) }}" title="@lang('translation.contact')">
                                                     {{ $workorder->contact->full_name }}
                                                 </a>
                                             </td>
-                                            <td class="tc text-dark fw-bold">{{ $workorder->salesManager->full_name ?? 'No Manager Assigned' }}</td>
+                                            <td class="tc text-dark fw-bold">{{ $workorder->salesPerson->full_name ?? 'No Manager Assigned' }}</td>
                                             <td class="tc text-dark fw-bold">{!! $workorder->location->short_location_two_lines ?? null !!}</td>
                                             <td class="tc text-dark fw-bold">{{ $workorder->status->status ?? null }}</td>
                                             <td class="centered actions">
@@ -70,6 +74,16 @@
                                                                 <a href="javascript:" class="action" data-action="add-note" data-route="{{ route('workorder_note_store', ['work_order' => $workorder->id]) }}" data-workorder_name="{{ $workorder->name }}"
                                                                    data-proposal_id="{{ $workorder->id }}">
                                                                     <span class="fas fa-sticky-note tc mr6"></span>@lang('translation.add') @lang('translation.note')
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="javascript:" class="action" data-action="route" data-route="{{ route('show_workorder', ['id' => $workorder->id]) }}">
+                                                                    <span class="fas fa-eye tc mr6"></span>@lang('translation.view')
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="javascript:" class="action" data-action="route" data-route="{{ route('contact_details', ['contact' => $workorder->contact_id] ) }}">
+                                                                    <span class="fas fa-user tc mr6"></span>@lang('translation.Customer') @lang('translation.details')
                                                                 </a>
                                                             </li>
                                                         </ul>

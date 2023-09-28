@@ -22,36 +22,37 @@ class Proposal extends Model
 
     public $sortable = [
         'name',
+        'job_master_id',
         'proposal_date',
         'proposals.created_by|users.fname',
-        'proposal_statuses_id|proposal_statuses.status',
+        'proposals.proposal_statuses_id|proposal_statuses.status',
         'proposals.contact_id|contacts.first_name',
-        'proposals.salesmanager_id|users.fname',
         'proposals.salesperson_id|users.fname',
     ];
 
     public $searchable = [
-        'name'        => "LIKE",
+        'name' => "LIKE",
+        'job_master_id' => "LIKE",
         'childModels' => [
-            'contact'      => [
+            'contact' => [
                 'fields' => [
                     'contacts.first_name' => 'LIKE',
                 ],
             ],
-            'salesManager' => [
+            'salesPerson' => [
                 'fields' => [
                     'users.fname' => 'LIKE',
                     'users.lname' => 'LIKE',
                 ],
             ],
-            'location'     => [
+            'location' => [
                 'fields' => [
                     'address_line1' => 'LIKE',
-                    'city'          => 'LIKE',
-                    'postal_code'   => 'LIKE',
+                    'city' => 'LIKE',
+                    'postal_code' => 'LIKE',
                 ],
             ],
-            'status'       => [
+            'status' => [
                 'fields' => [
                     'status' => 'LIKE',
                 ],
@@ -150,16 +151,16 @@ class Proposal extends Model
 
     public function scopeActiveJobsWithIncompletedServices($query)
     {
-        return $query->where('proposal_statuses_id', 5)->whereHas('details', function ($q){
+        return $query->where('proposal_statuses_id', 5)->whereHas('details', function ($q) {
             $q->whereNotIn('status_id', [3, 4]);
         });
     }
 
     public function scopeActiveJobs($query)
     {
-        return $query->where('proposal_statuses_id', 5)->whereHas('details', function ($q){
+        return $query->where('proposal_statuses_id', 5)->whereHas('details', function ($q) {
             $q->where('status_id', '>', 2);
-        })->with(['details' => function ($w){
+        })->with(['details' => function ($w) {
             $w->where('status_id', '>', 2);
         }]);
     }
@@ -175,7 +176,7 @@ class Proposal extends Model
 
     public function scopeReadytoclose($query)
     {
-        return $query->where('proposal_statuses_id', 5)->whereHas('details', function ($q){
+        return $query->where('proposal_statuses_id', 5)->whereHas('details', function ($q) {
             $q->where('status_id', '>', 2);
         })->with('details');
     }
@@ -206,7 +207,7 @@ class Proposal extends Model
     public function scopeOwnDashboardData($query)
     {
         if (!auth()->user()->isAdmin()) {
-            $query->where(function ($q){
+            $query->where(function ($q) {
                 $q->orWhere('created_by', auth()->user()->id)
                     ->orWhere('salesmanager_id', auth()->user()->id)
                     ->orWhere('salesperson_id', auth()->user()->id);
@@ -359,7 +360,7 @@ class Proposal extends Model
          * 2- Next, get unique years ($unique) based on proposal_year (as it is not a table field
          *    but a dynamically created property). Check getProposalYearAttribute()
          */
-        $unique = Cache::remember('existing_activity_by_status_years', 60 * 24, function (){
+        $unique = Cache::remember('existing_activity_by_status_years', 60 * 24, function () {
             return ($rows = self::select('proposal_date')
                 ->whereNotNull('proposal_date')
                 ->orderBy('proposal_date', "DESC")
@@ -527,8 +528,8 @@ class Proposal extends Model
             }
             // Add a second level into sales person array to have his/her data per status
             $rows[$salesPersonFullName]['Pending'] = [
-                'total_jobs'     => $totalJobs,
-                'cost'           => $totalCost,
+                'total_jobs' => $totalJobs,
+                'cost' => $totalCost,
                 'formatted_cost' => Currency::format($totalCost),
             ];
 
@@ -547,8 +548,8 @@ class Proposal extends Model
                 }
             }
             $rows[$salesPersonFullName]['Rejected'] = [
-                'total_jobs'     => $totalJobs,
-                'cost'           => $totalCost,
+                'total_jobs' => $totalJobs,
+                'cost' => $totalCost,
                 'formatted_cost' => Currency::format($totalCost),
             ];
 
@@ -567,8 +568,8 @@ class Proposal extends Model
                 }
             }
             $rows[$salesPersonFullName]['Active'] = [
-                'total_jobs'     => $totalJobs,
-                'cost'           => $totalCost,
+                'total_jobs' => $totalJobs,
+                'cost' => $totalCost,
                 'formatted_cost' => Currency::format($totalCost),
             ];
             $globalCost += $totalCost;
@@ -588,8 +589,8 @@ class Proposal extends Model
                 }
             }
             $rows[$salesPersonFullName]['Completed'] = [
-                'total_jobs'     => $totalJobs,
-                'cost'           => $totalCost,
+                'total_jobs' => $totalJobs,
+                'cost' => $totalCost,
                 'formatted_cost' => Currency::format($totalCost),
             ];
             $globalCost += $totalCost;
@@ -609,8 +610,8 @@ class Proposal extends Model
                 }
             }
             $rows[$salesPersonFullName]['Cancelled'] = [
-                'total_jobs'     => $totalJobs,
-                'cost'           => $totalCost,
+                'total_jobs' => $totalJobs,
+                'cost' => $totalCost,
                 'formatted_cost' => Currency::format($totalCost),
             ];
 
@@ -629,8 +630,8 @@ class Proposal extends Model
                 }
             }
             $rows[$salesPersonFullName]['Billed'] = [
-                'total_jobs'     => $totalJobs,
-                'cost'           => $totalCost,
+                'total_jobs' => $totalJobs,
+                'cost' => $totalCost,
                 'formatted_cost' => Currency::format($totalCost),
             ];
             $globalCost += $totalCost;
@@ -650,8 +651,8 @@ class Proposal extends Model
                 }
             }
             $rows[$salesPersonFullName]['Paid'] = [
-                'total_jobs'     => $totalJobs,
-                'cost'           => $totalCost,
+                'total_jobs' => $totalJobs,
+                'cost' => $totalCost,
                 'formatted_cost' => Currency::format($totalCost),
             ];
             $globalCost += $totalCost;
@@ -720,7 +721,7 @@ class Proposal extends Model
                 if ($proposals = self::where('proposal_statuses_id', '!=', 7)
                     ->where('salesperson_id', $salesPersonId)
                     ->whereBetween('proposal_date', [$fromDate, $toDate])
-                    ->whereHas('contact', function ($q) use ($contactTypeId){
+                    ->whereHas('contact', function ($q) use ($contactTypeId) {
                         $q->where('contact_type_id', $contactTypeId);
                     })
                     ->get()
@@ -737,7 +738,7 @@ class Proposal extends Model
                 if ($workOrders = self::where('proposal_statuses_id', '!=', 7)
                     ->where('salesperson_id', $salesPersonId)
                     ->whereBetween('sale_date', [$fromDate, $toDate])
-                    ->whereHas('contact', function ($q) use ($contactTypeId){
+                    ->whereHas('contact', function ($q) use ($contactTypeId) {
                         $q->where('contact_type_id', $contactTypeId);
                     })
                     ->get()
@@ -750,11 +751,11 @@ class Proposal extends Model
                 }
 
                 $rows[$salesPersonFullName]['contact_types'][$contactTypeName] = [
-                    'contact_type_id'  => $contactTypeId,
-                    'proposal_total'   => $proposalsTotal,
-                    'proposal_cost'    => Currency::format($proposalsCost),
+                    'contact_type_id' => $contactTypeId,
+                    'proposal_total' => $proposalsTotal,
+                    'proposal_cost' => Currency::format($proposalsCost),
                     'work_order_total' => $workOrdersTotal,
-                    'work_order_cost'  => Currency::format($workOrdersCost),
+                    'work_order_cost' => Currency::format($workOrdersCost),
                 ];
             }
 
