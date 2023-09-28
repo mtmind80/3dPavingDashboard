@@ -67,7 +67,7 @@
 
         .normaltext {
             font-family: Tahoma, Verdana, Arial, Helvetica;
-            font-size: 20px;
+            font-size: 12px;
             color: #000000;
         }
 
@@ -157,7 +157,7 @@
 <!-- Service Listings -->
 <p class="pb">
 </p>
-<h2>Service Listings</h2>
+<h3>Service Listings</h3>
 <table>
 
     @php
@@ -168,13 +168,13 @@
             $totalcost += $service->cost;
         @endphp
 
-        <tr>
-            <td class="tl fw-bolder">{{$service->service_name}}</td>
-            <td class="tr fw-bolder">{{ \App\Helpers\Currency::format($service->cost ?? '0.0') }}
+        <tr style="border:5px solid #000000;">
+            <td class="tl normaltext">{{$service->service_name}}</td>
+            <td class="tl normaltext">{{ \App\Helpers\Currency::format($service->cost ?? '0.0') }}
             </td>
         </tr>
         <tr>
-            <td colspan='2' class="tl">{!!$service->proposal_text!!} </td>
+            <td colspan='2' class="tl small_normal">{!!$service->proposal_text!!} </td>
         </tr>
     @endforeach
 </table>
@@ -204,9 +204,8 @@
 </table>
 <p class="pb">
 </p>
-<div class="headerclass">Acceptances of proposal</div>
-<br/>
-<br/>
+<h3>Acceptances of proposal</h3>
+
 We would like to thank you for the opportunity to visit your property and the possibility to earn your
 business. We are committed to providing our customers with great service and workmanship on all
 of our projects. Our commitment to customers is why we always warranty our projects and stand

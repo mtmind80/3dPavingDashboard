@@ -203,9 +203,9 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td>CLone Proposal</td>
+                                            <td>Clone Proposal</td>
                                             <td>
-                                                <a href="{{route('contact_details',['contact'=>$proposal['customer_staff_id']])}}" title="clone this proposal">Clone This Proposal</a>
+                                                <a href="{{route('clone_proposal',['id'=>$proposal['id']])}}" title="Clone this proposal">Clone This Proposal</a>
 
                                             </td>
                                         </tr>

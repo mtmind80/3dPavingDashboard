@@ -7,12 +7,20 @@ use App\Http\Requests\SearchRequest;
 use App\Http\Requests\ProposalNoteRequest;
 use App\Models\AcceptedDocuments;
 use App\Models\County;
+use Carbon\Carbon;
 use App\Models\Location;
 use App\Models\MediaType;
 use App\Models\Permit;
 use App\Models\Proposal;
 use App\Models\Contact;
 use App\Models\Lead;
+use App\Models\ProposalDetailAdditionalCost as AdditionalCost;
+use App\Models\ProposalDetailEquipment as Equipment;
+use App\Models\ProposalDetailLabor as Labor;
+use App\Models\ProposalDetailStripingService as Striping;
+use App\Models\ProposalDetailSubcontractor as Subcontractor;
+use App\Models\ProposalDetailVehicle as Vehicle;
+
 use App\Models\ProposalActions;
 use App\Models\ServiceCategory;
 use App\Models\State;
@@ -704,9 +712,59 @@ class ProposalController extends Controller
     public function clone($id)
     {
 
-        $records = Proposal::where('id', $id)->whereIn('proposal_statuses_id', [3, 7])->get();
-        $data['records'] = $records;
-        return view('proposals.clone', $data);
+        $proposal = Proposal::find($id);
+        $newProposal = $proposal->replicate();
+        $newProposal->created_at = Carbon::now();
+        $newProposal->proposal_date = Carbon::now();
+        $newProposal->proposal_statuses_id = 1;
+        $newProposal->job_master_id = null;
+        $newProposal->changeorder = null;
+        $newProposal->sale_date = NULL;
+        $newProposal->created_by = auth()->user()->id;
+        $newProposal->save();
+        $new_id = $newProposal->id;
+        //print_r($new_id);
+
+
+
+        $proposalDetails = ProposalDetail::where('proposal_id', $id)->get();
+//here
+        foreach($proposalDetails as $details)
+
+        {
+            // get proposal detail and any other items associated
+            $oldproposal_detail_id = $details->id;
+            $details->proposal_id = $new_id;
+            //create new detail
+            $newdetails = ProposalDetail::create($details);
+            $newdetails_id = $newdetails->id;
+            //get any related data
+            $additional_details = AdditionalCost::where('proposal_detail_id', '=', $olddetails_id)->get();
+            if($additional_details) { // with new id
+            }
+            $additional_details = Equipment::where('proposal_detail_id', '=', $olddetails_id)->get();
+            if($additional_details) { // with new id
+            }
+
+            $additional_details = Labor::where('proposal_detail_id', '=', $olddetails_id)->get();
+            if($additional_details) { // with new id
+            }
+
+            $additional_details = Striping::where('proposal_detail_id', '=', $olddetails_id)->get();
+            if($additional_details) { // with new id
+            }
+
+            $additional_details = Subcontractor::where('proposal_detail_id', '=', $olddetails_id)->get();
+            if($additional_details) { // with new id
+            }
+
+            $additional_details = Vehicle::where('proposal_detail_id', '=', $olddetails_id)->get();
+            if($additional_details) { // with new id
+            }
+
+        }
+
+        return route('show_proposal',['id' => $new_id]);
 
     }
 
