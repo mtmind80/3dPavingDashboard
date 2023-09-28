@@ -52,9 +52,13 @@ i.field-required {
   text-align: center;
   width: 100px !important; }
 
+.admin-form .list-table .person-name {
+  text-align: center;
+  width: 260px !important; }
+
 .admin-form .list-table .actions {
   text-align: center;
-  width: 80px !important; }
+  width: 100px !important; }
 
 .admin-form .list-table tbody tr td.actions ul {
   float: none;
@@ -771,4 +775,3 @@ table .td-tt {
     opacity: 1; }
 
 /*# sourceMappingURL=style-extras.css.map */
-
