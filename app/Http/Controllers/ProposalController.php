@@ -725,8 +725,10 @@ class ProposalController extends Controller
         $new_id = $newProposal->id;
         //print_r($new_id);
 
-        $proposalDetails = ProposalDetail::where('proposal_id', $id)->get();
 
+
+        $proposalDetails = ProposalDetail::where('proposal_id', $id)->get();
+//here
         foreach($proposalDetails as $details)
 
         {
