@@ -51,7 +51,11 @@
                                 @else
                                     @foreach ($workorders as $workorder)
                                         <tr>
-                                            <td class="tc text-dark fw-bold">{{ $workorder->job_master_id }}</td>
+                                            <td class="tc text-dark fw-bold">
+                                                <a href="{{ route('show_workorder',['id'=>$workorder->id]) }}" title="@lang('translation.view')">
+                                                    {{ $workorder->job_master_id }}
+                                                </a>
+                                            </td>
                                             <td class="tc">
                                                 <a href="{{ route('show_workorder',['id'=>$workorder->id]) }}" title="@lang('translation.view')">
                                                     {{ $workorder->name }}
