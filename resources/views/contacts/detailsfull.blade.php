@@ -54,7 +54,9 @@
                     <div class="tab-content plr0 pt30 pb0 text-muted">
                         <div class="tab-pane active" id="profile" role="tabpanel">
                             <div class="row">
-                                
+                                <div class="col-md-8 col-sm-6 mb20">
+                                    <x-href-button url="{{ route('contact_edit', ['contact' => $contact->id, 'returnTo' => Request::url(), 'tab' => 'profile']) }}" class="btn-info"><i class="fas fa-edit"></i>@lang('translation.edit')</x-href-button>
+                                </div>
                                 <div class="col-md-4 col-sm-6 mb20"></div>
                             </div>
                             <div class="row">

@@ -86,9 +86,21 @@
                                                                 </a>
                                                             </li>
                                                             <li>
+                                                                <a href="javascript:"
+                                                                   class="trigger-contact-modal action"
+                                                                   data-action=""
+                                                                   data-name="{{ $workorder->contact->full_name ?? null }}"
+                                                                   data-email="{{ $workorder->contact->EmailsTwoLines ?? null }}"
+                                                                   data-phone="{{ $workorder->contact->phones_two_lines ?? null }}"
+                                                                   data-address="{{ $workorder->contact->full_address_two_lines ?? null }}"
+                                                                >
+                                                                    <span class="fas fa-user tc mr6"></span>@lang('translation.Customer') @lang('translation.details')
+                                                                </a>
+                                                                {{--
                                                                 <a href="javascript:" class="action" data-action="route" data-route="{{ route('contact_details', ['contact' => $workorder->contact_id] ) }}">
                                                                     <span class="fas fa-user tc mr6"></span>@lang('translation.Customer') @lang('translation.details')
                                                                 </a>
+                                                                --}}
                                                             </li>
                                                         </ul>
                                                     </li>
@@ -163,6 +175,24 @@
                         noteForm.submit();
                     }
                 }
+            });
+
+            // name email phone address
+
+            $('.trigger-contact-modal').click(function(){
+                let el = $(this);
+                let name = el.data('name');
+                let email = el.data('email');
+                let phone = el.data('phone');
+                let address = el.data('address');
+                let html;
+
+                html = '<b>Name:</b><div class="pl20 pb4">'+ name +' </div>';
+                html += '<b>Email:</b><div class="pl20 pb4">'+ email +'</div>';
+                html += '<b>Phone:</b><div class="pl20 pb4">'+ phone +'</div>';
+                html += '<b>Address:</b><div class="pl20">'+ address +'</div>';
+
+                notify({message: html, title: 'Customer Contact Info', type: 'info', delay: 0, class: 'pnfy'});
             });
         });
     </script>

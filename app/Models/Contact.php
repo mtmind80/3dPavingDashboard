@@ -218,7 +218,7 @@ class Contact extends Model
         return self::buildFullAddress($this->address1, $this->city, $this->county, $this->state, $this->postal_code, ', ', $this->address2);
     }
 
-    public function getFullAddressTwoLineAttribute()
+    public function getFullAddressTwoLinesAttribute()
     {
         return self::buildFullAddress($this->address1, $this->city, $this->county, $this->state, $this->postal_code, '<br>', $this->address2);
     }
@@ -228,7 +228,7 @@ class Contact extends Model
         return self::buildFullAddress($this->billing_address1, $this->billing_city, null, $this->billing_state, $this->billing_postal_code, ', ', $this->billing_address2);
     }
 
-    public function getFullBillingAddressTwoLineAttribute()
+    public function getFullBillingAddressTwoLinesAttribute()
     {
         return self::buildFullAddress($this->billing_address1, $this->billing_city, null, $this->billing_state, $this->billing_postal_code, '<br>', $this->billing_address2);
     }
