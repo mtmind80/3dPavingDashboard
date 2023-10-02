@@ -886,6 +886,7 @@ class ProposalController extends Controller
         if(isset($request['status'])){
             $status = $request['status'];
             $note = $request['note'];
+            $reason = $request['reason'];
             $action_id = intval($status) + 1;
             $proposal_id = $request['proposal_id'];
         }
@@ -895,8 +896,8 @@ class ProposalController extends Controller
 
         if($status == 2) // approved
         {
+            // create job master id and set sale date to taday
             $year = date('Y');
-
             $maxrec = Proposal::where(DB::raw('YEAR(created_at)'), '=', $year)->get()->count();
             $maxrec = $maxrec + 1;
             $maxrec = str_pad($maxrec, 5, "0", STR_PAD_LEFT);
@@ -910,7 +911,14 @@ class ProposalController extends Controller
 
         if($status == 3) // rejected
         {
+            $proposal->rejected_reason = $reason;
             // do something when rejected  email Keith
+        }
+
+        if($status == 4) // Proposal sent
+        {
+            $note = "Proposal Sent to Client";
+
         }
 
         $proposal->save();

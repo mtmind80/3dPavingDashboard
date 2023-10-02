@@ -73,14 +73,14 @@
                     <a href="{{ url('index/es') }}" class="dropdown-item notify-item">
                         <img src="{{ URL::asset('/assets/images/flags/spain.jpg')}}" alt="user-image" class="mr-1" height="12"> <span class="align-middle">Spanish</span>
                     </a>
-                    
+
                 </div>
             </div>
 
             <div class="dropdown d-inline-block user-dropdown">
                 <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                   <!-- <img class="header-profile-user" src="{{ URL::asset('/assets/images/users/avatar-1.jpg')}}"
+<!--                   <img class="header-profile-user" src="{{ URL::asset('/assets/images/users/avatar-1.jpg')}}"
                         alt="Header Avatar"> -->
                     <span class="d-none d-xl-inline-block ml-1">{{ Auth::user()->full_name }}</span>
                     <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
