@@ -19,6 +19,7 @@ class CreateProposalsTable extends Migration
             $table->string('job_master_id',50)->default(null)->index()->nullable();
             $table->string('name', 225);
             $table->unsignedBigInteger('proposal_statuses_id')->default('1');
+            $table->string('rejected_reason', 225);
             $table->dateTime('proposal_date')->default(date("Y-m-d H:i:s"));
             $table->dateTime('sale_date')->nullable()->default(null);
             $table->unsignedBigInteger('created_by');

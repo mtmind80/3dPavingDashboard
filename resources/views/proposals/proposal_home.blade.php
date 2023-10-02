@@ -4,6 +4,17 @@
     3D Paving Proposals
 @endsection
 
+<style>
+    .list-item {
+        border: 2px solid #A2D9CE;
+        font-size:1.25EM;
+        margin-bottom: 9px;
+    }
+.bg_lightning{
+    color:#000000;
+    background-color:#E8F8F5;
+}
+</style>
 @section('content')
     @component('components.breadcrumb')
         @slot('title')
@@ -25,33 +36,30 @@
                 <div class="card-body">
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs nav-tabs-custom nav-justified" role="tablist">
-                        <li class="nav-item no-border">
+                        <li class="nav-item  no-border">
                             <a class="nav-link active" data-toggle="tab" href="#proposal" role="tab">
-                                <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
-                                <span class="d-none d-sm-block h4">@lang('translation.proposal')</span>
+                                <span class="d-block list-item"><i class="ri-home-2-line"></i> &nbsp;@lang('translation.proposal')</span>
                             </a>
+                            <br/>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#services" id='servicestab' role="tab">
-                                <span class="d-block d-sm-none"><i class="far fa-envelope"></i></span>
-                                <span class="d-none d-sm-block h4">@lang('translation.services')</span>
+                                <span class="d-block  list-item"><i class="ri-tools-line"></i> &nbsp;@lang('translation.services')</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#notes" id="notestab" role="tab">
-                                <span class="d-block d-sm-none"><i class="far fa-user"></i></span>
-                                <span class="d-none d-sm-block h4">@lang('translation.notes') / @lang('translation.media')</span>
+                                <span class="d-block list-item"><i class="ri-camera-2-line"></i> &nbsp;@lang('translation.notes') / @lang('translation.media')</span>
                             </a>
                         </li>
 
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#crm" id="crmtab" role="tab">
-                                <span class="d-block d-sm-none"><i class="ri-compass-2-line"></i></span>
-                                <span class="d-none d-sm-block h4">@lang('translation.status') / @lang('translation.letters')</span>
+                                <span class="d-block list-item"><i class="ri-file-2-line"></i> &nbsp;@lang('translation.status') / @lang('translation.letters')</span>
                             </a>
                         </li>
                     </ul>
-                    <table class="bg-light table-centered w-100 font-size-24 p10">
+                    <table class="bg_lightning table-centered w-100 font-size-24 p18">
                         <tr>
                             <td>
                                 {{$proposal['name']}}
@@ -121,7 +129,7 @@
                                         <td>{{ \Carbon\Carbon::parse($proposal['proposal_date'])->format('m/d/yy') }}</td>
                                     </tr>
 
-                                    <tr>
+   <!--                                 <tr>
                                         <td>@lang('translation.salesmanager')</td>
                                         <td>
                                             @if($proposal['salesmanager_id'])
@@ -129,7 +137,8 @@
                                             @endif
                                         </td>
                                     </tr>
-                                    <tr>
+       -->
+                                        <tr>
                                         <td>@lang('translation.salesperson')</td>
                                         <td>
                                             @if($proposal['salesperson_id'])
@@ -363,16 +372,29 @@
                         <div class="tab-pane" id="crm" role="tabpanel">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <h3>@lang('translation.status')</h3>
+                                    <h3>@lang('translation.change') @lang('translation.status')</h3>
                                     <form id="statusform"  name="statusform" method="POST" action="{{route('change_status')}}">
                                         @csrf
                                         <input type="hidden" name="proposal_id" value="{{$proposal['id']}}">
 
-                                        <select name="status">
-                                            <option value="2" selected>Approved</option>
-                                                <option value="3">Rejected</option>
+                                        <select id="proposalstatus" name="status" class="form-control-sm" onchange="Javascript:shownote(this);">
+                                            <option value="4">Proposal Sent to Client</option>
+                                            <option value="2" selected>Client Approved Proposal</option>
+                                                <option value="3">Client Rejected Proposal (add reason)</option>
                                             </select>
-                                        <input type="button" id="changestatus" class="{{$site_button_class}}" value="Change Status"></li>
+                                        <br/>
+                                        <div id='noteform' style="display:none;">Note:<br/><textarea class="form-control" rows='3' cols='65' name="note" id="note" placeholder="Add Note Here"></textarea>
+                                            <br/>
+                                            Rejected Reason: <br/><select  class="form-control-sm" id="reason" name="reason">
+                                                <option selected>Client decided not to do the work.</option>
+                                                <option>Client accepted a competeing bid.</option>
+                                                <option>Could not meet the clients needs.</option>
+                                                <option>Other</option>
+                                            </select>
+                                            <br/>
+                                        </div>
+
+                                        <input type="button" id="changestatus" class="{{$site_button_class}}" value="Click to Change Status"></li>
 
                                     </form>
                                 </div>
@@ -424,11 +446,11 @@
 
                 Swal.fire({
                     title: 'Working On It!',
-                    html: '</br><h3>Cloning your proposal.</h3><br/>',
+                    html: '</br><h3>Updating Proposal Status.</h3><br/>',
                     icon: 'info',
                     heightAuto: false,
                     timerProgressBar : true,
-                    timer: 3000,
+                    timer: 2000,
                     width: '60em',
                     showConfirmButton: true,
                 })
@@ -749,6 +771,19 @@
         });
 
 
+
+        function shownote(nform)
+        {
+
+            var f = parseInt(nform.value);
+           if(f == 3) { //rejected
+                alert("If you are rejecting this proposal please give a short reason.")
+               $("#noteform").show();
+                return;
+           }
+            $("#noteform").hide();
+
+        }
     </script>
 @stop
 
