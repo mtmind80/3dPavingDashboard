@@ -364,11 +364,17 @@
                             <div class="row">
                                 <div class="col-sm-12">
                                     <h3>@lang('translation.status')</h3>
+                                    <form id="statusform"  name="statusform" method="POST" action="{{route('change_status')}}">
+                                        @csrf
+                                        <input type="hidden" name="proposal_id" value="{{$proposal['id']}}">
 
-                                    <ul>
-                                        <li>Set Alert</li>
-                                        <li>Change Status</li>
-                                    </ul>
+                                        <select name="status">
+                                            <option value="2" selected>Approved</option>
+                                                <option value="3">Rejected</option>
+                                            </select>
+                                        <input type="Submit" class="{{$site_button_class}}" value="Change Status"></li>
+
+                                    </form>
                                 </div>
                             </div>
                             <div class="row">

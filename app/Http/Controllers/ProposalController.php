@@ -63,42 +63,46 @@ class ProposalController extends Controller
             $q->where('salesmanager_id', auth()->user()->id)->orWhere('created_by', auth()->user()->id)->orWhere('salesperson_id', auth()->user()->id);
         })->get()->toArray();
 
-        $data['proposals'] = $proposals;
-        $data['proposalcount'] = count($proposals);
+        if($proposals) {
+            $data['proposals'] = $proposals;
+            $data['proposalcount'] = count($proposals);
 
-        $customersCB = Cache::remember('customersCB', env('CACHE_TIMETOLIVE'), function() {
-            $customersCB = Proposal::customersCB();
-            return json_encode($customersCB);
+            $customersCB = Cache::remember('customersCB', env('CACHE_TIMETOLIVE'), function () {
+                $customersCB = Proposal::customersCB();
+                return json_encode($customersCB);
 
-        });
-        $data['customersCB'] = json_decode($customersCB, true);
+            });
+            $data['customersCB'] = json_decode($customersCB, true);
 
-        $creatorsCB = Cache::remember('creatorsCB', env('CACHE_TIMETOLIVE'), function() {
-            $creatorsCB = Proposal::creatorsCB();
-            return json_encode($creatorsCB);
+            $creatorsCB = Cache::remember('creatorsCB', env('CACHE_TIMETOLIVE'), function () {
+                $creatorsCB = Proposal::creatorsCB();
+                return json_encode($creatorsCB);
 
-        });
+            });
 
-        $data['creatorsCB'] = json_decode($creatorsCB, true);
+            $data['creatorsCB'] = json_decode($creatorsCB, true);
 
-        $salesManagersCB = Cache::remember('salesManagersCB', env('CACHE_TIMETOLIVE'), function() {
-            $salesManagersCB = Proposal::salesManagersCB();
-            return json_encode($salesManagersCB);
+            $salesManagersCB = Cache::remember('salesManagersCB', env('CACHE_TIMETOLIVE'), function () {
+                $salesManagersCB = Proposal::salesManagersCB();
+                return json_encode($salesManagersCB);
 
-        });
+            });
 
-        $data['salesManagersCB'] = json_decode($salesManagersCB, true);
+            $data['salesManagersCB'] = json_decode($salesManagersCB, true);
 
-        $salesPersonsCB = Cache::remember('salesPersonsCB', env('CACHE_TIMETOLIVE'), function() {
-            $salesPersonsCB = Proposal::salesPersonsCB();
-            return json_encode($salesPersonsCB);
+            $salesPersonsCB = Cache::remember('salesPersonsCB', env('CACHE_TIMETOLIVE'), function () {
+                $salesPersonsCB = Proposal::salesPersonsCB();
+                return json_encode($salesPersonsCB);
 
-        });
+            });
 
-        $data['salesPersonsCB'] = json_decode($salesPersonsCB, true);
+            $data['salesPersonsCB'] = json_decode($salesPersonsCB, true);
 
 
-        return view('proposals.index', $data);
+            return view('proposals.index', $data);
+        }
+        return view('pages-404');
+
     }
 
 
@@ -465,7 +469,7 @@ class ProposalController extends Controller
     {
         $orderType = $request->order_type ?? 'ASC';
 
-        $query = Proposal::with(['status', 'details' => function($w) use ($orderType){
+        $query = Proposal::where('proposal_statuses_id', '=', '1')->with(['status', 'details' => function($w) use ($orderType){
             $w->orderBy('dsort', $orderType);
         }]);
 
@@ -552,10 +556,11 @@ class ProposalController extends Controller
 
         //what kind of access do i have
         if(auth()->user()->isAdmin()) {
-            $proposal = Proposal::where('id', $id)->first()->toArray();
+
+            $proposal = Proposal::where('id', $id)->where('proposal_statuses_id', '=', 1)->first()->toArray();
         } else {
 
-            $proposal = Proposal::where('id', '=', $id)->where(function($q) {
+            $proposal = Proposal::where('id', '=', $id)->where('proposal_statuses_id', '=', 1)->where(function($q) {
                 $q->where('salesmanager_id', auth()->user()->id)->orWhere('salesperson_id', auth()->user()->id);
             })->first()->toArray();
             // managers only show if I am on the proposal
@@ -661,7 +666,7 @@ class ProposalController extends Controller
         $data['paginate'] = 1;
 
         if($proposalId) {
-            $records = Proposal::where('id', $proposalId)->first();
+            $records = Proposal::where('id', $proposalId)->where('proposal_statuses_id', '=', 1)->first();
             $data['paginate'] = 0;
 
             if($records) {
@@ -809,6 +814,55 @@ class ProposalController extends Controller
         dd($user);
     }
 
+
+    public function changestatus(Request $request)
+    {
+
+
+        if(isset($request['status'])){
+            $status = $request['status'];
+            $note = $request['note'];
+            $action_id = intval($status) + 1;
+            $proposal_id = $request['proposal_id'];
+        }
+        $proposal = Proposal::find($proposal_id);
+
+        $proposal->proposal_statuses_id = $status;
+
+        if($status == 2) // approved
+        {
+            $year = date('Y');
+
+            $maxrec = Proposal::where(DB::raw('YEAR(created_at)'), '=', $year)->get()->count();
+            $maxrec = $maxrec + 1;
+            $maxrec = str_pad($maxrec, 5, "0", STR_PAD_LEFT);
+            $month = date('m');
+            $month = str_pad($month, 2, "0", STR_PAD_LEFT);
+            $jobMasterId = $year . ":" . $month . ":" . $maxrec;
+            //approved create work order
+            $proposal->job_master_id = $jobMasterId;
+            $proposal->sale_date = date_create()->format('Y-m-d H:i:s');
+        }
+
+        if($status == 3) // rejected
+        {
+            // do something when rejected  email Keith
+        }
+
+        $proposal->save();
+
+        $this->globalrecordactions($proposal_id, $action_id, $note);
+
+        if($status == 2) // approved
+        {
+            return redirect()->route('show_workorder', ['id' => $proposal_id])->with('success', 'Proposal status changed.');
+        }
+        return redirect()->route('dashboard')->with('success', 'Proposal was archived. See archived proposals.');
+
+        //return redirect()->back()->with('success', 'Proposal status changed.');
+
+
+    }
 
     public function refreshMaterialPricing($id)
     {

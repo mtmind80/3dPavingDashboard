@@ -300,6 +300,8 @@ Route::group(['prefix' => 'proposals'], function() {
 
     Route::get('/{id}/show_proposal', 'ProposalController@show')->name('show_proposal');
 
+    Route::post('/change_status', 'ProposalController@changestatus')->name('change_status');
+
     Route::post('/reorder-services', 'ProposalController@reorderServices')->name('services_reorder');
 
     Route::get('/start_proposal/{id}', 'ProposalController@start')->name('start_proposal');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ProposalActions;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -115,6 +116,17 @@ class Controller extends BaseController
             $user->save();
         }
         return "Records Processed". $records;
+
+    }
+
+    public function globalrecordactions($proposal_id, $action_id, $note = null)
+    {
+        $proposalAction = new ProposalActions;
+        $proposalAction->proposal_id = $proposal_id;
+        $proposalAction->action_id = $action_id;
+        $proposalAction->created_by = auth()->user()->id;
+        $proposalAction->note = $note;
+        $proposalAction->save();
 
     }
 
