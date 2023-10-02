@@ -727,49 +727,113 @@ class ProposalController extends Controller
         $newProposal->sale_date = NULL;
         $newProposal->created_by = auth()->user()->id;
         $newProposal->save();
+
         $new_id = $newProposal->id;
+
+        $this->setMaterialPricing($new_id);
         //print_r($new_id);
 
-
-
         $proposalDetails = ProposalDetail::where('proposal_id', $id)->get();
-//here
-        foreach($proposalDetails as $details)
+
+        foreach($proposalDetails as $detail)
 
         {
+
+
             // get proposal detail and any other items associated
-            $oldproposal_detail_id = $details->id;
-            $details->proposal_id = $new_id;
-            //create new detail
-            $newdetails = ProposalDetail::create($details);
-            $newdetails_id = $newdetails->id;
+            $proposaldetail = ProposalDetail::find($detail->id);
+
+            if($proposaldetail) {
+                $newDetail = $proposaldetail->replicate();
+                $newDetail->proposal_id = $new_id;
+                $newDetail->alt_desc = NULL;
+                $newDetail->proposal_note = NULL;
+                $newDetail->proposal_field_note = NULL;
+                $newDetail->scheduled_by = NULL;
+                $newDetail->completed_by = NULL;
+                $newDetail->completed_date = NULL;
+                $newDetail->start_date = NULL;
+                $newDetail->end_date = NULL;
+                $newDetail->save();
+
+            } else {
+
+                return redirect()->route('show_proposal',['id' => $new_id])->with('success', 'Proposal cloned.');
+
+            }
+            //            $newdetails = ProposalDetail::create($newdetail);
+            $newdetail_id = $newDetail->id;
             //get any related data
-            $additional_details = AdditionalCost::where('proposal_detail_id', '=', $olddetails_id)->get();
+
+            $additional_details = AdditionalCost::where('proposal_detail_id', '=', $detail->id)->get();
+
             if($additional_details) { // with new id
-            }
-            $additional_details = Equipment::where('proposal_detail_id', '=', $olddetails_id)->get();
-            if($additional_details) { // with new id
+                foreach($additional_details as $details) {
+                    $d = AdditionalCost::find($details->id);
+                    $newRecord = $d->replicate();
+                    $newRecord->proposal_detail_id = $newdetail_id;
+                    $newRecord->save();
+                }
+
             }
 
-            $additional_details = Labor::where('proposal_detail_id', '=', $olddetails_id)->get();
+            $additional_details = Equipment::where('proposal_detail_id', '=', $detail->id)->get();
+
             if($additional_details) { // with new id
+                foreach($additional_details as $details) {
+                    $d = Equipment::find($details->id);
+                    $newRecord = $d->replicate();
+                    $newRecord->proposal_detail_id = $newdetail_id;
+                    $newRecord->save();
+                }
+
             }
 
-            $additional_details = Striping::where('proposal_detail_id', '=', $olddetails_id)->get();
+            $additional_details = Labor::where('proposal_detail_id', '=', $detail->id)->get();
             if($additional_details) { // with new id
+                foreach($additional_details as $details) {
+                    $d = Labor::find($details->id);
+                    $newRecord = $d->replicate();
+                    $newRecord->proposal_detail_id = $newdetail_id;
+                    $newRecord->save();
+                }
             }
 
-            $additional_details = Subcontractor::where('proposal_detail_id', '=', $olddetails_id)->get();
+            $additional_details = Striping::where('proposal_detail_id', '=', $detail->id)->get();
             if($additional_details) { // with new id
+                foreach($additional_details as $details) {
+                    $d = Striping::find($details->id);
+                    $newRecord = $d->replicate();
+                    $newRecord->proposal_detail_id = $newdetail_id;
+                    $newRecord->save();
+                }
             }
 
-            $additional_details = Vehicle::where('proposal_detail_id', '=', $olddetails_id)->get();
+            $additional_details = Subcontractor::where('proposal_detail_id', '=', $detail->id)->get();
             if($additional_details) { // with new id
+                foreach($additional_details as $details) {
+                    $d = Subcontractor::find($details->id);
+                    $newRecord = $d->replicate();
+                    $newRecord->proposal_detail_id = $newdetail_id;
+                    $newRecord->save();
+                }
+            }
+
+            $additional_details = Vehicle::where('proposal_detail_id', '=', $detail->id)->get();
+            if($additional_details) { // with new id
+                foreach($additional_details as $details) {
+                    $d = Vehicle::find($details->id);
+                    $newRecord = $d->replicate();
+                    $newRecord->proposal_detail_id = $newdetail_id;
+                    $newRecord->save();
+                }
             }
 
         }
 
-        return route('show_proposal',['id' => $new_id]);
+        // save material costs
+
+        return redirect()->route('show_proposal',['id' => $new_id])->with('success', 'Proposal cloned with services.');
 
     }
 

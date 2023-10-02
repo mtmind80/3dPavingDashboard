@@ -372,7 +372,7 @@
                                             <option value="2" selected>Approved</option>
                                                 <option value="3">Rejected</option>
                                             </select>
-                                        <input type="Submit" class="{{$site_button_class}}" value="Change Status"></li>
+                                        <input type="button" id="changestatus" class="{{$site_button_class}}" value="Change Status"></li>
 
                                     </form>
                                 </div>
@@ -419,6 +419,22 @@
 
         $(document).ready(function () {
 
+
+            $("#changestatus").click(function(){
+
+                Swal.fire({
+                    title: 'Working On It!',
+                    html: '</br><h3>Cloning your proposal.</h3><br/>',
+                    icon: 'info',
+                    heightAuto: false,
+                    timerProgressBar : true,
+                    timer: 3000,
+                    width: '60em',
+                    showConfirmButton: true,
+                })
+                $("statusform").submit();
+
+            })
 
             $("#printproposal").click(function(){
 
