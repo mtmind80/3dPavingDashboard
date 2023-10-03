@@ -63,7 +63,7 @@ class ProposalController extends Controller
             $q->where('salesmanager_id', auth()->user()->id)->orWhere('created_by', auth()->user()->id)->orWhere('salesperson_id', auth()->user()->id);
         })->get()->toArray();
 
-        if($proposals) {
+
             $data['proposals'] = $proposals;
             $data['proposalcount'] = count($proposals);
 
@@ -100,8 +100,6 @@ class ProposalController extends Controller
 
 
             return view('proposals.index', $data);
-        }
-        return view('pages-404');
 
     }
 

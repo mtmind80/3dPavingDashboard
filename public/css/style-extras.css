@@ -1,5 +1,13 @@
 /** from backend css */
-#footer {
+.list-item {
+    font-size:1.25EM;
+    margin-bottom: 9px;
+}
+.bg_lightning{
+    color:#000000;
+    background-color:#E8F8F5;
+}
+.footer {
     position: absolute;
     bottom: 0;
     width: 100%;

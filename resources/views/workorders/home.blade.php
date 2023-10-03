@@ -4,6 +4,20 @@
     3D Paving Work Orders
 @endsection
 
+<style>
+    .list-item {
+        font-size:1.25EM;
+        margin-bottom: 9px;
+    }
+    .bg_lightning{
+        color:#000000;
+        background-color:#E8F8F5;
+    }
+
+</style>
+
+
+
 @section('content')
     @component('components.breadcrumb')
         @slot('title')
@@ -26,27 +40,23 @@
                     <ul class="nav nav-tabs nav-tabs-custom nav-justified" role="tablist">
                         <li class="nav-item">
                             <a class="nav-link active" data-toggle="tab" href="#proposal" role="tab">
-                                <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
-                                <span class="d-none d-sm-block">@lang('translation.menu_workorders')</span>
+                                <span class="d-block  list-item"><i class="ri-home-2-line"></i> @lang('translation.menu_workorders')</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#services" role="tab">
-                                <span class="d-block d-sm-none"><i class="far fa-envelope"></i></span>
-                                <span class="d-none d-sm-block">@lang('translation.services')</span>
+                                <span class="d-block  list-item"><i class="ri-tools-line"></i> @lang('translation.services')</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#notes" role="tab">
-                                <span class="d-block d-sm-none"><i class="far fa-user"></i></span>
-                                <span class="d-none d-sm-block">@lang('translation.notes') / @lang('translation.media')</span>
+                                <span class="d-block  list-item"><i class="ri-camera-2-line"></i> @lang('translation.notes') / @lang('translation.media')</span>
                             </a>
                         </li>
 
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#crm" role="tab">
-                                <span class="d-block d-sm-none"><i class="ri-compass-2-line"></i></span>
-                                <span class="d-none d-sm-block">@lang('translation.status') / @lang('translation.letters')</span>
+                                <span class="d-block  list-item"><i class="ri-file-2-line"></i> @lang('translation.status') / @lang('translation.letters')</span>
                             </a>
                         </li>
                     </ul>
