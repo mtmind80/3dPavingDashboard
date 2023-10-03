@@ -6,15 +6,16 @@
 
 <style>
     .list-item {
-        border: 2px solid #A2D9CE;
         font-size:1.25EM;
         margin-bottom: 9px;
     }
-.bg_lightning{
-    color:#000000;
-    background-color:#E8F8F5;
-}
+    .bg_lightning{
+        color:#000000;
+        background-color:#E8F8F5;
+    }
+
 </style>
+
 @section('content')
     @component('components.breadcrumb')
         @slot('title')
