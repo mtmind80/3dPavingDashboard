@@ -4,6 +4,7 @@
     3D Paving Proposals
 @endsection
 
+
 <style>
     .list-item {
         font-size:1.25EM;
@@ -206,16 +207,9 @@
                                     </tr>
 
                                         <tr>
-                                            <td>Create Change Order</td>
-                                            <td>
-                                                <a href="{{route('contact_details',['contact'=>$proposal['customer_staff_id']])}}"  title="create change order">New Change Order</a>
-
-                                            </td>
-                                        </tr>
-                                        <tr>
                                             <td>Clone Proposal</td>
                                             <td>
-                                                <a href="{{route('clone_proposal',['id'=>$proposal['id']])}}" title="Clone this proposal">Clone This Proposal</a>
+                                                <a href="Javascript:AREYOUSURE('You are about to clone this proposal. Are you sure?','{{route('clone_proposal',['id'=>$proposal['id']])}}');" title="Clone this proposal">Clone This Proposal</a>
 
                                             </td>
                                         </tr>
@@ -440,6 +434,35 @@
     <script>
         var selectedTab = "{{ $selectedTab ?? '' }}"
 
+        function AREYOUSURE(msg, url){
+
+            Swal.fire({
+                title: msg,
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                cancelButtonText: "No",
+                cancelButtonColor: "#A9DFBF",
+                customClass: {
+                    actions: 'my-actions',
+                    cancelButton: 'order-1 right-gap',
+                    confirmButton: 'order-2',
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    return window.location.href=url; //'{{route('clone_proposal',['id'=>$proposal['id']])}}';
+                } else if (result.isDenied) {
+                    Swal.fire('Cancelled', 'Cancelled', 'info')
+                }
+            })
+
+
+
+        }
+
+
+
+
+
         $(document).ready(function () {
 
 
@@ -458,6 +481,7 @@
                 $("statusform").submit();
 
             })
+
 
             $("#printproposal").click(function(){
 
