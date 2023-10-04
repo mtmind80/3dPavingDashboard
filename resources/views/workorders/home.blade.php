@@ -67,10 +67,10 @@
                             <div class="row">
                                 <table width="100%" class="table-centered table-bordered font-size-20">
                                     <tr>
-                                        <td class="tc">
+                                        <td class="tc w-25">
                                             {{$proposal['name']}}
                                         </td>
-                                        <td class="tc">
+                                        <td class="tc w-75">
                                            STATUS: {{ App\Models\ProposalStatus::find($proposal['proposal_statuses_id'])->status }}
                                         </td>
                                     </tr>
@@ -213,6 +213,21 @@
                                             @endif
                                         </td>
                                     </tr>
+                                    <tr>
+                                        <td>Create Change Order</td>
+                                        <td>
+                                            <a href="Javascript:AREYOUSURE('You want to create a change order for this workorder? Are you sure?','{{route('contact_details',['contact'=>$proposal['customer_staff_id']])}}');" title="Create Change Order for this Work Order">Create Change Order</a>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Clone Work Order</td>
+                                        <td>
+                                            <a href="Javascript:AREYOUSURE('You are about to clone this work order. Are you sure?','{{route('clone_proposal',['id'=>$proposal['id']])}}');" title="Clone this proposal">Clone This Work Order</a>
+
+                                        </td>
+                                    </tr>
+
                                 </table>
 
                             </div>
@@ -474,6 +489,34 @@
 
 @section('page-js')
     <script>
+
+
+
+        function AREYOUSURE(msg, url){
+
+            Swal.fire({
+                title: msg,
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                cancelButtonText: "No",
+                cancelButtonColor: "#A9DFBF",
+                customClass: {
+                    actions: 'my-actions',
+                    cancelButton: 'order-1 right-gap',
+                    confirmButton: 'order-2',
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    return window.location.href=url; //'{{route('clone_proposal',['id'=>$proposal['id']])}}';
+                } else if (result.isDenied) {
+                    Swal.fire('Cancelled', 'Cancelled', 'info')
+                }
+            })
+
+
+
+        }
+
 
         $(document).ready(function () {
 
