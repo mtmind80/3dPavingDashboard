@@ -4,6 +4,20 @@
     3D Paving Work Orders
 @endsection
 
+<style>
+    .list-item {
+        font-size:1.25EM;
+        margin-bottom: 9px;
+    }
+    .bg_lightning{
+        color:#000000;
+        background-color:#E8F8F5;
+    }
+
+</style>
+
+
+
 @section('content')
     @component('components.breadcrumb')
         @slot('title')
@@ -26,27 +40,23 @@
                     <ul class="nav nav-tabs nav-tabs-custom nav-justified" role="tablist">
                         <li class="nav-item">
                             <a class="nav-link active" data-toggle="tab" href="#proposal" role="tab">
-                                <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
-                                <span class="d-none d-sm-block">@lang('translation.menu_workorders')</span>
+                                <span class="d-block  list-item"><i class="ri-home-2-line"></i> @lang('translation.menu_workorders')</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#services" role="tab">
-                                <span class="d-block d-sm-none"><i class="far fa-envelope"></i></span>
-                                <span class="d-none d-sm-block">@lang('translation.services')</span>
+                                <span class="d-block  list-item"><i class="ri-tools-line"></i> @lang('translation.services')</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#notes" role="tab">
-                                <span class="d-block d-sm-none"><i class="far fa-user"></i></span>
-                                <span class="d-none d-sm-block">@lang('translation.notes') / @lang('translation.media')</span>
+                                <span class="d-block  list-item"><i class="ri-camera-2-line"></i> @lang('translation.notes') / @lang('translation.media')</span>
                             </a>
                         </li>
 
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#crm" role="tab">
-                                <span class="d-block d-sm-none"><i class="ri-compass-2-line"></i></span>
-                                <span class="d-none d-sm-block">@lang('translation.status') / @lang('translation.letters')</span>
+                                <span class="d-block  list-item"><i class="ri-file-2-line"></i> @lang('translation.status') / @lang('translation.letters')</span>
                             </a>
                         </li>
                     </ul>
@@ -57,10 +67,10 @@
                             <div class="row">
                                 <table width="100%" class="table-centered table-bordered font-size-20">
                                     <tr>
-                                        <td class="tc">
+                                        <td class="tc w-25">
                                             {{$proposal['name']}}
                                         </td>
-                                        <td class="tc">
+                                        <td class="tc w-75">
                                            STATUS: {{ App\Models\ProposalStatus::find($proposal['proposal_statuses_id'])->status }}
                                         </td>
                                     </tr>
@@ -203,6 +213,21 @@
                                             @endif
                                         </td>
                                     </tr>
+                                    <tr>
+                                        <td>Create Change Order</td>
+                                        <td>
+                                            <a href="Javascript:AREYOUSURE('You want to create a change order for this workorder? Are you sure?','{{route('contact_details',['contact'=>$proposal['customer_staff_id']])}}');" title="Create Change Order for this Work Order">Create Change Order</a>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Clone Work Order</td>
+                                        <td>
+                                            <a href="Javascript:AREYOUSURE('You are about to clone this work order. Are you sure?','{{route('clone_proposal',['id'=>$proposal['id']])}}');" title="Clone this proposal">Clone This Work Order</a>
+
+                                        </td>
+                                    </tr>
+
                                 </table>
 
                             </div>
@@ -464,6 +489,34 @@
 
 @section('page-js')
     <script>
+
+
+
+        function AREYOUSURE(msg, url){
+
+            Swal.fire({
+                title: msg,
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                cancelButtonText: "No",
+                cancelButtonColor: "#A9DFBF",
+                customClass: {
+                    actions: 'my-actions',
+                    cancelButton: 'order-1 right-gap',
+                    confirmButton: 'order-2',
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    return window.location.href=url; //'{{route('clone_proposal',['id'=>$proposal['id']])}}';
+                } else if (result.isDenied) {
+                    Swal.fire('Cancelled', 'Cancelled', 'info')
+                }
+            })
+
+
+
+        }
+
 
         $(document).ready(function () {
 

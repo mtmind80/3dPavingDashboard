@@ -4,6 +4,9 @@
     3D Paving Proposals
 @endsection
 
+
+
+
 @section('content')
     @component('components.breadcrumb')
         @slot('title')
@@ -25,33 +28,30 @@
                 <div class="card-body">
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs nav-tabs-custom nav-justified" role="tablist">
-                        <li class="nav-item no-border">
+                        <li class="nav-item  no-border">
                             <a class="nav-link active" data-toggle="tab" href="#proposal" role="tab">
-                                <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
-                                <span class="d-none d-sm-block h4">@lang('translation.proposal')</span>
+                                <span class="d-block list-item"><i class="ri-home-2-line"></i> &nbsp;@lang('translation.proposal')</span>
                             </a>
+                            <br/>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#services" id='servicestab' role="tab">
-                                <span class="d-block d-sm-none"><i class="far fa-envelope"></i></span>
-                                <span class="d-none d-sm-block h4">@lang('translation.services')</span>
+                                <span class="d-block  list-item"><i class="ri-tools-line"></i> &nbsp;@lang('translation.services')</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#notes" id="notestab" role="tab">
-                                <span class="d-block d-sm-none"><i class="far fa-user"></i></span>
-                                <span class="d-none d-sm-block h4">@lang('translation.notes') / @lang('translation.media')</span>
+                                <span class="d-block list-item"><i class="ri-camera-2-line"></i> &nbsp;@lang('translation.notes') / @lang('translation.media')</span>
                             </a>
                         </li>
 
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#crm" id="crmtab" role="tab">
-                                <span class="d-block d-sm-none"><i class="ri-compass-2-line"></i></span>
-                                <span class="d-none d-sm-block h4">@lang('translation.status') / @lang('translation.letters')</span>
+                                <span class="d-block list-item"><i class="ri-file-2-line"></i> &nbsp;@lang('translation.status') / @lang('translation.letters')</span>
                             </a>
                         </li>
                     </ul>
-                    <table class="bg-light table-centered w-100 font-size-24 p10">
+                    <table class="bg_lightning table-centered w-100 font-size-24 p18">
                         <tr>
                             <td>
                                 {{$proposal['name']}}
@@ -121,7 +121,7 @@
                                         <td>{{ \Carbon\Carbon::parse($proposal['proposal_date'])->format('m/d/yy') }}</td>
                                     </tr>
 
-                                    <tr>
+   <!--                                 <tr>
                                         <td>@lang('translation.salesmanager')</td>
                                         <td>
                                             @if($proposal['salesmanager_id'])
@@ -129,7 +129,8 @@
                                             @endif
                                         </td>
                                     </tr>
-                                    <tr>
+       -->
+                                        <tr>
                                         <td>@lang('translation.salesperson')</td>
                                         <td>
                                             @if($proposal['salesperson_id'])
@@ -141,7 +142,8 @@
                                         <td>@lang('translation.client')</td>
                                         <td>
                                             @if($proposal['contact_id'])
-                                                <a href="{{route('contact_details',['contact'=>$proposal['contact_id']])}}" title="find contact">{{ App\Models\Contact::find($proposal['contact_id'])->FullName }}</a>
+
+                                                <a href="Javascript:showData(1);" title="find contact">{{ App\Models\Contact::find($proposal['contact_id'])->FullName }}</a>
                                             @endif
                                         </td>
                                     </tr>
@@ -149,7 +151,7 @@
                                         <td>@lang('translation.proposalclient')</td>
                                         <td>
                                             @if($proposal['customer_staff_id'])
-                                                <a href="{{route('contact_details',['contact'=>$proposal['customer_staff_id']])}}"  title="find staff">{{ App\Models\Contact::find($proposal['customer_staff_id'])->FullName }}</a>
+                                                <a href="Javascript:showData(2);"  title="find staff">{{ App\Models\Contact::find($proposal['customer_staff_id'])->FullName }}</a>
                                             @endif
                                         </td>
                                     </tr>
@@ -196,16 +198,9 @@
                                     </tr>
 
                                         <tr>
-                                            <td>Create Change Order</td>
+                                            <td>Clone Proposal</td>
                                             <td>
-                                                <a href="{{route('contact_details',['contact'=>$proposal['customer_staff_id']])}}"  title="create change order">New Change Order</a>
-
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>CLone Proposal</td>
-                                            <td>
-                                                <a href="{{route('contact_details',['contact'=>$proposal['customer_staff_id']])}}" title="clone this proposal">Clone This Proposal</a>
+                                                <a href="Javascript:AREYOUSURE('You are about to clone this proposal. Are you sure?','{{route('clone_proposal',['id'=>$proposal['id']])}}');" title="Clone this proposal">Clone This Proposal</a>
 
                                             </td>
                                         </tr>
@@ -363,12 +358,31 @@
                         <div class="tab-pane" id="crm" role="tabpanel">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <h3>@lang('translation.status')</h3>
+                                    <h3>@lang('translation.change') @lang('translation.status')</h3>
+                                    <form id="statusform"  name="statusform" method="POST" action="{{route('change_status')}}">
+                                        @csrf
+                                        <input type="hidden" name="proposal_id" value="{{$proposal['id']}}">
 
-                                    <ul>
-                                        <li>Set Alert</li>
-                                        <li>Change Status</li>
-                                    </ul>
+                                        <select id="proposalstatus" name="status" class="form-control-sm" onchange="Javascript:shownote(this);">
+                                            <option value="4">Proposal Sent to Client</option>
+                                            <option value="2" selected>Client Approved Proposal</option>
+                                                <option value="3">Client Rejected Proposal (add reason)</option>
+                                            </select>
+                                        <br/>
+                                        <div id='noteform' style="display:none;">Reason Rejected:<br/><textarea class="form-control" rows='3' cols='65' name="note" id="note" placeholder="Add Note Here"></textarea>
+                                            <br/>
+                                            Rejected Reason: <br/><select  class="form-control-sm" id="reason" name="reason">
+                                                <option selected>Client decided not to do the work.</option>
+                                                <option>Client accepted a competeing bid.</option>
+                                                <option>Could not meet the clients needs.</option>
+                                                <option>Other</option>
+                                            </select>
+                                            <br/>
+                                        </div>
+
+                                        <input type="submit" id="changestatus" class="{{$site_button_class}}" value="Click to Change Status">
+
+                                    </form>
                                 </div>
                             </div>
                             <div class="row">
@@ -377,9 +391,6 @@
 
                                     <ul>
                                         <li>Thank You For Signing</li>
-                                        <li>Change Order</li>
-                                        <li>Service Begin Reminder</li>
-                                        <li>MOT Reminder</li>
                                     </ul>
                                 </div>
                             </div>
@@ -411,6 +422,77 @@
     <script>
         var selectedTab = "{{ $selectedTab ?? '' }}"
 
+        function AREYOUSURE(msg, url){
+
+            Swal.fire({
+                title: msg,
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                cancelButtonText: "No",
+                cancelButtonColor: "#A9DFBF",
+                customClass: {
+                    actions: 'my-actions',
+                    cancelButton: 'order-1 right-gap',
+                    confirmButton: 'order-2',
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    return window.location.href=url; //'{{route('clone_proposal',['id'=>$proposal['id']])}}';
+                } else if (result.isDenied) {
+                    Swal.fire('Cancelled', 'Cancelled', 'info')
+                }
+            })
+
+
+
+        }
+
+
+        function showData(c) {
+
+
+            if(c == 1) // customer
+            {
+
+                Swal.fire({
+                    title: 'Client Contact',
+                    html: '<br/><h2><a href="{{route("contact_details",["contact"=>$proposal["contact_id"]])}}" title="find contact">{{ $proposal_customer["first_name"] }}  {{ $proposal_customer["last_name"] }}</a></h2>' +
+                        '<br/><h3>{{ $proposal_customer['email'] }}</h3>' +
+                        '<br/><h3>{{ $proposal_customer['phone'] }}</h3>' +
+                    '<br/><h3>{{ $proposal_customer['address1'] }} {{ $proposal_customer['address2'] }}</h3>' +
+                    '<br/><h3>{{ $proposal_customer['city'] }}, {{ $proposal_customer['state'] }} {{ $proposal_customer['postal_code'] }}</h3>' ,
+                    icon: 'info',
+                    heightAuto: false,
+                    width: '60em',
+                    showConfirmButton: true,
+
+                })
+
+
+            }
+            if(c == 2) // sales
+            {
+                Swal.fire({
+                    title: 'Client Staff Contact',
+                    html: '<br/><h2><a href="{{route("contact_details",["contact"=>$proposal["customer_staff_id"]])}}"  title="find staff">{{ $proposal_staff["first_name"] }}  {{ $proposal_staff["last_name"] }}</a></h2>' +
+                        '<br/><h3>{{ $proposal_staff['email'] }}</h3>' +
+                        '<br/><h3>{{ $proposal_staff['phone'] }}</h3>' +
+                        '<br/><h3>{{ $proposal_staff['address1'] }} {{ $proposal_staff['address2'] }}</h3>' +
+                        '<br/><h3>{{ $proposal_staff['city'] }}, {{ $proposal_staff['state'] }} {{ $proposal_staff['postal_code'] }}</h3>' ,
+                    icon: 'info',
+                    heightAuto: false,
+                    width: '60em',
+                    showConfirmButton: true,
+
+                })
+
+
+            }
+
+
+        }
+
+
         $(document).ready(function () {
 
 
@@ -431,71 +513,6 @@
 
                 window.location.href="{{route('print_proposal',['proposal_id'=> $proposal['id']])}}";
 
-/*
-                Swal.fire({
-                    title: 'Auto close alert!',
-                    html:
-                        'I will close in <strong></strong> seconds.<br/><br/>' +
-                        '<button id="increase" class="btn btn-warning">' +
-                        'I need 5 more seconds!' +
-                        '</button><br/><br/>' +
-                        '<button id="stop" class="btn btn-danger">' +
-                        'Please stop the timer!!' +
-                        '</button><br/><br/>' +
-                        '<button id="resume" class="btn btn-success" disabled>' +
-                        'Phew... you can restart now!' +
-                        '</button><br/><br/>' +
-                        '<button id="toggle" class="btn btn-primary">' +
-                        'Toggle' +
-                        '</button>',
-                    timer: 10000,
-                    didOpen: () => {
-                        const content = Swal.getHtmlContainer()
-                        const $ = content.querySelector.bind(content)
-
-                        const stop = $('#stop')
-                        const resume = $('#resume')
-                        const toggle = $('#toggle')
-                        const increase = $('#increase')
-
-                        Swal.showLoading()
-
-                        function toggleButtons () {
-                            stop.disabled = !Swal.isTimerRunning()
-                            resume.disabled = Swal.isTimerRunning()
-                        }
-
-                        stop.addEventListener('click', () => {
-                            Swal.stopTimer()
-                            toggleButtons()
-                        })
-
-                        resume.addEventListener('click', () => {
-                            Swal.resumeTimer()
-                            toggleButtons()
-                        })
-
-                        toggle.addEventListener('click', () => {
-                            Swal.toggleTimer()
-                            toggleButtons()
-                        })
-
-                        increase.addEventListener('click', () => {
-                            Swal.increaseTimer(5000)
-                        })
-
-                        timerInterval = setInterval(() => {
-                            Swal.getHtmlContainer().querySelector('strong')
-                                .textContent = (Swal.getTimerLeft() / 1000)
-                                .toFixed(0)
-                        }, 100)
-                    },
-                    willClose: () => {
-                        clearInterval(timerInterval)
-                    }
-                })
-
-                */
                 return;
 
             })
@@ -727,6 +744,28 @@
         });
 
 
+
+        function shownote(nform)
+        {
+
+            var f = parseInt(nform.value);
+           if(f == 3) { //rejected
+               Swal.fire({
+                   title: 'Proposal Rejected',
+                   html: '<br/><h3>If you are rejecting this proposal please give a short reason.</h3>',
+                   icon: 'info',
+                   heightAuto: false,
+                   width: '80em',
+                   showConfirmButton: true,
+
+               })
+
+               $("#noteform").show();
+                return;
+           }
+            $("#noteform").hide();
+
+        }
     </script>
 @stop
 

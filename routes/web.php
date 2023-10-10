@@ -300,6 +300,8 @@ Route::group(['prefix' => 'proposals'], function() {
 
     Route::get('/{id}/show_proposal', 'ProposalController@show')->name('show_proposal');
 
+    Route::post('/change_status', 'ProposalController@changestatus')->name('change_status');
+
     Route::post('/reorder-services', 'ProposalController@reorderServices')->name('services_reorder');
 
     Route::get('/start_proposal/{id}', 'ProposalController@start')->name('start_proposal');
@@ -408,6 +410,7 @@ Route::group(['prefix' => 'resources'], function() {
 /*************** Contacts  ***************/
 
 Route::group(['prefix' => 'contacts', 'middleware' => 'admin'], function() {
+    Route::model('contact', \App\Models\Contact::class);
 
     Route::match(['get', 'post'], '/search', 'ContactsController@search')->name('contact_search');
 

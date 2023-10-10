@@ -128,7 +128,7 @@ FROM sysdocumenttypes;
 
 UPDATE accepted_documents Set id = id * 223;
 UPDATE accepted_documents set id = old_id;
-Update  accepted_documents set extension = 'gif,jpg,png' where type ='Image';
+Update  accepted_documents set extension = 'gif,jpg,png,jpeg' where type ='Image';
 
 
 #XXXXX
