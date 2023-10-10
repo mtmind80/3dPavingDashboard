@@ -64,7 +64,8 @@ class Controller extends BaseController
               //  return redirect()->route('lockout');
             }
 
-            $site_button_class ="btn  btn-outline-info";
+            //$site_button_class ="btn btn-info";
+            $site_button_class ="btn btn-default";
             view()->share('site_button_class', $site_button_class);
 
             view()->share('authuser', json_decode(json_encode(auth()->user()),true));

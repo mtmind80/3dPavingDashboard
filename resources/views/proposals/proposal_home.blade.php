@@ -5,17 +5,7 @@
 @endsection
 
 
-<style>
-    .list-item {
-        font-size:1.25EM;
-        margin-bottom: 9px;
-    }
-    .bg_lightning{
-        color:#000000;
-        background-color:#E8F8F5;
-    }
 
-</style>
 
 @section('content')
     @component('components.breadcrumb')
@@ -152,7 +142,8 @@
                                         <td>@lang('translation.client')</td>
                                         <td>
                                             @if($proposal['contact_id'])
-                                                <a href="{{route('contact_details',['contact'=>$proposal['contact_id']])}}" title="find contact">{{ App\Models\Contact::find($proposal['contact_id'])->FullName }}</a>
+
+                                                <a href="Javascript:showData(1);" title="find contact">{{ App\Models\Contact::find($proposal['contact_id'])->FullName }}</a>
                                             @endif
                                         </td>
                                     </tr>
@@ -160,7 +151,7 @@
                                         <td>@lang('translation.proposalclient')</td>
                                         <td>
                                             @if($proposal['customer_staff_id'])
-                                                <a href="{{route('contact_details',['contact'=>$proposal['customer_staff_id']])}}"  title="find staff">{{ App\Models\Contact::find($proposal['customer_staff_id'])->FullName }}</a>
+                                                <a href="Javascript:showData(2);"  title="find staff">{{ App\Models\Contact::find($proposal['customer_staff_id'])->FullName }}</a>
                                             @endif
                                         </td>
                                     </tr>
@@ -378,7 +369,7 @@
                                                 <option value="3">Client Rejected Proposal (add reason)</option>
                                             </select>
                                         <br/>
-                                        <div id='noteform' style="display:none;">Note:<br/><textarea class="form-control" rows='3' cols='65' name="note" id="note" placeholder="Add Note Here"></textarea>
+                                        <div id='noteform' style="display:none;">Reason Rejected:<br/><textarea class="form-control" rows='3' cols='65' name="note" id="note" placeholder="Add Note Here"></textarea>
                                             <br/>
                                             Rejected Reason: <br/><select  class="form-control-sm" id="reason" name="reason">
                                                 <option selected>Client decided not to do the work.</option>
@@ -389,7 +380,7 @@
                                             <br/>
                                         </div>
 
-                                        <input type="button" id="changestatus" class="{{$site_button_class}}" value="Click to Change Status"></li>
+                                        <input type="submit" id="changestatus" class="{{$site_button_class}}" value="Click to Change Status">
 
                                     </form>
                                 </div>
@@ -400,9 +391,6 @@
 
                                     <ul>
                                         <li>Thank You For Signing</li>
-                                        <li>Change Order</li>
-                                        <li>Service Begin Reminder</li>
-                                        <li>MOT Reminder</li>
                                     </ul>
                                 </div>
                             </div>
@@ -460,27 +448,52 @@
         }
 
 
+        function showData(c) {
 
+
+            if(c == 1) // customer
+            {
+
+                Swal.fire({
+                    title: 'Client Contact',
+                    html: '<br/><h2><a href="{{route("contact_details",["contact"=>$proposal["contact_id"]])}}" title="find contact">{{ $proposal_customer["first_name"] }}  {{ $proposal_customer["last_name"] }}</a></h2>' +
+                        '<br/><h3>{{ $proposal_customer['email'] }}</h3>' +
+                        '<br/><h3>{{ $proposal_customer['phone'] }}</h3>' +
+                    '<br/><h3>{{ $proposal_customer['address1'] }} {{ $proposal_customer['address2'] }}</h3>' +
+                    '<br/><h3>{{ $proposal_customer['city'] }}, {{ $proposal_customer['state'] }} {{ $proposal_customer['postal_code'] }}</h3>' ,
+                    icon: 'info',
+                    heightAuto: false,
+                    width: '60em',
+                    showConfirmButton: true,
+
+                })
+
+
+            }
+            if(c == 2) // sales
+            {
+                Swal.fire({
+                    title: 'Client Staff Contact',
+                    html: '<br/><h2><a href="{{route("contact_details",["contact"=>$proposal["customer_staff_id"]])}}"  title="find staff">{{ $proposal_staff["first_name"] }}  {{ $proposal_staff["last_name"] }}</a></h2>' +
+                        '<br/><h3>{{ $proposal_staff['email'] }}</h3>' +
+                        '<br/><h3>{{ $proposal_staff['phone'] }}</h3>' +
+                        '<br/><h3>{{ $proposal_staff['address1'] }} {{ $proposal_staff['address2'] }}</h3>' +
+                        '<br/><h3>{{ $proposal_staff['city'] }}, {{ $proposal_staff['state'] }} {{ $proposal_staff['postal_code'] }}</h3>' ,
+                    icon: 'info',
+                    heightAuto: false,
+                    width: '60em',
+                    showConfirmButton: true,
+
+                })
+
+
+            }
+
+
+        }
 
 
         $(document).ready(function () {
-
-
-            $("#changestatus").click(function(){
-
-                Swal.fire({
-                    title: 'Working On It!',
-                    html: '</br><h3>Updating Proposal Status.</h3><br/>',
-                    icon: 'info',
-                    heightAuto: false,
-                    timerProgressBar : true,
-                    timer: 2000,
-                    width: '60em',
-                    showConfirmButton: true,
-                })
-                $("statusform").submit();
-
-            })
 
 
             $("#printproposal").click(function(){
@@ -500,71 +513,6 @@
 
                 window.location.href="{{route('print_proposal',['proposal_id'=> $proposal['id']])}}";
 
-/*
-                Swal.fire({
-                    title: 'Auto close alert!',
-                    html:
-                        'I will close in <strong></strong> seconds.<br/><br/>' +
-                        '<button id="increase" class="btn btn-warning">' +
-                        'I need 5 more seconds!' +
-                        '</button><br/><br/>' +
-                        '<button id="stop" class="btn btn-danger">' +
-                        'Please stop the timer!!' +
-                        '</button><br/><br/>' +
-                        '<button id="resume" class="btn btn-success" disabled>' +
-                        'Phew... you can restart now!' +
-                        '</button><br/><br/>' +
-                        '<button id="toggle" class="btn btn-primary">' +
-                        'Toggle' +
-                        '</button>',
-                    timer: 10000,
-                    didOpen: () => {
-                        const content = Swal.getHtmlContainer()
-                        const $ = content.querySelector.bind(content)
-
-                        const stop = $('#stop')
-                        const resume = $('#resume')
-                        const toggle = $('#toggle')
-                        const increase = $('#increase')
-
-                        Swal.showLoading()
-
-                        function toggleButtons () {
-                            stop.disabled = !Swal.isTimerRunning()
-                            resume.disabled = Swal.isTimerRunning()
-                        }
-
-                        stop.addEventListener('click', () => {
-                            Swal.stopTimer()
-                            toggleButtons()
-                        })
-
-                        resume.addEventListener('click', () => {
-                            Swal.resumeTimer()
-                            toggleButtons()
-                        })
-
-                        toggle.addEventListener('click', () => {
-                            Swal.toggleTimer()
-                            toggleButtons()
-                        })
-
-                        increase.addEventListener('click', () => {
-                            Swal.increaseTimer(5000)
-                        })
-
-                        timerInterval = setInterval(() => {
-                            Swal.getHtmlContainer().querySelector('strong')
-                                .textContent = (Swal.getTimerLeft() / 1000)
-                                .toFixed(0)
-                        }, 100)
-                    },
-                    willClose: () => {
-                        clearInterval(timerInterval)
-                    }
-                })
-
-                */
                 return;
 
             })
@@ -802,7 +750,16 @@
 
             var f = parseInt(nform.value);
            if(f == 3) { //rejected
-                alert("If you are rejecting this proposal please give a short reason.")
+               Swal.fire({
+                   title: 'Proposal Rejected',
+                   html: '<br/><h3>If you are rejecting this proposal please give a short reason.</h3>',
+                   icon: 'info',
+                   heightAuto: false,
+                   width: '80em',
+                   showConfirmButton: true,
+
+               })
+
                $("#noteform").show();
                 return;
            }
