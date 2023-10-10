@@ -467,7 +467,7 @@ class ProposalController extends Controller
     {
         $orderType = $request->order_type ?? 'ASC';
 
-        $query = Proposal::where('proposal_statuses_id', '=', '1')->with(['status', 'details' => function($w) use ($orderType){
+        $query = Proposal::whereIn('proposal_statuses_id', [1,4])->with(['status', 'details' => function($w) use ($orderType){
             $w->orderBy('dsort', $orderType);
         }]);
 
@@ -503,10 +503,32 @@ class ProposalController extends Controller
         $notes = ProposalNote::where('proposal_id', $id)->get();
         $permits = Permit::where('proposal_id', $id)->get();
         $medias = ProposalMedia::where('proposal_id', $id)->get();
+        $proposal_customer = [];
+        if($proposal['contact_id'] > 0) {
+            $proposal_customer = Contact::where('id', '=', $proposal['contact_id'])->first()->toArray();
+        }
+
+        /*
+
+        $proposal_sales = [];
+        if($proposal['salesperson_id'] > 0) {
+            $proposal_sales = Contact::where('id', '=', $proposal['salesperson_id'])->first()->toArray();
+        }
+        */
+
+        $proposal_staff = [];
+        if($proposal['customer_staff_id'] > 0) {
+            $proposal_staff = Contact::where('id', '=', $proposal['customer_staff_id'])->first()->toArray();
+        }
 
         $hostwithHttp = request()->getSchemeAndHttpHost();
 
         $data['hostwithHttp'] = $hostwithHttp;
+
+       // $data['proposal_sales'] = $proposal_sales;
+        $data['proposal_staff'] = $proposal_staff;
+        $data['proposal_customer'] = $proposal_customer;
+
 
         $data['id'] = $id;
         $data['proposal'] = $proposal;
@@ -888,7 +910,7 @@ class ProposalController extends Controller
             $action_id = intval($status) + 1;
             $proposal_id = $request['proposal_id'];
         }
-        $proposal = Proposal::find($proposal_id);
+        $proposal = Proposal::where('id', '=', $proposal_id)->first();
 
         $proposal->proposal_statuses_id = $status;
 
@@ -906,6 +928,7 @@ class ProposalController extends Controller
             $proposal->job_master_id = $jobMasterId;
             $proposal->sale_date = date_create()->format('Y-m-d H:i:s');
         }
+
 
         if($status == 3) // rejected
         {
@@ -927,9 +950,12 @@ class ProposalController extends Controller
         {
             return redirect()->route('show_workorder', ['id' => $proposal_id])->with('success', 'Proposal status changed.');
         }
-        return redirect()->route('dashboard')->with('success', 'Proposal was archived. See archived proposals.');
-
-        //return redirect()->back()->with('success', 'Proposal status changed.');
+        if($status == 3) // rejected
+        {
+            return redirect()->route('dashboard')->with('success', 'Proposal was archived. See archived proposals.');
+        }
+        //sent to customer
+        return redirect()->back()->with('success', 'Proposal status changed.');
 
 
     }

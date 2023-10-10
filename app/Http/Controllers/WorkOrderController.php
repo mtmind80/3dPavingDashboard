@@ -135,7 +135,7 @@ class WorkOrderController extends Controller
             $data['services'] = $services;
             $data['notes'] = $notes;
 
-            return view('workorders.home', $data);
+            return view('workorders.workorder_home', $data);
 
         }
         return view('pages-404');
