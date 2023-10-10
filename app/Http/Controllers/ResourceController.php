@@ -11,9 +11,10 @@ use Illuminate\Http\Request;
 class ResourceController extends Controller
 {
     // allowed to edit these
-    public $models = ['Equipment', 'RockVendorsCosts','AsphaltVendorCost','MediaType', 'Material', 'Vehicle', 'VehicleType','LaborRate', 'StripingCost', 'StripingService', 'LeadSource', 'OfficeLocations', 'WebConfig', 'Term'];
+    public $models = ['Equipment', 'RockVendorsCosts','AsphaltVendorCost','MediaType', 'Material', 'Vehicle', 'VehicleType','LaborRate', 'StripingCost', 'StripingService', 'Service', 'LeadSource', 'OfficeLocations', 'WebConfig', 'Term'];
     public $orderby = [
         'Equipment' => ['name'],
+        'Service' => ['name'],
         'Material' => ['service_category_id'],
         'Vehicle' => ['id'],
         'VehicleType' => ['name' ],
@@ -31,6 +32,7 @@ class ResourceController extends Controller
 
     public $columns = [
         'Equipment' => ['id', 'name', 'rate_type', 'rate'],
+        'Service' => ['name', 'percent_overhead'],
         'Material' => ['id', 'name', 'cost','service_category_id'],
         'Vehicle' => ['id', 'vehicle_types_id', 'name', 'description', 'active', 'office_location_id'],
         'VehicleType' => ['id', 'name', 'description','rate'],
@@ -49,6 +51,7 @@ class ResourceController extends Controller
 
     public $headers = [
         'Equipment' => ['Edit', 'Name', 'Normally Billed', 'Rate'],
+        'Service' => ['Name', '% Overhead'],
         'Material' => ['Edit', 'Name', 'Cost','Service'],
         'Vehicle' => ['Edit', 'Type', 'Name', 'Description', 'Active', 'Location'],
         'VehicleType' => ['Edit', 'Name', 'Description','Rate'],
@@ -66,6 +69,7 @@ class ResourceController extends Controller
 
     public $views = [
         'Equipment' => "resources.equipment",
+        'Service' => "resources.service",
         'Material' => "resources.materials",
         'Vehicle' => "resources.vehicles",
         'VehicleType' => "resources.vehicletype",
@@ -84,6 +88,7 @@ class ResourceController extends Controller
 
     public $headernames = [
         'Equipment' => "Equipment",
+        'Service' => "Service Overhead",
         'Material' => "Materials",
         'Vehicle' => "Vehicles",
         'VehicleType' => "Vehicle Types",
@@ -107,7 +112,7 @@ class ResourceController extends Controller
         parent::__construct();
 
     }
-    
+
     public function index()
     {
         return view('resources.index');
@@ -133,7 +138,7 @@ class ResourceController extends Controller
                     $data['p'] = false;
                     $datum = $modelname::all()->sortBy($this->orderby[$data["model"]])->toArray();
                 }
-                
+
                 $headers = $this->headers[$data["model"]];
                 $columns = $this->columns[$data["model"]];
                 $view = $this->views[$data["model"]];
@@ -284,7 +289,7 @@ class ResourceController extends Controller
 
         }
         return view('pages-404');
-        
+
     }
-    
+
 }

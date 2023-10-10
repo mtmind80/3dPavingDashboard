@@ -11,6 +11,13 @@
     <title>{{$web_config['webSitetitle']}} @yield('title')</title>
 
     <link rel="shortcut icon" href="{{ URL::asset('/assets/images/favicon-16x16.png')}}">
+    <!-- Fonts -->
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Pacifico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mr+De+Haviland&display=swap" rel="stylesheet">
 
     @include('layouts.head')
 
@@ -56,9 +63,24 @@
     @yield('js-plugin-files')
 
     <script src="{{ URL::asset('/js/common-base.min.js')}}"></script>
-    <script src="{{ URL::asset('/js/extra-scripts.js')}}"></script>
 
+
+    <script src="{{ URL::asset('/js/sweetalert2.min.js')}}"></script>
+    <link rel="stylesheet" href="{{ URL::asset('/css/sweetalert2.min.css')}}">
+
+    <script src="{{ URL::asset('/js/extra-scripts.js')}}"></script>
     <script>
+
+
+        // Create our number formatter.
+        const formatCurrency = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+            // These options are needed to round to whole numbers if that's what you want.
+            //minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
+            //maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
+        });
+
         var controllerName = "{{ \App\Helpers\RouteAction::getControllerName() }}";
         var functionName = "{{ \App\Helpers\RouteAction::getFunctionName() }}";
 

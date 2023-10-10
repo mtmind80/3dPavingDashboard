@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ProposalActions;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -36,6 +37,9 @@ class Controller extends BaseController
                 return $data;
             });
 
+            $today = date("Y-m-d H:i:s"); //mysql date format
+            view()->share('today', $today);
+
             view()->share('debug_blade', 'true');
             view()->share('web_config', $web_config);
             session(['web_config'=> $web_config]);
@@ -59,10 +63,11 @@ class Controller extends BaseController
             if($lockout) {
               //  return redirect()->route('lockout');
             }
-            
-            $site_button_class ="btn  btn-outline-info";
+
+            //$site_button_class ="btn btn-info";
+            $site_button_class ="btn btn-default";
             view()->share('site_button_class', $site_button_class);
-            
+
             view()->share('authuser', json_decode(json_encode(auth()->user()),true));
             return $next($request);
         });
@@ -112,6 +117,17 @@ class Controller extends BaseController
             $user->save();
         }
         return "Records Processed". $records;
+
+    }
+
+    public function globalrecordactions($proposal_id, $action_id, $note = null)
+    {
+        $proposalAction = new ProposalActions;
+        $proposalAction->proposal_id = $proposal_id;
+        $proposalAction->action_id = $action_id;
+        $proposalAction->created_by = auth()->user()->id;
+        $proposalAction->note = $note;
+        $proposalAction->save();
 
     }
 

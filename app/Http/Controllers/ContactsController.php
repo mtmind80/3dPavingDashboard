@@ -9,6 +9,7 @@ use App\Models\ContactType;
 use App\Models\LeadSource;
 use App\Models\Location;
 use App\Models\Staff;
+use Exception;
 use Illuminate\Http\Request;
 use App\Models\Contact;
 
@@ -183,26 +184,16 @@ class ContactsController extends Controller
 
     }
 
-    public function details(Contact $contact)
+    public function details($contactId)
     {
-
-
-
-
-        $contact->load([
-            'contactType',
-           
-        ]);
+        if (! $contact = Contact::with(['contactType'])->find($contactId)){
+            return view('pages-404');
+        }
 
         $data = [
-            'contact'               => $contact,
+            'contact' => $contact,
         ];
 
-        if(!$contact) {
-            return view('pages-404');
-
-        }
-        
         return view('contacts.detailsfull', $data);
     }
 

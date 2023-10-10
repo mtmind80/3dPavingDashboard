@@ -256,7 +256,10 @@ Route::group(['prefix' => 'proposaldetails'], function() {
 Route::group(['prefix' => 'print'], function() {
 
     //Print report
-    Route::get('/proposal/{proposal_id}', 'PrintingController@proposal')->name('proposal_print');
+    Route::get('/proposal/{proposal_id}', 'PrintingController@proposal')->name('print_proposal');
+
+    //Print report
+    Route::get('/printcoversheet', 'PrintingController@coversheet')->name('print_coversheet');
 
     /**** example of printing a pdf with background image */
 
@@ -296,12 +299,19 @@ Route::group(['prefix' => 'proposals'], function() {
     // get a specific proposal
 
     Route::get('/{id}/show_proposal', 'ProposalController@show')->name('show_proposal');
+
+    Route::post('/change_status', 'ProposalController@changestatus')->name('change_status');
+
     Route::post('/reorder-services', 'ProposalController@reorderServices')->name('services_reorder');
 
     Route::get('/start_proposal/{id}', 'ProposalController@start')->name('start_proposal');
 
     //  show alert
     Route::get('/alert/{id}', 'ProposalController@alertproposal')->name('alert_proposal');
+
+    // set alert
+    Route::post('set-alert', 'ProposalController@setAlert')->name('proposal_alert_set');
+    Route::get('/{proposal_id}/reset-alert', 'ProposalController@resetAlert')->name('proposal_alert_reset');
 
     //  bill specific proposal
     Route::get('/bill/{id}', 'ProposalController@billproposal')->name('bill_proposal');
@@ -390,6 +400,8 @@ Route::group(['prefix' => 'resources'], function() {
 
     Route::get('/destroy/{model}/{id}', 'ResourceController@destroy')->name('destroy_resource');
 
+    Route::get('/restore_config/', 'ResourceController@restore_web_config')->name('restore_config');
+
 
 });
 /** END Resources */
@@ -398,6 +410,7 @@ Route::group(['prefix' => 'resources'], function() {
 /*************** Contacts  ***************/
 
 Route::group(['prefix' => 'contacts', 'middleware' => 'admin'], function() {
+    Route::model('contact', \App\Models\Contact::class);
 
     Route::match(['get', 'post'], '/search', 'ContactsController@search')->name('contact_search');
 

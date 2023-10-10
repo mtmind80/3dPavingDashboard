@@ -20,7 +20,7 @@
             - Service: {{$proposalDetail->services_id}} - Category: {{$service->service_category_id}}
             @endif
          <br/>
-            Service Title: 
+            Service Title:
             {{ $proposalDetail->service_name }}
             <br/><br/>
             <a id="header_calculate_combined_costing_button4" class="{{ $site_button_class }}" href="javascript:">Save This Service</a>
@@ -28,7 +28,9 @@
         <td class="w-50 p8">
             Service Location:
             <p class="mb0">{!! $proposalDetail->location->full_location_two_lines !!}</p>
+            <!--
             <span id="changelocation" class="{{ $site_button_class }}">Change Location</span>
+            -->
         </td>
     </tr>
 </table>

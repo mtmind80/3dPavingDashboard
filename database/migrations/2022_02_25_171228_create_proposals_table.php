@@ -19,13 +19,14 @@ class CreateProposalsTable extends Migration
             $table->string('job_master_id',50)->default(null)->index()->nullable();
             $table->string('name', 225);
             $table->unsignedBigInteger('proposal_statuses_id')->default('1');
+            $table->string('rejected_reason', 225)->nullable()->default(null);
             $table->dateTime('proposal_date')->default(date("Y-m-d H:i:s"));
             $table->dateTime('sale_date')->nullable()->default(null);
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('last_updated_by')->nullable()->default(null);
             $table->unsignedBigInteger('contact_id')->index();
             $table->unsignedBigInteger('customer_staff_id')->nullable()->default(null);
-            $table->unsignedBigInteger('salesmanager_id')->nullable()->default(null)->index();
+            $table->unsignedBigInteger('salesmanager_id')->nullable()->default(10)->index();
             $table->unsignedBigInteger('salesperson_id')->nullable()->default(null)->index();
             $table->unsignedBigInteger('location_id')->nullable()->default(null);
             $table->unsignedBigInteger('lead_id')->nullable()->default(null);

@@ -7,12 +7,21 @@ use App\Http\Requests\SearchRequest;
 use App\Http\Requests\ProposalNoteRequest;
 use App\Models\AcceptedDocuments;
 use App\Models\County;
+use Carbon\Carbon;
 use App\Models\Location;
 use App\Models\MediaType;
 use App\Models\Permit;
 use App\Models\Proposal;
 use App\Models\Contact;
 use App\Models\Lead;
+use App\Models\ProposalDetailAdditionalCost as AdditionalCost;
+use App\Models\ProposalDetailEquipment as Equipment;
+use App\Models\ProposalDetailLabor as Labor;
+use App\Models\ProposalDetailStripingService as Striping;
+use App\Models\ProposalDetailSubcontractor as Subcontractor;
+use App\Models\ProposalDetailVehicle as Vehicle;
+
+use App\Models\ProposalActions;
 use App\Models\ServiceCategory;
 use App\Models\State;
 use App\Models\ProposalDetail;
@@ -24,6 +33,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Validator;
 
 class ProposalController extends Controller
 {
@@ -53,42 +63,44 @@ class ProposalController extends Controller
             $q->where('salesmanager_id', auth()->user()->id)->orWhere('created_by', auth()->user()->id)->orWhere('salesperson_id', auth()->user()->id);
         })->get()->toArray();
 
-        $data['proposals'] = $proposals;
-        $data['proposalcount'] = count($proposals);
 
-        $customersCB = Cache::remember('customersCB', env('CACHE_TIMETOLIVE'), function() {
-            $customersCB = Proposal::customersCB();
-            return json_encode($customersCB);
+            $data['proposals'] = $proposals;
+            $data['proposalcount'] = count($proposals);
 
-        });
-        $data['customersCB'] = json_decode($customersCB, true);
+            $customersCB = Cache::remember('customersCB', env('CACHE_TIMETOLIVE'), function () {
+                $customersCB = Proposal::customersCB();
+                return json_encode($customersCB);
 
-        $creatorsCB = Cache::remember('creatorsCB', env('CACHE_TIMETOLIVE'), function() {
-            $creatorsCB = Proposal::creatorsCB();
-            return json_encode($creatorsCB);
+            });
+            $data['customersCB'] = json_decode($customersCB, true);
 
-        });
+            $creatorsCB = Cache::remember('creatorsCB', env('CACHE_TIMETOLIVE'), function () {
+                $creatorsCB = Proposal::creatorsCB();
+                return json_encode($creatorsCB);
 
-        $data['creatorsCB'] = json_decode($creatorsCB, true);
+            });
 
-        $salesManagersCB = Cache::remember('salesManagersCB', env('CACHE_TIMETOLIVE'), function() {
-            $salesManagersCB = Proposal::salesManagersCB();
-            return json_encode($salesManagersCB);
+            $data['creatorsCB'] = json_decode($creatorsCB, true);
 
-        });
+            $salesManagersCB = Cache::remember('salesManagersCB', env('CACHE_TIMETOLIVE'), function () {
+                $salesManagersCB = Proposal::salesManagersCB();
+                return json_encode($salesManagersCB);
 
-        $data['salesManagersCB'] = json_decode($salesManagersCB, true);
+            });
 
-        $salesPersonsCB = Cache::remember('salesPersonsCB', env('CACHE_TIMETOLIVE'), function() {
-            $salesPersonsCB = Proposal::salesPersonsCB();
-            return json_encode($salesPersonsCB);
+            $data['salesManagersCB'] = json_decode($salesManagersCB, true);
 
-        });
+            $salesPersonsCB = Cache::remember('salesPersonsCB', env('CACHE_TIMETOLIVE'), function () {
+                $salesPersonsCB = Proposal::salesPersonsCB();
+                return json_encode($salesPersonsCB);
 
-        $data['salesPersonsCB'] = json_decode($salesPersonsCB, true);
+            });
+
+            $data['salesPersonsCB'] = json_decode($salesPersonsCB, true);
 
 
-        return view('proposals.index', $data);
+            return view('proposals.index', $data);
+
     }
 
 
@@ -455,7 +467,7 @@ class ProposalController extends Controller
     {
         $orderType = $request->order_type ?? 'ASC';
 
-        $query = Proposal::with(['status', 'details' => function($w) use ($orderType){
+        $query = Proposal::whereIn('proposal_statuses_id', [1,4])->with(['status', 'details' => function($w) use ($orderType){
             $w->orderBy('dsort', $orderType);
         }]);
 
@@ -491,10 +503,32 @@ class ProposalController extends Controller
         $notes = ProposalNote::where('proposal_id', $id)->get();
         $permits = Permit::where('proposal_id', $id)->get();
         $medias = ProposalMedia::where('proposal_id', $id)->get();
+        $proposal_customer = [];
+        if($proposal['contact_id'] > 0) {
+            $proposal_customer = Contact::where('id', '=', $proposal['contact_id'])->first()->toArray();
+        }
+
+        /*
+
+        $proposal_sales = [];
+        if($proposal['salesperson_id'] > 0) {
+            $proposal_sales = Contact::where('id', '=', $proposal['salesperson_id'])->first()->toArray();
+        }
+        */
+
+        $proposal_staff = [];
+        if($proposal['customer_staff_id'] > 0) {
+            $proposal_staff = Contact::where('id', '=', $proposal['customer_staff_id'])->first()->toArray();
+        }
 
         $hostwithHttp = request()->getSchemeAndHttpHost();
 
         $data['hostwithHttp'] = $hostwithHttp;
+
+       // $data['proposal_sales'] = $proposal_sales;
+        $data['proposal_staff'] = $proposal_staff;
+        $data['proposal_customer'] = $proposal_customer;
+
 
         $data['id'] = $id;
         $data['proposal'] = $proposal;
@@ -542,10 +576,11 @@ class ProposalController extends Controller
 
         //what kind of access do i have
         if(auth()->user()->isAdmin()) {
-            $proposal = Proposal::where('id', $id)->first()->toArray();
+
+            $proposal = Proposal::where('id', $id)->where('proposal_statuses_id', '=', 1)->first()->toArray();
         } else {
 
-            $proposal = Proposal::where('id', '=', $id)->where(function($q) {
+            $proposal = Proposal::where('id', '=', $id)->where('proposal_statuses_id', '=', 1)->where(function($q) {
                 $q->where('salesmanager_id', auth()->user()->id)->orWhere('salesperson_id', auth()->user()->id);
             })->first()->toArray();
             // managers only show if I am on the proposal
@@ -651,7 +686,7 @@ class ProposalController extends Controller
         $data['paginate'] = 1;
 
         if($proposalId) {
-            $records = Proposal::where('id', $proposalId)->first();
+            $records = Proposal::where('id', $proposalId)->where('proposal_statuses_id', '=', 1)->first();
             $data['paginate'] = 0;
 
             if($records) {
@@ -702,9 +737,123 @@ class ProposalController extends Controller
     public function clone($id)
     {
 
-        $records = Proposal::where('id', $id)->whereIn('proposal_statuses_id', [3, 7])->get();
-        $data['records'] = $records;
-        return view('proposals.clone', $data);
+        $proposal = Proposal::find($id);
+        $newProposal = $proposal->replicate();
+        $newProposal->created_at = Carbon::now();
+        $newProposal->proposal_date = Carbon::now();
+        $newProposal->proposal_statuses_id = 1;
+        $newProposal->job_master_id = null;
+        $newProposal->changeorder = null;
+        $newProposal->sale_date = NULL;
+        $newProposal->created_by = auth()->user()->id;
+        $newProposal->save();
+
+        $new_id = $newProposal->id;
+
+        $this->setMaterialPricing($new_id);
+        //print_r($new_id);
+
+        $proposalDetails = ProposalDetail::where('proposal_id', $id)->get();
+
+        foreach($proposalDetails as $detail)
+
+        {
+
+
+            // get proposal detail and any other items associated
+            $proposaldetail = ProposalDetail::find($detail->id);
+
+            if($proposaldetail) {
+                $newDetail = $proposaldetail->replicate();
+                $newDetail->proposal_id = $new_id;
+                $newDetail->alt_desc = NULL;
+                $newDetail->proposal_note = NULL;
+                $newDetail->proposal_field_note = NULL;
+                $newDetail->scheduled_by = NULL;
+                $newDetail->completed_by = NULL;
+                $newDetail->completed_date = NULL;
+                $newDetail->start_date = NULL;
+                $newDetail->end_date = NULL;
+                $newDetail->save();
+
+            } else {
+
+                return redirect()->route('show_proposal',['id' => $new_id])->with('success', 'Proposal cloned.');
+
+            }
+            //            $newdetails = ProposalDetail::create($newdetail);
+            $newdetail_id = $newDetail->id;
+            //get any related data
+
+            $additional_details = AdditionalCost::where('proposal_detail_id', '=', $detail->id)->get();
+
+            if($additional_details) { // with new id
+                foreach($additional_details as $details) {
+                    $d = AdditionalCost::find($details->id);
+                    $newRecord = $d->replicate();
+                    $newRecord->proposal_detail_id = $newdetail_id;
+                    $newRecord->save();
+                }
+
+            }
+
+            $additional_details = Equipment::where('proposal_detail_id', '=', $detail->id)->get();
+
+            if($additional_details) { // with new id
+                foreach($additional_details as $details) {
+                    $d = Equipment::find($details->id);
+                    $newRecord = $d->replicate();
+                    $newRecord->proposal_detail_id = $newdetail_id;
+                    $newRecord->save();
+                }
+
+            }
+
+            $additional_details = Labor::where('proposal_detail_id', '=', $detail->id)->get();
+            if($additional_details) { // with new id
+                foreach($additional_details as $details) {
+                    $d = Labor::find($details->id);
+                    $newRecord = $d->replicate();
+                    $newRecord->proposal_detail_id = $newdetail_id;
+                    $newRecord->save();
+                }
+            }
+
+            $additional_details = Striping::where('proposal_detail_id', '=', $detail->id)->get();
+            if($additional_details) { // with new id
+                foreach($additional_details as $details) {
+                    $d = Striping::find($details->id);
+                    $newRecord = $d->replicate();
+                    $newRecord->proposal_detail_id = $newdetail_id;
+                    $newRecord->save();
+                }
+            }
+
+            $additional_details = Subcontractor::where('proposal_detail_id', '=', $detail->id)->get();
+            if($additional_details) { // with new id
+                foreach($additional_details as $details) {
+                    $d = Subcontractor::find($details->id);
+                    $newRecord = $d->replicate();
+                    $newRecord->proposal_detail_id = $newdetail_id;
+                    $newRecord->save();
+                }
+            }
+
+            $additional_details = Vehicle::where('proposal_detail_id', '=', $detail->id)->get();
+            if($additional_details) { // with new id
+                foreach($additional_details as $details) {
+                    $d = Vehicle::find($details->id);
+                    $newRecord = $d->replicate();
+                    $newRecord->proposal_detail_id = $newdetail_id;
+                    $newRecord->save();
+                }
+            }
+
+        }
+
+        // save material costs
+
+        return redirect()->route('show_proposal',['id' => $new_id])->with('success', 'Proposal cloned with services.');
 
     }
 
@@ -749,6 +898,67 @@ class ProposalController extends Controller
         dd($user);
     }
 
+
+    public function changestatus(Request $request)
+    {
+
+
+        if(isset($request['status'])){
+            $status = $request['status'];
+            $note = $request['note'];
+            $reason = $request['reason'];
+            $action_id = intval($status) + 1;
+            $proposal_id = $request['proposal_id'];
+        }
+        $proposal = Proposal::where('id', '=', $proposal_id)->first();
+
+        $proposal->proposal_statuses_id = $status;
+
+        if($status == 2) // approved
+        {
+            // create job master id and set sale date to taday
+            $year = date('Y');
+            $maxrec = Proposal::where(DB::raw('YEAR(created_at)'), '=', $year)->get()->count();
+            $maxrec = $maxrec + 1;
+            $maxrec = str_pad($maxrec, 5, "0", STR_PAD_LEFT);
+            $month = date('m');
+            $month = str_pad($month, 2, "0", STR_PAD_LEFT);
+            $jobMasterId = $year . ":" . $month . ":" . $maxrec;
+            //approved create work order
+            $proposal->job_master_id = $jobMasterId;
+            $proposal->sale_date = date_create()->format('Y-m-d H:i:s');
+        }
+
+
+        if($status == 3) // rejected
+        {
+            $proposal->rejected_reason = $reason;
+            // do something when rejected  email Keith
+        }
+
+        if($status == 4) // Proposal sent
+        {
+            $note = "Proposal Sent to Client";
+
+        }
+
+        $proposal->save();
+
+        $this->globalrecordactions($proposal_id, $action_id, $note);
+
+        if($status == 2) // approved
+        {
+            return redirect()->route('show_workorder', ['id' => $proposal_id])->with('success', 'Proposal status changed.');
+        }
+        if($status == 3) // rejected
+        {
+            return redirect()->route('dashboard')->with('success', 'Proposal was archived. See archived proposals.');
+        }
+        //sent to customer
+        return redirect()->back()->with('success', 'Proposal status changed.');
+
+
+    }
 
     public function refreshMaterialPricing($id)
     {
@@ -825,6 +1035,86 @@ class ProposalController extends Controller
         } else {
             return redirect()->back()->with('success', 'Proposal note added.');
         }
+    }
+
+    public function setAlert(Request $request)
+    {
+        $validator = Validator::make(
+            $request->only(['proposal_id', 'alert_reason']), [
+                'proposal_id' => 'required|positive',
+                'alert_reason' => 'required|text|max:255',
+            ]
+        );
+        if ($validator->fails()) {
+            return redirect()->back()->with('error', $validator->messages()->first());
+        }
+
+        if (!$proposal = Proposal::find($request->proposal_id)) {
+            return redirect()->back()->with('error', 'Proposal not found.');
+        }
+
+        if (!empty($proposal->on_alert)) {
+            redirect()->back()->with('error', 'Proposal has an alert already.');
+        }
+
+        try {
+            DB::transaction(function () use ($request, & $proposal) {
+                $proposal->on_alert = true;
+                $proposal->alert_reason = $request->alert_reason;
+                $proposal->save();
+
+                $proposalAction = new ProposalActions;
+                $proposalAction->proposal_id = $proposal->id;
+                $proposalAction->action_id = 6;     // set alert
+                $proposalAction->created_by = auth()->user()->id;
+                $proposalAction->note = $proposal->alert_reason;
+                $proposalAction->save();
+            });
+        } catch (Exception $e) {
+            redirect()->back()->with('error', $e->getMessage());
+        }
+
+        return redirect()->back()->with('success', 'Alert set.');
+    }
+
+    public function resetAlert($proposal_id)
+    {
+        $validator = Validator::make([
+                'proposal_id' => $proposal_id,
+            ], [
+                'proposal_id' => 'required|positive',
+            ]
+        );
+        if ($validator->fails()) {
+            return redirect()->back()->with('error', $validator->messages()->first());
+        }
+
+        if (!$proposal = Proposal::find($proposal_id)) {
+            return redirect()->back()->with('error', 'Proposal not found.');
+        }
+
+        if (empty($proposal->on_alert)) {
+            return redirect()->back()->with('error', 'Proposal does not have an alert.');
+        }
+
+        try {
+            DB::transaction(function () use (& $proposal) {
+                $proposal->on_alert = false;
+                $proposal->alert_reason = null;
+                $proposal->save();
+
+                $proposalAction = new ProposalActions;
+                $proposalAction->proposal_id = $proposal->id;
+                $proposalAction->action_id = 7;     // remove alert
+                $proposalAction->created_by = auth()->user()->id;
+                $proposalAction->note = null;
+                $proposalAction->save();
+            });
+        } catch (Exception $e) {
+            redirect()->back()->with('error', $e->getMessage());
+        }
+
+        return redirect()->back()->with('success', 'Alert removed.');
     }
 
 }
