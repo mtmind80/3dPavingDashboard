@@ -48,7 +48,8 @@ class WorkOrderEquipmentController extends Controller
         $inputs = $request->all();
 
         $inputs['name'] = $equipment->name;
-        $inputs['rate_per_hour'] = $equipment->rate_per_hour;
+        $inputs['rate_type'] = $equipment->rate_type;
+        $inputs['rate'] = $equipment->rate;
         $inputs['created_by'] = auth()->user()->id;
 
         WorkOrderEquipment::create($inputs);
