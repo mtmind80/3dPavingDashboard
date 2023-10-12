@@ -18,7 +18,7 @@ class WorkorderTimesheets extends Model
 
     public $fillable = [
         'proposal_id',
-        'proposal_details_id',
+        'proposal_detail_id',
         'employee_id',
         'created_by',
         'report_date',
@@ -72,7 +72,7 @@ class WorkorderTimesheets extends Model
 
     public function proposalDetails()
     {
-        return $this->belongsTo(ProposalDetail::class, 'proposal_details_id');
+        return $this->belongsTo(ProposalDetail::class, 'proposal_detail_id');
     }
 
     public function proposal()
