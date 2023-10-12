@@ -107,6 +107,11 @@ class Proposal extends Model
         return $this->hasOne(User::class, 'id', 'salesmanager_id');
     }
 
+    public function payments()
+    {
+        return $this->hasMany(Payments::class, 'id', 'proposal_id');
+
+    }
     public function location()
     {
         return $this->belongsTo(Location::class);

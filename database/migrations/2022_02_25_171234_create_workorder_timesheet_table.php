@@ -17,7 +17,7 @@ class CreateWorkorderTimesheetTable extends Migration
             $table->engine = 'InnoDB';
             $table->id();
             $table->unsignedBigInteger('proposal_id');
-            $table->unsignedBigInteger('proposal_details_id');
+            $table->unsignedBigInteger('proposal_detail_id');
             $table->unsignedBigInteger('employee_id');
             $table->unsignedBigInteger('created_by');
             $table->date('report_date');
@@ -25,8 +25,10 @@ class CreateWorkorderTimesheetTable extends Migration
             $table->dateTime('end_time');
             $table->unsignedDouble('actual_hours')->default(0);
             $table->float('rate',8,2, true); //money
-            
             $table->timestamps();
+
+            $table->foreign('proposal_id')->references('id')->on('proposals');
+            $table->foreign('proposal_detail_id')->references('id')->on('proposal_details');
             $table->foreign('employee_id')->references('id')->on('users');
             $table->foreign('created_by')->references('id')->on('users');
         });
