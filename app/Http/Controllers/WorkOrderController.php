@@ -153,6 +153,29 @@ class WorkOrderController extends Controller
 
     }
 
+    public function changeorder($id)
+    {
+        $workorder = WorkOrder::where('id' , '=', $id)->first();
+
+            $proposal = new Proposal();
+        // set the job id when converted to a work order
+       // $proposal->job_master_id = $workorder->job_master_id;
+        $proposal->name = $workorder->name;
+        $proposal->proposal_statuses_id = 1;
+        $proposal->proposal_date  = $workorder->proposal_date;
+        $proposal->sale_date = $workorder->sale_date;
+        $proposal->created_by = auth()->user()->id;
+        $proposal->contact_id = $workorder->contact_id;
+        $proposal->customer_staff_id = $workorder->customer_staff_id;
+        $proposal->salesmanager_id = $workorder->salesmanager_id;
+        $proposal->salesperson_id = $workorder->salesperson_id;
+        $proposal->location_id = $workorder->location_id;
+        $proposal->lead_id = $workorder->lead_id;
+        $proposal->changeorder = $workorder->id;
+        $proposal->save();
+
+        return route('show_proposal', ['id'=>$proposal->id])->with('success', 'Change Order Created for Job.');
+    }
 
     public function doassignmanager(Request $request, $id, $detail_id)
     {

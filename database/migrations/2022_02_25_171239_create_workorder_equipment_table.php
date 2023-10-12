@@ -24,7 +24,8 @@ class CreateWorkorderEquipmentTable extends Migration
             $table->unsignedBigInteger('created_by');
             $table->unsignedDouble('hours')->nullable();
             $table->unsignedDouble('number_of_units')->nullable();
-            $table->float('rate_per_hour',8,2, true)->default(0);
+            $table->enum('rate_type',['per hour','per day']);
+            $table->float('rate',8,2, true)->default(0);
             $table->timestamps();
         });
     }
