@@ -63,11 +63,9 @@ Route::group(['middleware' => ['auth']], function() {
         Route::post('/{id}/{detail_id}/doassignmanager', 'WorkOrderController@doassignmanager')->name('doassignmanager');
         Route::post('/{work_order}/add-note', 'WorkOrderController@storeNote')->name('workorder_note_store');
         Route::get('/view_service/{proposal_id}/{id}', 'WorkOrderController@view_service')->name('view_service');
-    });
 
-    /** END workorders */
 
-    /*************** Timesheets  ***************/
+        /*************** Timesheets  ***************/
 
         Route::group(['prefix' => 'timesheets'], function() {
             Route::get('/{proposal_detail_id}/list', 'WorkOrderTimesheetsController@index')->name('workorder_timesheet_list');
@@ -131,8 +129,20 @@ Route::group(['middleware' => ['auth']], function() {
         });
         /** END Contractors */
 
+
+        /*************** Details  ***************/
+
+        Route::group(['prefix' => 'details'], function() {
+            Route::get('/{proposal_detail_id}', 'WorkOrderDetailsController@details')->name('workorder_details');
+
+            // timesheets:   ajaxStore
+            Route::post('/ajax-timesheet-store', 'WorkOrderDetailsController@ajaxTimeSheetStore')->name('ajax_workorder_timesheet_store');
+            Route::post('/ajax-timesheet-destroy', 'WorkOrderDetailsController@ajaxTimeSheetDestroy')->name('ajax_workorder_timesheet_destroy');
+        });
+        /** END Details */
     });
-    /** END Workorders */
+});
+/** END Workorders */
 
 
 /*************** Permits  ***************/

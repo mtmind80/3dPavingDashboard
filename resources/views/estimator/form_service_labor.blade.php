@@ -19,6 +19,7 @@
 <!-- input fields values row -->
 <form method="POST" action="#" accept-charset="UTF-8" id="labor_form" class="admin-form">
     @csrf
+    <input type='hidden' name='id' value='0'>
     <div class="row">
         <div class="col-sm-3 admin-form-item-widget">
             <x-form-select name="labor_id"
