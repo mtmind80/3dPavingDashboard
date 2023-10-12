@@ -216,7 +216,7 @@
                                     <tr>
                                         <td>Create Change Order</td>
                                         <td>
-                                            <a href="Javascript:AREYOUSURE('You want to create a change order for this workorder? Are you sure?','{{route('contact_details',['contact'=>$proposal['customer_staff_id']])}}');" title="Create Change Order for this Work Order">Create Change Order</a>
+                                            <a href="Javascript:AREYOUSURE('You want to create a change order for this workorder? Are you sure?','{{route('create_changeorder',['id'=>$proposal['id']])}}');" title="Create Change Order for this Work Order">Create Change Order</a>
 
                                         </td>
                                     </tr>
