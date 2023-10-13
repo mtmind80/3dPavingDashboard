@@ -93,7 +93,6 @@
                                 <th class="tc w100">@lang('translation.action')</th>
                             </tr>
                             </thead>
-
                             <tbody>
                                 @foreach ($equipments as $equipment)
                                     <tr {{ !empty($equipment->status->color) ? ' style=background-color:#'.$equipment->status->color.' ' : '' }}data-id="{{ $equipment->id }}">

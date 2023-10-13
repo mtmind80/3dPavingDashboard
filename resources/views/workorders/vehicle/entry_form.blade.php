@@ -55,9 +55,10 @@
                                 ></x-form-select>
                             </div>
                             <div class="col-lg-2 col-md-2 col-sm-5 admin-form-item-widget">
-                                <x-form-text name="number_of_vehicles"
-                                     class="check-contact"
-                                     :params="[
+                                <x-form-text
+                                    name="number_of_vehicles"
+                                    class="check-contact"
+                                    :params="[
                                         'label'     => 'Number of Vehicles',
                                         'iconClass' => 'fas fa-bookmark',
                                         'required'  => true,
