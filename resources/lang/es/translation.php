@@ -396,6 +396,7 @@ return [
     "set" => "Definir",
     "alert" => "Alerta",
     "print" => "Imprimir",
-    "overhead" => "Overhead",
-    "percentage" => "Percentage",
+    "overhead" => "Por encima",
+    "percentage" => "Porciento",
+    "list" => "Lista",
     ];

@@ -22,7 +22,7 @@ class WorkOrderTimesheetsController extends Controller
         $reportDate = !empty($request->report_date) ? Carbon::createFromFormat('m/d/Y', $request->report_date) : null;
 
         if (!empty($reportDate)) {
-            $timeSheets = WorkorderTimesheets::where('proposal_details_id', $proposal_detail_id)
+            $timeSheets = WorkorderTimesheets::where('proposal_detail_id', $proposal_detail_id)
                 ->where('report_date', $reportDate->format('Y-m-d'))
                 ->with(['employee' => function($q){
                     $q->orderBy('fname')->orderBy('lname');
@@ -69,12 +69,12 @@ class WorkOrderTimesheetsController extends Controller
     {
         $workorderTimesheet = WorkorderTimesheets::find($workorder_timesheet_id);
 
-        $proposal_details_id = $workorderTimesheet->proposal_details_id;
+        $proposal_detail_id = $workorderTimesheet->proposal_detail_id;
         $report_date = $workorderTimesheet->report_date;
 
         $workorderTimesheet->delete();
 
-        return redirect()->route('workorder_timesheet_entry_form', ['proposal_detail_id' => $proposal_details_id, 'report_date' => $report_date->format('m/d/Y')])->with('success', 'Timesheet entry removed.');
+        return redirect()->route('workorder_timesheet_entry_form', ['proposal_detail_id' => $proposal_detail_id, 'report_date' => $report_date->format('m/d/Y')])->with('success', 'Timesheet entry removed.');
     }
 
 }
