@@ -55,22 +55,24 @@
                                 ></x-form-select>
                             </div>
                             <div class="col-lg-2 col-md-2 col-sm-5 admin-form-item-widget">
-                                <x-form-text name="cost"
-                                     class="check-contact"
-                                     :params="[
-                                        'label'     => 'Cost',
+                                <x-form-text
+                                    name="cost"
+                                    class="check-contact"
+                                    :params="[
+                                        'label' => 'Cost',
                                         'iconClass' => 'fas fa-dollar-sign',
-                                        'required'  => true,
+                                        'required' => true,
                                     ]"
                                 ></x-form-text>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-7 admin-form-item-widget">
-                                <x-form-textarea name="description"
-                                     class="check-contact"
-                                         :params="[
-                                        'label'     => 'Description',
+                                <x-form-textarea
+                                    name="description"
+                                    class="check-contact"
+                                    :params="[
+                                        'label' => 'Description',
                                         'iconClass' => 'fa fa-bookmark',
-                                        'required'  => true,
+                                        'required' => true,
                                     ]"
                                 ></x-form-textarea>
                             </div>
