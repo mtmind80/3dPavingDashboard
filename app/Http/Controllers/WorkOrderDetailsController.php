@@ -1,0 +1,528 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Helpers\Currency;
+use App\Models\Contractor;
+use App\Models\Equipment;
+use App\Models\Material;
+use App\Models\User;
+use App\Models\Vehicle;
+use App\Models\ProposalDetail;
+use App\Models\WorkorderEquipment;
+use App\Models\WorkorderMaterial;
+use App\Models\WorkorderSubcontractor;
+use App\Models\WorkorderTimesheets;
+use App\Models\WorkorderVehicle;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Validator;
+
+class WorkOrderDetailsController extends Controller
+{
+    public function details($proposal_detail_id, Request $request)
+    {
+        if (!$proposalDetail = ProposalDetail::with([
+            'proposal',
+            'service',
+            'vehicles',
+            'labor',
+            'equipment',
+            'subcontractors',
+        ])->find($proposal_detail_id)
+        ) {
+            abort(404);
+        }
+
+        $reportDate = Carbon::createFromFormat('m/d/Y', $request->report_date ?? now(config('app.timezone'))->format('m/d/Y'));
+
+        // time sheets
+
+        if (!empty($reportDate)) {
+            $timeSheets = WorkorderTimesheets::where('proposal_detail_id', $proposal_detail_id)
+                ->where('report_date', $reportDate->toDateString())
+                ->with(['employee' => function ($q) {
+                    $q->orderBy('fname')->orderBy('lname');
+                }])
+                ->get();
+        }
+
+        // equipment
+
+        if (!empty($reportDate)) {
+            $equipments = WorkorderEquipment::where('proposal_detail_id', $proposal_detail_id)
+                ->where('report_date', $reportDate->toDateString())
+                ->orderBy('name')
+                ->get();
+        }
+
+        // materials
+
+        if (!empty($reportDate)) {
+            $materials = WorkorderMaterial::where('proposal_detail_id', $proposal_detail_id)
+                ->where('report_date', $reportDate->toDateString())
+                ->orderBy('name')
+                ->get();
+        }
+
+        // vehicles
+
+        if (!empty($reportDate)) {
+            $vehicles = WorkorderVehicle::where('proposal_detail_id', $proposal_detail_id)
+                ->where('report_date', $reportDate->toDateString())
+                ->orderBy('vehicle_name')
+                ->get();
+        }
+
+        // subcontractors
+
+        if (!empty($reportDate)) {
+            $subcontractors = WorkorderSubcontractor::where('proposal_detail_id', $proposal_detail_id)
+                ->where('report_date', $reportDate->toDateString())
+                ->with(['subcontractor' => function ($q) {
+                    $q->orderBy('name');
+                }])
+                ->get();
+        }
+
+        $data = [
+            'proposalDetail' => $proposalDetail,
+            'reportDate' => $reportDate,
+            'returnTo' => route('show_workorder', ['id' => $proposalDetail->proposal_id]),
+            'currentUrl' => route('workorder_details', ['proposal_detail_id' => $proposalDetail->id]),
+            'tabSelected' => 'services',
+
+            // time sheets
+            'timeSheets' => $timeSheets ?? null,
+            'employeesCB' => User::employeesCB(['0' => 'Select employee']),
+            // equipment
+            'equipments' => $equipments ?? null,
+            'equipmentCB' => Equipment::equipmentCB(['0' => 'Select equipment']),
+            // materials
+            'materials' => $materials ?? null,
+            'materialsCB' => Material::materialsCB(['0' => 'Select material']),
+            // vehicles:
+            'vehicles' => $vehicles ?? null,
+            'vehiclesCB' => Vehicle::vehiclesCB(['0' => 'Select vehicle']),
+            // subcontractors:
+            'subcontractors' => $subcontractors ?? null,
+            'contractorsCB' => Contractor::contractorsCB(['0' => 'Select contractor']),
+        ];
+
+        return view('workorders.details', $data);
+    }
+
+    // Timesheets
+
+    public function ajaxTimeSheetStore(Request $request)
+    {
+        if ($request->isMethod('post') && $request->ajax()) {
+            $inputs = $request->only(['report_date', 'proposal_id', 'proposal_detail_id', 'employee_id', 'start_time', 'end_time']);
+
+            $validator = Validator::make(
+                $inputs, [
+                    'report_date' => 'required|date',
+                    'proposal_id' => 'required|positive',
+                    'proposal_detail_id' => 'required|positive',
+                    'employee_id' => 'required|positive',
+                    'start_time' => 'required|time',
+                    'end_time' => 'required|time',
+                ]
+            );
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $validator->messages()->first(),
+                ]);
+            }
+
+            $employee = User::find($request->employee_id);
+
+            $inputs['rate'] = $employee->rate_per_hour;
+            $inputs['report_date'] = Carbon::createFromFormat('m/d/Y', $request->report_date);
+            $inputs['start_time'] = Carbon::createFromFormat('m/d/Y g:i A', $request->report_date . ' ' . $request->start_time);
+            $inputs['end_time'] = Carbon::createFromFormat('m/d/Y g:i A', $request->report_date . ' ' . $request->end_time);
+            $inputs['actual_hours'] = round($inputs['start_time']->floatDiffInHours($inputs['end_time']), 2);
+            $inputs['created_by'] = auth()->user()->id;
+
+            $workOrderTimesheet = WorkOrderTimeSheets::create($inputs);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'New timesheet added.',
+                'data' => [
+                    'id' => $workOrderTimesheet->id,
+                    'employee_full_name' => $employee->full_name ?? '',
+                    'html_start' => $workOrderTimesheet->html_start,
+                    'html_finish' => $workOrderTimesheet->html_finish,
+                    'actual_hours' => $workOrderTimesheet->actual_hours,
+                ],
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid request.',
+            ]);
+        }
+    }
+
+    public function ajaxTimeSheetDestroy(Request $request)
+    {
+        if ($request->isMethod('post') && $request->ajax()) {
+            $validator = Validator::make(
+                $request->only(['timesheet_id']), [
+                    'timesheet_id' => 'required|positive',
+                ]
+            );
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $validator->messages()->first(),
+                ]);
+            }
+
+            WorkorderTimesheets::destroy($request->timesheet_id);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Timesheet deleted.',
+                'timesheet_id' => $request->timesheet_id,
+            ]);
+
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid request.',
+            ]);
+        }
+    }
+
+    // equipment
+
+    public function ajaxEquipmentStore(Request $request)
+    {
+        if ($request->isMethod('post') && $request->ajax()) {
+            $inputs = $request->only(['report_date', 'proposal_id', 'proposal_detail_id', 'equipment_id', 'hours', 'number_of_units']);
+
+            $validator = Validator::make(
+                $inputs, [
+                    'report_date' => 'required|date',
+                    'proposal_id' => 'required|positive',
+                    'proposal_detail_id' => 'required|positive',
+                    'equipment_id' => 'required|positive',
+                    'hours' => 'required|float',
+                    'number_of_units' => 'required|positive',
+                ]
+            );
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $validator->messages()->first(),
+                ]);
+            }
+
+            $equipment = Equipment::find($request->equipment_id);
+
+            $inputs['name'] = $equipment->name;
+            $inputs['rate_type'] = $equipment->rate_type;
+            $inputs['rate'] = $equipment->rate;
+            $inputs['created_by'] = auth()->user()->id;
+
+            $workOrderEquipment = WorkOrderEquipment::create($inputs);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'New equipment added.',
+                'data' => [
+                    'id' => $workOrderEquipment->id,
+                    'equipment_name' => $equipment->name ?? '',
+                    'hours' => $workOrderEquipment->hours,
+                    'rate_type' => $workOrderEquipment->rate_type,
+                    'html_rate' => $workOrderEquipment->html_rate,
+                    'number_of_units' => $workOrderEquipment->number_of_units,
+                ],
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid request.',
+            ]);
+        }
+    }
+
+    public function ajaxEquipmentDestroy(Request $request)
+    {
+        if ($request->isMethod('post') && $request->ajax()) {
+            $validator = Validator::make(
+                $request->only(['equipment_id']), [
+                    'equipment_id' => 'required|positive',
+                ]
+            );
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $validator->messages()->first(),
+                ]);
+            }
+
+            WorkorderEquipment::destroy($request->equipment_id);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Entry deleted.',
+                'equipment_id' => $request->equipment_id,
+            ]);
+
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid request.',
+            ]);
+        }
+    }
+
+    // materials
+
+    public function ajaxMaterialStore(Request $request)
+    {
+        if ($request->isMethod('post') && $request->ajax()) {
+            $inputs = $request->only(['report_date', 'proposal_id', 'proposal_detail_id', 'material_id', 'quantity', 'note']);
+
+            $validator = Validator::make(
+                $inputs, [
+                    'report_date' => 'required|date',
+                    'proposal_id' => 'required|positive',
+                    'proposal_detail_id' => 'required|positive',
+                    'material_id' => 'required|positive',
+                    'quantity' => 'required|float',
+                    'note' => 'nullable|text',
+                ]
+            );
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $validator->messages()->first(),
+                ]);
+            }
+
+            $material = Material::find($request->material_id);
+
+            $inputs['report_date'] = Carbon::createFromFormat('m/d/Y', $request->report_date);
+            $inputs['name'] = $material->name;
+            $inputs['cost'] = $material->cost;
+            $inputs['created_by'] = auth()->user()->id;
+
+            $workOrderMaterial = WorkOrderMaterial::create($inputs);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'New material added.',
+                'data' => [
+                    'id' => $workOrderMaterial->id,
+                    'material_name' => $material->name ?? '',
+                    'quantity' => $workOrderMaterial->quantity,
+                    'html_total_cost' => Currency::format($workOrderMaterial->quantity * $workOrderMaterial->cost),
+                    'note' => $workOrderMaterial->note ?? '',
+                ],
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid request.',
+            ]);
+        }
+    }
+
+    public function ajaxMaterialDestroy(Request $request)
+    {
+        if ($request->isMethod('post') && $request->ajax()) {
+            $validator = Validator::make(
+                $request->only(['material_id']), [
+                    'material_id' => 'required|positive',
+                ]
+            );
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $validator->messages()->first(),
+                ]);
+            }
+
+            WorkorderMaterial::destroy($request->material_id);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Material deleted.',
+                'material_id' => $request->material_id,
+            ]);
+
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid request.',
+            ]);
+        }
+    }
+
+    // vehicles
+
+    public function ajaxVehicleStore(Request $request)
+    {
+        if ($request->isMethod('post') && $request->ajax()) {
+            $inputs = $request->only(['report_date', 'proposal_id', 'proposal_detail_id', 'vehicle_id', 'number_of_vehicles', 'note']);
+
+            $validator = Validator::make(
+                $inputs, [
+                    'report_date' => 'required|date',
+                    'proposal_id' => 'required|positive',
+                    'proposal_detail_id' => 'required|positive',
+                    'vehicle_id' => 'required|positive',
+                    'number_of_vehicles' => 'required|float',
+                    'note' => 'nullable|text',
+                ]
+            );
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $validator->messages()->first(),
+                ]);
+            }
+
+            $vehicle = Vehicle::find($request->vehicle_id);
+
+            $inputs['report_date'] = Carbon::createFromFormat('m/d/Y', $request->report_date);
+            $inputs['vehicle_name'] = $vehicle->name;
+            $inputs['created_by'] = auth()->user()->id;
+
+            $workOrderVehicle = WorkOrderVehicle::create($inputs);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'New vehicle added.',
+                'data' => [
+                    'id' => $workOrderVehicle->id,
+                    'vehicle_name' => $vehicle->name ?? '',
+                    'number_of_vehicles' => $workOrderVehicle->number_of_vehicles,
+                    'note' => $workOrderVehicle->note ?? '',
+                ],
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid request.',
+            ]);
+        }
+    }
+
+    public function ajaxVehicleDestroy(Request $request)
+    {
+        if ($request->isMethod('post') && $request->ajax()) {
+            $validator = Validator::make(
+                $request->only(['vehicle_id']), [
+                    'vehicle_id' => 'required|positive',
+                ]
+            );
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $validator->messages()->first(),
+                ]);
+            }
+
+            WorkorderVehicle::destroy($request->vehicle_id);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Vehicle deleted.',
+                'vehicle_id' => $request->vehicle_id,
+            ]);
+
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid request.',
+            ]);
+        }
+    }
+
+    // subcontractors
+
+    public function ajaxSubcontractorStore(Request $request)
+    {
+        if ($request->isMethod('post') && $request->ajax()) {
+            $inputs = $request->only(['report_date', 'proposal_id', 'proposal_detail_id', 'contractor_id', 'cost', 'description']);
+
+            $validator = Validator::make(
+                $inputs, [
+                    'report_date' => 'required|date',
+                    'proposal_id' => 'required|positive',
+                    'proposal_detail_id' => 'required|positive',
+                    'contractor_id' => 'required|positive',
+                    'cost' => 'required|float',
+                    'description' => 'required|text',
+                ]
+            );
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $validator->messages()->first(),
+                ]);
+            }
+
+            $contractor = Contractor::find($request->contractor_id);
+
+            $inputs['report_date'] = Carbon::createFromFormat('m/d/Y', $request->report_date);
+            $inputs['created_by'] = auth()->user()->id;
+
+            $workOrderSubcontractor = WorkOrderSubcontractor::create($inputs);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'New subcontractor added.',
+                'data' => [
+                    'id' => $workOrderSubcontractor->id,
+                    'subcontractor_name' => $contractor->name,
+                    'cost' => $workOrderSubcontractor->html_cost,
+                    'description' => $workOrderSubcontractor->description,
+                ],
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid request.',
+            ]);
+        }
+    }
+
+    public function ajaxSubcontractorDestroy(Request $request)
+    {
+        if ($request->isMethod('post') && $request->ajax()) {
+            $validator = Validator::make(
+                $request->only(['subcontractor_id']), [
+                    'subcontractor_id' => 'required|positive',
+                ]
+            );
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $validator->messages()->first(),
+                ]);
+            }
+
+            WorkorderSubcontractor::destroy($request->subcontractor_id);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Subcontractor deleted.',
+                'subcontractor_id' => $request->subcontractor_id,
+            ]);
+
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid request.',
+            ]);
+        }
+    }
+
+}

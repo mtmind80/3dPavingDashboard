@@ -25,7 +25,6 @@
                     @endif
                 </div>
             </div>
-            <!--  entry form  -->
 
             <div class="card">
                 <div class="card-body">
@@ -33,7 +32,7 @@
                     <form method="POST" action="{{ route('workorder_timesheet_store') }}" accept-charset="UTF-8" id="adminForm" class="admin-form">
                         @csrf
                         <input type="hidden" name="proposal_id" id="proposal_id" value="{{ $proposalDetail->proposal_id ?? null }}">
-                        <input type="hidden" name="proposal_details_id" id="proposal_details_id" value="{{ $proposalDetail->id ?? null }}">
+                        <input type="hidden" name="proposal_detail_id" id="proposal_detail_id" value="{{ $proposalDetail->id ?? null }}">
 
                         <div class="row">
                             <div class="col-lg-3 col-md-3 col-sm-6 admin-form-item-widget">
@@ -77,7 +76,6 @@
                                 ></x-form-time-picker>
                             </div>
                         </div>
-
                         <div class="row buttons">
                             <div class="col-sm-12 tr">
                                 <x-button id="cancel_button" class="btn-light"><i
@@ -90,51 +88,56 @@
                 </div>
             </div>
 
-            <!-- entry list -->
-            @if (!empty($timeSheets))
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="mb-4">@lang('translation.timesheet')</h5>
-                        <table class="list-table table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                            <thead>
-                            <tr>
-                                <th class="tc">Employeee</th>
-                                <th class="tc w200">Start</th>
-                                <th class="tc w200">Finish</th>
-                                <th class="tc w200">Hours</th>
-                                <th class="tc w100">@lang('translation.action')</th>
-                            </tr>
-                            </thead>
+            @if (!empty($reportDate))
 
-                            <tbody>
-                                @foreach ($timeSheets as $timeSheet)
-                                    <tr {{ !empty($timeSheet->status->color) ? ' style=background-color:#'.$timeSheet->status->color.' ' : '' }}data-id="{{ $timeSheet->id }}">
-                                        <td class="tc">{{ $timeSheet->employee->full_name ?? null }}</td>
-                                        <td class="tc">{{ $timeSheet->html_start }}</td>
-                                        <td class="tc">{{ $timeSheet->html_finish }}</td>
-                                        <td class="tc">{{ $timeSheet->actual_hours }}</td>
-                                        <td class="centered">
-                                            <form action="{{ route('workorder_timesheet_destroy',['workorder_timesheet_id' => $timeSheet->id]) }}" method="post">
-                                                @csrf
-                                                <input name="_method" type="hidden" value="DELETE">
-                                                <button class="btn p0 btn-danger tc" type="submit" data-toggle="tooltip" title="Delete item"><i class="far fa-trash-alt dib m0 plr5"></i></button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                <!-- timesheets -->
+                @if (!empty($timeSheets))
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="mb-4">@lang('translation.timesheet')</h5>
+                            <table class="list-table table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                <thead>
+                                <tr>
+                                    <th class="tc">Employeee</th>
+                                    <th class="tc w200">Start</th>
+                                    <th class="tc w200">Finish</th>
+                                    <th class="tc w200">Hours</th>
+                                    <th class="tc w100">@lang('translation.action')</th>
+                                </tr>
+                                </thead>
 
-                        <x-paginator
-                            :collection="$timeSheets"
-                            route-name="workorder_timesheet_list"
-                            :params="[
-                                    'route_params' => ['proposal_detail_id' => $proposalDetail->id],
-                                    'pageLimits' => [25, 50, 100],
-                                ]"
-                        ></x-paginator>
+                                <tbody>
+                                    @foreach ($timeSheets as $timeSheet)
+                                        <tr {{ !empty($timeSheet->status->color) ? ' style=background-color:#'.$timeSheet->status->color.' ' : '' }}data-id="{{ $timeSheet->id }}">
+                                            <td class="tc">{{ $timeSheet->employee->full_name ?? null }}</td>
+                                            <td class="tc">{{ $timeSheet->html_start }}</td>
+                                            <td class="tc">{{ $timeSheet->html_finish }}</td>
+                                            <td class="tc">{{ $timeSheet->actual_hours }}</td>
+                                            <td class="centered">
+                                                <form action="{{ route('workorder_timesheet_destroy',['workorder_timesheet_id' => $timeSheet->id]) }}" method="post">
+                                                    @csrf
+                                                    <input name="_method" type="hidden" value="DELETE">
+                                                    <button class="btn p0 btn-danger tc" type="submit" data-toggle="tooltip" title="Delete item"><i class="far fa-trash-alt dib m0 plr5"></i></button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+
+                            <x-paginator
+                                :collection="$timeSheets"
+                                route-name="workorder_timesheet_list"
+                                :params="[
+                                        'route_params' => ['proposal_detail_id' => $proposalDetail->id],
+                                        'pageLimits' => [25, 50, 100],
+                                    ]"
+                            ></x-paginator>
+                        </div>
                     </div>
-                </div>
+                @endif
+            @else
+
             @endif
         </div>
     </div>

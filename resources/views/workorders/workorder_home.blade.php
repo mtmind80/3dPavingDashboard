@@ -216,7 +216,7 @@
                                     <tr>
                                         <td>Create Change Order</td>
                                         <td>
-                                            <a href="Javascript:AREYOUSURE('You want to create a change order for this workorder? Are you sure?','{{route('contact_details',['contact'=>$proposal['customer_staff_id']])}}');" title="Create Change Order for this Work Order">Create Change Order</a>
+                                            <a href="Javascript:AREYOUSURE('You want to create a change order for this workorder? Are you sure?','{{route('create_changeorder',['id'=>$proposal['id']])}}');" title="Create Change Order for this Work Order">Create Change Order</a>
 
                                         </td>
                                     </tr>
@@ -288,7 +288,7 @@
                                                                 <ul class="dropdown-menu animated animated-short flipInX" role="menu">
                                                                     <li>
                                                                         <a href="{{ route('workorder_timesheet_entry_form', ['proposal_detail_id' => $service->id]) }}">
-                                                                            <span class="fas fa-pallet mr10"></span>@lang('translation.timesheet')
+                                                                            <span class="fas fa-clock mr10"></span>@lang('translation.timesheet')
                                                                         </a>
                                                                     </li>
                                                                     <li>
@@ -330,7 +330,7 @@
                                                                     <li>
                                                                         <a href="{{route('workordermedia', ['proposal_id'=>$proposal['id'], 'proposal_detail_id'=>$service->id])}}"
                                                                            class="list-group-item-action">
-                                                                            <span class="far fa-eye"></span>
+                                                                            <span class="fa fa-upload"></span>
                                                                             &nbsp; @lang('translation.upload')
                                                                         </a>
                                                                     </li>
@@ -339,6 +339,11 @@
                                                                            class="list-group-item-action">
                                                                             <span class="far fa-address-book"></span>
                                                                             &nbsp; @lang('translation.fieldmanager')
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="{{ route('workorder_details', ['proposal_detail_id' => $service->id]) }}">
+                                                                            <span class="fas fa-eye mr10"></span>@lang('translation.view') @lang('translation.details')
                                                                         </a>
                                                                     </li>
                                                                 </ul>
@@ -466,6 +471,8 @@
                                 <h3>@lang('translation.letters')</h3>
 
                                 <ul>
+                                    <li>Thank You For Signing</li>
+                                    <li>Change Order</li>
                                     <li>Service Begin Reminder</li>
                                     <li>MOT Reminder</li>
                                 </ul>

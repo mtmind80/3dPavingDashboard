@@ -57,16 +57,15 @@ Route::group(['middleware' => ['auth']], function() {
 
         Route::get('/', 'WorkOrderController@index')->name('workorders');
         Route::match(['get', 'post'], '/search', 'WorkOrderController@search')->name('workorder_search');
+        Route::get('/{id}/changeorder', 'WorkOrderController@changeorder')->name('create_changeorder');
         Route::get('/{id}/show', 'WorkOrderController@show')->name('show_workorder');
         Route::get('/{id}/{detail_id}/assignmanager', 'WorkOrderController@assignmanager')->name('assignmanager');
         Route::post('/{id}/{detail_id}/doassignmanager', 'WorkOrderController@doassignmanager')->name('doassignmanager');
         Route::post('/{work_order}/add-note', 'WorkOrderController@storeNote')->name('workorder_note_store');
         Route::get('/view_service/{proposal_id}/{id}', 'WorkOrderController@view_service')->name('view_service');
-    });
 
-    /** END workorders */
 
-    /*************** Timesheets  ***************/
+        /*************** Timesheets  ***************/
 
         Route::group(['prefix' => 'timesheets'], function() {
             Route::get('/{proposal_detail_id}/list', 'WorkOrderTimesheetsController@index')->name('workorder_timesheet_list');
@@ -130,8 +129,36 @@ Route::group(['middleware' => ['auth']], function() {
         });
         /** END Contractors */
 
+
+        /*************** Details  ***************/
+
+        Route::group(['prefix' => 'details'], function() {
+            Route::get('/{proposal_detail_id}', 'WorkOrderDetailsController@details')->name('workorder_details');
+
+            // timesheet:
+            Route::post('/ajax-timesheet-store', 'WorkOrderDetailsController@ajaxTimeSheetStore')->name('ajax_workorder_timesheet_store');
+            Route::post('/ajax-timesheet-destroy', 'WorkOrderDetailsController@ajaxTimeSheetDestroy')->name('ajax_workorder_timesheet_destroy');
+
+            // equipment:
+            Route::post('/ajax-equipment-store', 'WorkOrderDetailsController@ajaxEquipmentStore')->name('ajax_workorder_equipment_store');
+            Route::post('/ajax-equipment-destroy', 'WorkOrderDetailsController@ajaxEquipmentDestroy')->name('ajax_workorder_equipment_destroy');
+
+            // material:
+            Route::post('/ajax-material-store', 'WorkOrderDetailsController@ajaxMaterialStore')->name('ajax_workorder_material_store');
+            Route::post('/ajax-material-destroy', 'WorkOrderDetailsController@ajaxMaterialDestroy')->name('ajax_workorder_material_destroy');
+
+            // vehicle:
+            Route::post('/ajax-vehicle-store', 'WorkOrderDetailsController@ajaxVehicleStore')->name('ajax_workorder_vehicle_store');
+            Route::post('/ajax-vehicle-destroy', 'WorkOrderDetailsController@ajaxVehicleDestroy')->name('ajax_workorder_vehicle_destroy');
+
+            // subcontractor:
+            Route::post('/ajax-subcontractor-store', 'WorkOrderDetailsController@ajaxSubcontractorStore')->name('ajax_workorder_subcontractor_store');
+            Route::post('/ajax-subcontractor-destroy', 'WorkOrderDetailsController@ajaxSubcontractorDestroy')->name('ajax_workorder_subcontractor_destroy');
+        });
+        /** END Details */
     });
-    /** END Workorders */
+});
+/** END Workorders */
 
 
 /*************** Permits  ***************/

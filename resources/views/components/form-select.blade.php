@@ -13,7 +13,7 @@
             @endif
     >
         @foreach ($items as $key => $value)
-            <option value="{{ $key }}"{{ $key == $selected ? ' selected' : ''}} {{ empty($key) ? ' disabled' : ''}}>{{ $value }}</option>
+            <option value="{{ $key }}"{{ $key == $selected ? ' selected' : ''}} {{ $key === '' ? ' disabled' : ''}}>{{ $value }}</option>
         @endforeach
     </select>
     <i class="arrow double"></i>

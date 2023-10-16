@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\Currency;
 use Illuminate\Database\Eloquent\Model;
 
 class WorkorderSubcontractor extends Model
@@ -87,5 +88,10 @@ class WorkorderSubcontractor extends Model
     }
 
     /** Accessor(get) and Mutators(set) */
+
+    public function getHtmlCostAttribute()
+    {
+        return Currency::format($this->cost);
+    }
 
 }
