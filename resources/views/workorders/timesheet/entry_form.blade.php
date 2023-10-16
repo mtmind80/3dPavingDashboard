@@ -32,7 +32,7 @@
                     <form method="POST" action="{{ route('workorder_timesheet_store') }}" accept-charset="UTF-8" id="adminForm" class="admin-form">
                         @csrf
                         <input type="hidden" name="proposal_id" id="proposal_id" value="{{ $proposalDetail->proposal_id ?? null }}">
-                        <input type="hidden" name="proposal_details_id" id="proposal_details_id" value="{{ $proposalDetail->id ?? null }}">
+                        <input type="hidden" name="proposal_detail_id" id="proposal_detail_id" value="{{ $proposalDetail->id ?? null }}">
 
                         <div class="row">
                             <div class="col-lg-3 col-md-3 col-sm-6 admin-form-item-widget">

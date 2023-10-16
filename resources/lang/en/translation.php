@@ -404,4 +404,5 @@ return [
     "print" => "Print",
     "overhead" => "Overhead",
     "percentage" => "Percentage",
+    "list" => "List",
 ];

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\Currency;
 use App\Traits\SearchTrait;
 use App\Traits\SortableTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -25,13 +26,15 @@ class WorkorderEquipment extends Model
         'created_by',
         'hours',
         'number_of_units',
-        'rate_per_hour',
+        'rate_type',
+        'rate',
     ];
 
     public $sortable = [
         'report_date',
         'hours',
-        'rate_per_hour',
+        'rate_type',
+        'rate',
         'created_at',
         'workorder_equipment.proposal_id|proposals.name',
         'workorder_equipment.created_by|users.fname',
@@ -39,6 +42,8 @@ class WorkorderEquipment extends Model
 
     public $searchable = [
         'report_date'  => 'LIKE',
+        'rate_type'   => 'LIKE',
+        'rate'   => 'LIKE',
         'created_at'   => 'LIKE',
         'childModels' => [
             'proposal'     => [
@@ -88,5 +93,10 @@ class WorkorderEquipment extends Model
     }
 
     /** Accessor(get) and Mutators(set) */
+
+    public function getHtmlRateAttribute()
+    {
+        return Currency::format($this->rate);
+    }
 
 }
