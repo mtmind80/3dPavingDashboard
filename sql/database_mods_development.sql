@@ -1632,7 +1632,7 @@ where proposal_details.location_id is null;
 #You can drop table locations2 now
 DROP TABLE locations2;
 
-
+Update proposal_statuses set status = 'Presented To Client' where id =4;
 
 #run 
 #load fake data
