@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Helpers\Currency;
 use App\Scopes\WorkOrderScope;
+
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
@@ -33,6 +34,18 @@ class WorkOrder extends Proposal
     }
 
     // Relationships
+
+
+    public function permits()
+    {
+        $this->hasMany(Permit::class, 'proposal_id', 'id');
+
+    }
+    public function payment()
+    {
+        $this->hasMany(Payment::class, 'proposal_id', 'id');
+
+    }
 
     // Scopes:
 
@@ -124,4 +137,20 @@ class WorkOrder extends Proposal
         ];
     }
 
+
+    public function hasPayments()
+    {
+    //has at least one payment record
+
+    }
+
+    public function hasPermits()
+    {
+
+        //where proposal permit_required = true, then check has
+        // any permit record
+        //where status <> 'Completed' (see enums for this field)
+        //If all permits have a status 'completed' then return true else return false
+        // if proposal permit_required is true but there are No permit records the result is still false.
+    }
 }
