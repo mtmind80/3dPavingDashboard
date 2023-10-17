@@ -1,23 +1,23 @@
 @extends('layouts.master')
 
 @section('title')
-    3D Paving Proposals
+    3D Paving Work Orders
 @endsection
 
 @section('content')
 
     @component('components.breadcrumb')
         @slot('title')
-            @lang('translation.edit') @lang('translation.proposal')
+            @lang('translation.edit') @lang('translation.workorder')
         @endslot
         @slot('li_1')
             <a href="/dashboard">@lang('translation.Dashboard')</a>
         @endslot
         @slot('li_2')
-            <a href="/proposals">@lang('translation.Proposals')</a>
+            <a href="/workorders">@lang('translation.WorkOrders')</a>
         @endslot
         @slot('li_3')
-            @lang('translation.edit') @lang('translation.proposal')
+            @lang('translation.edit') @lang('translation.workorder')
         @endslot
     @endcomponent
 

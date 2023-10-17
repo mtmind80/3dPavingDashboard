@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PermitNoteRequest;
 use App\Http\Requests\PermitRequest;
 use App\Http\Requests\SearchRequest;
+
 use App\Models\Permit;
 use App\Models\PermitNote;
 use Illuminate\Http\Request;
@@ -14,6 +15,15 @@ use NumberFormatter;
 
 class PermitsController extends Controller
 {
+
+    public $statusCB = [
+        'Not Submitted' => 'Not Submitted',
+        'Submitted'     => 'Submitted',
+        'Under Review'  => 'Under Review',
+        'Approved'      => 'Approved',
+        'Comments'      => 'Comments',
+    ];
+
     public function index(Request $request)
     {
         $needle = $request->needle ?? null;
@@ -25,18 +35,9 @@ class PermitsController extends Controller
             ->with(['proposal'])
             ->paginate($perPage);
 
-        $statusCB = [
-            'Not Submitted' => 'Not Submitted',
-            'Submitted'     => 'Submitted',
-            'Under Review'  => 'Under Review',
-            'Approved'      => 'Approved',
-            'Comments'      => 'Comments',
-            'Completed'     => 'Completed',
-        ];
-
         $data = [
             'permits'  => $permits,
-            'statusCB' => $statusCB,
+            'statusCB' => $this->statusCB,
             'needle'   => $needle,
         ];
 
@@ -78,7 +79,7 @@ class PermitsController extends Controller
 
         ];
 
-        return view('permits.create', $data);
+        return view('permit.create', $data);
     }
 
     public function store(PermitRequest $request)
@@ -104,6 +105,7 @@ class PermitsController extends Controller
                 $q->with(['createdBy']);
             }, 'proposal', 'proposalDetail', 'createdBy']),
         ];
+        $data['statusCB'] = $this->statusCB;
 
         return view('permit.details', $data);
     }

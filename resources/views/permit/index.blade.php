@@ -43,7 +43,7 @@
                         @else
                             @foreach ($permits as $permit)
                                 <tr>
-                                    <td class="tc"><a href="{{ route('show_proposal', ['id' => $permit->proposal_id]) }}">{{ $permit->proposal->name }}</a>
+                                    <td class="tc"><a href="{{ route('show_workorder', ['id' => $permit->proposal_id]) }}">{{ $permit->proposal->name }}</a>
                                         <br/>{{ $permit->proposal->WorkOrderNumber }}
                                     </td>
                                     <td class="tc">{{ $permit->county }}</td>
@@ -97,8 +97,8 @@
                                                         </a>
                                                     </li>
                                                     <li>
-                                                        <a href="{{ route('show_proposal', ['id' => $permit->proposal_id]) }}">
-                                                            <span class="fas fa-eye"></span>@lang('translation.view') @lang('translation.proposal')
+                                                        <a href="{{ route('show_workorder', ['id' => $permit->proposal_id]) }}">
+                                                            <span class="fas fa-eye"></span>@lang('translation.view') @lang('translation.work_order')
                                                         </a>
                                                     </li>
                                                 </ul>

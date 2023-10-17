@@ -54,7 +54,8 @@
                                             <td class="tc text-dark fw-bold">
                                                 <a href="{{ route('show_workorder',['id'=>$workorder->id]) }}" title="@lang('translation.view')">
                                                     {{ $workorder->job_master_id }}
-                                                </a>
+                                                </a><br/>
+                                                {{ $workorder->id }}
                                             </td>
                                             <td class="tc">
                                                 <a href="{{ route('show_workorder',['id'=>$workorder->id]) }}" title="@lang('translation.view')">

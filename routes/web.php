@@ -57,12 +57,15 @@ Route::group(['middleware' => ['auth']], function() {
 
         Route::get('/', 'WorkOrderController@index')->name('workorders');
         Route::match(['get', 'post'], '/search', 'WorkOrderController@search')->name('workorder_search');
+        Route::get('/{id}/manage_permits', 'WorkOrderController@permits')->name('manage_permits');
+        Route::get('/{id}/make_payments', 'WorkOrderController@payments')->name('create_payment');
         Route::get('/{id}/changeorder', 'WorkOrderController@changeorder')->name('create_changeorder');
         Route::get('/{id}/show', 'WorkOrderController@show')->name('show_workorder');
         Route::get('/{id}/{detail_id}/assignmanager', 'WorkOrderController@assignmanager')->name('assignmanager');
         Route::post('/{id}/{detail_id}/doassignmanager', 'WorkOrderController@doassignmanager')->name('doassignmanager');
         Route::post('/{work_order}/add-note', 'WorkOrderController@storeNote')->name('workorder_note_store');
         Route::get('/view_service/{proposal_id}/{id}', 'WorkOrderController@view_service')->name('view_service');
+
 
 
         /*************** Timesheets  ***************/
