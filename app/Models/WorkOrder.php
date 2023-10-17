@@ -138,13 +138,13 @@ class WorkOrder extends Proposal
     }
 
 
-    public function hasPayments()
+    public function getHasPayments()
     {
     //has at least one payment record
 
     }
 
-    public function hasPermits()
+    public function getHasPermits()
     {
 
         //where proposal permit_required = true, then check has
