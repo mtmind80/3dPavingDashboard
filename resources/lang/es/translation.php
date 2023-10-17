@@ -399,4 +399,6 @@ return [
     "overhead" => "Por encima",
     "percentage" => "Porciento",
     "list" => "Lista",
-    ];
+    "fieldreport" => "Field Report",
+    "cantschedule" => "Can't Schedule",
+];

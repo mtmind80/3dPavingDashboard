@@ -67,7 +67,7 @@
                                 <div class="col-sm-12">
                                     <table width="100%" class="table-centered table-bordered font-size-20">
                                     <tr>
-                                    @if($proposal['IsEditable'])
+
                                             <td>
                                                 <a href="{{route('edit_proposal',['id'=> $proposal['id']])}}"
                                                    title="@lang('translation.edit') @lang('translation.proposal')"
@@ -75,14 +75,12 @@
                                                     <i class="fas fa-plus"></i> @lang('translation.edit') @lang('translation.proposal')
                                                 </a>
 
+                                                @if(!$proposal['IsEditable'])
+                                                    <br/><strong>Services are not editable.</strong>
+                                                @endif
+
                                             </td>
 
-                                    @else
-
-                                            <td class="alert-sucess">
-                                                <strong>Services are not editable.</strong>
-                                            </td>
-                                    @endif
 
                                         <td class="tc">
 
@@ -364,6 +362,7 @@
                                         <input type="hidden" name="proposal_id" value="{{$proposal['id']}}">
 
                                         <select id="proposalstatus" name="status" class="form-control-sm" onchange="Javascript:shownote(this);">
+                                            <option value="1">Reset Proposal to Pending</option>
                                             <option value="4">Proposal Sent to Client</option>
                                             <option value="2" selected>Client Approved Proposal</option>
                                                 <option value="3">Client Rejected Proposal (add reason)</option>

@@ -577,7 +577,7 @@ class ProposalController extends Controller
         //what kind of access do i have
         if(auth()->user()->isAdmin()) {
 
-            $proposal = Proposal::where('id', $id)->where('proposal_statuses_id', '=', 1)->first()->toArray();
+            $proposal = Proposal::where('id', $id)->whereIN('proposal_statuses_id', [1,4])->first()->toArray();
         } else {
 
             $proposal = Proposal::where('id', '=', $id)->where('proposal_statuses_id', '=', 1)->where(function($q) {
@@ -686,7 +686,7 @@ class ProposalController extends Controller
         $data['paginate'] = 1;
 
         if($proposalId) {
-            $records = Proposal::where('id', $proposalId)->where('proposal_statuses_id', '=', 1)->first();
+            $records = Proposal::where('id', $proposalId)->whereIN('proposal_statuses_id', [1,4])->first();
             $data['paginate'] = 0;
 
             if($records) {
@@ -914,6 +914,12 @@ class ProposalController extends Controller
 
         $proposal->proposal_statuses_id = $status;
 
+        if($status == 1) // Proposal sent
+        {
+            $note = "Proposal Reset to Pending";
+
+        }
+
         if($status == 2) // approved
         {
             // create job master id and set sale date to taday
@@ -954,9 +960,8 @@ class ProposalController extends Controller
         {
             return redirect()->route('dashboard')->with('success', 'Proposal was archived. See archived proposals.');
         }
-        //sent to customer
+        //reset to pending or sent to customer
         return redirect()->back()->with('success', 'Proposal status changed.');
-
 
     }
 

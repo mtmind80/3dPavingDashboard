@@ -33,71 +33,32 @@
                         @endif
                     </ul>
 
+                    @php
+                                print_r($statusCB);
+                    @endphp
+
                     <!-- Tab panes -->
                     <div class="tab-content plr0 pt30 pb0 text-muted">
                         <div class="tab-pane active" id="profile" role="tabpanel">
                             <div class="row">
-                                <div class="col-md-8 col-sm-6 mb20">
-                                    <x-href-button url="{{ route('permit_edit', ['permit' => $permit->id, 'returnTo' => Request::url(), 'tab' => 'profile']) }}" class="btn-info"><i class="fas fa-edit"></i>@lang('translation.edit')</x-href-button>
-                                </div>
-                                <div class="col-md-4 col-sm-6 mb20"></div>
-                            </div>
+                    <form method="post" action="{{route('permit_update',['permit'=>$permit->id])}}" id="permitform">
+                        @csrf
+                        <input type="hidden" name="id" value="{{$permit->id}}">
+                        <input type="hidden" name="proposal_detail_id" value="{{isset($permit->proposal_detail->id) ? $permit->proposal_detail->id : 0 }}">
+                        <input type="hidden" name="proposal_id" value="{{$permit->proposal->id}}">
                             <div class="row">
-                                <div class="col-lg-3 col-md-3 col-sm-6 admin-form-item-widget">
-                                    <x-form-show :params="['label' => 'Name', 'iconClass' => 'fas fa-user']">{{ $permit->full_name }}</x-form-show>
+                                <div class="col-lg-4">
+                                    <x-form-select name="status" :items="$statusCB" selected="{{ $permit->status ?? null }}"  :params="['label' => 'Status', 'required' => true]"></x-form-select>
+
                                 </div>
-                                <div class="col-lg-3 col-md-3 col-sm-6 admin-form-item-widget">
-                                    <x-form-show :params="['label' => 'Email', 'iconClass' => 'fas fa-envelope']">{{ $permit->email }}</x-form-show>
+                                <div class="col-lg-4">
+                                    <x-form-text name="type" : params="['label' => 'Type', 'iconClass' => 'fas fa-file','required' => true]">{{ $permit->type }}</x-form-text>
                                 </div>
-                                <div class="col-lg-3 col-md-3 col-sm-6 admin-form-item-widget">
-                                    <x-form-show :params="['label' => 'Phone', 'iconClass' => 'fas fa-phone']">{{ $permit->phone }}</x-form-show>
-                                </div>
-                                <div class="col-lg-3 col-md-3 col-sm-6 admin-form-item-widget">
-                                    <x-form-show :params="['label' => 'Status', 'iconClass' => 'fas fa-bookmark']">{{ $permit->status->status ?? null }}</x-form-show>
+                                <div class="col-lg-4">
+                                    <x-form-text name="number" :params="['label' => 'Number', 'iconClass' => 'fas fa-folder']">{{ $permit->number }}</x-form-text>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-lg-6 col-md-6 col-sm-12 admin-form-item-widget">
-                                    <x-form-show :params="['label' => 'Address', 'iconClass' => 'fas fa-building']">{{ $permit->full_address_one_line }}</x-form-show>
-                                </div>
-                                <div class="col-lg-3 col-md-3 col-sm-6 admin-form-item-widget">
-                                    <x-form-show :params="['label' => 'Previous Assigned To', 'iconClass' => 'fas fa-user']">{{ $permit->previousAssignedTo->full_name ?? null }}</x-form-show>
-                                </div>
-                                <div class="col-lg-3 col-md-3 col-sm-6 admin-form-item-widget">
-                                    <x-form-show :params="['label' => 'Assigned To', 'iconClass' => 'fas fa-user']">{{ $permit->assignedTo->full_name ?? null }}</x-form-show>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-2 col-md-3 col-sm-4 admin-form-item-widget">
-                                    <x-form-show :params="['label' => 'Worked Before', 'iconClass' => 'fas fa-question']">{{ $permit->worked_before ? 'Yes' : 'No' }}</x-form-show>
-                                </div>
-                                <div class="col-lg-10 col-md-9 col-sm-8 admin-form-item-widget">
-                                    <x-form-show :params="['label' => 'Worked Before Description', 'iconClass' => 'fas fa-bookmark']">{{ $permit->worked_before_description ?? null }}</x-form-show>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-12 col-md-12 col-sm-12 admin-form-item-widget">
-                                    <x-form-show :params="['label' => 'Type of Work Needed', 'iconClass' => 'fas fa-bookmark']">{{ $permit->type_of_work_needed ? 'Yes' : 'No' }}</x-form-show>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-3 col-md-4 col-sm-5 admin-form-item-widget">
-                                    <x-form-show :params="['label' => 'Permit Source', 'iconClass' => 'fas fa-bookmark']">{{ $permit->permit_source ? 'Yes' : 'No' }}</x-form-show>
-                                </div>
-                                <div class="col-lg-9 col-md-8 col-sm-7 admin-form-item-widget">
-                                    <x-form-show :params="['label' => 'How Related', 'iconClass' => 'fas fa-bookmark']">{{ $permit->how_related }}</x-form-show>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-2 col-md-3 col-sm-4 admin-form-item-widget">
-                                    <x-form-show :params="['label' => 'Onsite', 'iconClass' => 'fas fa-question']">{{ $permit->onsite ? 'Yes' : 'No' }}</x-form-show>
-                                </div>
-                                <div class="col-lg-6 col-md-5 col-sm-4 admin0xEe92902a284987283769F9350711f4A3369D34c2-form-item-widget">
-                                    <x-form-show :params="['label' => 'Best Days', 'iconClass' => 'fas fa-bookmark']">{{ $permit->best_days }}</x-form-show>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 admin-form-item-widget">
-                                    <x-form-show :params="['label' => 'Created By', 'iconClass' => 'fas fa-user']">{{ $permit->createdBy->full_name ?? null }}</x-form-show>
-                                </div>
+                                </form>
                             </div>
                             @if (!empty($permit->note))
                                 <div class="row">

@@ -138,19 +138,42 @@ class WorkOrder extends Proposal
     }
 
 
-    public function getHasPayments()
+    public function getHasPaymentsAttribute()
     {
+        return false;
     //has at least one payment record
 
     }
 
-    public function getHasPermits()
+    public function getHasPermitsAttribute()
     {
 
+        $permitOK = true; // by default permit ok is true
+
+        if($this->permit_required) // if permits are required then assume they are not completed
+        {
+            $permitOK = false;
+        }
+
+        //get all permits for this record
+        $permits = Permit::where('proposal_id', '=', $this->id)->get();
+        if(count($permits)) { // if there are permits entered assume they are all good before we check them
+            $permitOK = true;
+        }
+        foreach($permits as $permit) // check any permits to make sure they are all approved
+        {
+
+            if($permit->status != 'Approved') // if ANY permit is not approved then return false.
+            {
+                $permitOK = false;
+            }
+        }
         //where proposal permit_required = true, then check has
         // any permit record
-        //where status <> 'Completed' (see enums for this field)
-        //If all permits have a status 'completed' then return true else return false
+        //where status <> 'Approved' (see enums for this field)
+        //If all permits have a status 'Approved' then return true else return false
         // if proposal permit_required is true but there are No permit records the result is still false.
+        return $permitOK;
+
     }
 }
