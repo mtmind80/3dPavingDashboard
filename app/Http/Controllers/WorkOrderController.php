@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\SearchRequest;
 use App\Models\AcceptedDocuments;
 use App\Models\MediaType;
+use App\Models\Payment;
 use App\Models\Permit;
 use App\Models\Proposal;
 use App\Models\ProposalDetail;
@@ -101,17 +102,27 @@ class WorkOrderController extends Controller
         $data = array();
         //what kind of access do i have
         if (auth()->user()->isAdmin()) {
-            $proposal = Proposal::find($id);
+            $proposal = Workorder::find($id);
         } else {
 
-            $proposal = Proposal::where('id', '=', $id)->where(function ($q) {
+            $proposal = Workorder::where('id', '=', $id)->where(function ($q) {
                 $q->where('salesmanager_id', auth()->user()->id)->orWhere('salesperson_id', auth()->user()->id);
             })->first()->toArray();
-            // managers only show if I am on the proposal
+            // managers only show if I am on the Workorder
         }
 
 
         if ($proposal) {
+
+            $data['allowSchedule'] = false;
+
+            $data['permitsOK'] = $proposal['HasPermits'];
+            $data['paymentsOK'] = $proposal['HasPayments'];
+
+            if($data['paymentsOK'] && $data['permitsOK'])
+            {
+                $data['allowSchedule'] = true;
+            }
 
             $data['fieldmanagers'] = User::where('role_id', 6)->where('status', 1)->get()->toArray();
             $data['mediatypes'] = MediaType::all()->toArray();
@@ -135,7 +146,7 @@ class WorkOrderController extends Controller
             $data['services'] = $services;
             $data['notes'] = $notes;
 
-            return view('workorders.workorder_home', $data);
+                    return view('workorders.workorder_home', $data);
 
         }
         return view('pages-404');
@@ -198,6 +209,27 @@ class WorkOrderController extends Controller
 
     }
 
+
+    public function permits($id)
+    {
+        $workorder = WorkOrder::find($id)->first();
+        $permits = Permit::where('proposal_id','=',$id)->get()->toArray();
+        $data['permits'] = $permits;
+        $data['workorder'] = $workorder;
+        return view('workorders.permitmanager', $data);
+
+    }
+
+    public function payments($id)
+    {
+        $workorder = WorkOrder::find($id)->first();
+        $payments = Payment::where('proposal_id','=',$id)->get()->toArray();
+        $data['payments'] = $payments;
+        $data['workorder'] = $workorder;
+        return view('workorders.paymentmanager', $data);
+
+    }
+
     public function assignmanager($id, $detail_id)
     {
 
@@ -241,9 +273,29 @@ class WorkOrderController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        // edit workoder
+        $proposal_id = $request['proposal_id'];
+        $data['name'] = $request['name'];
+        $data['customer_staff_id'] = $request['customer_staff_id'];
+        $data['salesmanager_id'] = $request['salesmanager_id'];
+        $data['salesperson_id'] = $request['salesperson_id'];
+        $data['mot_required'] = $request['mot_required'] ?? 0;
+        $data['permit_required'] = $request['permit_required'] ?? 0;
+        $data['nto_required'] = $request['nto_required'] ?? 0;
+        $data['last_updated_by'] = auth()->user()->id;
+        try {
+            Proposal::whereId($proposal_id)->update($data);
+            \Session::flash('message', 'Your workorder was updated!');
+            return redirect()->route('show_workorder', ['id' => $proposal_id]);
+
+        } catch(exception $e) {
+            \Session::flash('message', 'Sorry no matching records were found!');
+            return redirect()->back();
+        }
+
+
     }
 
     /**

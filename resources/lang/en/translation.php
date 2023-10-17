@@ -405,4 +405,6 @@ return [
     "overhead" => "Overhead",
     "percentage" => "Percentage",
     "list" => "List",
-];
+    "fieldreport" => "Field Report",
+    "cantschedule" => "Can't Schedule",
+    ];

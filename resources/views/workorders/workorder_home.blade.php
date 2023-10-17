@@ -286,32 +286,8 @@
                                                             <li class="dropdown">
                                                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-angle-down"></i></a>
                                                                 <ul class="dropdown-menu animated animated-short flipInX" role="menu">
-                                                                    <li>
-                                                                        <a href="{{ route('workorder_timesheet_entry_form', ['proposal_detail_id' => $service->id]) }}">
-                                                                            <span class="fas fa-clock mr10"></span>@lang('translation.timesheet')
-                                                                        </a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a href="{{ route('workorder_equipment_entry_form', ['proposal_detail_id' => $service->id]) }}">
-                                                                            <span class="fas fa-gamepad mr10"></span>@lang('translation.equipment')
-                                                                        </a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a href="{{ route('workorder_material_entry_form', ['proposal_detail_id' => $service->id]) }}">
-                                                                            <span class="fas fa-sitemap mr10"></span>@lang('translation.materials')
-                                                                        </a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a href="{{ route('workorder_vehicle_entry_form', ['proposal_detail_id' => $service->id]) }}">
-                                                                            <span class="fas fa-car mr10"></span>@lang('translation.vehicle')
-                                                                        </a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a href="{{ route('workorder_subcontractor_entry_form', ['proposal_detail_id' => $service->id]) }}">
-                                                                            <span class="fas fa-user-friends mr10"></span>@lang('translation.subcontractors')
-                                                                        </a>
-                                                                    </li>
-                                                                    @if($service->status_id == 1)
+                                                                    @if($allowSchedule)
+                                                                        @if($service->status_id == 1)
                                                                         <li>
                                                                             <a href="{{route('schedule_service', ['service_id'=>$service->id])}}" class="action list-group-item-action">
                                                                                 <span class="far fa-calendar-check"></span>
@@ -326,6 +302,15 @@
                                                                                 &nbsp; @lang('translation.changeschedule')
                                                                             </a>
                                                                         </li>
+                                                                    @endif
+                                                                    @else
+                                                                        <li>
+                                                                            <a href="Javascript:alert('Until a deposit is recorded and all permits are completed you cannot schedule this work. Check Payments and Permits');"
+                                                                               class="list-group-item-action">
+                                                                                <span class="far fa-calendar-check"></span>
+                                                                                &nbsp; @lang('translation.cantschedule')
+                                                                            </a>                                                                        </li>
+
                                                                     @endif
                                                                     <li>
                                                                         <a href="{{route('workordermedia', ['proposal_id'=>$proposal['id'], 'proposal_detail_id'=>$service->id])}}"
@@ -343,7 +328,7 @@
                                                                     </li>
                                                                     <li>
                                                                         <a href="{{ route('workorder_details', ['proposal_detail_id' => $service->id]) }}">
-                                                                            <span class="fas fa-eye mr10"></span>@lang('translation.view') @lang('translation.details')
+                                                                            <span class="fas fa-eye mr10"></span>@lang('translation.fieldreport')
                                                                         </a>
                                                                     </li>
                                                                 </ul>
@@ -463,7 +448,14 @@
 
                                 <ul>
                                     <li>Set Alert</li>
-                                    <li>Change Status</li>
+                                    <li>Cancel Workorder</li>
+                                    <li>
+                                        <a href="{{route('create_payment',['id'=>$proposal['id']])}}">Record Payments</a>
+                                    </li>
+                                    @if($proposal->permit_required)
+                                        <li><a href="{{route('manage_permits',['id'=>$proposal['id']])}}">Manage Permits</a>
+                                        </li>
+                                    @endif
                                 </ul>
                             </div>
                             <div class="row">
@@ -529,6 +521,15 @@
             var noteModal = $('#formNoteModal');
             var noteForm = $('#admin_form_note_modal');
             var note = $('#note');
+
+
+
+            $('#addpermit').click(function () {
+
+                alert('here');
+                return true;
+
+            });
 
 
             $('#addnotebutton').click(function () {
