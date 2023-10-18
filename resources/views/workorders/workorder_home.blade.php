@@ -288,21 +288,21 @@
                                                                 <ul class="dropdown-menu animated animated-short flipInX" role="menu">
                                                                     @if($allowSchedule)
                                                                         @if($service->status_id == 1)
-                                                                        <li>
-                                                                            <a href="{{route('schedule_service', ['service_id'=>$service->id])}}" class="action list-group-item-action">
-                                                                                <span class="far fa-calendar-check"></span>
-                                                                                &nbsp; @lang('translation.schedule')
-                                                                            </a>
-                                                                        </li>
-                                                                    @else
-                                                                        <li>
-                                                                            <a href="{{route('schedule_service', ['service_id'=>$service->id])}}"
-                                                                               class="list-group-item-action">
-                                                                                <span class="far fa-calendar-check"></span>
-                                                                                &nbsp; @lang('translation.changeschedule')
-                                                                            </a>
-                                                                        </li>
-                                                                    @endif
+                                                                            <li>
+                                                                                <a href="{{route('schedule_service', ['service_id'=>$service->id])}}" class="action list-group-item-action">
+                                                                                    <span class="far fa-calendar-check"></span>
+                                                                                    &nbsp; @lang('translation.schedule')
+                                                                                </a>
+                                                                            </li>
+                                                                        @else
+                                                                            <li>
+                                                                                <a href="{{route('schedule_service', ['service_id'=>$service->id])}}"
+                                                                                   class="list-group-item-action">
+                                                                                    <span class="far fa-calendar-check"></span>
+                                                                                    &nbsp; @lang('translation.changeschedule')
+                                                                                </a>
+                                                                            </li>
+                                                                        @endif
                                                                     @else
                                                                         <li>
                                                                             <a href="Javascript:alert('Until a deposit is recorded and all permits are completed you cannot schedule this work. Check Payments and Permits');"
@@ -335,9 +335,7 @@
                                                             </li>
                                                         </ul>
                                                     </td>
-
                                                 </tr>
-
                                             @endforeach
                                             </tbody>
                                         </table>
