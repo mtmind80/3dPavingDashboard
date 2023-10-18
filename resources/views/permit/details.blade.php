@@ -48,8 +48,15 @@
                         <input type="hidden" name="proposal_id" value="{{$permit->proposal->id}}">
                             <div class="row">
                                 <div class="col-lg-4">
-                                    <x-form-select name="status" :items="$statusCB" selected="{{ $permit->status ?? null }}"  :params="['label' => 'Status', 'required' => true]"></x-form-select>
-
+                                    <x-form-select
+                                        name="status"
+                                        :items="$statusCB"
+                                        selected="{{ $permit->status ?? null }}"
+                                        :params="[
+                                            'label' => 'Status',
+                                            'required' => true
+                                        ]"
+                                    ></x-form-select>
                                 </div>
                                 <div class="col-lg-4">
                                     <x-form-text name="type" : params="['label' => 'Type', 'iconClass' => 'fas fa-file','required' => true]">{{ $permit->type }}</x-form-text>

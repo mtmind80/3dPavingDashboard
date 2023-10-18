@@ -26,7 +26,6 @@ class WorkOrderDetailsController extends Controller
             'proposal',
             'service',
             'vehicles',
-            'labor',
             'equipment',
             'subcontractors',
         ])->find($proposal_detail_id)
@@ -34,60 +33,41 @@ class WorkOrderDetailsController extends Controller
             abort(404);
         }
 
-        $reportDate = Carbon::createFromFormat('m/d/Y', $request->report_date ?? now(config('app.timezone'))->format('m/d/Y'));
+        $today = now(config('app.timezone'));
 
         // time sheets
 
-        if (!empty($reportDate)) {
-            $timeSheets = WorkorderTimesheets::where('proposal_detail_id', $proposal_detail_id)
-                ->where('report_date', $reportDate->toDateString())
-                ->with(['employee' => function ($q) {
-                    $q->orderBy('fname')->orderBy('lname');
-                }])
-                ->get();
-        }
+        $timeSheets = WorkorderTimesheets::where('proposal_detail_id', $proposal_detail_id)
+            ->with(['employee' => fn($q) => $q->orderBy('fname')->orderBy('lname')])
+            ->get();
 
         // equipment
 
-        if (!empty($reportDate)) {
-            $equipments = WorkorderEquipment::where('proposal_detail_id', $proposal_detail_id)
-                ->where('report_date', $reportDate->toDateString())
-                ->orderBy('name')
-                ->get();
-        }
+        $equipments = WorkorderEquipment::where('proposal_detail_id', $proposal_detail_id)
+            ->orderBy('name')
+            ->get();
 
         // materials
 
-        if (!empty($reportDate)) {
-            $materials = WorkorderMaterial::where('proposal_detail_id', $proposal_detail_id)
-                ->where('report_date', $reportDate->toDateString())
-                ->orderBy('name')
-                ->get();
-        }
+        $materials = WorkorderMaterial::where('proposal_detail_id', $proposal_detail_id)
+            ->orderBy('name')
+            ->get();
 
         // vehicles
 
-        if (!empty($reportDate)) {
             $vehicles = WorkorderVehicle::where('proposal_detail_id', $proposal_detail_id)
-                ->where('report_date', $reportDate->toDateString())
                 ->orderBy('vehicle_name')
                 ->get();
-        }
 
         // subcontractors
 
-        if (!empty($reportDate)) {
-            $subcontractors = WorkorderSubcontractor::where('proposal_detail_id', $proposal_detail_id)
-                ->where('report_date', $reportDate->toDateString())
-                ->with(['subcontractor' => function ($q) {
-                    $q->orderBy('name');
-                }])
-                ->get();
-        }
+        $subcontractors = WorkorderSubcontractor::where('proposal_detail_id', $proposal_detail_id)
+            ->with(['subcontractor' => fn($q) => $q->orderBy('name')])
+            ->get();
 
         $data = [
             'proposalDetail' => $proposalDetail,
-            'reportDate' => $reportDate,
+            'reportDate' => $today,
             'returnTo' => route('show_workorder', ['id' => $proposalDetail->proposal_id]),
             'currentUrl' => route('workorder_details', ['proposal_detail_id' => $proposalDetail->id]),
             'tabSelected' => 'services',
