@@ -33,41 +33,37 @@ class WorkOrderDetailsController extends Controller
             abort(404);
         }
 
-        $today = now(config('app.timezone'));
-
         // time sheets
-
         $timeSheets = WorkorderTimesheets::where('proposal_detail_id', $proposal_detail_id)
             ->with(['employee' => fn($q) => $q->orderBy('fname')->orderBy('lname')])
+            ->orderBy('report_date')
             ->get();
 
         // equipment
-
         $equipments = WorkorderEquipment::where('proposal_detail_id', $proposal_detail_id)
-            ->orderBy('name')
+            ->orderBy('report_date')
             ->get();
 
         // materials
-
         $materials = WorkorderMaterial::where('proposal_detail_id', $proposal_detail_id)
-            ->orderBy('name')
+            ->orderBy('report_date')
             ->get();
 
         // vehicles
-
-            $vehicles = WorkorderVehicle::where('proposal_detail_id', $proposal_detail_id)
-                ->orderBy('vehicle_name')
-                ->get();
+        $vehicles = WorkorderVehicle::where('proposal_detail_id', $proposal_detail_id)
+            ->orderBy('report_date')
+            ->get();
 
         // subcontractors
-
         $subcontractors = WorkorderSubcontractor::where('proposal_detail_id', $proposal_detail_id)
             ->with(['subcontractor' => fn($q) => $q->orderBy('name')])
+            ->orderBy('report_date')
             ->get();
 
         $data = [
+            'today' => now(config('app.timezone')),
             'proposalDetail' => $proposalDetail,
-            'reportDate' => $today,
+
             'returnTo' => route('show_workorder', ['id' => $proposalDetail->proposal_id]),
             'currentUrl' => route('workorder_details', ['proposal_detail_id' => $proposalDetail->id]),
             'tabSelected' => 'services',
@@ -89,7 +85,7 @@ class WorkOrderDetailsController extends Controller
             'contractorsCB' => Contractor::contractorsCB(['0' => 'Select contractor']),
         ];
 
-        return view('workorders.details', $data);
+        return view('workorders.field_report', $data);
     }
 
     // Timesheets
@@ -125,18 +121,17 @@ class WorkOrderDetailsController extends Controller
             $inputs['actual_hours'] = round($inputs['start_time']->floatDiffInHours($inputs['end_time']), 2);
             $inputs['created_by'] = auth()->user()->id;
 
-            $workOrderTimesheet = WorkOrderTimeSheets::create($inputs);
+            WorkOrderTimeSheets::create($inputs);
+
+            $timeSheets = WorkorderTimesheets::where('proposal_detail_id', $request->proposal_detail_id)
+                ->with(['employee' => fn($q) => $q->orderBy('fname')->orderBy('lname')])
+                ->orderBy('report_date')
+                ->get();
 
             return response()->json([
                 'success' => true,
                 'message' => 'New timesheet added.',
-                'data' => [
-                    'id' => $workOrderTimesheet->id,
-                    'employee_full_name' => $employee->full_name ?? '',
-                    'html_start' => $workOrderTimesheet->html_start,
-                    'html_finish' => $workOrderTimesheet->html_finish,
-                    'actual_hours' => $workOrderTimesheet->actual_hours,
-                ],
+                'html' => view('workorders.timesheet._list', ['timeSheets' => $timeSheets])->render(),
             ]);
         } else {
             return response()->json([
@@ -208,19 +203,16 @@ class WorkOrderDetailsController extends Controller
             $inputs['rate'] = $equipment->rate;
             $inputs['created_by'] = auth()->user()->id;
 
-            $workOrderEquipment = WorkOrderEquipment::create($inputs);
+            WorkOrderEquipment::create($inputs);
+
+            $equipments = WorkorderEquipment::where('proposal_detail_id', $request->proposal_detail_id)
+                ->orderBy('report_date')
+                ->get();
 
             return response()->json([
                 'success' => true,
                 'message' => 'New equipment added.',
-                'data' => [
-                    'id' => $workOrderEquipment->id,
-                    'equipment_name' => $equipment->name ?? '',
-                    'hours' => $workOrderEquipment->hours,
-                    'rate_type' => $workOrderEquipment->rate_type,
-                    'html_rate' => $workOrderEquipment->html_rate,
-                    'number_of_units' => $workOrderEquipment->number_of_units,
-                ],
+                'html' => view('workorders.equipment._list', ['equipments' => $equipments])->render(),
             ]);
         } else {
             return response()->json([
@@ -292,18 +284,16 @@ class WorkOrderDetailsController extends Controller
             $inputs['cost'] = $material->cost;
             $inputs['created_by'] = auth()->user()->id;
 
-            $workOrderMaterial = WorkOrderMaterial::create($inputs);
+            WorkOrderMaterial::create($inputs);
+
+            $materials = WorkorderMaterial::where('proposal_detail_id', $request->proposal_detail_id)
+                ->orderBy('report_date')
+                ->get();
 
             return response()->json([
                 'success' => true,
                 'message' => 'New material added.',
-                'data' => [
-                    'id' => $workOrderMaterial->id,
-                    'material_name' => $material->name ?? '',
-                    'quantity' => $workOrderMaterial->quantity,
-                    'html_total_cost' => Currency::format($workOrderMaterial->quantity * $workOrderMaterial->cost),
-                    'note' => $workOrderMaterial->note ?? '',
-                ],
+                'html' => view('workorders.material._list', ['materials' => $materials])->render(),
             ]);
         } else {
             return response()->json([
@@ -374,17 +364,16 @@ class WorkOrderDetailsController extends Controller
             $inputs['vehicle_name'] = $vehicle->name;
             $inputs['created_by'] = auth()->user()->id;
 
-            $workOrderVehicle = WorkOrderVehicle::create($inputs);
+            WorkOrderVehicle::create($inputs);
+
+            $vehicles = WorkorderVehicle::where('proposal_detail_id', $request->proposal_detail_id)
+                ->orderBy('report_date')
+                ->get();
 
             return response()->json([
                 'success' => true,
                 'message' => 'New vehicle added.',
-                'data' => [
-                    'id' => $workOrderVehicle->id,
-                    'vehicle_name' => $vehicle->name ?? '',
-                    'number_of_vehicles' => $workOrderVehicle->number_of_vehicles,
-                    'note' => $workOrderVehicle->note ?? '',
-                ],
+                'html' => view('workorders.vehicle._list', ['vehicles' => $vehicles])->render(),
             ]);
         } else {
             return response()->json([
@@ -454,17 +443,17 @@ class WorkOrderDetailsController extends Controller
             $inputs['report_date'] = Carbon::createFromFormat('m/d/Y', $request->report_date);
             $inputs['created_by'] = auth()->user()->id;
 
-            $workOrderSubcontractor = WorkOrderSubcontractor::create($inputs);
+            WorkOrderSubcontractor::create($inputs);
+
+            $subcontractors = WorkorderSubcontractor::where('proposal_detail_id', $request->proposal_detail_id)
+                ->with(['subcontractor' => fn($q) => $q->orderBy('name')])
+                ->orderBy('report_date')
+                ->get();
 
             return response()->json([
                 'success' => true,
                 'message' => 'New subcontractor added.',
-                'data' => [
-                    'id' => $workOrderSubcontractor->id,
-                    'subcontractor_name' => $contractor->name,
-                    'cost' => $workOrderSubcontractor->html_cost,
-                    'description' => $workOrderSubcontractor->description,
-                ],
+                'html' => view('workorders.subcontractor._list', ['subcontractors' => $subcontractors])->render(),
             ]);
         } else {
             return response()->json([
@@ -495,6 +484,7 @@ class WorkOrderDetailsController extends Controller
                 'success' => true,
                 'message' => 'Subcontractor deleted.',
                 'subcontractor_id' => $request->subcontractor_id,
+                'total' => WorkorderSubcontractor::where('proposal_detail_id', $request->proposal_detail_id)->count(),
             ]);
 
         } else {
