@@ -17,22 +17,9 @@
                 @include('_partials._alert')
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-sm-8">
+                        <div class="col-sm-12">
                             <h6 class="">@lang('translation.work_order'): <span class="ml8 fwn info-color">{{ $proposalDetail->proposal->name }}</span></h6>
                             <h6 class="mt-3">@lang('translation.work_order') @lang('translation.service'): <span class="ml8 fwn info-color">{{ $proposalDetail->service->name }}</span></h6>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="w240 tl" style="margin:0 0 0 auto">
-                                <x-form-date-picker
-                                    name="report_date"
-                                    :params="[
-                                    'id' => 'report_date',
-                                    'label' => 'Report day',
-                                    'iconClass' => 'fas fa-calendar',
-                                    'value' => $reportDate,
-                                ]"
-                                ></x-form-date-picker>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -42,16 +29,24 @@
                 <div class="card-body">
                     @include('_partials._alert', ['alertId' => 'timesheet_alert'])
                     <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-sm-12">
                             <h4 class="mb-4">@lang('translation.timesheet')</h4>
-                        </div>
-                        <div class="col-sm-6 tr">
-                            Day: <b>{{ $reportDate->format('m/d/Y') }}</b>
                         </div>
                     </div>
                     <h5 class="mb-4">@lang('translation.add')</h5>
                     <form method="POST" action="#" accept-charset="UTF-8" class="admin-form" id="time_sheet_form">
                         <div class="row">
+                            <div class="col-lg-2 col-md-3 col-sm-6 admin-form-item-widget">
+                                <x-form-date-picker
+                                    name="report_date"
+                                    :params="[
+                                        'id' => 'time_sheet_report_date',
+                                        'label' => 'Report day',
+                                        'iconClass' => 'fas fa-calendar',
+                                        'value' => $today,
+                                    ]"
+                                ></x-form-date-picker>
+                            </div>
                             <div class="col-lg-3 col-md-4 col-sm-6 admin-form-item-widget">
                                 <x-form-select
                                    name="employee_id"
@@ -82,8 +77,6 @@
                                 ]"
                                 ></x-form-time-picker>
                             </div>
-                            <div class="col-lg-5 col-md-2 col-sm-4 admin-form-item-widget xs-hidden">
-                            </div>
                         </div>
                         <div class="row buttons">
                             <div class="col-sm-12">
@@ -104,6 +97,7 @@
                     <table class="list-table table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
                             <tr>
+                                <th class="tc w200">Date</th>
                                 <th class="tc">Employeee</th>
                                 <th class="tc w200">Start</th>
                                 <th class="tc w200">Finish</th>
@@ -112,27 +106,7 @@
                             </tr>
                         </thead>
                         <tbody id="timesheet_tbody">
-                            @if (!empty($timeSheets) && $timeSheets->count() > 0)
-                                @foreach ($timeSheets as $timeSheet)
-                                    <tr id="timesheet_{{ $timeSheet->id }}">
-                                        <td class="tc">{{ $timeSheet->employee->full_name ?? null }}</td>
-                                        <td class="tc">{{ $timeSheet->html_start }}</td>
-                                        <td class="tc">{{ $timeSheet->html_finish }}</td>
-                                        <td class="tc">{{ round($timeSheet->actual_hours, 2) }}</td>
-                                        <td class="centered">
-                                            <button
-                                                class="btn p0 btn-danger tc delete-timesheet-button"
-                                                type="button"
-                                                data-toggle="tooltip"
-                                                title="Delete item"
-                                                data-timesheet_id="{{ $timeSheet->id }}"
-                                            >
-                                                <i class="far fa-trash-alt dib m0 plr5"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @endif
+                            @include('workorders.timesheet._list')
                         </tbody>
                     </table>
                 </div>
@@ -144,16 +118,24 @@
                 <div class="card-body">
                     @include('_partials._alert', ['alertId' => 'equipment_alert'])
                     <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-sm-12">
                             <h4 class="mb-4">@lang('translation.equipment')</h4>
-                        </div>
-                        <div class="col-sm-6 tr">
-                            Day: <b>{{ $reportDate->format('m/d/Y') }}</b>
                         </div>
                     </div>
                     <h5 class="mb-4">@lang('translation.add')</h5>
                     <form method="POST" action="#" accept-charset="UTF-8" class="admin-form" id="equipment_form">
                         <div class="row">
+                            <div class="col-lg-2 col-md-3 col-sm-6 admin-form-item-widget">
+                                <x-form-date-picker
+                                    name="report_date"
+                                    :params="[
+                                        'id' => 'equipment_report_date',
+                                        'label' => 'Report day',
+                                        'iconClass' => 'fas fa-calendar',
+                                        'value' => $today,
+                                    ]"
+                                ></x-form-date-picker>
+                            </div>
                             <div class="col-lg-3 col-md-4 col-sm-6 admin-form-item-widget">
                                 <x-form-select name="equipment_id"
                                    :items="$equipmentCB"
@@ -195,6 +177,7 @@
                     <table class="list-table table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
                         <tr>
+                            <th class="tc w200">Date</th>
                             <th class="tc">Equipment</th>
                             <th class="tc w200">Hours</th>
                             <th class="tc w200">Rate Type</th>
@@ -204,28 +187,7 @@
                         </tr>
                         </thead>
                         <tbody id="equipment_tbody">
-                        @if (!empty($equipments) && $equipments->count() > 0)
-                            @foreach ($equipments as $equipment)
-                                <tr id="equipment_{{ $equipment->id }}">
-                                    <td class="tc">{{ $equipment->name }}</td>
-                                    <td class="tc">{{ $equipment->hours }}</td>
-                                    <td class="tc">{{ $equipment->rate_type }}</td>
-                                    <td class="tc">{{ $equipment->html_rate }}</td>
-                                    <td class="tc">{{ $equipment->number_of_units }}</td>
-                                    <td class="centered">
-                                        <button
-                                            class="btn p0 btn-danger tc delete-equipment-button"
-                                            type="button"
-                                            data-toggle="tooltip"
-                                            title="Delete item"
-                                            data-equipment_id="{{ $equipment->id }}"
-                                        >
-                                            <i class="far fa-trash-alt dib m0 plr5"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        @endif
+                            @include('workorders.equipment._list')
                         </tbody>
                     </table>
                 </div>
@@ -237,16 +199,24 @@
                 <div class="card-body">
                     @include('_partials._alert', ['alertId' => 'material_alert'])
                     <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-sm-12">
                             <h4 class="mb-4">@lang('translation.materials')</h4>
-                        </div>
-                        <div class="col-sm-6 tr">
-                            Day: <b>{{ $reportDate->format('m/d/Y') }}</b>
                         </div>
                     </div>
                     <h5 class="mb-4">@lang('translation.add')</h5>
                     <form method="POST" action="#" accept-charset="UTF-8" class="admin-form" id="material_form">
                         <div class="row">
+                            <div class="col-lg-2 col-md-3 col-sm-6 admin-form-item-widget">
+                                <x-form-date-picker
+                                    name="report_date"
+                                    :params="[
+                                        'id' => 'material_report_date',
+                                        'label' => 'Report day',
+                                        'iconClass' => 'fas fa-calendar',
+                                        'value' => $today,
+                                    ]"
+                                ></x-form-date-picker>
+                            </div>
                             <div class="col-lg-3 col-md-4 col-sm-6 admin-form-item-widget">
                                 <x-form-select
                                     name="material_id"
@@ -297,6 +267,7 @@
                     <table class="list-table table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
                         <tr>
+                            <th class="tc w200">Date</th>
                             <th class="tc w600">Material</th>
                             <th class="tc w160">Quantity</th>
                             <th class="tc w200">Total Cost</th>
@@ -305,27 +276,7 @@
                         </tr>
                         </thead>
                         <tbody id="material_tbody">
-                            @if (!empty($materials) && $materials->count() > 0)
-                                @foreach ($materials as $material)
-                                    <tr id="material_{{ $material->id }}">
-                                        <td class="tc">{{ $material->name }}</td>
-                                        <td class="tc">{{ $material->quantity }}</td>
-                                        <td class="tc">{{ \App\Helpers\Currency::format($material->quantity * $material->cost) }}</td>
-                                        <td class="tc">{{ $material->note }}</td>
-                                        <td class="centered">
-                                            <button
-                                                class="btn p0 btn-danger tc delete-material-button"
-                                                type="button"
-                                                data-toggle="tooltip"
-                                                title="Delete item"
-                                                data-material_id="{{ $material->id }}"
-                                            >
-                                                <i class="far fa-trash-alt dib m0 plr5"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                        @endif
+                            @include('workorders.material._list')
                         </tbody>
                     </table>
                 </div>
@@ -337,16 +288,24 @@
                 <div class="card-body">
                     @include('_partials._alert', ['alertId' => 'vehicle_alert'])
                     <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-sm-12">
                             <h4 class="mb-4">@lang('translation.vehicle')</h4>
-                        </div>
-                        <div class="col-sm-6 tr">
-                            Day: <b>{{ $reportDate->format('m/d/Y') }}</b>
                         </div>
                     </div>
                     <h5 class="mb-4">@lang('translation.add')</h5>
                     <form method="POST" action="#" accept-charset="UTF-8" class="admin-form" id="vehicle_form">
                         <div class="row">
+                            <div class="col-lg-2 col-md-3 col-sm-6 admin-form-item-widget">
+                                <x-form-date-picker
+                                    name="report_date"
+                                    :params="[
+                                        'id' => 'vehicle_report_date',
+                                        'label' => 'Report day',
+                                        'iconClass' => 'fas fa-calendar',
+                                        'value' => $today,
+                                    ]"
+                                ></x-form-date-picker>
+                            </div>
                             <div class="col-lg-3 col-md-4 col-sm-6 admin-form-item-widget">
                                 <x-form-select
                                     name="vehicle_id"
@@ -397,6 +356,7 @@
                     <table class="list-table table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
                         <tr>
+                            <th class="tc w200">Date</th>
                             <th class="tc w600">Vehicle</th>
                             <th class="tc w200">Number of Vehicles</th>
                             <th class="tc">Note</th>
@@ -404,26 +364,7 @@
                         </tr>
                         </thead>
                         <tbody id="vehicle_tbody">
-                        @if (!empty($vehicles) && $vehicles->count() > 0)
-                            @foreach ($vehicles as $vehicle)
-                                <tr id="vehicle_{{ $vehicle->id }}">
-                                    <td class="tc">{{ $vehicle->vehicle_name }}</td>
-                                    <td class="tc">{{ $vehicle->number_of_vehicles }}</td>
-                                    <td class="tc">{{ $vehicle->note }}</td>
-                                    <td class="centered">
-                                        <button
-                                            class="btn p0 btn-danger tc delete-vehicle-button"
-                                            type="button"
-                                            data-toggle="tooltip"
-                                            title="Delete item"
-                                            data-vehicle_id="{{ $vehicle->id }}"
-                                        >
-                                            <i class="far fa-trash-alt dib m0 plr5"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        @endif
+                            @include('workorders.vehicle._list')
                         </tbody>
                     </table>
                 </div>
@@ -435,16 +376,24 @@
                 <div class="card-body">
                     @include('_partials._alert', ['alertId' => 'subcontractor_alert'])
                     <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-sm-12">
                             <h4 class="mb-4">@lang('translation.contractors')</h4>
-                        </div>
-                        <div class="col-sm-6 tr">
-                            Day: <b>{{ $reportDate->format('m/d/Y') }}</b>
                         </div>
                     </div>
                     <h5 class="mb-4">@lang('translation.add')</h5>
                     <form method="POST" action="#" accept-charset="UTF-8" class="admin-form" id="subcontractor_form">
                         <div class="row">
+                            <div class="col-lg-2 col-md-3 col-sm-6 admin-form-item-widget">
+                                <x-form-date-picker
+                                    name="report_date"
+                                    :params="[
+                                        'id' => 'contractor_report_date',
+                                        'label' => 'Report day',
+                                        'iconClass' => 'fas fa-calendar',
+                                        'value' => $today,
+                                    ]"
+                                ></x-form-date-picker>
+                            </div>
                             <div class="col-lg-3 col-md-4 col-sm-6 admin-form-item-widget">
                                 <x-form-select
                                     name="contractor_id"
@@ -495,6 +444,7 @@
                     <table class="list-table table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
                         <tr>
+                            <th class="tc w200">Date</th>
                             <th class="tc w600">Contractor</th>
                             <th class="tc w200">Cost</th>
                             <th class="tc">Description</th>
@@ -502,32 +452,13 @@
                         </tr>
                         </thead>
                         <tbody id="subcontractor_tbody">
-                        @if (!empty($subcontractors) && $subcontractors->count() > 0)
-                            @foreach ($subcontractors as $subcontractor)
-                                <tr id="subcontractor_{{ $subcontractor->id }}">
-                                    <td class="tc">{{ $subcontractor->subcontractor->name ?? null }}</td>
-                                    <td class="tc">{{ $subcontractor->html_cost }}</td>
-                                    <td class="tc">{{ $subcontractor->description }}</td>
-                                    <td class="centered">
-                                        <button
-                                            class="btn p0 btn-danger tc delete-subcontractor-button"
-                                            type="button"
-                                            data-toggle="tooltip"
-                                            title="Delete item"
-                                            data-subcontractor_id="{{ $subcontractor->id }}"
-                                        >
-                                            <i class="far fa-trash-alt dib m0 plr5"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        @endif
+                            @include('workorders.subcontractor._list')
                         </tbody>
                     </table>
                 </div>
             </div>
             <!-- END subcontractor -->
-
+            <div id="bottom_empty_div" class="{{ !empty($subcontractors) && $subcontractors->count() > 0 ? ' hidden' : '' }}" style="height:140px;"></div>
         </div>
     </div>
 @stop
@@ -535,24 +466,18 @@
 @section('page-js')
     <script>
         $(document).ready(function () {
-            // global
-            $('#report_date').change(function(){
-                let val = $(this).val();
-                if (isUSDate(val)) {
-                    window.location = "{{ $currentUrl }}" + '?report_date=' + val;
-                }
-            });
-
             var commonFormProperties = {
-                report_date: "{{ $reportDate->format('m/d/Y') }}",
                 proposal_id: "{{ $proposalDetail->proposal_id  }}",
                 proposal_detail_id: "{{ $proposalDetail->id  }}"
             };
+
+            var bottomEmptyDiv = $('#bottom_empty_div');
 
             // timesheets
 
             var timeSheetAlert = $('#timesheet_alert');
             var timesheetTbody = $('#timesheet_tbody');
+            var timesheetCard = timesheetTbody.closest('.card-body');
 
             timeSheetAlert.on('click', function(ev){
                 ev.stopPropagation();
@@ -564,6 +489,10 @@
 
             timeSheetForm.validate({
                 rules: {
+                    report_date: {
+                        required: true,
+                        date: true
+                    },
                     employee_id: {
                         required: true,
                         positive: true
@@ -578,6 +507,10 @@
                     }
                 },
                 messages: {
+                    report_date: {
+                        required: "@lang('translation.field_required')",
+                        date: "@lang('translation.invalid_entry')"
+                    },
                     employee_id: {
                         required: "@lang('translation.field_required')",
                         positive: "@lang('translation.select_item')"
@@ -619,20 +552,9 @@
                         if (typeof response.success === 'undefined'  ) {
                             showErrorAlert('Critical error has occurred.', timeSheetAlert);
                         } else if (response.success) {
-                            let data = response.data;
-                            let html = '';
-
-                            html += '<tr id="timesheet_'+ data.id +'">';
-                            html += '<td class="tc">'+ data.employee_full_name +'</td>';
-                            html += '<td class="tc">'+ data.html_start +'</td>';
-                            html += '<td class="tc">'+ data.html_finish +'</td>';
-                            html += '<td class="tc">'+ data.actual_hours +'</td>';
-                            html += '<td class="tc"><button data-timesheet_id="'+ data.id +'" class="btn p0 btn-danger tc delete-timesheet-button" type="button" data-toggle="tooltip" title="Delete item"><i class="far fa-trash-alt dib m0 plr5"></i></button></td>';
-                            html += '</tr>';
-
-                            timesheetTbody.append(html);
-
+                            timesheetTbody.html(response.html);
                             timeSheetForm.trigger('reset');
+                            timeSheetCard.removeClass('hidden');
 
                             if (response.message) {
                                 showSuccessAlert(response.message, timeSheetAlert);
@@ -699,6 +621,7 @@
 
             var equipmentAlert = $('#equipment_alert');
             var equipmentTbody = $('#equipment_tbody');
+            var equipmentCard = equipmentTbody.closest('.card-body');
 
             equipmentAlert.on('click', function(ev){
                 ev.stopPropagation();
@@ -710,6 +633,10 @@
 
             equipmentForm.validate({
                 rules: {
+                    report_date: {
+                        required: true,
+                        date: true
+                    },
                     equipment_id: {
                         required: true,
                         positive: true
@@ -724,6 +651,10 @@
                     }
                 },
                 messages: {
+                    report_date: {
+                        required: "@lang('translation.field_required')",
+                        date: "@lang('translation.invalid_entry')"
+                    },
                     equipment_id: {
                         required: "@lang('translation.field_required')",
                         positive: "@lang('translation.select_item')"
@@ -765,21 +696,9 @@
                         if (typeof response.success === 'undefined'  ) {
                             showErrorAlert('Critical error has occurred.', equipmentAlert);
                         } else if (response.success) {
-                            let data = response.data;
-                            let html = '';
-
-                            html += '<tr id="equipment_'+ data.id +'">';
-                            html += '<td class="tc">'+ data.equipment_name +'</td>';
-                            html += '<td class="tc">'+ data.hours +'</td>';
-                            html += '<td class="tc">'+ data.rate_type +'</td>';
-                            html += '<td class="tc">'+ data.html_rate +'</td>';
-                            html += '<td class="tc">'+ data.number_of_units +'</td>';
-                            html += '<td class="tc"><button data-equipment_id="'+ data.id +'" class="btn p0 btn-danger tc delete-equipment-button" type="button" data-toggle="tooltip" title="Delete item"><i class="far fa-trash-alt dib m0 plr5"></i></button></td>';
-                            html += '</tr>';
-
-                            equipmentTbody.append(html);
-
+                            equipmentTbody.html(response.html);
                             equipmentForm.trigger('reset');
+                            equipmentCard.removeClass('hidden');
 
                             if (response.message) {
                                 showSuccessAlert(response.message, equipmentAlert);
@@ -845,6 +764,7 @@
 
             var materialAlert = $('#material_alert');
             var materialTbody = $('#material_tbody');
+            var materialCard = materialTbody.closest('.card-body');
 
             materialAlert.on('click', function(ev){
                 ev.stopPropagation();
@@ -856,6 +776,10 @@
 
             materialForm.validate({
                 rules: {
+                    report_date: {
+                        required: true,
+                        date: true
+                    },
                     material_id: {
                         required: true,
                         positive: true
@@ -871,6 +795,10 @@
                     }
                 },
                 messages: {
+                    report_date: {
+                        required: "@lang('translation.field_required')",
+                        date: "@lang('translation.invalid_entry')"
+                    },
                     material_id: {
                         required: "@lang('translation.field_required')",
                         positive: "@lang('translation.select_item')"
@@ -911,20 +839,9 @@
                         if (typeof response.success === 'undefined'  ) {
                             showErrorAlert('Critical error has occurred.', materialAlert);
                         } else if (response.success) {
-                            let data = response.data;
-                            let html = '';
-
-                            html += '<tr id="material_'+ data.id +'">';
-                            html += '<td class="tc">'+ data.material_name +'</td>';
-                            html += '<td class="tc">'+ data.quantity +'</td>';
-                            html += '<td class="tc">'+ data.html_total_cost +'</td>';
-                            html += '<td class="tc">'+ data.note +'</td>';
-                            html += '<td class="tc"><button data-material_id="'+ data.id +'" class="btn p0 btn-danger tc delete-material-button" type="button" data-toggle="tooltip" title="Delete item"><i class="far fa-trash-alt dib m0 plr5"></i></button></td>';
-                            html += '</tr>';
-
-                            materialTbody.append(html);
-
+                            materialTbody.html(response.html);
                             materialForm.trigger('reset');
+                            materialCard.removeClass('hidden');
 
                             if (response.message) {
                                 showSuccessAlert(response.message, materialAlert);
@@ -991,6 +908,7 @@
 
             var vehicleAlert = $('#vehicle_alert');
             var vehicleTbody = $('#vehicle_tbody');
+            var vehicleCard = vehicleTbody.closest('.card-body');
 
             vehicleAlert.on('click', function(ev){
                 ev.stopPropagation();
@@ -1002,6 +920,10 @@
 
             vehicleForm.validate({
                 rules: {
+                    report_date: {
+                        required: true,
+                        date: true
+                    },
                     vehicle_id: {
                         required: true,
                         positive: true
@@ -1017,6 +939,10 @@
                     }
                 },
                 messages: {
+                    report_date: {
+                        required: "@lang('translation.field_required')",
+                        date: "@lang('translation.invalid_entry')"
+                    },
                     vehicle_id: {
                         required: "@lang('translation.field_required')",
                         positive: "@lang('translation.select_item')"
@@ -1057,19 +983,9 @@
                         if (typeof response.success === 'undefined'  ) {
                             showErrorAlert('Critical error has occurred.', vehicleAlert);
                         } else if (response.success) {
-                            let data = response.data;
-                            let html = '';
-
-                            html += '<tr id="vehicle_'+ data.id +'">';
-                            html += '<td class="tc">'+ data.vehicle_name +'</td>';
-                            html += '<td class="tc">'+ data.number_of_vehicles +'</td>';
-                            html += '<td class="tc">'+ data.note +'</td>';
-                            html += '<td class="tc"><button data-vehicle_id="'+ data.id +'" class="btn p0 btn-danger tc delete-vehicle-button" type="button" data-toggle="tooltip" title="Delete item"><i class="far fa-trash-alt dib m0 plr5"></i></button></td>';
-                            html += '</tr>';
-
-                            vehicleTbody.append(html);
-
+                            vehicleTbody.html(response.html);
                             vehicleForm.trigger('reset');
+                            vehicleCard.removeClass('hidden');
 
                             if (response.message) {
                                 showSuccessAlert(response.message, vehicleAlert);
@@ -1135,6 +1051,7 @@
 
             var subcontractorAlert = $('#subcontractor_alert');
             var subcontractorTbody = $('#subcontractor_tbody');
+            var subcontractorCard = subcontractorTbody.closest('.card-body');
 
             subcontractorAlert.on('click', function(ev){
                 ev.stopPropagation();
@@ -1146,6 +1063,10 @@
 
             subcontractorForm.validate({
                 rules: {
+                    report_date: {
+                        required: true,
+                        date: true
+                    },
                     contractor_id: {
                         required: true,
                         positive: true
@@ -1160,6 +1081,10 @@
                     }
                 },
                 messages: {
+                    report_date: {
+                        required: "@lang('translation.field_required')",
+                        date: "@lang('translation.invalid_entry')"
+                    },
                     contractor_id: {
                         required: "@lang('translation.field_required')",
                         positive: "@lang('translation.select_item')"
@@ -1200,19 +1125,11 @@
                         if (typeof response.success === 'undefined'  ) {
                             showErrorAlert('Critical error has occurred.', subcontractorAlert);
                         } else if (response.success) {
-                            let data = response.data;
-                            let html = '';
-
-                            html += '<tr id="subcontractor_'+ data.id +'">';
-                            html += '<td class="tc">'+ data.subcontractor_name +'</td>';
-                            html += '<td class="tc">'+ data.cost +'</td>';
-                            html += '<td class="tc">'+ data.description +'</td>';
-                            html += '<td class="tc"><button data-subcontractor_id="'+ data.id +'" class="btn p0 btn-danger tc delete-subcontractor-button" type="button" data-toggle="tooltip" title="Delete item"><i class="far fa-trash-alt dib m0 plr5"></i></button></td>';
-                            html += '</tr>';
-
-                            subcontractorTbody.append(html);
-
+                            subcontractorTbody.html(response.html);
                             subcontractorForm.trigger('reset');
+                            subcontractorCard.removeClass('hidden');
+
+                            bottomEmptyDiv.addClass('hidden');
 
                             if (response.message) {
                                 showSuccessAlert(response.message, subcontractorAlert);
@@ -1255,6 +1172,11 @@
                             showErrorAlert('Critical error has occurred.', subcontractorAlert);
                         } else if (response.success) {
                             subcontractorTbody.find('tr#subcontractor_'+response.subcontractor_id).remove();
+
+                            if (response.total === 0) {
+                                subcontractorCard.addClass('hidden');
+                                bottomEmptyDiv.removeClass('hidden');
+                            }
 
                             if (response.message) {
                                 showSuccessAlert(response.message, subcontractorAlert);
