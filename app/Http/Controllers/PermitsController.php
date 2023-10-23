@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PermitNoteRequest;
 use App\Http\Requests\PermitRequest;
 use App\Http\Requests\SearchRequest;
-
+use Illuminate\Support\Facades\DB;
+use App\Models\County;
 use App\Models\Permit;
 use App\Models\PermitNote;
 use Illuminate\Http\Request;
@@ -35,7 +36,12 @@ class PermitsController extends Controller
             ->with(['proposal'])
             ->paginate($perPage);
 
+
+        $counties = DB::table('counties')->groupBy('county')->get(['county']);
+
+
         $data = [
+            'counties'  => $counties,
             'permits'  => $permits,
             'statusCB' => $this->statusCB,
             'needle'   => $needle,
@@ -106,6 +112,10 @@ class PermitsController extends Controller
             }, 'proposal', 'proposalDetail', 'createdBy']),
         ];
         $data['statusCB'] = $this->statusCB;
+
+
+        $counties = DB::table('counties')->groupBy('county')->get(['county']);
+        $data['counties'] = $counties;
 
         return view('permit.details', $data);
     }

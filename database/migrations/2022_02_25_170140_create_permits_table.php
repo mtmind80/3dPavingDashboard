@@ -23,6 +23,7 @@ class CreatePermitsTable extends Migration
             $table->string('number', 25)->default(null)->nullable();
             $table->string('county', 100)->default(null)->nullable();
             $table->unsignedBigInteger('created_by');
+            $table->unsignedBigInteger('last_updated_by');
             $table->timestamps();
 
             $table->foreign('created_by')->references('id')->on('users');

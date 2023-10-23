@@ -14,12 +14,12 @@ class PermitRequest extends Request
     {
         return [
             'proposal_id'        => 'required|positive',
-            'proposal_detail_id' => 'required|positive',
+            'proposal_detail_id' => 'nullable|integer|min:0',
             'status' => [
                 Rule::in(['Approved','Completed','Not Submitted','Submitted','Under Review']),
             ],
             'type' => [
-                Rule::in(['Regular', 'Special']),
+                Rule::in(['Regular', 'Special', 'Other']),
             ],
             'expires_on'         => 'nullable|date',
             'county'             => 'required|plainText',

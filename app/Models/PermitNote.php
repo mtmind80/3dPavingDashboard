@@ -71,4 +71,8 @@ class PermitNote extends Model
         return !empty($this->created_at) ? $this->created_at->format('m/d/Y') . ' - ' . $this->createdBy->full_name : null;
     }
 
+    public function getCreatorAttribute()
+    {
+        return  $this->createdBy->full_name;
+    }
 }
