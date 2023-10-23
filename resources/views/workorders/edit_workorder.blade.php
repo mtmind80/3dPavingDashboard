@@ -8,16 +8,16 @@
 
     @component('components.breadcrumb')
         @slot('title')
-            @lang('translation.edit') @lang('translation.workorder')
+            @lang('translation.edit') @lang('translation.work_orders')
         @endslot
         @slot('li_1')
             <a href="/dashboard">@lang('translation.Dashboard')</a>
         @endslot
         @slot('li_2')
-            <a href="/workorders">@lang('translation.WorkOrders')</a>
+            <a href="/workorders">@lang('translation.work_orders')</a>
         @endslot
         @slot('li_3')
-            @lang('translation.edit') @lang('translation.workorder')
+            @lang('translation.edit') @lang('translation.work_order')
         @endslot
     @endcomponent
 
@@ -25,7 +25,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <form method="POST" action="{{ route('update_proposal', ['id' => $proposal['id'] ?? null]) }}"
+                    <form method="POST" action="{{ route('update_workorder', ['id' => $proposal['id'] ?? null]) }}"
                           accept-charset="UTF-8" id="proposal_form" class="admin-form">
                         @csrf
 
@@ -50,14 +50,14 @@
 
                         <div class="row">
                             <div class="col-lg-12">
-                                <h3>Proposal Information</h3>
+                                <h3>Work Order Information</h3>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-lg-6 col-md-6 col-sm-6 admin-form-item-widget">
                                 <x-form-text id="name" name="name" class="check-lead"
-                                             :params="['label' => 'Proposal Name', 'iconClass' => 'fas fa-circle', 'required' => true]">{{ $proposal['name'] ?? "Name This Proposal" }}</x-form-text>
+                                             :params="['label' => 'Work Order Name', 'iconClass' => 'fas fa-circle', 'required' => true]">{{ $proposal['name'] ?? "Name This Work Order" }}</x-form-text>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-6 admin-form-item-widget">
                                 <x-form-select name="customer_staff_id" :items="$staff"

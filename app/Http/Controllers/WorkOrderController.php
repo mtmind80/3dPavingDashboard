@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PaymentRequest;
 use App\Http\Requests\SearchRequest;
 use App\Models\AcceptedDocuments;
+use App\Models\Contact;
+use App\Models\Location;
 use App\Models\MediaType;
 use App\Models\Payment;
 use App\Models\Permit;
@@ -12,9 +15,11 @@ use App\Models\ProposalDetail;
 use App\Http\Requests\ProposalNoteRequest;
 use App\Models\ProposalMedia;
 use App\Models\ProposalNote;
+use App\Models\State;
 use App\Models\User;
 use App\Models\WorkOrder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 
 class WorkOrderController extends Controller
@@ -226,7 +231,34 @@ class WorkOrderController extends Controller
         $payments = Payment::where('proposal_id','=',$id)->get()->toArray();
         $data['payments'] = $payments;
         $data['workorder'] = $workorder;
+        $data['payment_types'] = ['Deposit' =>'Deposit','Interim Payment' =>'Interim Payment','Additional Payment'=>'Additional Payment','Final Payment'=>'Final Payment'];
+
         return view('workorders.paymentmanager', $data);
+
+    }
+    public function add_payments(PaymentRequest $request)
+    {
+        $id = $request['proposal_id'];
+        $workorder = WorkOrder::find($id)->first();
+
+
+        Payment::create($request->all());
+
+
+        $payments = Payment::where('proposal_id','=',$id)->get()->toArray();
+        $data['payments'] = $payments;
+        $data['workorder'] = $workorder;
+        $data['payment_types'] = ['Deposit' =>'Deposit','Interim Payment' =>'Interim Payment','Additional Payment'=>'Additional Payment','Final Payment'=>'Final Payment'];
+
+        return view('workorders.paymentmanager', $data)->with('success', "Nice Work!");
+
+    }
+    public function delete_payment($id)
+    {
+
+        $payment = Payment::where('id', '=', $id)->firstorfail()->delete();
+        return back()->withSuccess('Payment Deleted!');
+
 
     }
 
@@ -263,7 +295,59 @@ class WorkOrderController extends Controller
      */
     public function edit($id)
     {
-        //
+
+
+        $proposal = WorkOrder::where('id', $id)->where('proposal_statuses_id', 5)->first()->toArray();
+
+
+        if($proposal) {
+
+            $data = array();
+            $contact = Contact::where('id', $proposal['contact_id'])->first()->toArray();
+            $data['contact'] = $contact;
+            $data['id'] = $id;
+            $data['proposal'] = $proposal;
+
+            $contactstaff = [];
+            $contactstaff[$contact['id']] = $contact['first_name'] . ' ' . $contact['last_name'];
+            $staff = Contact::where('related_to', '=', $contact['id'])->get();
+            $staff = json_decode(json_encode($staff), true);
+            if($staff) {
+                foreach($staff as $s) {
+                    $contactstaff[$s['id']] = $s['first_name'] . ' ' . $s['last_name'];
+                }
+            }
+            $data['staff'] = $contactstaff;
+
+            $salesManagersCB = Cache::remember('salesManagersCB', env('CACHE_TIMETOLIVE'), function() {
+                $salesManagersCB = Proposal::salesManagersCB();
+                return json_encode($salesManagersCB);
+
+            });
+
+            $data['salesManagersCB'] = json_decode($salesManagersCB, true);
+
+            $salesPersonsCB = Cache::remember('salesPersonsCB', env('CACHE_TIMETOLIVE'), function() {
+                $salesPersonsCB = Proposal::salesPersonsCB();
+                return json_encode($salesPersonsCB);
+
+            });
+
+            $data['salesPersonsCB'] = json_decode($salesPersonsCB, true);
+            $data['locationTypesCB'] = Location::locationTypesCB();
+            $data['countiesCB'] = Location::countiesCB();
+
+            $data['submit_caption'] = "Submit";
+            $data['cancel_caption'] = "Cancel";
+            $data['states'] = State::all()->toArray();
+
+
+            return view('workorders.edit_workorder', $data);
+
+        }
+
+        return view('pages-404')->with('message', 'You know it');
+
     }
 
     /**

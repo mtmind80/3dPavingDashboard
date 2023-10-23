@@ -40,7 +40,7 @@
                     <ul class="nav nav-tabs nav-tabs-custom nav-justified" role="tablist">
                         <li class="nav-item">
                             <a class="nav-link active" data-toggle="tab" href="#proposal" role="tab">
-                                <span class="d-block  list-item"><i class="ri-home-2-line"></i> @lang('translation.menu_workorders')</span>
+                                <span class="d-block  list-item"><i class="ri-home-2-line"></i> @lang('translation.work_order')</span>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -66,6 +66,20 @@
                         <div class="tab-pane active" id="proposal" role="tabpanel">
                             <div class="row">
                                 <table width="100%" class="table-centered table-bordered font-size-20">
+@if($proposal->proposal_statuses_id == 5)
+                                    <tr>
+                                        <td class="tc w-25">
+
+                                    <a href="{{route('edit_workorder',['id'=> $proposal['id']])}}"
+                                       title="@lang('translation.edit') @lang('translation.proposal')"
+                                       class="{{$site_button_class}}">
+                                        <i class="fas fa-plus"></i> @lang('translation.edit') @lang('translation.work_order')
+                                    </a>
+                                        </td>
+                                        <td class="tc w-75">
+                                        </td>
+                                    </tr>
+@endif
                                     <tr>
                                         <td class="tc w-25">
                                             {{$proposal['name']}}
@@ -157,7 +171,7 @@
                                     </tr>
                                     @if($proposal['permit_required'] && $permits)
                                         <tr>
-                                            <td>@lang('translation.permits')</td>
+                                            <td>Current @lang('translation.permits')</td>
                                             <td>
                                                 <table width="80%">
                                                     <tr>
@@ -168,9 +182,9 @@
                                                     </tr>
                                                     @foreach($permits as $permit)
                                                         <tr>
-                                                            <td class="tc"><a class="tc"><a
-                                                                            href="{{route('permit_show',['permit'=>$permit->id])}}">View
-                                                                        Permit</a></td>
+                                                            <td class="tc">
+                                                                <a href="{{route('permit_show',['permit'=>$permit->id])}}">View Permit</a>
+                                                            </td>
                                                             <td class="tc">{{$permit->county}}</td>
                                                             <td class="tc">{{$permit->number}}</td>
                                                             <td class="tc">{{$permit->status}}</td>

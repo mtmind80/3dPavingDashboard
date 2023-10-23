@@ -17,35 +17,30 @@
                 <div class="card-body">
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs nav-tabs-custom nav-justified" role="tablist">
-                        <li class="nav-item">
-                            <a id="tab_link_profile" class="nav-link active" data-toggle="tab" href="#profile" role="tab">
-                                <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
-                                <span class="d-none d-sm-block">@lang('translation.permit')</span>
+                        <li class="nav-item  no-border">
+                            <a class="nav-link active" data-toggle="tab" href="#permits" role="tab">
+                                <span class="d-block list-item"><i class="ri-building-2-line"></i>@lang('translation.permit')</span>
                             </a>
                         </li>
-                        @if (!empty($permit->notes))
-                            <li class="nav-item">
+
+                        <li class="nav-item">
                                 <a id="tab_link_notes" class="nav-link" data-toggle="tab" href="#notes" role="tab">
-                                    <span class="d-block d-sm-none"><i class="far fa-user"></i></span>
-                                    <span class="d-none d-sm-block">@lang('translation.notes')</span>
+                                    <span class="d-block list-item"><i class="ri-notification-2-line"></i>@lang('translation.notes')</span>
                                 </a>
                             </li>
-                        @endif
+
                     </ul>
 
-                    @php
-                                print_r($statusCB);
-                    @endphp
-
                     <!-- Tab panes -->
-                    <div class="tab-content plr0 pt30 pb0 text-muted">
-                        <div class="tab-pane active" id="profile" role="tabpanel">
+                    <div class="tab-content ">
+                        <div class="tab-pane active" id="permits" role="tabpanel">
                             <div class="row">
                     <form method="post" action="{{route('permit_update',['permit'=>$permit->id])}}" id="permitform">
                         @csrf
                         <input type="hidden" name="id" value="{{$permit->id}}">
                         <input type="hidden" name="proposal_detail_id" value="{{isset($permit->proposal_detail->id) ? $permit->proposal_detail->id : 0 }}">
                         <input type="hidden" name="proposal_id" value="{{$permit->proposal->id}}">
+
                             <div class="row">
                                 <div class="col-lg-4">
                                     <x-form-select
@@ -82,7 +77,7 @@
                             <div class="tab-pane" id="notes" role="tabpanel">
                                 <div class="row">
                                     <div class="col-md-8 col-sm-6 mb20">
-                                        <x-href-button id="add_note_button" class="btn-success" data-route="{{ route('permit_note_add', ['permit' => $permit->id]) }}" data-id="{{ $permit->id }}" data-permit_name="{{ $permit->full_name }}"><i class="fas fa-plus"></i>@lang('translation.add')</x-href-button>
+                                        <x-href-button id="add_note_button" class="btn-success" data-route="{{ route('permit_note_add', ['permit' => $permit->id]) }}" data-id="{{ $permit->id }}" data-permit_name="{{ $permit->full_name }}"><i class="fas fa-plus"></i>@lang('translation.add') @lang('translation.note')</x-href-button>
                                     </div>
                                     <div class="col-md-4 col-sm-6 mb20"></div>
                                 </div>
