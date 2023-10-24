@@ -2,13 +2,22 @@
 
 @section('title') 3D Paving Permit Details @endsection
 
+
 @section('content')
     @component('components.breadcrumb')
-        @slot('title') @lang('translation.permit') @endslot
-        @slot('li_1') <a href="{{ route('dashboard') }}">@lang('translation.Dashboard')</a>@endslot
-        @slot('li_2') <a href="{{ route('permits') }}">@lang('translation.permits')</a>@endslot
-        @slot('li_3') "#{{ $permit->number }}" @endslot
-        @slot('li_4') @lang('translation.details') @endslot
+        @slot('title')
+            @lang('translation.permit') {{$permit->proposal->name}}
+        @endslot
+        @slot('li_1')
+            <a href="{{ route('dashboard') }}" xmlns="http://www.w3.org/1999/html">@lang('translation.Dashboard')</a>
+        @endslot
+        @slot('li_2')
+            <a href="{{ route('permits') }}">@lang('translation.all') @lang('translation.permits')</a>
+        @endslot
+        @slot('li_3')
+            <a href="{{ route('show_workorder', ['id'=>$permit->proposal->id]) }}">@lang('translation.work_order')</a>
+        @endslot
+
     @endcomponent
 
     <div class="row admin-form">
@@ -17,55 +26,104 @@
                 <div class="card-body">
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs nav-tabs-custom nav-justified" role="tablist">
-                        <li class="nav-item">
-                            <a id="tab_link_profile" class="nav-link active" data-toggle="tab" href="#profile" role="tab">
-                                <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
-                                <span class="d-none d-sm-block">@lang('translation.permit')</span>
+                        <li class="nav-item  no-border">
+                            <a class="nav-link active" data-toggle="tab" href="#permits" role="tab">
+                                <span class="d-block list-item"><i class="ri-building-2-line"></i>@lang('translation.edit') @lang('translation.permit')</span>
                             </a>
                         </li>
-                        @if (!empty($permit->notes))
-                            <li class="nav-item">
-                                <a id="tab_link_notes" class="nav-link" data-toggle="tab" href="#notes" role="tab">
-                                    <span class="d-block d-sm-none"><i class="far fa-user"></i></span>
-                                    <span class="d-none d-sm-block">@lang('translation.notes')</span>
-                                </a>
-                            </li>
-                        @endif
+
+                        <li class="nav-item">
+                            <a id="tab_link_notes" class="nav-link" data-toggle="tab" href="#notes" role="tab">
+                                <span class="d-block list-item"><i class="ri-inbox-line"></i>@lang('translation.notes') / @lang('translation.fees')</span>
+                            </a>
+                        </li>
                     </ul>
 
-                    @php
-                                print_r($statusCB);
-                    @endphp
-
                     <!-- Tab panes -->
-                    <div class="tab-content plr0 pt30 pb0 text-muted">
-                        <div class="tab-pane active" id="profile" role="tabpanel">
+                    <div class="tab-content ">
+                        <div class="tab-pane active" id="permits" role="tabpanel">
                             <div class="row">
-                    <form method="post" action="{{route('permit_update',['permit'=>$permit->id])}}" id="permitform">
-                        @csrf
-                        <input type="hidden" name="id" value="{{$permit->id}}">
-                        <input type="hidden" name="proposal_detail_id" value="{{isset($permit->proposal_detail->id) ? $permit->proposal_detail->id : 0 }}">
-                        <input type="hidden" name="proposal_id" value="{{$permit->proposal->id}}">
-                            <div class="row">
-                                <div class="col-lg-4">
-                                    <x-form-select
-                                        name="status"
-                                        :items="$statusCB"
-                                        selected="{{ $permit->status ?? null }}"
-                                        :params="[
-                                            'label' => 'Status',
-                                            'required' => true
-                                        ]"
-                                    ></x-form-select>
-                                </div>
-                                <div class="col-lg-4">
-                                    <x-form-text name="type" : params="['label' => 'Type', 'iconClass' => 'fas fa-file','required' => true]">{{ $permit->type }}</x-form-text>
-                                </div>
-                                <div class="col-lg-4">
-                                    <x-form-text name="number" :params="['label' => 'Number', 'iconClass' => 'fas fa-folder']">{{ $permit->number }}</x-form-text>
-                                </div>
-                            </div>
+                                <form method="post" action="{{route('permit_update',['permit'=>$permit->id])}}"
+                                      id="permitform">
+                                    @csrf
+
+                                    <input name="_method" type="hidden" value="PATCH">
+                                    <input type="hidden" name="returnTo" value="{{url()->current()}}">
+                                    <input type="hidden" name="id" value="{{$permit->id}}">
+                                    <input type="hidden" name="last_updated_by" value="{{auth()->user()->id}}">
+                                    <input type="hidden" name="created_by" value="{{$permit->created_by}}">
+                                    <input type="hidden" name="proposal_detail_id"
+                                           value="{{isset($permit->proposal_detail->id) ? $permit->proposal_detail->id : 0 }}">
+                                    <input type="hidden" name="proposal_id" value="{{$permit->proposal->id}}">
+
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <label>Status:</label>
+                                            <select class="form-control" name="status">
+                                                <option>{{$permit->status}}</option>
+                                                <option>Not Submitted</option>
+                                                <option>Submitted</option>
+                                                <option>Under Review</option>
+                                                <option>Approved</option>
+                                                <option>Comments</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <label>Type:</label>
+                                            <select class="form-control" name="type">
+                                                <option>{{$permit->type}}</option>
+                                                <option>Regular</option>
+                                                <option>Special</option>
+                                                <option>Other</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <x-form-text name="number"
+                                                         :params="['label' => 'Permit Number', 'iconClass' => 'fas fa-folder']">{{ $permit->number }}</x-form-text>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <label>County:</label>
+                                            <select name="county" id="county" class="form-control">
+                                                <option>{{$permit->county}}</option>
+                                                @foreach($counties as $county)
+                                                    <option>{{$county->county}}</option>
+
+                                                @endforeach
+
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <x-form-text name="city" :
+                                                         params="['label' => 'City', 'iconClass' => 'fas fa-file','required' => true]">{{ $permit->city }}</x-form-text>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <x-form-date-picker
+                                                name="expires_on"
+                                                :params="[
+                                    'id' => 'expires_on',
+                                    'label' => 'Expires On',
+                                    'iconClass' => 'fas fa-calendar',
+                                    'value' => $permit->expires_on,
+                                ]"
+                                            ></x-form-date-picker>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <p></p>
+                                            <input type="submit" value="Update Permit" class="{{$site_button_class}}" />
+                                        </div>
+                                    </div>
                                 </form>
+
                             </div>
                             @if (!empty($permit->note))
                                 <div class="row">
@@ -78,25 +136,46 @@
                                 </div>
                             @endif
                         </div>
+
                         @if (!empty($permit->notes))
+                            @php
+                            $ttotal =0;
+                            @endphp
                             <div class="tab-pane" id="notes" role="tabpanel">
                                 <div class="row">
                                     <div class="col-md-8 col-sm-6 mb20">
-                                        <x-href-button id="add_note_button" class="btn-success" data-route="{{ route('permit_note_add', ['permit' => $permit->id]) }}" data-id="{{ $permit->id }}" data-permit_name="{{ $permit->full_name }}"><i class="fas fa-plus"></i>@lang('translation.add')</x-href-button>
+                                        <x-href-button id="add_note_button" class="{{$site_button_class}}" data-route="{{ route('permit_note_add', ['permit' => $permit->id]) }}" data-id="{{ $permit->id }}" data-permit_name="{{ $permit->full_name }}"><i class="fas fa-plus"></i>@lang('translation.add') @lang('translation.note')</x-href-button>
                                     </div>
                                     <div class="col-md-4 col-sm-6 mb20"></div>
                                 </div>
+                                <div class="row info-color">
+                                    <div class="col-lg-6 admin-form-item-widget">
+                                        <strong>Note</strong>
+                                    </div>
+                                    <div class="col-lg-4  admin-form-item-widget">
+                                        <strong>Created By</strong>
+                                    </div>
+                                    <div class="col-lg-2 admin-form-item-widget">
+                                        <strong>Fee</strong>
+                                    </div>
+                                </div>
                                 @foreach ($permit->notes as $notes)
                                     <div class="row">
-                                        <div class="col-lg-10 col-md-9 col-sm-8 admin-form-item-widget">
-                                            <p class="mb4 fs14">{{ $notes->date_creator }}</p>
-                                            <x-form-show class="mh-100" :params="['label' => 'none', 'iconClass' => 'fas fa-sticky-note']">{{ $notes->note ?? null }}</x-form-show>
+                                        <div class="col-lg-6 admin-form-item-widget">
+                                            {{ $notes->note ?? null }}
                                         </div>
-                                        <div class="col-lg-2 col-md-3 col-sm-4 admin-form-item-widget">
-                                            <x-form-show class="mh-100" :params="['label' => 'Fee', 'iconClass' => 'fas fa-dollar-sign']">{{ $notes->fee ?? '0.00' }}</x-form-show>
+                                        <div class="col-lg-4  admin-form-item-widget">
+                                            <p class="mb4 fs14">{{ $notes->creator }}:</p>
+                                            {{ $notes->created_at->format('M-d-Y') ?? null }}
+                                        </div>
+                                        <div class="col-lg-2 admin-form-item-widget">
+                                            ${{ number_format($notes->fee,2) ?? '0.00' }}
                                         </div>
                                     </div>
+                                    @php($ttotal = $ttotal + $notes->fee)
                                 @endforeach
+Total Cost: ${{ number_format($ttotal, 2) }}
+
                             </div>
                         @endif
                     </div>

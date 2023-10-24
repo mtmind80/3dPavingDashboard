@@ -140,9 +140,15 @@ class WorkOrder extends Proposal
 
     public function getHasPaymentsAttribute()
     {
-        return false;
-    //has at least one payment record
 
+        $paymentsOK = false;
+        //has at least one payment record
+        $payments = Payment::where('proposal_id','=', $this->id)->get();
+        if(count($payments))
+        {
+            $paymentsOK = true;
+        }
+        return $paymentsOK;
     }
 
     public function getHasPermitsAttribute()

@@ -401,4 +401,8 @@ return [
     "list" => "Lista",
     "fieldreport" => "Reporte de Campo",
     "cantschedule" => "Can't Schedule",
+    "all" => "Todo",
+    "fees" => "Fees",
+
+
 ];
