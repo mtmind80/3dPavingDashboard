@@ -180,9 +180,12 @@ Route::group(['prefix' => 'permits'], function() {
     Route::get('/{permit}/show', 'PermitsController@details')->name('permit_show');
     Route::post('/{permit}/add-note', 'PermitsController@storeNote')->name('permit_note_add');
     Route::post('/{permit}/change-status', 'PermitsController@changeStatus')->name('permit_status_change');
+    Route::get('/add_permit/{id}', 'PermitsController@create')->name('add_permit');
     Route::get('/{permit}/edit', 'PermitsController@edit')->name('permit_edit');
     Route::patch('/{permit}', 'PermitsController@update')->name('permit_update');
     Route::post('ajax-note-list', 'PermitsController@noteList')->name('ajax_permit_note_list');
+    Route::post('/create_permit', 'PermitsController@store')->name('create_permit');
+
 });
 /** END Permits */
 

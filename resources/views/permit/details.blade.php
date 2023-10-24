@@ -6,7 +6,7 @@
 @section('content')
     @component('components.breadcrumb')
         @slot('title')
-            @lang('translation.permit')
+            @lang('translation.permit') {{$permit->proposal->name}}
         @endslot
         @slot('li_1')
             <a href="{{ route('dashboard') }}" xmlns="http://www.w3.org/1999/html">@lang('translation.Dashboard')</a>
@@ -28,13 +28,13 @@
                     <ul class="nav nav-tabs nav-tabs-custom nav-justified" role="tablist">
                         <li class="nav-item  no-border">
                             <a class="nav-link active" data-toggle="tab" href="#permits" role="tab">
-                                <span class="d-block list-item"><i class="ri-building-2-line"></i>@lang('translation.permit')</span>
+                                <span class="d-block list-item"><i class="ri-building-2-line"></i>@lang('translation.edit') @lang('translation.permit')</span>
                             </a>
                         </li>
 
                         <li class="nav-item">
                             <a id="tab_link_notes" class="nav-link" data-toggle="tab" href="#notes" role="tab">
-                                <span class="d-block list-item"><i class="ri-notification-2-line"></i>@lang('translation.notes') / @lang('translation.fees')</span>
+                                <span class="d-block list-item"><i class="ri-inbox-line"></i>@lang('translation.notes') / @lang('translation.fees')</span>
                             </a>
                         </li>
                     </ul>
@@ -138,6 +138,9 @@
                         </div>
 
                         @if (!empty($permit->notes))
+                            @php
+                            $ttotal =0;
+                            @endphp
                             <div class="tab-pane" id="notes" role="tabpanel">
                                 <div class="row">
                                     <div class="col-md-8 col-sm-6 mb20">
@@ -145,17 +148,34 @@
                                     </div>
                                     <div class="col-md-4 col-sm-6 mb20"></div>
                                 </div>
+                                <div class="row info-color">
+                                    <div class="col-lg-6 admin-form-item-widget">
+                                        <strong>Note</strong>
+                                    </div>
+                                    <div class="col-lg-4  admin-form-item-widget">
+                                        <strong>Created By</strong>
+                                    </div>
+                                    <div class="col-lg-2 admin-form-item-widget">
+                                        <strong>Fee</strong>
+                                    </div>
+                                </div>
                                 @foreach ($permit->notes as $notes)
                                     <div class="row">
-                                        <div class="col-lg-10 col-md-9 col-sm-8 admin-form-item-widget">
-                                            <p class="mb4 fs14">{{ $notes->creator }}</p>
-                                            <x-form-show class="mh-100" :params="['label' => 'none', 'iconClass' => 'fas fa-sticky-note']">{{ $notes->note ?? null }}</x-form-show>
+                                        <div class="col-lg-6 admin-form-item-widget">
+                                            {{ $notes->note ?? null }}
                                         </div>
-                                        <div class="col-lg-2 col-md-3 col-sm-4 admin-form-item-widget">
-                                            <x-form-show class="mh-100" :params="['label' => 'Fee', 'iconClass' => 'fas fa-dollar-sign']">{{ $notes->fee ?? '0.00' }}</x-form-show>
+                                        <div class="col-lg-4  admin-form-item-widget">
+                                            <p class="mb4 fs14">{{ $notes->creator }}:</p>
+                                            {{ $notes->created_at->format('M-d-Y') ?? null }}
+                                        </div>
+                                        <div class="col-lg-2 admin-form-item-widget">
+                                            ${{ number_format($notes->fee,2) ?? '0.00' }}
                                         </div>
                                     </div>
+                                    @php($ttotal = $ttotal + $notes->fee)
                                 @endforeach
+Total Cost: ${{ number_format($ttotal, 2) }}
+
                             </div>
                         @endif
                     </div>

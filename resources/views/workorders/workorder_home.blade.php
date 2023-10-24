@@ -163,7 +163,7 @@
                                         <td>@if($proposal['permit_required'])
                                                 YES
                                                 &nbsp; &nbsp;
-                                                <button class="button info" id="addpermit">Add Permit</button>
+                                                <button class="{{$site_button_class}}" id="addpermit">Add Permit</button>
                                             @else
                                                 NO
                                             @endif
@@ -491,7 +491,6 @@
 
     @include('modals.form_media_modal')
     @include('modals.form_fieldmanagers_modal')
-
     @include('modals.form_proposal_note_modal')
 
 @stop
@@ -538,9 +537,7 @@
 
             $('#addpermit').click(function () {
 
-                alert('here');
-                return true;
-
+                window.location.href='{{ route('add_permit',['id'=>$permit->proposal->id]) }}';
             });
 
 

@@ -166,6 +166,7 @@
 
                             var notes = response.notes;
                             var html = '';
+                            console.log(notes);
 
                             $.each(notes, function (index, note){
                                 html += '<div class="note-box">';
