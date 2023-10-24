@@ -195,7 +195,7 @@
                 if ("{{ $returnTo }}" !== "") {
                     window.location.href = "{{ $returnTo }}";
                 } else {
-                    window.location.href = "{{ route('show_proposal',['id'=>$proposal['id']]) }}";
+                    window.location.href = "{{ route('show_workorder',['id'=>$proposal['id']]) }}";
                 }
             });
         });
