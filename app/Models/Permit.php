@@ -20,9 +20,11 @@ class Permit extends Model
         'status',
         'type',
         'number',
+        'city',
         'expires_on',
         'county',
         'created_by',
+        'last_updated_by',
     ];
 
     public $sortable = [
@@ -96,7 +98,7 @@ class Permit extends Model
 
     public function getStatusOptionsAttributes() : array
     {
-        return ['Approved','Completed','Not Submitted','Submitted','Under Review','Comments'];
+        return ['Approved','Not Submitted','Submitted','Under Review','Comments'];
     }
 
 

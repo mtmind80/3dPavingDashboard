@@ -71,7 +71,7 @@ Route::group(['middleware' => ['auth']], function() {
 
         Route::post('/add_payments/', 'WorkOrderController@add_payments')->name('add_payment');
         Route::get('/{id}/make_payments', 'WorkOrderController@payments')->name('create_payment');
-        Route::get('/delete_payment/{id}', 'WorkOrderController@delete_payment')->name('delete_payment');
+        Route::get('/delete_payment/{proposal_id}/{id}', 'WorkOrderController@delete_payment')->name('delete_payment');
 
         Route::get('/{id}/manage_permits', 'WorkOrderController@permits')->name('manage_permits');
 
@@ -177,7 +177,8 @@ Route::group(['middleware' => ['auth']], function() {
 Route::group(['prefix' => 'permits'], function() {
     Route::get('/', 'PermitsController@index')->name('permits');
     Route::match(['get', 'post'], '/search', 'PermitsController@search')->name('permit_search');
-    Route::get('/{permit}/show', 'PermitsController@details')->name('permit_show');
+    Route::get('/{permit}/show', 'PermitsController@edit')->name('permit_show');
+    Route::get('/{id}/remove', 'PermitsController@destroy')->name('remove_permit');
     Route::post('/{permit}/add-note', 'PermitsController@storeNote')->name('permit_note_add');
     Route::post('/{permit}/change-status', 'PermitsController@changeStatus')->name('permit_status_change');
     Route::get('/add_permit/{id}', 'PermitsController@create')->name('add_permit');
@@ -256,6 +257,9 @@ Route::group(['prefix' => 'proposaldetails'], function() {
     Route::get('/edit/{proposal_id}/{id}', 'ProposalDetailController@edit')->name('edit_service');
     // Schedule a service
     Route::get('/scehdule/{service_id}', 'ProposalDetailController@schedule')->name('schedule_service');
+    Route::post('/creeate_scehdule/{proposal_detail}', 'ProposalDetailController@createschedule')->name('create_schedule');
+    Route::post('/remove_scehdule/{schedule}', 'ProposalDetailController@removeschedule')->name('remove_schedule');
+
     // Select service type
     Route::post('/checkform', 'ProposalDetailController@checkform')->name('checkform');
 

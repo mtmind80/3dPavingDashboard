@@ -20,6 +20,7 @@ use App\Models\ProposalDetailVehicle;
 use App\Models\ProposalMaterial;
 use App\Models\Service;
 use App\Models\ServiceCategory;
+use App\Models\ServiceSchedule;
 use App\Models\StripingCost;
 use App\Models\Vehicle;
 use App\Models\VehicleType;
@@ -1255,6 +1256,38 @@ class ProposalDetailController extends Controller
         return response()->json($response);
     }
 
+
+    public function schedule($service_id)
+    {
+
+        $service = ProposalDetail::where('id','=',$service_id)->first();
+        if(!$service) {
+            return view('pages-404');
+        }
+
+        $proposal = Proposal::where('id','=',$service->proposal_id)->first();
+
+        $schedules = ServiceSchedule::where('proposal_detail_id','=',$service->id)->get();
+        $data['shedules'] = $schedules;
+        $data['service_id'] = $service_id;
+        $data['service'] = $service;
+        $data['proposal'] = $proposal;
+
+
+        return view('proposaldetails.schedule_service', $data);
+
+
+    }
+    public function createschedule(ScheduleRequest $request, ProposalDetail $proposal_detail)
+    {
+
+        $newschedule = $request->all();
+        ServiceSchedule::create($newschedule);
+
+        return redirect()->back()->with('info', 'Schedule Created!');
+
+
+    }
     public function destroyOLD($id)
     {
         $service = ProposalDetail::where('id', '=', $id)->first()->toArray();
