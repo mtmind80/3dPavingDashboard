@@ -6,7 +6,8 @@
 @section('content')
     @component('components.breadcrumb')
         @slot('title')
-            @lang('translation.permit') {{$proposal->name}}
+            @lang('translation.schedule') {{$service->service_name}}</br> For:
+            {{$proposal->name}}
         @endslot
         @slot('li_1')
             <a href="{{ route('dashboard') }}" xmlns="http://www.w3.org/1999/html">@lang('translation.Dashboard')</a>
@@ -27,7 +28,7 @@
 
                                     <input type="hidden" name="created_by" value="{{auth()->user()->id}}">
                                     <input type="hidden" name="proposal_detail_id"
-                                           value="{{$service->proposal_detail_id}}">
+                                           value="{{$service->id}}">
                                     <input type="hidden" name="proposal_id" value="{{$proposal->id}}">
 
                                     <div class="row">
@@ -36,6 +37,7 @@
                                                 name="start_date"
                                                 :params="[
                                     'id' => 'start_date',
+                                    'language' => 'en',
                                     'label' => 'Start Date',
                                     'iconClass' => 'fas fa-calendar',
                                 ]"
@@ -48,6 +50,7 @@
                                                 name="end_date"
                                                 :params="[
                                     'id' => 'end_date',
+                                    'language' => 'en',
                                     'label' => 'End Date',
                                     'iconClass' => 'fas fa-calendar',
                                 ]"
@@ -55,6 +58,7 @@
 
                                         </div>
                                         <div class="col-lg-4">
+                                            <x-form-text name="note" :params="['label' => 'Note', 'iconClass' => 'fas fa-note', 'required' => false]"></x-form-text>
                                         </div>
                                     </div>
 
@@ -68,6 +72,31 @@
                                     </div>
                                 </form>
 
+                    <div class="row">
+
+                    <table class="table">
+                        <tr>
+                            <th>Start</th>
+                            <th>End</th>
+                            <th>Note</th>
+                            <th>Created By</th>
+                            <th>Delete</th>
+                        </tr>
+                        @foreach($schedules as $schedule)
+                            <tr>
+                                <td>{{\Carbon\Carbon::parse($schedule->start_date)->format('j F, Y')}}</td>
+                                <td>{{\Carbon\Carbon::parse($schedule->end_date)->format('j F, Y')}}</td>
+                                <td>{{$schedule->note}}</td>
+                                <td>{{\App\Models\User::where('id', '=', $schedule->created_by)->first()->FullName}}</td>
+                                <td><a href="Javascript:AREYOUSURE('You are about to remove this schedule. Are you sure!','{{$schedule->id}}');">Delete</a></td>
+                            </tr>
+
+                        @endforeach
+
+                    </table>
+
+                    </div>
+
                             </div>
                 </div>
             </div>
@@ -77,6 +106,18 @@
 
 @section('page-js')
     <script>
+        function AREYOUSURE(msg, id)
+        {
+            @php
+            $id =6;
+            @endphp
+            var ok = confirm(msg);
+            if(ok)
+            {
+                window.location.href="/proposaldetails/remove_schedule/{{$schedule->id}}";
+            }
+            return true;
+        }
         $(document).ready(function(){
         $("#returntoworkorder").on('click', function(){
             window.location.href="{{route('show_workorder',['id'=>$proposal->id])}}";
@@ -87,6 +128,8 @@
                     window.location.href="{{route('create_schedule',['proposal_detail'=>$service->id])}}";
 
         });
+
+
 
         });
 

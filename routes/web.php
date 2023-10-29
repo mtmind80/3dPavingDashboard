@@ -258,7 +258,7 @@ Route::group(['prefix' => 'proposaldetails'], function() {
     // Schedule a service
     Route::get('/scehdule/{service_id}', 'ProposalDetailController@schedule')->name('schedule_service');
     Route::post('/creeate_scehdule/{proposal_detail}', 'ProposalDetailController@createschedule')->name('create_schedule');
-    Route::post('/remove_scehdule/{schedule}', 'ProposalDetailController@removeschedule')->name('remove_schedule');
+    Route::get('/remove_schedule/{schedule}', 'ProposalDetailController@removeschedule')->name('remove_schedule');
 
     // Select service type
     Route::post('/checkform', 'ProposalDetailController@checkform')->name('checkform');
