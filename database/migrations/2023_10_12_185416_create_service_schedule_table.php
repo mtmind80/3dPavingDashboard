@@ -19,6 +19,7 @@ class CreateServiceScheduleTable extends Migration
             $table->unsignedBigInteger('proposal_detail_id');
             $table->dateTime('start_date');
             $table->dateTime('end_date');
+            $table->string('note', 1000)->nullable();
             $table->unsignedBigInteger('created_by');
             $table->timestamps();
         });

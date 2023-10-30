@@ -464,10 +464,6 @@
                                     <li>
                                         <a href="{{route('create_payment',['id'=>$proposal['id']])}}">Record Payments</a>
                                     </li>
-                                    @if($proposal->permit_required)
-                                        <li><a href="{{route('manage_permits',['id'=>$proposal['id']])}}">Manage Permits</a>
-                                        </li>
-                                    @endif
                                 </ul>
                             </div>
                             <div class="row">

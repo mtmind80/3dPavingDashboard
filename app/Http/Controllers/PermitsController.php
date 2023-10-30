@@ -94,6 +94,7 @@ class PermitsController extends Controller
     public function store(PermitRequest $request)
     {
         $inputs = $request->all();
+
         Permit::create($inputs);
 
         if (!empty($this->returnTo)) {
@@ -103,7 +104,7 @@ class PermitsController extends Controller
         }
     }
 
-    public function details(Permit $permit)
+    public function edit(Permit $permit)
     {
         $data = [
             'permit' => $permit->load(['notes' => function ($q){
@@ -116,13 +117,13 @@ class PermitsController extends Controller
         $counties = DB::table('counties')->groupBy('county')->get(['county']);
         $data['counties'] = $counties;
 
-        return view('permit.details', $data);
+        return view('permit.edit', $data);
     }
 
-    public function edit(Permit $permit)
+    public function editX(Permit $permit)
     {
         $data = ['permit'=>$permit];
-        return view('permit.details', $data);
+        return view('permit.edit', $data);
     }
 
     public function update(Permit $permit, PermitRequest $request)
@@ -157,25 +158,20 @@ class PermitsController extends Controller
         return redirect()->back()->with('success', 'Permit status updated.');
     }
 
-    public function destroy(Request $request)
+    public function destroy($id)
     {
-        if (!$permit = Permit::find($request->item_id)) {
+        if (!$permit = Permit::where('id','=', $id)->with('proposal')->first()) {
             return redirect()->back()->with('error', 'Permit not found.');
         }
 
+        $id = $permit->proposal_id;
         try {
-            $fullName = $permit->full_name;
             $permit->delete();
         } catch (\Exception $e) {
-            if (env('APP_ENV') == 'local') {
                 return redirect()->back()->with('error', $e->getMessage());
-            } else {
-                \Log::error(get_class() . ' - ' . $e->getMessage());
-                return redirect()->back()->with('error', 'Exception error');
-            }
         }
 
-        return redirect()->route('permit_list', !empty($request->http_query) ? explode('&', $request->http_query) : [])->with('success', 'Permit <b>' . $permit->full_name . '</b> deleted.');
+        return redirect()->route('show_workorder',['id'=>$id])->with('success', 'Permit  deleted.');
     }
 
     public function noteList(Request $request)

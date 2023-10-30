@@ -227,12 +227,14 @@ class WorkOrderController extends Controller
 
     public function payments($id)
     {
-        $workorder = WorkOrder::find($id)->first();
+
+
+        $workorder = WorkOrder::where('id' , '=', $id)->first();
+
         $payments = Payment::where('proposal_id','=',$id)->get()->toArray();
         $data['payments'] = $payments;
         $data['workorder'] = $workorder;
         $data['payment_types'] = ['Deposit' =>'Deposit','Interim Payment' =>'Interim Payment','Additional Payment'=>'Additional Payment','Final Payment'=>'Final Payment'];
-
         return view('workorders.paymentmanager', $data);
 
     }
@@ -240,25 +242,25 @@ class WorkOrderController extends Controller
     {
         $id = $request['proposal_id'];
         $workorder = WorkOrder::find($id)->first();
-
-
+        //create new payment
         Payment::create($request->all());
-
-
+        //get all payments
         $payments = Payment::where('proposal_id','=',$id)->get()->toArray();
+
+        $data['id'] = $id;
         $data['payments'] = $payments;
         $data['workorder'] = $workorder;
         $data['payment_types'] = ['Deposit' =>'Deposit','Interim Payment' =>'Interim Payment','Additional Payment'=>'Additional Payment','Final Payment'=>'Final Payment'];
 
-        return view('workorders.paymentmanager', $data)->with('success', "Nice Work!");
+        return $this->payments($id)->with('success', "Nice Work!");;
+//        return view('workorders.paymentmanager', $data)->with('success', "Nice Work!");
 
     }
-    public function delete_payment($id)
+    public function delete_payment($proposal_id,$id)
     {
 
         $payment = Payment::where('id', '=', $id)->firstorfail()->delete();
-        return back()->withSuccess('Payment Deleted!');
-
+        return $this->payments($proposal_id);
 
     }
 

@@ -26,7 +26,8 @@
             <div class="card">
                 <div class="card-body">
                     <form method="POST" action="{{ route('add_payment')}}"
-                          accept-charset="UTF-8" id="proposal_form" class="admin-form">
+                          accept-charset="UTF-8" id="proposal_form" id="payment_admin-form"
+                          class="admin-form">
                         @csrf
 
                         <input type="hidden" name="proposal_id" id="proposal_id" value="{{ $workorder['id']}}">
@@ -71,6 +72,8 @@
 
                         <div class="row">
                             <div class="col-sm-12 tr">
+                                <x-button id="cancel_button2" class="btn-light"><i
+                                        class="far fa-arrow-alt-circle-left "></i>Return to WorkOrder</x-button>
                                 <x-button id="cancel_button" class="btn-light"><i
                                             class="far fa-arrow-alt-circle-left "></i>Cancel</x-button>
                                 <x-button id="submit_button" class="btn-dark" type="submit"><i
@@ -78,7 +81,6 @@
                                 </x-button>
                             </div>
                         </div>
-                </div>
             </form>
 
                 <p></p>
@@ -89,25 +91,36 @@
                     <th>Payment</th>
                     <th>Check No.</th>
                         <th>Note</th>
+                        <th>Created</th>
                         <th>Action</th>
                     </tr>
                     </thead>
                     <tbody>
+                    @php
+                        $ttotal = 0;
+                    @endphp
             @foreach($payments as $payment)
+                        @php
+                         $ttotal = $ttotal +  $payment['payment'];
+                        @endphp
                         <tr>
                         <td>{{$payment['payment_type']}}</td>
-                        <td>{{$payment['payment']}}
+                        <td>${{number_format($payment['payment'], 2)}}
                         </td>
                         <td>{{$payment['check_no']}}
                         </td>
                         <td>{{$payment['note']}}</td>
+                         <td>{{ \Carbon\Carbon::parse($payment['created_at'])->format('j F, Y')}}</td>
                         <td>
-                            <a href="{{route('delete_payment', ['id' => $payment['id']])}}">
-                                {{$payment['id']}} Delete
-                            </a>
+                            <a title="Delete Payment" href="{{route('delete_payment', ['proposal_id'=>$payment['proposal_id'],'id' => $payment['id']])}}">Delete</a>
                         </td>
                     </tr>
                 @endforeach
+                    <tr class="alert-success">
+                        <td>Total</td>
+                        <td>${{number_format($ttotal, 2)}}</td>
+                        <td colspan="4'"></td>
+                    </tr>
                     </tbody>
 
                 </table>
@@ -148,6 +161,10 @@
                     window.location.href = "{{ route('show_workorder',['id'=>$workorder['id']]) }}";
                 }
             });
+            $('#cancel_button2').click(function () {
+                    window.location.href = "{{ route('show_workorder',['id'=>$workorder['id']]) }}";
+            });
+
         });
 
 
