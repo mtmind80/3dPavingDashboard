@@ -19,6 +19,7 @@
 <!-- input fields values row -->
 <form method="POST" action="#" accept-charset="UTF-8" id="vehicle_form" class="admin-form">
     @csrf
+    <input type="hidden" name="proposal_detail_vehicle_id" id="proposal_detail_vehicle_id">
     <div class="row">
         <div class="col-sm-3 admin-form-item-widget">
             <select name="vehicle_id" id="vehicle_id" class="form-control">
@@ -76,40 +77,22 @@
     <div class="col-sm-1 tc">Hours</div>
     <div class="col-sm-1 tc">Rate</div>
     <div class="col-sm-1 tc">Total</div>
-    <div class="col-sm-1 tc">Remove</div>
+    <div class="col-sm-1 tc">Edit / Remove</div>
 </div>
 
 <!-- vehicles row -->
 <div id="vehicle_rows_container" class="mb20">
     @if (!empty($proposalDetail->vehicles) && $proposalDetail->vehicles->count() > 0)
-        @foreach ($proposalDetail->vehicles as $vehicle)
-            <div id="proposal_detail_vehicle_id_{{ $vehicle->id }}" class="row vehicle-row border-bottom-dashed">
-                <div class="col-sm-6 vehicle-type">{{ $vehicle->vehicle_name }}</div>
-                <div class="col-sm-1 tc vehicle-quantity">{{ $vehicle->number_of_vehicles }}</div>
-                <div class="col-sm-1 tc vehicle-days">{{ $vehicle->days }}</div>
-                <div class="col-sm-1 tc vehicle-hours">{{ $vehicle->hours }}</div>
-                <div class="col-sm-1 tc vehicle-rate">{{ $vehicle->html_rate_per_hour }}</div>
-                <div class="col-sm-1 tc vehicle-cost" data-cost="{{ $vehicle->cost }}">{{ $vehicle->html_cost }}</div>
-                <div class="col-sm-1 tc">
-                    <button
-                        class="btn p0 btn-danger tc vehicle-remove-button"
-                        type="button"
-                        data-toggle="tooltip"
-                        title="remove item"
-                        data-proposal_detail_vehicle_id="{{ $vehicle->id }}"
-                    >
-                        <i class="far fa-trash-alt dib m0 plr5"></i>
-                    </button>
-                </div>
-            </div>
-        @endforeach
+        @include('estimator._form_service_vehicles', ['vehicles' => $proposalDetail->vehicles])
     @endif
 </div>
 
 <!-- vehicle footer row -->
 <div class="row mt12">
     <div class="col-sm-3">
-        <a id="vehicle_add_button" href="javascript:" class="{{ $site_button_class }}">Add Vehicle</a>
+        <a id="vehicle_add_button" href="javascript:" class="{{ $site_button_class }} submit">Add Vehicle</a>
+        <a id="vehicle_update_button" href="javascript:" class="btn btn-info hidden submit">Update Vehicle</a>
+        <a id="vehicle_cancel_button" href="javascript:" class="btn btn-light hidden ml6">Cancel</a>
     </div>
     <div class="col-sm-2 pt8 m0">
         <label class="control-label">Total Vehicles</label>
@@ -130,11 +113,22 @@
 @push('partials-scripts')
     <script>
         $(document).ready(function () {
+            var proposalDetailId = Number('{{ $proposalDetail->id }}');
+
             var vehicleElForm = $('#vehicle_form');
+            var vehicleElFormProposalDetailVehicleId = $('#proposal_detail_vehicle_id');
+            var vehicleElFormVehicleId = $('#vehicle_id');
+            var vehicleElFormNumberOfVehicles = $('#vehicle_quantity');
+            var vehicleElFormDays = $('#vehicle_days');
+            var vehicleElFormHours = $('#vehicle_hours');
+
             var vehicleElRowsHeader = $('#vehicle_rows_header');
             var vehicleElRowsContainer = $('#vehicle_rows_container');
 
+            var vehicleSubmitButton = $('.submit');
             var vehicleAddButton = $('#vehicle_add_button');
+            var vehicleUpdateButton = $('#vehicle_update_button');
+            var vehicleCancelButton = $('#vehicle_cancel_button');
             var vehicleElTotalCost = $('#vehicle_total_cost');
             var vehicleElEstimatorFormFieldTotalCost = $('#estimator_form_vehicle_total_cost');
 
@@ -148,7 +142,7 @@
 
             vehicleUpdateTotalCost();
 
-            vehicleAddButton.on('click', function(){
+            vehicleSubmitButton.on('click', function(){
                 vehicleElForm.validate({
                     rules: {
                         vehicle_id: {
@@ -200,7 +194,7 @@
                         },
                         data: formData,
                         type: "POST",
-                        url: "{{ route('ajax_vehicle_add_new') }}",
+                        url: "{{ route('ajax_vehicle_add_or_update') }}",
                         beforeSend: function (request){
                             showSpinner();
                         },
@@ -211,32 +205,14 @@
                             if (!response) {
                                 showErrorAlert('Critical error has occurred.', vehicleAlert);
                             } else if (response.success) {
-                                let data = response.data;
-                                let html  = '';
-
-                                let vehicleRows = $('.vehicle-row');
-
-                                if (vehicleRows.length === 0) {
-                                    vehicleElRowsHeader.removeClass('hidden');
-                                }
-
-                                html += '<div id="proposal_detail_vehicle_id_'+ data. proposal_detail_vehicle_id +'" class="row vehicle-row border-bottom-dashed">';
-                                html += '   <div class="col-sm-6 vehicle-name">'+ data.vehicle_name +'</div>';
-                                html += '   <div class="col-sm-1 tc vehicle-number_of_vehicles">'+ data.number_of_vehicles +'</div>';
-                                html += '   <div class="col-sm-1 tc vehicle-days">'+ data.days +'</div>';
-                                html += '   <div class="col-sm-1 tc vehicle-hours">'+ data.hours +'</div>';
-                                html += '   <div class="col-sm-1 tc vehicle-rate">'+ data.rate_per_hour +'</div>';
-                                html += '   <div class="col-sm-1 tc vehicle-cost" data-cost="'+ data.cost +'">'+ data.formatted_cost +'</div>';
-                                html += '   <div class="col-sm-1 tc">';
-                                html += '       <button class="btn p0 btn-danger tc vehicle-remove-button" type="button" data-toggle="tooltip" title="remove item" data-proposal_detail_vehicle_id="'+ data. proposal_detail_vehicle_id +'"><i class="far fa-trash-alt dib m0 plr5"></i></button>';
-                                html += '   </div>';
-                                html += '</div>';
-
-                                vehicleElRowsContainer.append(html);
+                                vehicleElRowsContainer.html(response.html);
 
                                 vehicleUpdateTotalCost();
-
                                 vehicleResetForm();
+
+                                vehicleAddButton.removeClass('hidden');
+                                vehicleUpdateButton.addClass('hidden');
+                                vehicleCancelButton.addClass('hidden');
 
                                 if (response.message) {
                                     showSuccessAlert(response.message, vehicleAlert);
@@ -265,6 +241,7 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     data: {
+                        proposal_detail_id: proposalDetailId,
                         proposal_detail_vehicle_id: proposal_detail_vehicle_id
                     },
                     type: "POST",
@@ -279,8 +256,7 @@
                         if (!response) {
                             showErrorAlert('Critical error has occurred.', vehicleAlert);
                         } else if (response.success) {
-
-                            $('#proposal_detail_vehicle_id_' + response.data.proposal_detail_vehicle_id).remove();
+                            vehicleElRowsContainer.html(response.html);
 
                             let vehicleRows = $('.vehicle-row');
 
@@ -307,6 +283,27 @@
                 });
             });
 
+            vehicleElRowsContainer.on('click', '.vehicle-edit-button', function(){
+                let el = $(this);
+                vehicleElFormProposalDetailVehicleId.val(el.data('proposal_detail_vehicle_id'));
+                vehicleElFormVehicleId.val(el.data('vehicle_id'));
+                vehicleElFormNumberOfVehicles.val(el.data('number_of_vehicles'));
+                vehicleElFormDays.val(el.data('days'));
+                vehicleElFormHours.val(el.data('hours'));
+
+                vehicleAddButton.addClass('hidden');
+                vehicleUpdateButton.removeClass('hidden');
+                vehicleCancelButton.removeClass('hidden');
+            });
+
+            vehicleCancelButton.click(function(){
+                vehicleResetForm();
+
+                vehicleAddButton.removeClass('hidden');
+                vehicleUpdateButton.addClass('hidden');
+                vehicleCancelButton.addClass('hidden');
+            });
+
             function vehicleUpdateTotalCost()
             {
                 let vehicleCosts = $('.vehicle-cost');
@@ -330,6 +327,7 @@
             function vehicleResetForm()
             {
                 vehicleElForm.trigger('reset');
+                vehicleElFormProposalDetailVehicleId.val('');
             }
         });
     </script>

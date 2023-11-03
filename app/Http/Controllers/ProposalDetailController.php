@@ -488,16 +488,17 @@ class ProposalDetailController extends Controller
         return response()->json($response);
     }
 
-    public function ajaxVehicleAddNew(Request $request)
+    public function ajaxVehicleAddOrUpdate(Request $request)
     {
         if($request->isMethod('post') && $request->ajax()) {
             $validator = Validator::make(
-                $request->only(['proposal_detail_id', 'vehicle_id', 'number_of_vehicles', 'days', 'hours']), [
+                $request->only(['proposal_detail_id', 'vehicle_id', 'number_of_vehicles', 'days', 'hours', 'proposal_detail_vehicle_id']), [
                     'proposal_detail_id' => 'required|positive',
                     'vehicle_id' => 'required|positive',
                     'number_of_vehicles' => 'required|positive',
                     'days' => 'required|float',
                     'hours' => 'required|float',
+                    'proposal_detail_vehicle_id' => 'nullable|positive',
                 ]
             );
 
@@ -519,36 +520,38 @@ class ProposalDetailController extends Controller
                         $numberOfVehicles = (integer)$request->number_of_vehicles;
                         $days = (float)$request->days;
                         $hours = (float)$request->hours;
-                        $cost = $numberOfVehicles * $days * $hours * $ratePerHour;
 
                         $data = [
-                            'proposal_detail_id' => $request->proposal_detail_id,
                             'vehicle_id' => $request->vehicle_id,
                             'vehicle_name' => $vehicleName,
                             'number_of_vehicles' => $numberOfVehicles,
                             'days' => $days,
                             'hours' => $hours,
                             'rate_per_hour' => $ratePerHour,
-                            'created_by' => auth()->user()->id,
                         ];
-                        $proposalDetailVehicle = ProposalDetailVehicle::create($data);
+
+                        if (!empty($request->proposal_detail_vehicle_id)) {
+                            // update
+                            $proposalDetailVehicle = ProposalDetailVehicle::find($request->proposal_detail_vehicle_id);
+                            $proposalDetailVehicle->update($data);
+                            $msg = 'Vehicle updated.';
+                        } else {
+                            // add new
+                            $data['proposal_detail_id']  = $request->proposal_detail_id;
+                            $data['created_by']  = auth()->user()->id;
+                            ProposalDetailVehicle::create($data);
+                            $msg = 'Vehicle added.';
+                        }
+
+                        $proposalDetailVehicles = ProposalDetailVehicle::where('proposal_detail_id', $request->proposal_detail_id)->get();
 
                         $response = [
                             'success' => true,
-                            'message' => 'Vehicle added.',
-                            'data' => [
-                                'vehicle_name' => $vehicleName,
-                                'number_of_vehicles' => $numberOfVehicles,
-                                'days' => $days,
-                                'hours' => $hours,
-                                'rate_per_hour' => $ratePerHour,
-                                'cost' => $cost,
-                                'formatted_cost' => Currency::format($cost),
-                                'proposal_detail_vehicle_id' => $proposalDetailVehicle->id,
-                            ],
+                            'message' => $msg,
+                            'html' => view('estimator._form_service_vehicles', ['vehicles' => $proposalDetailVehicles])->render(),
                         ];
                     }
-                } catch(Exception $e) {
+                } catch (Exception $e) {
                     if(env('APP_ENV') === 'local') {
                         $response = [
                             'success' => false,
@@ -577,7 +580,8 @@ class ProposalDetailController extends Controller
     {
         if($request->isMethod('post') && $request->ajax()) {
             $validator = Validator::make(
-                $request->only(['proposal_detail_vehicle_id']), [
+                $request->only(['proposal_detail_id', 'proposal_detail_vehicle_id']), [
+                    'proposal_detail_id' => 'required|positive',
                     'proposal_detail_vehicle_id' => 'required|positive',
                 ]
             );
@@ -597,12 +601,12 @@ class ProposalDetailController extends Controller
                     } else {
                         $ProposalDetailVehicle->delete();
 
+                        $vehicles = ProposalDetailVehicle::where('proposal_detail_id', $request->proposal_detail_id)->get();
+
                         $response = [
                             'success' => true,
                             'message' => 'Vehicle removed.',
-                            'data' => [
-                                'proposal_detail_vehicle_id' => $request->proposal_detail_vehicle_id,
-                            ],
+                            'html' => view('estimator._form_service_vehicles', ['vehicles' => $vehicles])->render(),
                         ];
                     }
                 } catch(Exception $e) {
