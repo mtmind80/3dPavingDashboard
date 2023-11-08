@@ -6,6 +6,7 @@ use App\Helpers\Currency;
 use App\Traits\SearchTrait;
 use App\Traits\SortableTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ProposalDetail extends Model
 {
@@ -150,6 +151,13 @@ class ProposalDetail extends Model
     public function equipment()
     {
         return $this->HasMany(ProposalDetailEquipment::class, 'proposal_detail_id');
+    }
+
+
+    public function schedule(): HasMany
+    {
+        return $this->HasMany(ServiceSchedule::class,'proposal_detail_id');
+
     }
 
     public function location()

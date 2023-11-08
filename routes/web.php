@@ -57,8 +57,7 @@ Route::group(['middleware' => ['auth']], function() {
 
         Route::get('/', 'WorkOrderController@index')->name('workorders');
         Route::match(['get', 'post'], '/search', 'WorkOrderController@search')->name('workorder_search');
-        Route::get('/{id}/manage_permits', 'WorkOrderController@permits')->name('manage_permits');
-        Route::get('/{id}/make_payments', 'WorkOrderController@payments')->name('create_payment');
+
         Route::get('/{id}/changeorder', 'WorkOrderController@changeorder')->name('create_changeorder');
         Route::get('/{id}/show', 'WorkOrderController@show')->name('show_workorder');
         Route::get('/{id}/{detail_id}/assignmanager', 'WorkOrderController@assignmanager')->name('assignmanager');
@@ -66,6 +65,15 @@ Route::group(['middleware' => ['auth']], function() {
         Route::post('/{work_order}/add-note', 'WorkOrderController@storeNote')->name('workorder_note_store');
         Route::get('/view_service/{proposal_id}/{id}', 'WorkOrderController@view_service')->name('view_service');
 
+
+        Route::get('/edit_workorder/{id}', 'WorkOrderController@edit')->name('edit_workorder');
+        Route::post('/update_workorder/{id}', 'WorkOrderController@update')->name('update_workorder');
+
+        Route::post('/add_payments/', 'WorkOrderController@add_payments')->name('add_payment');
+        Route::get('/{id}/make_payments', 'WorkOrderController@payments')->name('create_payment');
+        Route::get('/delete_payment/{proposal_id}/{id}', 'WorkOrderController@delete_payment')->name('delete_payment');
+
+        Route::get('/{id}/manage_permits', 'WorkOrderController@permits')->name('manage_permits');
 
 
         /*************** Timesheets  ***************/
@@ -169,12 +177,16 @@ Route::group(['middleware' => ['auth']], function() {
 Route::group(['prefix' => 'permits'], function() {
     Route::get('/', 'PermitsController@index')->name('permits');
     Route::match(['get', 'post'], '/search', 'PermitsController@search')->name('permit_search');
-    Route::get('/{permit}/show', 'PermitsController@details')->name('permit_show');
+    Route::get('/{permit}/show', 'PermitsController@edit')->name('permit_show');
+    Route::get('/{id}/remove', 'PermitsController@destroy')->name('remove_permit');
     Route::post('/{permit}/add-note', 'PermitsController@storeNote')->name('permit_note_add');
     Route::post('/{permit}/change-status', 'PermitsController@changeStatus')->name('permit_status_change');
+    Route::get('/add_permit/{id}', 'PermitsController@create')->name('add_permit');
     Route::get('/{permit}/edit', 'PermitsController@edit')->name('permit_edit');
     Route::patch('/{permit}', 'PermitsController@update')->name('permit_update');
     Route::post('ajax-note-list', 'PermitsController@noteList')->name('ajax_permit_note_list');
+    Route::post('/create_permit', 'PermitsController@store')->name('create_permit');
+
 });
 /** END Permits */
 
@@ -245,6 +257,9 @@ Route::group(['prefix' => 'proposaldetails'], function() {
     Route::get('/edit/{proposal_id}/{id}', 'ProposalDetailController@edit')->name('edit_service');
     // Schedule a service
     Route::get('/scehdule/{service_id}', 'ProposalDetailController@schedule')->name('schedule_service');
+    Route::post('/creeate_scehdule/{proposal_detail}', 'ProposalDetailController@createschedule')->name('create_schedule');
+    Route::get('/remove_schedule/{schedule}', 'ProposalDetailController@removeschedule')->name('remove_schedule');
+
     // Select service type
     Route::post('/checkform', 'ProposalDetailController@checkform')->name('checkform');
 
@@ -266,6 +281,7 @@ Route::group(['prefix' => 'proposaldetails'], function() {
     Route::post('/header-calculate-combined-costing', 'ProposalDetailController@ajaxCalculateCombinedCosting')->name('ajax_header_calculate_combined_costing');
 
     Route::post('/ajax-vehicle-add-new', 'ProposalDetailController@ajaxVehicleAddNew')->name('ajax_vehicle_add_new');
+    Route::post('/ajax-vehicle-add-or-update', 'ProposalDetailController@ajaxVehicleAddOrUpdate')->name('ajax_vehicle_add_or_update');
     Route::post('/ajax-vehicle-remove', 'ProposalDetailController@ajaxVehicleRemove')->name('ajax_vehicle_remove');
     Route::post('/ajax-equipment-add-new', 'ProposalDetailController@ajaxEquipmentAddNew')->name('ajax_equipment_add_new');
     Route::post('/ajax-equipment-remove', 'ProposalDetailController@ajaxEquipmentRemove')->name('ajax_equipment_remove');

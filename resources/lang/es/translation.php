@@ -399,6 +399,10 @@ return [
     "overhead" => "Por encima",
     "percentage" => "Porciento",
     "list" => "Lista",
-    "fieldreport" => "Field Report",
+    "fieldreport" => "Reporte de Campo",
     "cantschedule" => "Can't Schedule",
+    "all" => "Todo",
+    "fees" => "Fees",
+
+
 ];

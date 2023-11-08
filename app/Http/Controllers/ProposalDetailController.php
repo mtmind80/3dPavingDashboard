@@ -20,10 +20,13 @@ use App\Models\ProposalDetailVehicle;
 use App\Models\ProposalMaterial;
 use App\Models\Service;
 use App\Models\ServiceCategory;
+use App\Http\Requests\ScheduleRequest;
+use App\Models\ServiceSchedule;
 use App\Models\StripingCost;
 use App\Models\Vehicle;
 use App\Models\VehicleType;
 use Exception;
+use Google\Service\AdMob\Date;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -485,16 +488,17 @@ class ProposalDetailController extends Controller
         return response()->json($response);
     }
 
-    public function ajaxVehicleAddNew(Request $request)
+    public function ajaxVehicleAddOrUpdate(Request $request)
     {
         if($request->isMethod('post') && $request->ajax()) {
             $validator = Validator::make(
-                $request->only(['proposal_detail_id', 'vehicle_id', 'number_of_vehicles', 'days', 'hours']), [
+                $request->only(['proposal_detail_id', 'vehicle_id', 'number_of_vehicles', 'days', 'hours', 'proposal_detail_vehicle_id']), [
                     'proposal_detail_id' => 'required|positive',
                     'vehicle_id' => 'required|positive',
                     'number_of_vehicles' => 'required|positive',
                     'days' => 'required|float',
                     'hours' => 'required|float',
+                    'proposal_detail_vehicle_id' => 'nullable|positive',
                 ]
             );
 
@@ -516,36 +520,38 @@ class ProposalDetailController extends Controller
                         $numberOfVehicles = (integer)$request->number_of_vehicles;
                         $days = (float)$request->days;
                         $hours = (float)$request->hours;
-                        $cost = $numberOfVehicles * $days * $hours * $ratePerHour;
 
                         $data = [
-                            'proposal_detail_id' => $request->proposal_detail_id,
                             'vehicle_id' => $request->vehicle_id,
                             'vehicle_name' => $vehicleName,
                             'number_of_vehicles' => $numberOfVehicles,
                             'days' => $days,
                             'hours' => $hours,
                             'rate_per_hour' => $ratePerHour,
-                            'created_by' => auth()->user()->id,
                         ];
-                        $proposalDetailVehicle = ProposalDetailVehicle::create($data);
+
+                        if (!empty($request->proposal_detail_vehicle_id)) {
+                            // update
+                            $proposalDetailVehicle = ProposalDetailVehicle::find($request->proposal_detail_vehicle_id);
+                            $proposalDetailVehicle->update($data);
+                            $msg = 'Vehicle updated.';
+                        } else {
+                            // add new
+                            $data['proposal_detail_id']  = $request->proposal_detail_id;
+                            $data['created_by']  = auth()->user()->id;
+                            ProposalDetailVehicle::create($data);
+                            $msg = 'Vehicle added.';
+                        }
+
+                        $proposalDetailVehicles = ProposalDetailVehicle::where('proposal_detail_id', $request->proposal_detail_id)->get();
 
                         $response = [
                             'success' => true,
-                            'message' => 'Vehicle added.',
-                            'data' => [
-                                'vehicle_name' => $vehicleName,
-                                'number_of_vehicles' => $numberOfVehicles,
-                                'days' => $days,
-                                'hours' => $hours,
-                                'rate_per_hour' => $ratePerHour,
-                                'cost' => $cost,
-                                'formatted_cost' => Currency::format($cost),
-                                'proposal_detail_vehicle_id' => $proposalDetailVehicle->id,
-                            ],
+                            'message' => $msg,
+                            'html' => view('estimator._form_service_vehicles', ['vehicles' => $proposalDetailVehicles])->render(),
                         ];
                     }
-                } catch(Exception $e) {
+                } catch (Exception $e) {
                     if(env('APP_ENV') === 'local') {
                         $response = [
                             'success' => false,
@@ -574,7 +580,8 @@ class ProposalDetailController extends Controller
     {
         if($request->isMethod('post') && $request->ajax()) {
             $validator = Validator::make(
-                $request->only(['proposal_detail_vehicle_id']), [
+                $request->only(['proposal_detail_id', 'proposal_detail_vehicle_id']), [
+                    'proposal_detail_id' => 'required|positive',
                     'proposal_detail_vehicle_id' => 'required|positive',
                 ]
             );
@@ -594,12 +601,12 @@ class ProposalDetailController extends Controller
                     } else {
                         $ProposalDetailVehicle->delete();
 
+                        $vehicles = ProposalDetailVehicle::where('proposal_detail_id', $request->proposal_detail_id)->get();
+
                         $response = [
                             'success' => true,
                             'message' => 'Vehicle removed.',
-                            'data' => [
-                                'proposal_detail_vehicle_id' => $request->proposal_detail_vehicle_id,
-                            ],
+                            'html' => view('estimator._form_service_vehicles', ['vehicles' => $vehicles])->render(),
                         ];
                     }
                 } catch(Exception $e) {
@@ -1255,6 +1262,55 @@ class ProposalDetailController extends Controller
         return response()->json($response);
     }
 
+
+    public function schedule($service_id)
+    {
+
+        $service = ProposalDetail::where('id','=',$service_id)->first();
+        if(!$service) {
+            return view('pages-404');
+        }
+
+        $proposal = Proposal::where('id','=',$service->proposal_id)->first();
+
+        $schedules = ServiceSchedule::where('proposal_detail_id','=',$service->id)->get();
+        $data['schedules'] = $schedules;
+        $data['service_id'] = $service_id;
+        $data['service'] = $service;
+        $data['proposal'] = $proposal;
+
+
+        return view('proposaldetails.schedule_service', $data);
+
+
+    }
+
+    public function removeschedule($schedule)
+    {
+        $serviceschedule = ServiceSchedule::where('id','=',$schedule)->delete();
+
+        return redirect()->back()->with('info', 'Schedule Deleted!');
+
+    }
+
+
+        public function createschedule(ScheduleRequest $request, ProposalDetail $proposal_detail)
+    {
+        $start_date = strtotime($request['start_date']);
+        $request['start_date'] = date( 'Y-m-d', $start_date);
+
+        $end_date = strtotime($request['end_date']);
+        $request['end_date'] = date( 'Y-m-d', $end_date);
+
+        $newschedule = $request->all();
+        $serviceschedule = ServiceSchedule::create($newschedule);
+
+        $id = $serviceschedule->id;
+
+        return redirect()->back()->with('info', 'Schedule Created!');
+
+
+    }
     public function destroyOLD($id)
     {
         $service = ProposalDetail::where('id', '=', $id)->first()->toArray();

@@ -43,7 +43,7 @@
                         @else
                             @foreach ($permits as $permit)
                                 <tr>
-                                    <td class="tc"><a href="{{ route('show_workorder', ['id' => $permit->proposal_id]) }}">{{ $permit->proposal->name }}</a>
+                                    <td class="tc"><a href="{{route('permit_show',['permit'=>$permit->id])}}">{{ $permit->proposal->name }}</a>
                                         <br/>{{ $permit->proposal->WorkOrderNumber }}
                                     </td>
                                     <td class="tc">{{ $permit->county }}</td>
@@ -95,6 +95,12 @@
                                                         >
                                                             <span class="fas fa-retweet"></span>@lang('translation.change_status')
                                                         </a>
+                                                    </li>
+
+                                                    <li>
+                                                        <a href="{{route('permit_show',['permit'=>$permit->id])}}">
+                                                                    <span class="fas fa-eye"></span>@lang('translation.view') @lang('translation.permit')
+                                                                </a>
                                                     </li>
                                                     <li>
                                                         <a href="{{ route('show_workorder', ['id' => $permit->proposal_id]) }}">
@@ -160,6 +166,7 @@
 
                             var notes = response.notes;
                             var html = '';
+                            console.log(notes);
 
                             $.each(notes, function (index, note){
                                 html += '<div class="note-box">';
