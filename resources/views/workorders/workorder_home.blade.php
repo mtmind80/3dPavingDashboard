@@ -227,6 +227,7 @@
                                             @endif
                                         </td>
                                     </tr>
+    @if(!$proposal['changeorder'])
                                     <tr>
                                         <td>Create Change Order</td>
                                         <td>
@@ -234,7 +235,8 @@
 
                                         </td>
                                     </tr>
-                                    <tr>
+    @endif
+                                        <tr>
                                         <td>Clone Work Order</td>
                                         <td>
                                             <a href="Javascript:AREYOUSURE('You are about to clone this work order. Are you sure?','{{route('clone_proposal',['id'=>$proposal['id']])}}');" title="Clone this proposal">Clone This Work Order</a>

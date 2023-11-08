@@ -142,6 +142,8 @@
                                             @if($proposal['contact_id'])
 
                                                 <a href="Javascript:showData(1);" title="find contact">{{ App\Models\Contact::find($proposal['contact_id'])->FullName }}</a>
+
+                                            <span style="float:right;"><a href="{{ route('change_client',['id' => $proposal['id']]) }}" class='button' title="Change Client">Change Client</a></span>
                                             @endif
                                         </td>
                                     </tr>
@@ -194,7 +196,6 @@
                                             @endif
                                         </td>
                                     </tr>
-
                                         <tr>
                                             <td>Clone Proposal</td>
                                             <td>
@@ -424,10 +425,12 @@
         function AREYOUSURE(msg, url){
 
             Swal.fire({
+                height: 200,
                 title: msg,
                 showCancelButton: true,
                 confirmButtonText: 'Yes',
                 cancelButtonText: "No",
+                width: '60em',
                 cancelButtonColor: "#A9DFBF",
                 customClass: {
                     actions: 'my-actions',

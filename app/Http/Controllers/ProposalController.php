@@ -965,6 +965,15 @@ class ProposalController extends Controller
 
     }
 
+    public function changeclient($id)
+    {
+        \Session::flash('success', 'To change the client on this proposal, select an existing client or create a new one!');
+
+
+        return redirect()->route('change_contact', ['id' => $id])->with('info', 'To change client on this proposal, select an existing contact');
+
+    }
+
     public function refreshMaterialPricing($id)
     {
 

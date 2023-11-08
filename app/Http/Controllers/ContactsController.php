@@ -9,6 +9,7 @@ use App\Models\ContactType;
 use App\Models\LeadSource;
 use App\Models\Location;
 use App\Models\Staff;
+use App\Models\Proposal;
 use Exception;
 use Illuminate\Http\Request;
 use App\Models\Contact;
@@ -40,6 +41,26 @@ class ContactsController extends Controller
         //   dd($contact->toArray());
 
         return view('contacts.index', $data);
+    }
+
+    public function changeclient(Request $request, $id)  //proposal id
+    {
+
+
+        $needle = $request->needle ?? null;
+        $perPage = $request->perPage ?? 10;
+
+
+        $proposal = Proposal::where('id', '=', $id)->first();
+        $contacts = Contact::search($needle)->sortable()->with(['contactType', 'company'])->paginate($perPage);
+        $data = [
+            'id' => $id,
+            'proposal' => $proposal,
+            'contacts' => $contacts,
+            'needle'   => $needle,
+        ];
+
+        return view('contacts.index_change_client', $data);
     }
 
     public function search(SearchRequest $request)

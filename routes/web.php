@@ -327,6 +327,8 @@ Route::group(['prefix' => 'proposals'], function() {
     // close get ready to bill specific proposal
     Route::get('/close/{id}', 'ProposalController@closeproposal')->name('close_proposal');
 
+    Route::get('/change_client/{id}', 'ProposalController@changeclient')->name('change_client');
+
     Route::get('/clone_proposal/{id}', 'ProposalController@clone')->name('clone_proposal');
 
     Route::get('/fromlead/{lead}', 'ProposalController@startWithLead')->name('start_from_lead');
@@ -456,6 +458,10 @@ Route::group(['prefix' => 'resources'], function() {
 
 Route::group(['prefix' => 'contacts', 'middleware' => 'admin'], function() {
     Route::model('contact', \App\Models\Contact::class);
+
+
+
+    Route::get('/change_contact/{id}', 'ContactsController@changeclient')->name('change_contact');
 
     Route::match(['get', 'post'], '/search', 'ContactsController@search')->name('contact_search');
 
