@@ -83,17 +83,27 @@
 
 
                                         <td class="tc">
+                                            <form id="printform"  name="printform" method="POST" action="{{route('print_proposal')}}">
+                                                @csrf
 
-                                            <button id="printproposal"  class="{{$site_button_class}}">
+<table class="table">
+    <td><input type="hidden" name="proposal_id" value="{{$proposal['id']}}">
+
+                                                <button id="printproposal"  class="{{$site_button_class}}">
                                                 <i class="fas fa-plus"></i> @lang('translation.print') @lang('translation.proposal')
                                             </button>
-<!--
+    </td>
+    <td class="tc"><input type="text" name="print_date" value="{{ \Carbon\Carbon::parse($proposal['proposal_date'])->format('Y-m-d') }}" id="print_date"  class="form-control" data-provide="datepicker" data-date-format="yyyy-mm-dd"></td>
+                                            </table>
+
+                                            <!--
                                             <a  href="{{route('print_proposal',['proposal_id'=> $proposal['id']])}}"
                                                title="@lang('translation.print') @lang('translation.proposal')"
                                                class="{{$site_button_class}}">
                                                 <i class="fas fa-plus"></i> @lang('translation.print') @lang('translation.proposal')
                                             </a>
--->
+                                               -->
+                                            </form>
                                         </td>
 
                                     </tr>
@@ -498,7 +508,7 @@
             $("#printproposal").click(function(){
 
                 let timerInterval
-
+                var print_date = $("#print_date").val();
                 Swal.fire({
                     title: 'Working On It!',
                     html: '</br><h3>Preparing your proposal for download.</h3><br/>',
@@ -510,7 +520,7 @@
                     showConfirmButton: true,
                 })
 
-                window.location.href="{{route('print_proposal',['proposal_id'=> $proposal['id']])}}";
+                window.location.href="/print/proposal/?proposal_id={{$proposal['id']}}&print_date=" + print_date;
 
                 return;
 

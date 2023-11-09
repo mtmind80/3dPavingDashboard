@@ -40,7 +40,7 @@
                     <ul class="nav nav-tabs nav-tabs-custom nav-justified" role="tablist">
                         <li class="nav-item">
                             <a class="nav-link active" data-toggle="tab" href="#proposal" role="tab">
-                                <span class="d-block  list-item"><i class="ri-home-2-line"></i> @lang('translation.work_order')</span>
+                                <span class="d-block  list-item"><i class="ri-home-2-line"></i> @lang('translation.menu_workorders')</span>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -66,20 +66,6 @@
                         <div class="tab-pane active" id="proposal" role="tabpanel">
                             <div class="row">
                                 <table width="100%" class="table-centered table-bordered font-size-20">
-@if($proposal->proposal_statuses_id == 5)
-                                    <tr>
-                                        <td class="tc w-25">
-
-                                    <a href="{{route('edit_workorder',['id'=> $proposal['id']])}}"
-                                       title="@lang('translation.edit') @lang('translation.proposal')"
-                                       class="{{$site_button_class}}">
-                                        <i class="fas fa-plus"></i> @lang('translation.edit') @lang('translation.work_order')
-                                    </a>
-                                        </td>
-                                        <td class="tc w-75">
-                                        </td>
-                                    </tr>
-@endif
                                     <tr>
                                         <td class="tc w-25">
                                             {{$proposal['name']}}
@@ -163,7 +149,7 @@
                                         <td>@if($proposal['permit_required'])
                                                 YES
                                                 &nbsp; &nbsp;
-                                                <button class="{{$site_button_class}}" id="addpermit">Add Permit</button>
+                                                <button class="button info" id="addpermit">Add Permit</button>
                                             @else
                                                 NO
                                             @endif
@@ -171,7 +157,7 @@
                                     </tr>
                                     @if($proposal['permit_required'] && $permits)
                                         <tr>
-                                            <td>Current @lang('translation.permits')</td>
+                                            <td>@lang('translation.permits')</td>
                                             <td>
                                                 <table width="80%">
                                                     <tr>
@@ -182,9 +168,9 @@
                                                     </tr>
                                                     @foreach($permits as $permit)
                                                         <tr>
-                                                            <td class="tc">
-                                                                <a href="{{route('permit_show',['permit'=>$permit->id])}}">View Permit</a>
-                                                            </td>
+                                                            <td class="tc"><a class="tc"><a
+                                                                            href="{{route('permit_show',['permit'=>$permit->id])}}">View
+                                                                        Permit</a></td>
                                                             <td class="tc">{{$permit->county}}</td>
                                                             <td class="tc">{{$permit->number}}</td>
                                                             <td class="tc">{{$permit->status}}</td>
@@ -300,31 +286,46 @@
                                                             <li class="dropdown">
                                                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-angle-down"></i></a>
                                                                 <ul class="dropdown-menu animated animated-short flipInX" role="menu">
-                                                                    @if($allowSchedule)
-                                                                        @if($service->status_id == 1)
-                                                                            <li>
-                                                                                <a href="{{route('schedule_service', ['service_id'=>$service->id])}}" class="action list-group-item-action">
-                                                                                    <span class="far fa-calendar-check"></span>
-                                                                                    &nbsp; @lang('translation.schedule')
-                                                                                </a>
-                                                                            </li>
-                                                                        @else
-                                                                            <li>
-                                                                                <a href="{{route('schedule_service', ['service_id'=>$service->id])}}"
-                                                                                   class="list-group-item-action">
-                                                                                    <span class="far fa-calendar-check"></span>
-                                                                                    &nbsp; @lang('translation.changeschedule')
-                                                                                </a>
-                                                                            </li>
-                                                                        @endif
+                                                                    <li>
+                                                                        <a href="{{ route('workorder_timesheet_entry_form', ['proposal_detail_id' => $service->id]) }}">
+                                                                            <span class="fas fa-clock mr10"></span>@lang('translation.timesheet')
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="{{ route('workorder_equipment_entry_form', ['proposal_detail_id' => $service->id]) }}">
+                                                                            <span class="fas fa-gamepad mr10"></span>@lang('translation.equipment')
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="{{ route('workorder_material_entry_form', ['proposal_detail_id' => $service->id]) }}">
+                                                                            <span class="fas fa-sitemap mr10"></span>@lang('translation.materials')
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="{{ route('workorder_vehicle_entry_form', ['proposal_detail_id' => $service->id]) }}">
+                                                                            <span class="fas fa-car mr10"></span>@lang('translation.vehicle')
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="{{ route('workorder_subcontractor_entry_form', ['proposal_detail_id' => $service->id]) }}">
+                                                                            <span class="fas fa-user-friends mr10"></span>@lang('translation.subcontractors')
+                                                                        </a>
+                                                                    </li>
+                                                                    @if($service->status_id == 1)
+                                                                        <li>
+                                                                            <a href="{{route('schedule_service', ['service_id'=>$service->id])}}" class="action list-group-item-action">
+                                                                                <span class="far fa-calendar-check"></span>
+                                                                                &nbsp; @lang('translation.schedule')
+                                                                            </a>
+                                                                        </li>
                                                                     @else
                                                                         <li>
-                                                                            <a href="Javascript:alert('Until a deposit is recorded and all permits are completed you cannot schedule this work. Check Payments and Permits');"
+                                                                            <a href="{{route('schedule_service', ['service_id'=>$service->id])}}"
                                                                                class="list-group-item-action">
                                                                                 <span class="far fa-calendar-check"></span>
-                                                                                &nbsp; @lang('translation.cantschedule')
-                                                                            </a>                                                                        </li>
-
+                                                                                &nbsp; @lang('translation.changeschedule')
+                                                                            </a>
+                                                                        </li>
                                                                     @endif
                                                                     <li>
                                                                         <a href="{{route('workordermedia', ['proposal_id'=>$proposal['id'], 'proposal_detail_id'=>$service->id])}}"
@@ -341,15 +342,19 @@
                                                                         </a>
                                                                     </li>
                                                                     <li>
-                                                                        <a href="{{ route('workorder_details', ['proposal_detail_id' => $service->id]) }}">
-                                                                            <span class="fas fa-eye mr10"></span>@lang('translation.fieldreport')
+                                                                        <a href="{{route('workorder_details', ['proposal_detail_id'=>$service->id])}}"
+                                                                           class="list-group-item-action">
+                                                                            <span class="far fa-eye"></span>
+                                                                            &nbsp; @lang('translation.view') @lang('translation.details')
                                                                         </a>
                                                                     </li>
                                                                 </ul>
                                                             </li>
                                                         </ul>
                                                     </td>
+
                                                 </tr>
+
                                             @endforeach
                                             </tbody>
                                         </table>
@@ -460,10 +465,7 @@
 
                                 <ul>
                                     <li>Set Alert</li>
-                                    <li>Cancel Workorder</li>
-                                    <li>
-                                        <a href="{{route('create_payment',['id'=>$proposal['id']])}}">Record Payments</a>
-                                    </li>
+                                    <li>Change Status</li>
                                 </ul>
                             </div>
                             <div class="row">
@@ -471,8 +473,6 @@
                                 <h3>@lang('translation.letters')</h3>
 
                                 <ul>
-                                    <li>Thank You For Signing</li>
-                                    <li>Change Order</li>
                                     <li>Service Begin Reminder</li>
                                     <li>MOT Reminder</li>
                                 </ul>
@@ -487,6 +487,7 @@
 
     @include('modals.form_media_modal')
     @include('modals.form_fieldmanagers_modal')
+
     @include('modals.form_proposal_note_modal')
 
 @stop
@@ -528,13 +529,6 @@
             var noteModal = $('#formNoteModal');
             var noteForm = $('#admin_form_note_modal');
             var note = $('#note');
-
-
-
-            $('#addpermit').click(function () {
-
-                window.location.href='{{ route('add_permit',['id'=>$proposal->id]) }}';
-            });
 
 
             $('#addnotebutton').click(function () {
@@ -588,6 +582,7 @@
 
             $('#addmediabutton').click(function () {
 
+                console.log('We re arher');
 
                 let el = $(this);
                 let ProposalMediaContainer = $('#formMediaModalLabel').find('span');
@@ -599,6 +594,7 @@
                 mediaForm.attr('action', url);
                 ProposalMediaContainer.text(ProposalName);
                 mediaModal.modal('show');
+                console.log('we are here');
 
             });
 

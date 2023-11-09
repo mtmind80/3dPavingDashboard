@@ -302,7 +302,7 @@ Route::group(['prefix' => 'proposaldetails'], function() {
 Route::group(['prefix' => 'print'], function() {
 
     //Print report
-    Route::get('/proposal/{proposal_id}', 'PrintingController@proposal')->name('print_proposal');
+    Route::post('/proposal/', 'PrintingController@proposal')->name('print_proposal');
 
     //Print report
     Route::get('/printcoversheet', 'PrintingController@coversheet')->name('print_coversheet');

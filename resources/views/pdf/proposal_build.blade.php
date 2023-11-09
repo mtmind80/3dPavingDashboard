@@ -243,9 +243,9 @@ at the sole option of 3-D Paving.
             Title:Pavement Consultant
             </br></br>
         <div class="signaturefontd">    {{$sales['fname']}} {{$sales['lname']}}</div>
-        Date:@php
-        echo date('m/d/y');
-        @endphp
+        Date:
+            {{$print_date}}
+
 
    </td>
     <td class="tl">
