@@ -284,6 +284,7 @@ Route::group(['prefix' => 'proposaldetails'], function() {
     Route::post('/ajax-vehicle-add-or-update', 'ProposalDetailController@ajaxVehicleAddOrUpdate')->name('ajax_vehicle_add_or_update');
     Route::post('/ajax-vehicle-remove', 'ProposalDetailController@ajaxVehicleRemove')->name('ajax_vehicle_remove');
     Route::post('/ajax-equipment-add-new', 'ProposalDetailController@ajaxEquipmentAddNew')->name('ajax_equipment_add_new');
+    Route::post('/ajax-equipment-add-or-update', 'ProposalDetailController@ajaxEquipmentAddOrUpdate')->name('ajax_equipment_add_or_update');
     Route::post('/ajax-equipment-remove', 'ProposalDetailController@ajaxEquipmentRemove')->name('ajax_equipment_remove');
     Route::post('/ajax-labor-add-new', 'ProposalDetailController@ajaxLaborAddNew')->name('ajax_labor_add_new');
     Route::post('/ajax-labor-remove', 'ProposalDetailController@ajaxLaborRemove')->name('ajax_labor_remove');
