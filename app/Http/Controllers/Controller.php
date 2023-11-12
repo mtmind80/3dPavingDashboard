@@ -40,7 +40,7 @@ class Controller extends BaseController
             $today = date("Y-m-d H:i:s"); //mysql date format
             view()->share('today', $today);
 
-            view()->share('debug_blade', 'true');
+            view()->share('debug_blade', 'false');
             view()->share('web_config', $web_config);
             session(['web_config'=> $web_config]);
 

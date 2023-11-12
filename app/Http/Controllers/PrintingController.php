@@ -43,8 +43,14 @@ class PrintingController extends Controller
     }
 
 
-    public function proposal($proposal_id)
+    public function proposal(Request $request)
     {
+
+        $proposal_id =0;
+        if(isset($request['proposal_id'])) {
+            $proposal_id = $request['proposal_id'];
+            $print_date = $request['print_date'];
+        }
 
         $datestamp = date("Ymd");
         $pdfname = '3DPaving_' . $datestamp . '_' . $proposal_id . '.pdf';
@@ -80,6 +86,7 @@ class PrintingController extends Controller
 
         $data = [
             'title' => $pdfname,
+            'print_date' => $print_date,
             'terms' => $terms,
             'service_overhead' => $service_overhead,
             'ServiceTerms' => $TermsOfService,

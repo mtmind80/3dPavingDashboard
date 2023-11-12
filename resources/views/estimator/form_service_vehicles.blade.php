@@ -90,8 +90,8 @@
 <!-- vehicle footer row -->
 <div class="row mt12">
     <div class="col-sm-3">
-        <a id="vehicle_add_button" href="javascript:" class="{{ $site_button_class }} submit">Add Vehicle</a>
-        <a id="vehicle_update_button" href="javascript:" class="btn btn-info hidden submit">Update Vehicle</a>
+        <a id="vehicle_add_button" href="javascript:" class="{{ $site_button_class }} vehicle-submit">Add Vehicle</a>
+        <a id="vehicle_update_button" href="javascript:" class="btn btn-info hidden vehicle-submit">Update Vehicle</a>
         <a id="vehicle_cancel_button" href="javascript:" class="btn btn-light hidden ml6">Cancel</a>
     </div>
     <div class="col-sm-2 pt8 m0">
@@ -125,7 +125,7 @@
             var vehicleElRowsHeader = $('#vehicle_rows_header');
             var vehicleElRowsContainer = $('#vehicle_rows_container');
 
-            var vehicleSubmitButton = $('.submit');
+            var vehicleSubmitButton = $('.vehicle-submit');
             var vehicleAddButton = $('#vehicle_add_button');
             var vehicleUpdateButton = $('#vehicle_update_button');
             var vehicleCancelButton = $('#vehicle_cancel_button');
