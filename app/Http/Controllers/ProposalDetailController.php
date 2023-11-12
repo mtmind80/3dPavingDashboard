@@ -152,13 +152,11 @@ class ProposalDetailController extends Controller
             return view('pages-404');
         }
 
-
         $contact = $proposalDetail->proposal->contact;
         $asphaltMaterials = ProposalMaterial::where('proposal_id', $proposal_id)->byServiceCategory(1);
         $rockMaterials = ProposalMaterial::where('proposal_id', $proposal_id)->byServiceCategory(7);
         $sealcoatMaterials = ProposalMaterial::where('proposal_id', $proposal_id)->byServiceCategory(8);
         $materialsCB = ProposalMaterial::where('proposal_id', $proposal_id)->pluck('cost', 'material_id')->toArray();
-
 
         $color = ServiceCategory::where('id', '=', $proposalDetail->service->service_category_id)->first();
 
@@ -600,18 +598,7 @@ class ProposalDetailController extends Controller
                         ];
                     }
                 } catch (Exception $e) {
-                    if (env('APP_ENV') === 'local') {
-                        $response = [
-                            'success' => false,
-                            'message' => $e->getMessage(),
-                        ];
-                    } else {
-                        Log::error(get_class() . ' - ' . $e->getMessage());
-                        $response = [
-                            'success' => false,
-                            'message' => 'Exception error',
-                        ];
-                    }
+                    $response = ExceptionError::handleAjaxError($e);
                 }
             }
         } else {
@@ -704,97 +691,6 @@ class ProposalDetailController extends Controller
         return response()->json($response);
     }
 
-    public function ajaxEquipmentAddNew(Request $request)
-    {
-        if ($request->isMethod('post') && $request->ajax()) {
-            $validator = Validator::make(
-                $request->only(['proposal_detail_id', 'equipment_id', 'number_of_units', 'days', 'hours', 'equipment_rate_type']), [
-                    'proposal_detail_id' => 'required|positive',
-                    'equipment_id' => 'required|positive',
-                    'number_of_units' => 'required|positive',
-                    'days' => 'nullable|float|required_if:equipment_rate_type,per day',
-                    'hours' => 'nullable|float|required_if:equipment_rate_type,per hour',
-                    'equipment_rate_type' => 'required|in:per day,per hour',
-                ]
-            );
-
-            if ($validator->fails()) {
-                $response = [
-                    'success' => false,
-                    'message' => implode(' ', $validator->messages()->all()),
-                ];
-            } else {
-                try {
-                    if (!$equipment = Equipment::find($request->equipment_id)) {
-                        $response = [
-                            'success' => false,
-                            'message' => 'Equipment not found.',
-                        ];
-                    } else {
-                        $name = $equipment->name;
-                        $rateType = $equipment->rate_type;
-                        $rate = (float)$equipment->rate;
-                        $formattedRate = Currency::format($rate);
-                        $numberOfUnits = (integer)$request->number_of_units;
-                        $days = (float)$request->days;
-                        $hours = (float)$request->hours;
-                        $minCost = $equipment->min_cost;
-
-                        if ($equipment->rate_type === 'per day') {
-                            $cost = $numberOfUnits * $days * $rate;
-                        } else {
-                            $cost = $numberOfUnits * $hours * $rate;
-                            if (!empty($days)) {
-                                $cost *= $days;
-                            }
-                        }
-
-                        $data = [
-                            'proposal_detail_id' => $request->proposal_detail_id,
-                            'equipment_id' => $equipment->id,
-                            'created_by' => auth()->user()->id,
-                            'hours' => $hours,
-                            'days' => $days,
-                            'number_of_units' => $numberOfUnits,
-                            'rate_type' => $rateType,
-                            'rate' => $rate,
-                        ];
-                        $proposalDetailEquipment = ProposalDetailEquipment::create($data);
-
-                        $response = [
-                            'success' => true,
-                            'message' => 'Equipment added.',
-                            'data' => [
-                                'equipment_name' => $name,
-                                'formatted_name_and_rate_type' => $equipment->html_name_and_rate_type,
-                                'hours' => $hours,
-                                'days' => $days,
-                                'number_of_units' => $numberOfUnits,
-                                'rate_type' => $rateType,
-                                'rate' => $rate,
-                                'formatted_rate' => $formattedRate,
-                                'cost' => $cost,
-                                'formatted_cost' => Currency::format($cost),
-                                'min_cost' => $minCost,
-                                'formatted_min_cost' => '<span class="status ' . ($cost < $minCost ? 'danger' : '') . '">' . Currency::format($minCost) . '</span>',
-                                'proposal_detail_equipment_id' => $proposalDetailEquipment->id,
-                            ],
-                        ];
-                    }
-                } catch (Exception $e) {
-                    $response = ExceptionError::handleAjaxError($e);
-                }
-            }
-        } else {
-            $response = [
-                'success' => false,
-                'message' => 'Invalid request.',
-            ];
-        }
-
-        return response()->json($response);
-    }
-
     public function ajaxEquipmentRemove(Request $request)
     {
         if ($request->isMethod('post') && $request->ajax()) {
@@ -842,16 +738,17 @@ class ProposalDetailController extends Controller
         return response()->json($response);
     }
 
-    public function ajaxLaborAddNew(Request $request)
+    public function ajaxLaborAddOrUpdate(Request $request)
     {
         if ($request->isMethod('post') && $request->ajax()) {
             $validator = Validator::make(
-                $request->only(['proposal_detail_id', 'labor_id', 'number', 'days', 'hours']), [
+                $request->only(['proposal_detail_id', 'labor_id', 'number', 'days', 'hours', 'proposal_detail_labor_id']), [
                     'proposal_detail_id' => 'required|positive',
                     'labor_id' => 'required|positive',
                     'number' => 'required|positive',
                     'days' => 'required|float',
                     'hours' => 'required|float',
+                    'proposal_detail_labor_id' => 'nullable|positive',
                 ]
             );
 
@@ -870,12 +767,9 @@ class ProposalDetailController extends Controller
                     } else {
                         $ratePerHour = (float)$labor->rate;
                         $laborName = $labor->name;
-                        $formattedRatePerHour = Currency::format($ratePerHour);
-                        $laborNameAndformattedRate = $labor->name . ' - ' . $formattedRatePerHour;
                         $number = (integer)$request->number;
                         $days = (float)$request->days;
                         $hours = (float)$request->hours;
-                        $cost = $number * $days * $hours * $ratePerHour;
 
                         $data = [
                             'proposal_detail_id' => $request->proposal_detail_id,
@@ -886,38 +780,30 @@ class ProposalDetailController extends Controller
                             'rate_per_hour' => $ratePerHour,
                             'created_by' => auth()->user()->id,
                         ];
-                        $proposalDetailLabor = ProposalDetailLabor::create($data);
+
+                        if (!empty($request->proposal_detail_labor_id)) {
+                            // update
+                            $proposalDetailLabor = ProposalDetailLabor::find($request->proposal_detail_labor_id);
+                            $proposalDetailLabor->update($data);
+                            $msg = 'Labor updated.';
+                        } else {
+                            // add new
+                            $data['proposal_detail_id'] = $request->proposal_detail_id;
+                            $data['created_by'] = auth()->user()->id;
+                            ProposalDetailLabor::create($data);
+                            $msg = 'Labor added.';
+                        }
+
+                        $proposalDetailLabors = ProposalDetailLabor::where('proposal_detail_id', $request->proposal_detail_id)->get();
 
                         $response = [
                             'success' => true,
-                            'message' => 'Labor added.',
-                            'data' => [
-                                'labor_name' => $laborName,
-                                'formatted_labor_name_and_rate' => $laborNameAndformattedRate,
-                                'number' => $number,
-                                'days' => $days,
-                                'hours' => $hours,
-                                'rate_per_hour' => $ratePerHour,
-                                'formatted_rate_per_hour' => $formattedRatePerHour,
-                                'cost' => $cost,
-                                'formatted_cost' => Currency::format($cost),
-                                'proposal_detail_additional_cost_id' => $proposalDetailLabor->id,
-                            ],
+                            'message' => $msg,
+                            'html' => view('estimator._form_service_labor', ['labors' => $proposalDetailLabors])->render(),
                         ];
                     }
                 } catch (Exception $e) {
-                    if (env('APP_ENV') === 'local') {
-                        $response = [
-                            'success' => false,
-                            'message' => $e->getMessage(),
-                        ];
-                    } else {
-                        Log::error(get_class() . ' - ' . $e->getMessage());
-                        $response = [
-                            'success' => false,
-                            'message' => 'Exception error',
-                        ];
-                    }
+                    $response = ExceptionError::handleAjaxError($e);
                 }
             }
         } else {
@@ -934,7 +820,8 @@ class ProposalDetailController extends Controller
     {
         if ($request->isMethod('post') && $request->ajax()) {
             $validator = Validator::make(
-                $request->only(['proposal_detail_labor_id']), [
+                $request->only(['proposal_detail_id', 'proposal_detail_labor_id']), [
+                    'proposal_detail_id' => 'required|positive',
                     'proposal_detail_labor_id' => 'required|positive',
                 ]
             );
@@ -954,27 +841,16 @@ class ProposalDetailController extends Controller
                     } else {
                         $ProposalDetailLabor->delete();
 
+                        $labors = ProposalDetailLabor::where('proposal_detail_id', $request->proposal_detail_id)->get();
+
                         $response = [
                             'success' => true,
                             'message' => 'Labor removed.',
-                            'data' => [
-                                'proposal_detail_labor_id' => $request->proposal_detail_labor_id,
-                            ],
+                            'html' => view('estimator._form_service_labor', ['labors' => $labors])->render(),
                         ];
                     }
                 } catch (Exception $e) {
-                    if (env('APP_ENV') === 'local') {
-                        $response = [
-                            'success' => false,
-                            'message' => $e->getMessage(),
-                        ];
-                    } else {
-                        Log::error(get_class() . ' - ' . $e->getMessage());
-                        $response = [
-                            'success' => false,
-                            'message' => 'Exception error',
-                        ];
-                    }
+                    $response = ExceptionError::handleAjaxError($e);
                 }
             }
         } else {
@@ -987,15 +863,16 @@ class ProposalDetailController extends Controller
         return response()->json($response);
     }
 
-    public function ajaxAdditionalCostAddNew(Request $request)
+    public function ajaxAdditionalCostAddOrUpdate(Request $request)
     {
         if ($request->isMethod('post') && $request->ajax()) {
             $validator = Validator::make(
-                $request->only(['proposal_detail_id', 'amount', 'type', 'description']), [
+                $request->only(['proposal_detail_id', 'amount', 'type', 'description', 'proposal_detail_additional_cost_id']), [
                     'proposal_detail_id' => 'required|positive',
                     'amount' => 'required|float',
                     'type' => 'required|plainText',
                     'description' => 'required|text',
+                    'proposal_detail_additional_cost_id' => 'nullable|positive',
                 ]
             );
 
@@ -1017,33 +894,29 @@ class ProposalDetailController extends Controller
                         'description' => $description,
                         'created_by' => auth()->user()->id,
                     ];
-                    $proposalAdditionalCost = ProposalDetailAdditionalCost::create($data);
+
+                    if (!empty($request->proposal_detail_additional_cost_id)) {
+                        // update
+                        $proposalAdditionalCost = ProposalDetailAdditionalCost::find($request->proposal_detail_additional_cost_id);
+                        $proposalAdditionalCost->update($data);
+                        $msg = 'Additional cost updated.';
+                    } else {
+                        // add new
+                        $data['proposal_detail_id'] = $request->proposal_detail_id;
+                        $data['created_by'] = auth()->user()->id;
+                        ProposalDetailAdditionalCost::create($data);
+                        $msg = 'Additional cost added.';
+                    }
+
+                    $proposalAdditionalCosts = ProposalDetailAdditionalCost::where('proposal_detail_id', $request->proposal_detail_id)->get();
 
                     $response = [
                         'success' => true,
-                        'message' => 'Additional cost added.',
-                        'data' => [
-                            'type' => $type,
-                            'description' => $description,
-                            'short_description' => Str::limit($description, 100),
-                            'cost' => $amount,
-                            'formatted_cost' => Currency::format($amount),
-                            'proposal_detail_additional_cost_id' => $proposalAdditionalCost->id,
-                        ],
+                        'message' => $msg,
+                        'html' => view('estimator._form_service_additional_costs', ['additionalCosts' => $proposalAdditionalCosts])->render(),
                     ];
                 } catch (Exception $e) {
-                    if (env('APP_ENV') === 'local') {
-                        $response = [
-                            'success' => false,
-                            'message' => $e->getMessage(),
-                        ];
-                    } else {
-                        Log::error(get_class() . ' - ' . $e->getMessage());
-                        $response = [
-                            'success' => false,
-                            'message' => 'Exception error',
-                        ];
-                    }
+                    $response = ExceptionError::handleAjaxError($e);
                 }
             }
         } else {
@@ -1060,7 +933,8 @@ class ProposalDetailController extends Controller
     {
         if ($request->isMethod('post') && $request->ajax()) {
             $validator = Validator::make(
-                $request->only(['proposal_detail_additional_cost_id']), [
+                $request->only(['proposal_detail_additional_cost_id', 'proposal_detail_id']), [
+                    'proposal_detail_id' => 'required|positive',
                     'proposal_detail_additional_cost_id' => 'required|positive',
                 ]
             );
@@ -1080,27 +954,16 @@ class ProposalDetailController extends Controller
                     } else {
                         $proposalAdditionalCost->delete();
 
+                        $proposalAdditionalCosts = ProposalDetailAdditionalCost::where('proposal_detail_id', $request->proposal_detail_id)->get();
+
                         $response = [
                             'success' => true,
                             'message' => 'Additional cost removed.',
-                            'data' => [
-                                'proposal_detail_additional_cost_id' => $request->proposal_detail_additional_cost_id,
-                            ],
+                            'html' => view('estimator._form_service_additional_costs', ['additionalCosts' => $proposalAdditionalCosts])->render(),
                         ];
                     }
                 } catch (Exception $e) {
-                    if (env('APP_ENV') === 'local') {
-                        $response = [
-                            'success' => false,
-                            'message' => $e->getMessage(),
-                        ];
-                    } else {
-                        Log::error(get_class() . ' - ' . $e->getMessage());
-                        $response = [
-                            'success' => false,
-                            'message' => 'Exception error',
-                        ];
-                    }
+                    $response = ExceptionError::handleAjaxError($e);
                 }
             }
         } else {
