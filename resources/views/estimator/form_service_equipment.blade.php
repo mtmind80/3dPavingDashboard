@@ -82,7 +82,7 @@
     <div class="col-sm-1 tc">Rate</div>
     <div class="col-sm-1 tc">Total</div>
     <div class="col-sm-1 tc">Min Cost</div>
-    <div class="col-sm-1 tc">Remove</div>
+    <div class="col-sm-1 tc">Edit / Remove</div>
 </div>
 
 <!-- equipment row -->
@@ -153,21 +153,6 @@
                 let el = $(this);
 
                 equipmentHasChanged(el);
-
-                /*
-                let selected = el.find('option:selected');
-                equipmentRateType = selected.data('rate_type');
-
-                if (equipmentRateType === 'per day') {
-                    equipmentElFormHoursRequired.addClass('hidden');
-                    equipmentElFormHours.val(0);
-                    equipmentElFormHours.prop('disabled', true);
-                } else {
-                    equipmentElFormHoursRequired.removeClass('hidden');
-                    equipmentElFormHours.val('');
-                    equipmentElFormHours.prop('disabled', false);
-                }
-                 */
             });
 
             function equipmentHasChanged(el)

@@ -26,6 +26,11 @@ class ProposalDetailLabor extends Model
 
     /** Accessor(get) and Mutators(set) */
 
+    public function getLaborIdAttribute()
+    {
+        return ($row = LaborRate::where('name', $this->labor_name)->where('rate', $this->rate_per_hour)->first()) ? $row->id : null;
+    }
+
     public function getHtmlRatePerHourAttribute()
     {
         return Currency::format($this->rate_per_hour);

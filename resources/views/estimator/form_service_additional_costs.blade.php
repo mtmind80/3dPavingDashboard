@@ -13,6 +13,7 @@
 </div>
 <form method="POST" action="#" accept-charset="UTF-8" id="additional_cost_form" class="admin-form">
     @csrf
+    <input type="hidden" name="proposal_detail_additional_cost_id" id="proposal_detail_additional_cost_id">
     <div class="row">
         <div class="col-sm-3 admin-form-item-widget">
             <x-form-select name="type"
@@ -65,50 +66,20 @@
 <div id="additional_cost_rows_header" class="row fwb pb4 border-bottom-solid{{ !empty($proposalDetail->additionalCosts) && $proposalDetail->additionalCosts->count() > 0 ? '' : ' hidden' }}">
     <div class="col-sm-4">Type</div>
     <div class="col-sm-1 tc">Cost</div>
-    <div class="col-sm-6 tc">Short Description</div>
-    <div class="col-sm-1 tc">Remove</div>
+    <div class="col-sm-5 tc">Short Description</div>
+    <div class="col-sm-2 tr">View / Edit / Remove</div>
 </div>
 
 <!-- additional costs rows -->
 <div id="additional_cost_rows_container" class="mb20">
-    @if (!empty($proposalDetail->additionalCosts) && $proposalDetail->additionalCosts->count() > 0)
-        @foreach ($proposalDetail->additionalCosts as $additionalCost)
-            <div id="proposal_detail_additional_cost_id_{{ $additionalCost->id }}" class="row additional-cost-row border-bottom-dashed">
-                <div class="col-sm-4 additional-cost-type">{{ $additionalCost->type }}</div>
-                <div class="col-sm-1 tc additional-cost-cost" data-cost="{{ $additionalCost->cost }}">{{ $additionalCost->html_cost }}</div>
-                <div class="col-sm-6 tc additional-cost-short-description">{{ Str::limit($additionalCost->description, 100) }}</div>
-                <div class="col-sm-1 tc">
-                    <button
-                        class="btn p0 btn-info tc additional-cost-show-description-button mr6"
-                        type="button"
-                        data-toggle="tooltip"
-                        title="Show full description"
-                        data-proposal_detail_additional_cost_id="{{ $additionalCost->id }}"
-                        data-bs-toggle="modal"
-                        data-bs-target="#modal_full_description_{{ $additionalCost->id }}"
-                    >
-                        <i class="far fa-eye dib m0 plr5"></i>
-                        <div class="additional-cost-description hidden">{{ $additionalCost->description }}</div>
-                    </button>
-                    <button
-                        class="btn p0 btn-danger tc additional-cost-remove-button"
-                        type="button"
-                        data-toggle="tooltip"
-                        title="remove item"
-                        data-proposal_detail_additional_cost_id="{{ $additionalCost->id }}"
-                    >
-                        <i class="far fa-trash-alt dib m0 plr5"></i>
-                    </button>
-                </div>
-
-            </div>
-        @endforeach
-    @endif
+    @include('estimator._form_service_additional_costs', ['additionalCosts' => $proposalDetail->additionalCosts])
 </div>
 <!-- additional costs footer row -->
 <div class="row mt12">
     <div class="col-sm-3">
-        <a id="additional_cost_add_button" href="javascript:" class="{{ $site_button_class }}">Add Cost</a>
+        <a id="additional_cost_add_button" href="javascript:" class="{{ $site_button_class }} additional-cost-submit">Add Additional Cost</a>
+        <a id="additional_cost_update_button" href="javascript:" class="btn btn-info hidden additional-cost-submit">Update Additional Cost</a>
+        <a id="additional_cost_cancel_button" href="javascript:" class="btn btn-light hidden ml6">Cancel</a>
     </div>
     <div class="col-sm-2 pt8 m0">
         <label class="control-label">Total Additional Costs</label>
@@ -129,17 +100,25 @@
 @push('partials-scripts')
     <script>
         $(document).ready(function () {
+            var proposalDetailId = Number('{{ $proposalDetail->id }}');
+
             var additionalCostElForm = $('#additional_cost_form');
+            var additionalCostElFormProposalDetailAdditionalCostId = $('#proposal_detail_additional_cost_id');
+            var additionalCostElFormCostType = $('#additional_cost_type');
+            var additionalCostElFormDescription = $('#additional_cost_description');
+            var additionalCostElFormAmount = $('#additional_cost_amount');
+
             var additionalCostElRowsHeader = $('#additional_cost_rows_header');
             var additionalCostElRowsContainer = $('#additional_cost_rows_container');
 
+            var additionalCostSubmitButton = $('.additional-cost-submit');
             var additionalCostAddButton = $('#additional_cost_add_button');
+            var additionalCostUpdateButton = $('#additional_cost_update_button');
+            var additionalCostCancelButton = $('#additional_cost_cancel_button');
             var additionalCostElTotalCost = $('#additional_cost_total_cost');
             var additionalCostElEstimatorFormFieldTotalCost = $('#estimator_form_additional_cost_total_cost');
 
             var additionalCostsAlert = $('#additional_costs_alert');
-
-            console.log(additionalCostsAlert);
 
             additionalCostsAlert.on('click', function(ev){
                 ev.stopPropagation();
@@ -149,7 +128,7 @@
 
             additionalCostUpdateTotalCost();
 
-            additionalCostAddButton.on('click', function(){
+            additionalCostSubmitButton.on('click', function(){
                 additionalCostElForm.validate({
                     rules: {
                         type: {
@@ -181,7 +160,9 @@
 
                 if (additionalCostElForm.valid()) {
                     let formData = additionalCostElForm.serializeObject();
-                    let extraFormProperties = {proposal_detail_id: proposalDetailId};
+                    let extraFormProperties = {
+                        proposal_detail_id: proposalDetailId,
+                    };
 
                     $.extend(formData, extraFormProperties);
 
@@ -191,7 +172,7 @@
                         },
                         data: formData,
                         type: "POST",
-                        url: "{{ route('ajax_additional_cost_add_new') }}",
+                        url: "{{ route('ajax_additional_cost_add_or_update') }}",
                         beforeSend: function (request){
                             showSpinner();
                         },
@@ -202,31 +183,13 @@
                             if (!response) {
                                 showErrorAlert('Critical error has occurred.', additionalCostsAlert);
                             } else if (response.success) {
-                                let data = response.data;
-                                let html  = '';
+                                additionalCostElRowsContainer.html(response.html);
 
-                                let additionalCostRows = $('.additional-cost-row');
-
-                                if (additionalCostRows.length === 0) {
-                                    additionalCostElRowsHeader.removeClass('hidden');
-                                }
-
-                                html += '<div id="proposal_detail_additional_cost_id_'+ data.proposal_detail_additional_cost_id +'" class="row additional-cost-row border-bottom-dashed">';
-                                html += '   <div class="col-sm-4 additional-cost-type">'+ data.type +'</div>';
-                                html += '   <div class="col-sm-1 tc additional-cost-cost" data-cost="'+ data.cost +'">'+ data.formatted_cost +'</div>';
-                                html += '   <div class="col-sm-6 tc additional-cost-short_description">'+ data.short_description +'</div>';
-                                html += '   <div class="col-sm-1 tc">';
-                                html += '       <button class="btn p0 btn-danger tc additional-cost-remove-button" type="button" data-proposal_detail_additional_cost_id="'+ data. proposal_detail_additional_cost_id +'"><i class="far fa-trash-alt dib m0 plr5"></i><div class="additional-cost-description hidden">'+ data.short_description +'</div></button>';
-                                html += '           <i class="far fa-trash-alt dib m0 plr5"></i>';
-                                html += '           <div class="additional-cost-description hidden">'+ data.description +'</div>';
-                                html += '       </button>';
-                                html += '   </div>';
-                                html += '</div>';
-
-                                additionalCostElRowsContainer.append(html);
+                                additionalCostAddButton.removeClass('hidden');
+                                additionalCostUpdateButton.addClass('hidden');
+                                additionalCostCancelButton.addClass('hidden');
 
                                 additionalCostUpdateTotalCost();
-
                                 additionalCostResetForm();
 
                                 if (response.message) {
@@ -263,6 +226,7 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     data: {
+                        proposal_detail_id: proposalDetailId,
                         proposal_detail_additional_cost_id: proposalDetailAdditionalCostId
                     },
                     type: "POST",
@@ -277,8 +241,7 @@
                         if (!response) {
                             showErrorAlert('Critical error has occurred.', additionalCostsAlert);
                         } else if (response.success) {
-
-                            $('#proposal_detail_additional_cost_id_' + response.data.proposal_detail_additional_cost_id).remove();
+                            additionalCostElRowsContainer.html(response.html);
 
                             let additionalCostRows = $('.additional-cost-row');
 
@@ -303,6 +266,28 @@
                         @endif
                     }
                 });
+            });
+
+            // type:additional_cost_type description:additional_cost_description  amount:additional_cost_amount
+
+            additionalCostElRowsContainer.on('click', '.additional-cost-edit-button', function(){
+                let el = $(this);
+                additionalCostElFormProposalDetailAdditionalCostId.val(el.data('proposal_detail_additional_cost_id'));
+                additionalCostElFormCostType.val(el.data('cost_type'));
+                additionalCostElFormDescription.val(el.data('description'));
+                additionalCostElFormAmount.val(el.data('amount'));
+
+                additionalCostAddButton.addClass('hidden');
+                additionalCostUpdateButton.removeClass('hidden');
+                additionalCostCancelButton.removeClass('hidden');
+            });
+
+            additionalCostCancelButton.click(function(){
+                additionalCostResetForm();
+
+                additionalCostAddButton.removeClass('hidden');
+                additionalCostUpdateButton.addClass('hidden');
+                additionalCostCancelButton.addClass('hidden');
             });
 
             function additionalCostUpdateTotalCost()
