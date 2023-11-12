@@ -10,7 +10,7 @@ class ExceptionError
 {
     public static function handleError(Exception $e, $redirectTo = null, $errorMessage = 'Exception error')
     {
-        if (env('APP_ENV') !== 'local') {
+        if (app()->environment() !== 'local') {
             Log::error(__CLASS__ . ' - ' . $e->getMessage());
             return !$redirectTo ? redirect()->back()->with('error', $errorMessage) : redirect()->to(($redirectTo))->with('error', $errorMessage);
         }
@@ -19,18 +19,26 @@ class ExceptionError
 
     public static function handleAjaxError(Exception $e, $errorMessage = 'Exception error')
     {
-        if (env('APP_ENV') === 'local') {
-            return $e->getMessage();
+        if (app()->environment() === 'local') {
+            return [
+                'success' => false,
+                'message' => $e->getMessage(),
+            ];
         } else {
-            return $errorMessage;
+            Log::error(__CLASS__ . ' - ajax - ' . $e->getMessage());
+            return [
+                'success' => false,
+                'message' => $errorMessage,
+            ];
         }
     }
 
     public static function returnError(Exception $e, $errorMessage = 'Exception error')
     {
-        if (env('APP_ENV') === 'local') {
+        if (app()->environment() === 'local') {
             return $e->getMessage();
         } else {
+            Log::error(__CLASS__ . ' - ' . $e->getMessage());
             return $errorMessage;
         }
     }

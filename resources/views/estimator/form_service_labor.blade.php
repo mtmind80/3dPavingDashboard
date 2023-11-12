@@ -19,7 +19,7 @@
 <!-- input fields values row -->
 <form method="POST" action="#" accept-charset="UTF-8" id="labor_form" class="admin-form">
     @csrf
-    <input type='hidden' name='id' value='0'>
+    <input type="hidden" name="proposal_detail_labor_id" id="proposal_detail_labor_id">
     <div class="row">
         <div class="col-sm-3 admin-form-item-widget">
             <x-form-select name="labor_id"
@@ -79,40 +79,22 @@
     <div class="col-sm-1 tc">Hours</div>
     <div class="col-sm-1 tc">Rate</div>
     <div class="col-sm-1 tc">Total</div>
-    <div class="col-sm-1 tc">Remove</div>
+    <div class="col-sm-1 tc">Edit / Remove</div>
 </div>
 
 <!-- labor row -->
 <div id="labor_rows_container" class="mb20">
     @if (!empty($proposalDetail->labor) && $proposalDetail->labor->count() > 0)
-        @foreach ($proposalDetail->labor as $labor)
-            <div id="proposal_detail_labor_id_{{ $labor->id }}" class="row labor-row border-bottom-dashed">
-                <div class="col-sm-6 labor-type">{{ $labor->labor_name }}</div>
-                <div class="col-sm-1 tc labor-quantity">{{ $labor->number }}</div>
-                <div class="col-sm-1 tc labor-days">{{ $labor->days }}</div>
-                <div class="col-sm-1 tc labor-hours">{{ $labor->hours }}</div>
-                <div class="col-sm-1 tc labor-rate">{{ $labor->html_rate_per_hour }}</div>
-                <div class="col-sm-1 tc labor-cost" data-cost="{{ $labor->cost }}">{{ $labor->html_cost }}</div>
-                <div class="col-sm-1 tc">
-                    <button
-                        class="btn p0 btn-danger tc labor-remove-button"
-                        type="button"
-                        data-toggle="tooltip"
-                        title="remove item"
-                        data-proposal_detail_labor_id="{{ $labor->id }}"
-                    >
-                        <i class="far fa-trash-alt dib m0 plr5"></i>
-                    </button>
-                </div>
-            </div>
-        @endforeach
+        @include('estimator._form_service_labor', ['labors' => $proposalDetail->labor])
     @endif
 </div>
 
 <!-- labor footer row -->
 <div class="row mt12">
     <div class="col-sm-3">
-        <a id="labor_add_button" href="javascript:" class="{{ $site_button_class }}">Add Labor</a>
+        <a id="labor_add_button" href="javascript:" class="{{ $site_button_class }} labor-submit">Add Labor</a>
+        <a id="labor_update_button" href="javascript:" class="btn btn-info hidden labor-submit">Update Labor</a>
+        <a id="labor_cancel_button" href="javascript:" class="btn btn-light hidden ml6">Cancel</a>
     </div>
     <div class="col-sm-2 pt8 m0">
         <label class="control-label">Total Labor</label>
@@ -133,11 +115,22 @@
 @push('partials-scripts')
     <script>
         $(document).ready(function () {
+            var proposalDetailId = Number('{{ $proposalDetail->id }}');
+
             var laborElForm = $('#labor_form');
+            var laborElFormProposalDetailLaborId = $('#proposal_detail_labor_id');
+            var laborElFormLaborId = $('#labor_id');
+            var laborElFormNumber = $('#labor_quantity');
+            var laborElFormDays = $('#labor_days');
+            var laborElFormHours = $('#labor_hours');
+
             var laborElRowsHeader = $('#labor_rows_header');
             var laborElRowsContainer = $('#labor_rows_container');
 
+            var laborSubmitButton = $('.labor-submit');
             var laborAddButton = $('#labor_add_button');
+            var laborUpdateButton = $('#labor_update_button');
+            var laborCancelButton = $('#labor_cancel_button');
             var laborElTotalCost = $('#labor_total_cost');
             var laborElEstimatorFormFieldTotalCost = $('#estimator_form_labor_total_cost');
 
@@ -151,7 +144,7 @@
 
             laborUpdateTotalCost();
 
-            laborAddButton.on('click', function(){
+            laborSubmitButton.on('click', function(){
                 laborElForm.validate({
                     rules: {
                         labor_id: {
@@ -194,7 +187,7 @@
                 if (laborElForm.valid()) {
                     let formData = laborElForm.serializeObject();
                     let extraFormProperties = {
-                        proposal_detail_id: proposalDetailId
+                        proposal_detail_id: proposalDetailId,
                     };
 
                     $.extend(formData, extraFormProperties);
@@ -205,7 +198,7 @@
                         },
                         data: formData,
                         type: "POST",
-                        url: "{{ route('ajax_labor_add_new') }}",
+                        url: "{{ route('ajax_labor_add_or_update') }}",
                         beforeSend: function (request){
                             showSpinner();
                         },
@@ -216,32 +209,14 @@
                             if (!response) {
                                 showErrorAlert('Critical error has occurred.', laborAlert);
                             } else if (response.success) {
-                                let data = response.data;
-                                let html  = '';
-
-                                let laborRows = $('.labor-row');
-
-                                if (laborRows.length === 0) {
-                                    laborElRowsHeader.removeClass('hidden');
-                                }
-
-                                html += '<div id="proposal_detail_labor_id_'+ data. proposal_detail_labor_id +'" class="row labor-row border-bottom-dashed">';
-                                html += '   <div class="col-sm-6 labor-name">'+ data.formatted_labor_name_and_rate +'</div>';
-                                html += '   <div class="col-sm-1 tc labor-number_of_labor">'+ data.number +'</div>';
-                                html += '   <div class="col-sm-1 tc labor-days">'+ data.days +'</div>';
-                                html += '   <div class="col-sm-1 tc labor-hours">'+ data.hours +'</div>';
-                                html += '   <div class="col-sm-1 tc labor-rate">'+ data.formatted_rate_per_hour +'</div>';
-                                html += '   <div class="col-sm-1 tc labor-cost" data-cost="'+ data.cost +'">'+ data.formatted_cost +'</div>';
-                                html += '   <div class="col-sm-1 tc">';
-                                html += '       <button class="btn p0 btn-danger tc labor-remove-button" type="button" data-toggle="tooltip" title="remove item" data-proposal_detail_labor_id="'+ data. proposal_detail_labor_id +'"><i class="far fa-trash-alt dib m0 plr5"></i></button>';
-                                html += '   </div>';
-                                html += '</div>';
-
-                                laborElRowsContainer.append(html);
+                                laborElRowsContainer.html(response.html);
 
                                 laborUpdateTotalCost();
-
                                 laborResetForm();
+
+                                laborAddButton.removeClass('hidden');
+                                laborUpdateButton.addClass('hidden');
+                                laborCancelButton.addClass('hidden');
 
                                 if (response.message) {
                                     showSuccessAlert(response.message, laborAlert);
@@ -270,6 +245,7 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     data: {
+                        proposal_detail_id: proposalDetailId,
                         proposal_detail_labor_id: proposal_detail_labor_id
                     },
                     type: "POST",
@@ -284,8 +260,7 @@
                         if (!response) {
                             showErrorAlert('Critical error has occurred.', laborAlert);
                         } else if (response.success) {
-
-                            $('#proposal_detail_labor_id_' + response.data.proposal_detail_labor_id).remove();
+                            laborElRowsContainer.html(response.html);
 
                             let laborRows = $('.labor-row');
 
@@ -310,6 +285,27 @@
                         @endif
                     }
                 });
+            });
+
+            laborElRowsContainer.on('click', '.labor-edit-button', function(){
+                let el = $(this);
+                laborElFormProposalDetailLaborId.val(el.data('proposal_detail_labor_id'));
+                laborElFormLaborId.val(el.data('labor_id'));
+                laborElFormNumber.val(el.data('number'));
+                laborElFormDays.val(el.data('days'));
+                laborElFormHours.val(el.data('hours'));
+
+                laborAddButton.addClass('hidden');
+                laborUpdateButton.removeClass('hidden');
+                laborCancelButton.removeClass('hidden');
+            });
+
+            laborCancelButton.click(function(){
+                laborResetForm();
+
+                laborAddButton.removeClass('hidden');
+                laborUpdateButton.addClass('hidden');
+                laborCancelButton.addClass('hidden');
             });
 
             function laborUpdateTotalCost()
