@@ -590,7 +590,6 @@
 
             $('#addmediabutton').click(function () {
 
-                console.log('We re arher');
 
                 let el = $(this);
                 let ProposalMediaContainer = $('#formMediaModalLabel').find('span');
@@ -602,7 +601,6 @@
                 mediaForm.attr('action', url);
                 ProposalMediaContainer.text(ProposalName);
                 mediaModal.modal('show');
-                console.log('we are here');
 
             });
 

@@ -1,6 +1,6 @@
 <div class="mt20 mb10">
-    <div class="row justify-content-lg-center" style="background:{{$color->color}};">
-        <h3>{{$color->name}}</h3>
+    <div class="row" style="background:{{$color->color}};">
+        <h2>&nbsp; {{$color->name}}</h2>
     </div>
     <div class="row mt20">
     <div class="col-sm-2">

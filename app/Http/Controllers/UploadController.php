@@ -261,9 +261,10 @@ class UploadController extends Controller
 
     }
 
-    
+
     public function ajaxupload(MediaRequest $request)
     {
+
         $accepted_filetypes = AcceptedDocuments::all()->pluck('extension')->toArray();
         $doctypes = implode(',', $accepted_filetypes);
         $doctypes = explode(',', $doctypes);
@@ -275,6 +276,14 @@ class UploadController extends Controller
         $data['tab'] = $request['tab'];
 
         $proposal_id = $request['proposal_id'];
+        $proposal = Proposal::where('id', '=', $proposal_id)->first();
+        $route = 'show_proposal';
+        If ($proposal['job_master_id'])
+        {
+            $route = 'show_workorder';
+
+        }
+
         $proposal_detail_id = $request['proposal_detail_id'];
         $media_type_id = $request['media_type_id'];
         $description = htmlspecialchars($request['description']);
@@ -296,7 +305,7 @@ class UploadController extends Controller
         if(!in_array($extension, $doctypes)) {
             $msg .= "This file type ($extension) is not allowed.";
             \Session::flash('error', $msg);
-            return redirect()->route('show_proposal', ['id' => $proposal_id]);
+            return redirect()->route($route, ['id' => $proposal_id]);
             //return with error
         }
         $check = getimagesize($_FILES["file"]["tmp_name"]);
@@ -316,7 +325,7 @@ class UploadController extends Controller
         if($file_size > 5000000) {
             $msg .= "Sorry, your file is too large.";
             \Session::flash('error', $msg);
-            return redirect()->route('show_proposal', ['id' => $proposal_id]);
+            return redirect()->route($route, ['id' => $proposal_id]);
             //redirect();
 
         }
@@ -353,16 +362,17 @@ class UploadController extends Controller
         } else {
             if(move_uploaded_file($_FILES["file"]["tmp_name"], $new_filename)) {
 
+
                 $proposal_media = ProposalMedia::create($data);
                 $msg = "The file " . htmlspecialchars(basename($_FILES["file"]["name"])) . " has been uploaded to $new_filename.";
                 \Session::flash('success', $msg);
-                return redirect()->route('show_proposal', ['id' => $proposal_id]);
+                return redirect()->route($route, ['id' => $proposal_id]);
 
 
             } else {
                 $msg = "Sorry, there was an error uploading your file.";
                 \Session::flash('error', $msg);
-                return redirect()->route('show_proposal', ['id' => $proposal_id]);
+                return redirect()->route($route, ['id' => $proposal_id]);
             }
         }
 

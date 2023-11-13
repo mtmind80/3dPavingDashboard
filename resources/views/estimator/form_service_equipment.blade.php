@@ -19,6 +19,7 @@
 <!-- input fields values row -->
 <form action="#" accept-charset="UTF-8" id="equipment_form" class="admin-form">
     @csrf
+    <input type="hidden" name="proposal_detail_equipment_id" id="proposal_detail_equipment_id">
     <div class="row">
         <div class="col-sm-3 admin-form-item-widget">
             <label class="field select">
@@ -81,41 +82,22 @@
     <div class="col-sm-1 tc">Rate</div>
     <div class="col-sm-1 tc">Total</div>
     <div class="col-sm-1 tc">Min Cost</div>
-    <div class="col-sm-1 tc">Remove</div>
+    <div class="col-sm-1 tc">Edit / Remove</div>
 </div>
 
 <!-- equipment row -->
 <div id="equipment_rows_container" class="mb20">
     @if (!empty($proposalDetail->equipment) && $proposalDetail->equipment->count() > 0)
-        @foreach ($proposalDetail->equipment as $equipment)
-            <div id="proposal_detail_equipment_id_{{ $equipment->id }}" class="row equipment-row border-bottom-dashed">
-                <div class="col-sm-5 equipment-type">{{ $equipment->equipment->html_name_and_rate_type }}</div>
-                <div class="col-sm-1 tc equipment-quantity">{{ $equipment->number_of_units }}</div>
-                <div class="col-sm-1 tc equipment-days">{{ $equipment->days }}</div>
-                <div class="col-sm-1 tc equipment-hours">{{ $equipment->hours }}</div>
-                <div class="col-sm-1 tc equipment-rate">{{ $equipment->html_rate }}</div>
-                <div class="col-sm-1 tc equipment-cost" data-cost="{{ $equipment->cost }}">{{ $equipment->html_cost }}</div>
-                <div class="col-sm-1 tc equipment-rate"><span class="status {{ $equipment->cost < $equipment->equipment->min_cost ? 'danger' : '' }}">{{ $equipment->equipment->html_min_cost }}</span></div>
-                <div class="col-sm-1 tc">
-                    <button
-                        class="btn p0 btn-danger tc equipment-remove-button"
-                        type="button"
-                        data-toggle="tooltip"
-                        title="remove item"
-                        data-proposal_detail_equipment_id="{{ $equipment->id }}"
-                    >
-                        <i class="far fa-trash-alt dib m0 plr5"></i>
-                    </button>
-                </div>
-            </div>
-        @endforeach
+        @include('estimator._form_service_equipment', ['equipments' => $proposalDetail->equipment])
     @endif
 </div>
 
 <!-- equipment footer row -->
 <div class="row mt12">
     <div class="col-sm-3">
-        <a id="equipment_add_button" href="javascript:" class="{{ $site_button_class }}">Add Equipment</a>
+        <a id="equipment_add_button" href="javascript:" class="{{ $site_button_class }} equipment-submit">Add Equipment</a>
+        <a id="equipment_update_button" href="javascript:" class="btn btn-info hidden equipment-submit">Update Equipment</a>
+        <a id="equipment_cancel_button" href="javascript:" class="btn btn-light hidden ml6">Cancel</a>
     </div>
     <div class="col-sm-2 pt8 m0">
         <label class="control-label">Total Equipment</label>
@@ -136,14 +118,23 @@
 @push('partials-scripts')
     <script>
         $(document).ready(function () {
+            var proposalDetailId = Number('{{ $proposalDetail->id }}');
+
             var equipmentElForm = $('#equipment_form');
+            var equipmentElFormProposalDetailEquipmentId = $('#proposal_detail_equipment_id');
+            var equipmentElFormEquipmentId = $('#equipment_id');
+            var equipmentElFormNumberOfUnits = $('#equipment_quantity');
+            var equipmentElFormDays = $('#equipment_days');
+            var equipmentElFormHours = $('#equipment_hours');
+            var equipmentElFormHoursRequired = $('#equipment_hours_required');
+
             var equipmentElRowsHeader = $('#equipment_rows_header');
             var equipmentElRowsContainer = $('#equipment_rows_container');
-            var equipmentEl = $('#equipment_id');
-            var equipmentElDays = $('#equipment_days');
-            var equipmentElHours = $('#equipment_hours');
-            var equipmentElHoursRequired = $('#equipment_hours_required');
+
+            var equipmentSubmitButton = $('.equipment-submit');
             var equipmentAddButton = $('#equipment_add_button');
+            var equipmentUpdateButton = $('#equipment_update_button');
+            var equipmentCancelButton = $('#equipment_cancel_button');
             var equipmentElTotalCost = $('#equipment_total_cost');
             var equipmentElEstimatorFormFieldTotalCost = $('#estimator_form_equipment_total_cost');
             var equipmentRateType;
@@ -158,23 +149,29 @@
 
             equipmentUpdateTotalCost();
 
-            equipmentEl.change(function(){
+            equipmentElFormEquipmentId.change(function(){
                 let el = $(this);
+
+                equipmentHasChanged(el);
+            });
+
+            function equipmentHasChanged(el)
+            {
                 let selected = el.find('option:selected');
                 equipmentRateType = selected.data('rate_type');
 
                 if (equipmentRateType === 'per day') {
-                    equipmentElHoursRequired.addClass('hidden');
-                    equipmentElHours.val(0);
-                    equipmentElHours.prop('disabled', true);
+                    equipmentElFormHoursRequired.addClass('hidden');
+                    equipmentElFormHours.val(0);
+                    equipmentElFormHours.prop('disabled', true);
                 } else {
-                    equipmentElHoursRequired.removeClass('hidden');
-                    equipmentElHours.val('');
-                    equipmentElHours.prop('disabled', false);
+                    equipmentElFormHoursRequired.removeClass('hidden');
+                    equipmentElFormHours.val('');
+                    equipmentElFormHours.prop('disabled', false);
                 }
-            });
+            }
 
-            equipmentAddButton.on('click', function(){
+            equipmentSubmitButton.on('click', function(){
                 equipmentElForm.validate({
                     rules: {
                         equipment_id: {
@@ -187,15 +184,15 @@
                         },
                         days: {
                             required: function(){
-                                return equipmentElHours.val() === ''
+                                return equipmentElFormHours.val() === ''
                             },
-                            float   : true
+                            float: true
                         },
                         hours: {
                             required: function(){
-                                return equipmentElDays.val() === ''
+                                return equipmentElFormDays.val() === ''
                             },
-                            float   : true
+                            float: true
                         }
                     },
                     messages: {
@@ -232,7 +229,7 @@
                         },
                         data: formData,
                         type: "POST",
-                        url: "{{ route('ajax_equipment_add_new') }}",
+                        url: "{{ route('ajax_equipment_add_or_update') }}",
                         beforeSend: function (request){
                             showSpinner();
                         },
@@ -243,35 +240,20 @@
                             if (!response) {
                                 showErrorAlert('Critical error has occurred.', equipmentAlert);
                             } else if (response.success) {
-                                let data = response.data;
-                                let html  = '';
-                                let equipmentRows = $('.equipment-row');
+                                equipmentElRowsContainer.html(response.html);
 
-                                if (equipmentRows.length === 0) {
-                                    equipmentElRowsHeader.removeClass('hidden');
-                                }
-
-                                html += '<div id="proposal_detail_equipment_id_'+ data. proposal_detail_equipment_id +'" class="row equipment-row border-bottom-dashed">';
-                                html += '   <div class="col-sm-5 equipment-name">'+ data.formatted_name_and_rate_type +'</div>';
-                                html += '   <div class="col-sm-1 tc equipment-number_of_equipment">'+ data.number_of_units +'</div>';
-                                html += '   <div class="col-sm-1 tc equipment-days">'+ data.days +'</div>';
-                                html += '   <div class="col-sm-1 tc equipment-hours">'+ data.hours +'</div>';
-                                html += '   <div class="col-sm-1 tc equipment-rate">'+ data.formatted_rate +'</div>';
-                                html += '   <div class="col-sm-1 tc equipment-cost" data-cost="'+ data.cost +'">'+ data.formatted_cost +'</div>';
-                                html += '   <div class="col-sm-1 tc equipment-min_cost">'+ data.formatted_min_cost +'</div>';
-                                html += '   <div class="col-sm-1 tc">';
-                                html += '       <button class="btn p0 btn-danger tc equipment-remove-button" type="button" data-proposal_detail_equipment_id="'+ data. proposal_detail_equipment_id +'"><i class="far fa-trash-alt dib m0 plr5"></i></button>';
-                                html += '   </div>';
-                                html += '</div>';
-
-                                equipmentElRowsContainer.append(html);
                                 equipmentUpdateTotalCost();
                                 equipmentResetForm();
                                 equipmentRateType = null;
 
+                                equipmentAddButton.removeClass('hidden');
+                                equipmentUpdateButton.addClass('hidden');
+                                equipmentCancelButton.addClass('hidden');
+
                                 if (response.message) {
                                     showSuccessAlert(response.message, equipmentAlert);
                                 }
+
                             } else {
                                 showErrorAlert(response.message, equipmentAlert);
                             }
@@ -296,6 +278,7 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     data: {
+                        proposal_detail_id: proposalDetailId,
                         proposal_detail_equipment_id: proposal_detail_equipment_id
                     },
                     type: "POST",
@@ -310,8 +293,7 @@
                         if (!response) {
                             showErrorAlert('Critical error has occurred.', equipmentAlert);
                         } else if (response.success) {
-
-                            $('#proposal_detail_equipment_id_' + response.data.proposal_detail_equipment_id).remove();
+                            equipmentElRowsContainer.html(response.html);
 
                             let equipmentRows = $('.equipment-row');
 
@@ -338,6 +320,30 @@
                 });
             });
 
+            equipmentElRowsContainer.on('click', '.equipment-edit-button', function(){
+                let el = $(this);
+                equipmentElFormProposalDetailEquipmentId.val(el.data('proposal_detail_equipment_id'));
+                equipmentElFormEquipmentId.val(el.data('equipment_id'));
+
+                equipmentHasChanged(equipmentElFormEquipmentId);
+
+                equipmentElFormNumberOfUnits.val(el.data('number_of_units'));
+                equipmentElFormDays.val(el.data('days'));
+                equipmentElFormHours.val(el.data('hours'));
+
+                equipmentAddButton.addClass('hidden');
+                equipmentUpdateButton.removeClass('hidden');
+                equipmentCancelButton.removeClass('hidden');
+            });
+
+            equipmentCancelButton.click(function(){
+                equipmentResetForm();
+
+                equipmentAddButton.removeClass('hidden');
+                equipmentUpdateButton.addClass('hidden');
+                equipmentCancelButton.addClass('hidden');
+            });
+
             function equipmentUpdateTotalCost()
             {
                 let equipmentCosts = $('#equipment_rows_container .equipment-cost');
@@ -360,6 +366,7 @@
             function equipmentResetForm()
             {
                 equipmentElForm.trigger('reset');
+                equipmentRateType = null;
             }
         });
     </script>
