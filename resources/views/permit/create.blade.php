@@ -25,9 +25,9 @@
             <div class="card">
                 <div class="card-body">
                     <!-- Tab panes -->
-                            <div class="row">
+                            <div class="row ml-0 mr-0">
                                 <form method="post" action="{{route('create_permit')}}"
-                                      id="permitform">
+                    C                  id="permitform" class="w-100">
                                     @csrf
                                     <input type="hidden" name="proposal_id" value="{{$proposal->id}}">
                                     <input type="hidden" name="proposal_detail_id" value="0">
@@ -61,15 +61,24 @@
                                         <div class="col-lg-2">
                                             <label>County:</label>
                                             <select name="county" id="county" class="form-control">
+                                                <option>Select county</option>
                                                 @foreach($counties as $county)
                                                     <option>{{$county->county}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                         <div class="col-lg-2">
-                                            <x-form-text name="city" :
+                                            <label>City:</label>
+                                            <select name="city" id="city" class="form-control">
+                                                <option value="0">Select county first</option>
+                                            </select>
+                                        </div>
+                                        {{--
+                                        <div class="col-lg-2">
+                                            <x-form-text id="city" name="city" :
                                                          params="['label' => 'City', 'iconClass' => 'fas fa-file','required' => true]"></x-form-text>
                                         </div>
+                                        --}}
                                         <div class="col-lg-2">
                                             <x-form-date-picker
                                                 name="expires_on"
@@ -138,13 +147,56 @@
                 }
             });
 
-
-        $("#cancelbutton").on('click', function(){
-
+            $("#cancelbutton").on('click', function(){
                 window.location.href="{{route('show_workorder',['id'=>$proposal->id])}}";
+            });
 
-           });
+            var cityEl = $('#city');
 
+            $("#county").on('change', function(){
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: {
+                        county_id: $(this).val()
+                    },
+                    type: "POST",
+                    url: "{{ route('ajax_fetch_cities') }}",
+                    beforeSend: function (request) {
+                        showSpinner();
+                    },
+                    complete: function () {
+                        hideSpinner();
+                    },
+                    success: function (response) {
+                        if (typeof response.success === 'undefined' || !response) {
+                            cityEl.html('<option value="0">Select county first</option>');
+                            console.log('Critical error has occurred.');
+                        } else if (response.success) {
+                            let data = response.data;
+                            let html = '';
+
+                            $.each(data, function(key, value){
+                                html += '<option>'+ value +'</option>';
+                            })
+                            cityEl.html(html);
+                        } else {
+                            // controller defined response error message
+                            cityEl.html('<option value="0">Select county first</option>');
+                            console.log(response.message);
+                        }
+                    },
+                    error: function (response) {
+                        cityEl.html('<option value="0">Select county first</option>');
+                        @if (app()->environment() === 'local')
+                            console.log(response.responseJSON.message);
+                        @else
+                            console.log(response.message);
+                        @endif
+                    }
+                });
+            });
         });
     </script>
 @stop
