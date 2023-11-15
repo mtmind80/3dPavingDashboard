@@ -27,7 +27,7 @@
                     <!-- Tab panes -->
                             <div class="row ml-0 mr-0">
                                 <form method="post" action="{{route('create_permit')}}"
-                                      id="permitform" class="w-100">
+                    C                  id="permitform" class="w-100">
                                     @csrf
                                     <input type="hidden" name="proposal_id" value="{{$proposal->id}}">
                                     <input type="hidden" name="proposal_detail_id" value="0">
