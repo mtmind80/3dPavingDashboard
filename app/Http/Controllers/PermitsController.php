@@ -85,7 +85,7 @@ class PermitsController extends Controller
         $data['id'] = $id;
         $data['proposal'] = Proposal::where('id', '=', $id)->first();
         $data['statusCB'] = $this->statusCB;
-        $counties = DB::table('counties')->groupBy('county')->get(['county']);
+        $counties = DB::table('counties')->groupBy('county')->orderBy('county')->get(['county']);
         $data['counties'] = $counties;
 
         return view('permit.create', $data);
@@ -223,6 +223,45 @@ class PermitsController extends Controller
         }
 
         return response()->json($response);
+    }
+
+    public function ajaxFetchCities(Request $request)
+    {
+        if ($request->isMethod('post') && $request->ajax()) {
+            $validator = Validator::make(
+                $request->only(['county_id']), [
+                    'county_id' => 'required',
+                ]
+            );
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $validator->messages()->first(),
+                ]);
+            }
+
+            if ($citiesCB = County::where('county', $request->county_id)
+                ->distinct()
+                ->orderBy('city')
+                ->pluck('city', 'city')
+                ->toArray()
+            ) {
+                return response()->json([
+                    'success' => true,
+                    'data' => $citiesCB,
+                ]);
+            }
+
+            return response()->json([
+                'success' => false,
+                'message' => 'No cities found.',
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid request.',
+            ]);
+        }
     }
 
 }
