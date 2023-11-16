@@ -42,9 +42,9 @@
                     <!-- Tab panes -->
                     <div class="tab-content ">
                         <div class="tab-pane active" id="permits" role="tabpanel">
-                            <div class="row">
+                            <div class="row mt-3 ml-0 mr-0">
                                 <form method="post" action="{{route('permit_update',['permit'=>$permit->id])}}"
-                                      id="permitform">
+                                      id="permitform" class="w-100">
                                     @csrf
 
                                     <input name="_method" type="hidden" value="PATCH">
@@ -85,6 +85,23 @@
                                         <div class="col-lg-2">
                                             <label>County:</label>
                                             <select name="county" id="county" class="form-control">
+                                                @foreach($countiesCB as $county)
+                                                    <option{{ $permit->county === $county ? ' selected' : '' }}>{{ $county }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <label>City:</label>
+                                            <select name="city" id="city" class="form-control">
+                                                @foreach($citiesCB as $city)
+                                                    <option{{ $permit->city === $city ? ' selected' : '' }}>{{ $city }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        {{--
+                                        <div class="col-lg-2">
+                                            <label>County:</label>
+                                            <select name="county" id="county" class="form-control">
                                                 <option>{{$permit->county}}</option>
                                                 @foreach($counties as $county)
                                                     <option>{{$county->county}}</option>
@@ -96,6 +113,7 @@
                                             <x-form-text name="city" :
                                                          params="['label' => 'City', 'iconClass' => 'fas fa-file','required' => true]">{{ $permit->city }}</x-form-text>
                                         </div>
+                                        --}}
                                         <div class="col-lg-2">
                                             <x-form-date-picker
                                                 name="expires_on"
@@ -112,7 +130,7 @@
                                     </div>
 
 
-                                    <div class="row">
+                                    <div class="row mt-2">
                                         <div class="col-lg-12">
                                             <p></p>
                                             <input type="submit" value="Update Permit" class="{{$site_button_class}}" />
@@ -201,7 +219,7 @@ Total Cost: ${{ number_format($ttotal, 2) }}
             // Tab panes:  id="profile"
 
             const tabSelected = "{{ $tabSelected ?? '' }}";
-            const permitId = "{{ $permit->id }}";
+            const permitId = Number("{{ $permit->id }}");
 
             if (tabSelected !== "") {
                 $('#tab_link_'+tabSelected).click();
@@ -265,6 +283,58 @@ Total Cost: ${{ number_format($ttotal, 2) }}
                 }
             });
 
+            var countyEl = $('#county');
+            var cityEl = $('#city');
+            const initialCounty = "{{ $permit->county }}";
+            const initialCity = "{{ $permit->city }}";
+
+            countyEl.on('change', function(){
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: {
+                        county: $(this).val()
+                    },
+                    type: "POST",
+                    url: "{{ route('ajax_fetch_cities') }}",
+                    beforeSend: function (request) {
+                        showSpinner();
+                    },
+                    complete: function () {
+                        hideSpinner();
+                    },
+                    success: function (response) {
+                        if (typeof response.success === 'undefined' || !response) {
+                            countyEl.val(initialCounty);
+                            cityEl.val(initialCity);
+                            console.log('Critical error has occurred.');
+                        } else if (response.success) {
+                            let data = response.data;
+                            let html = '';
+
+                            $.each(data, function(key, value){
+                                html += '<option>'+ value +'</option>';
+                            })
+                            cityEl.html(html);
+                        } else {
+                            // controller defined response error message
+                            countyEl.val(initialCounty);
+                            cityEl.val(initialCity);
+                            console.log(response.message);
+                        }
+                    },
+                    error: function (response) {
+                        countyEl.val(initialCounty);
+                        cityEl.val(initialCity);
+                        @if (app()->environment() === 'local')
+                            console.log(response.responseJSON.message);
+                        @else
+                            console.log(response.message);
+                        @endif
+                    }
+                });
+            });
         });
 
         function templateResult(item, container) {

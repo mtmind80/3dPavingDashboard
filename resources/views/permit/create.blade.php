@@ -94,7 +94,7 @@
                                     </div>
 
 
-                                    <div class="row">
+                                    <div class="row mt-2">
                                         <div class="col-lg-12">
                                             <p></p>
                                             <input type="submit" value="Save Permit" class="{{$site_button_class}}" />
@@ -151,15 +151,16 @@
                 window.location.href="{{route('show_workorder',['id'=>$proposal->id])}}";
             });
 
+            var countyEl = $('#county');
             var cityEl = $('#city');
 
-            $("#county").on('change', function(){
+            countyEl.on('change', function(){
                 $.ajax({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     data: {
-                        county_id: $(this).val()
+                        county: $(this).val()
                     },
                     type: "POST",
                     url: "{{ route('ajax_fetch_cities') }}",

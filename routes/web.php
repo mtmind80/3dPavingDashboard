@@ -174,6 +174,7 @@ Route::group(['middleware' => ['auth']], function() {
 
 /*************** Permits  ***************/
 
+
 Route::group(['prefix' => 'permits'], function() {
     Route::get('/', 'PermitsController@index')->name('permits');
     Route::match(['get', 'post'], '/search', 'PermitsController@search')->name('permit_search');
