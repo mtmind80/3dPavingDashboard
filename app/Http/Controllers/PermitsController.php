@@ -104,18 +104,34 @@ class PermitsController extends Controller
         }
     }
 
-    public function edit(Permit $permit)
+    public function edit($permit)
     {
+        if (is_numeric($permit)) {
+            $permit = Permit::with([
+                'proposal',
+                'proposalDetail',
+                'createdBy',
+                'notes' => fn($q) => $q->with(['createdBy'])
+            ])->find($permit);
+        } else if ($permit instanceof Permit){
+            $permit->load([
+                'proposal',
+                'proposalDetail',
+                'createdBy',
+                'notes' => fn($q) => $q->with(['createdBy'])
+            ]);
+        }
+
+        $countiesCB = County::countiesCB();
+
+        $citiesCB = County::citiesCB($permit->county);
+
         $data = [
-            'permit' => $permit->load(['notes' => function ($q){
-                $q->with(['createdBy']);
-            }, 'proposal', 'proposalDetail', 'createdBy']),
+            'permit' => $permit,
+            'statusCB' => $this->statusCB,
+            'countiesCB' => $countiesCB,
+            'citiesCB' => $citiesCB,
         ];
-        $data['statusCB'] = $this->statusCB;
-
-
-        $counties = DB::table('counties')->groupBy('county')->get(['county']);
-        $data['counties'] = $counties;
 
         return view('permit.edit', $data);
     }
@@ -229,8 +245,8 @@ class PermitsController extends Controller
     {
         if ($request->isMethod('post') && $request->ajax()) {
             $validator = Validator::make(
-                $request->only(['county_id']), [
-                    'county_id' => 'required',
+                $request->only(['county']), [
+                    'county' => 'required',
                 ]
             );
             if ($validator->fails()) {
@@ -240,12 +256,7 @@ class PermitsController extends Controller
                 ]);
             }
 
-            if ($citiesCB = County::where('county', $request->county_id)
-                ->distinct()
-                ->orderBy('city')
-                ->pluck('city', 'city')
-                ->toArray()
-            ) {
+            if ($citiesCB = County::citiesCB($request->county)) {
                 return response()->json([
                     'success' => true,
                     'data' => $citiesCB,
