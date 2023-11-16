@@ -851,9 +851,12 @@ class ProposalController extends Controller
 
         }
 
-        // save material costs
+        \Session::flash('success', 'Proposal cloned with services. To change the client on this proposal, select an existing client or create a new one!');
 
-        return redirect()->route('show_proposal',['id' => $new_id])->with('success', 'Proposal cloned with services.');
+
+        return redirect()->route('change_proposal_client', ['id' => 9])->with('info', 'Proposal cloned with services. To change client on this proposal, select an existing contact');
+
+//        return redirect()->route('show_proposal',['id' => $new_id])->with('success', 'Proposal cloned with services.');
 
     }
 
@@ -967,10 +970,17 @@ class ProposalController extends Controller
 
     public function changeclient($id)
     {
-        \Session::flash('success', 'To change the client on this proposal, select an existing client or create a new one!');
 
+        $proposal = Proposal::where('id', '=', $id)->first();
+        $contacts = Contact::all()->toArray();
+        $data = [
+            'id' => $id,
+            'proposal' => $proposal,
+            'contacts' => $contacts,
+            'needle'   => '',
+        ];
 
-        return redirect()->route('change_contact', ['id' => $id])->with('info', 'To change client on this proposal, select an existing contact');
+        return view('contacts.index_change_client', $data);
 
     }
 

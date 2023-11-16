@@ -35,14 +35,21 @@
                             <th class="actions">Actions</th>
                         </tr>
                         </thead>
+
                         <tbody>
+
                         @if(!$permits)
                             <tr class="even">
-                                <td colspan='4' class="text-dark fw-bold">@lang('translation.norecordsfound')</td>
+                                <td colspan='7' class="text-dark fw-bold">@lang('translation.norecordsfound')</td>
                             </tr>
                         @else
                             @foreach ($permits as $permit)
-                                <tr>
+                                @if (date($permit->expires_on,strtotime("-1 days")) <= date('Y-m-d',strtotime("+1 days")) )
+                                    <tr class="alert-danger">
+                                @else
+                                    <tr>
+                                @endif
+
                                     <td class="tc"><a href="{{route('permit_show',['permit'=>$permit->id])}}">{{ $permit->proposal->name }}</a>
                                         <br/>{{ $permit->proposal->WorkOrderNumber }}
                                     </td>
@@ -119,6 +126,12 @@
 
                     <x-paginator :collection="$permits" route-name="permits" :needle="$needle" :params="['lang' => $lang]" class="mt10"></x-paginator>
                 </div>
+                <table class="table w220">
+                    <tr>
+                        <td class="w180">Indicates permit expired</td>
+                        <td class="alert-danger w40">&nbsp;</td>
+                    </tr>
+                </table>
             </div>
         </div>
     </div>

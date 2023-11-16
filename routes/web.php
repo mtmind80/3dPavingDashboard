@@ -181,7 +181,7 @@ Route::group(['prefix' => 'permits'], function() {
     Route::get('/{id}/remove', 'PermitsController@destroy')->name('remove_permit');
     Route::post('/{permit}/add-note', 'PermitsController@storeNote')->name('permit_note_add');
     Route::post('/{permit}/change-status', 'PermitsController@changeStatus')->name('permit_status_change');
-    Route::get('/add_permit/{id}', 'PermitsController@create')->name('add_permit');
+    Route::get('/{id}/add_permit', 'PermitsController@create')->name('add_permit');
     Route::get('/{permit}/edit', 'PermitsController@edit')->name('permit_edit');
     Route::patch('/{permit}', 'PermitsController@update')->name('permit_update');
     Route::post('ajax-note-list', 'PermitsController@noteList')->name('ajax_permit_note_list');
@@ -324,6 +324,8 @@ Route::group(['prefix' => 'proposals'], function() {
     Route::get('/new', 'ProposalController@new')->name('new_proposal');
 
     Route::get('', 'ProposalController@index')->name('proposals');
+
+    Route::get('/changeproposalclient/{id}', 'ProposalController@changeclient')->name('change_proposal_client');
 
     //update proposal materials pricing
     Route::get('/MaterialPricing/{id}', 'ProposalController@refreshMaterialPricing')->name('refresh_material');
