@@ -326,7 +326,7 @@ Route::group(['prefix' => 'proposals'], function() {
 
     Route::get('', 'ProposalController@index')->name('proposals');
 
-    Route::get('/changeproposalclient/{id}', 'ProposalController@changeclient')->name('change_proposal_client');
+    Route::get('/{proposal_id}/changeproposalclient', 'ProposalController@changeclient')->name('change_proposal_client');
 
     //update proposal materials pricing
     Route::get('/MaterialPricing/{id}', 'ProposalController@refreshMaterialPricing')->name('refresh_material');

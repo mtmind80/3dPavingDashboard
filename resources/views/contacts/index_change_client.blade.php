@@ -14,7 +14,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <a href="{{route('show_proposal',['id' => $id])}}">Don't Change Client Return to Proposal</a>
+                    <a href="{{route('show_proposal',['id' => $proposal_id])}}">Don't Change Client Return to Proposal</a>
                     <div class="row">
                         <div class="col-md-8 col-sm-6 mb20">
                         </div>
