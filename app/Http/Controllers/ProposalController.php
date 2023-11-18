@@ -969,21 +969,23 @@ class ProposalController extends Controller
 
     }
 
-    public function changeclient($proposal_id)
+    public function changeclient($proposal_id, Request $request)
     {
+        $proposal = Proposal::find($proposal_id);
 
-        $proposal = Proposal::where('id', '=', $proposal_id)->first();
-        $contacts = Contact::all()->toArray();
+        $needle = $request->needle ?? null;
+        $perPage = $request->perPage ?? 25;
+
+        $contacts = Contact::search($needle)->sortable()->paginate($perPage);
 
         $data = [
             'proposal_id' => $proposal_id,
             'proposal' => $proposal,
             'contacts' => $contacts,
-            'needle'   => '',
+            'needle'   => $needle,
         ];
 
         return view('contacts.index_change_client', $data);
-
     }
 
     public function refreshMaterialPricing($id)
