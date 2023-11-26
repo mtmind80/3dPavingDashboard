@@ -221,7 +221,7 @@ class WorkOrderController extends Controller
         $permits = Permit::where('proposal_id','=',$id)->get()->toArray();
         $data['permits'] = $permits;
         $data['workorder'] = $workorder;
-        return view('workorders.permitmanager', $data);
+        return view('permit.permitmanager', $data);
 
     }
 

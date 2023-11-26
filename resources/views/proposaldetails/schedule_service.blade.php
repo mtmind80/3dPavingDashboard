@@ -114,7 +114,7 @@
             var ok = confirm(msg);
             if(ok)
             {
-                window.location.href="/proposaldetails/remove_schedule/{{$schedule->id}}";
+                window.location.href="/proposaldetails/remove_schedule/" + id;
             }
             return true;
         }
