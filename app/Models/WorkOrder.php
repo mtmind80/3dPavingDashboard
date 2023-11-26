@@ -169,7 +169,7 @@ class WorkOrder extends Proposal
         foreach($permits as $permit) // check any permits to make sure they are all approved
         {
 
-            if($permit->status != 'Approved') // if ANY permit is not approved then return false.
+            if($permit->status != 'Completed') // if ANY permit is not approved then return false.
             {
                 $permitOK = false;
             }

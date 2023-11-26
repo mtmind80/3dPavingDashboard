@@ -851,9 +851,13 @@ class ProposalController extends Controller
 
         }
 
-        // save material costs
+        \Session::flash('success', 'Proposal cloned with services. To change the client on this proposal, select an existing client or create a new one!');
 
-        return redirect()->route('show_proposal',['id' => $new_id])->with('success', 'Proposal cloned with services.');
+
+        return redirect()->route('change_proposal_client', ['proposal_id' => $new_id]);
+        //->with('info', 'Proposal cloned with services. To change client on this proposal, select an existing contact');
+
+//        return redirect()->route('show_proposal',['id' => $new_id])->with('success', 'Proposal cloned with services.');
 
     }
 
@@ -963,6 +967,25 @@ class ProposalController extends Controller
         //reset to pending or sent to customer
         return redirect()->back()->with('success', 'Proposal status changed.');
 
+    }
+
+    public function changeclient($proposal_id, Request $request)
+    {
+        $proposal = Proposal::find($proposal_id);
+
+        $needle = $request->needle ?? null;
+        $perPage = $request->perPage ?? 25;
+
+        $contacts = Contact::search($needle)->sortable()->paginate($perPage);
+
+        $data = [
+            'proposal_id' => $proposal_id,
+            'proposal' => $proposal,
+            'contacts' => $contacts,
+            'needle'   => $needle,
+        ];
+
+        return view('contacts.index_change_client', $data);
     }
 
     public function refreshMaterialPricing($id)

@@ -139,6 +139,7 @@
                                             <td>{{ \Carbon\Carbon::parse($proposal['proposal_date'])->format('m/d/yy') }}</td>
                                         </tr>
 
+
                                         <!--                                 <tr>
                                         <td>@lang('translation.salesmanager')</td>
                                         <td>
@@ -149,6 +150,73 @@
                                     </tr>
        -->
                                         <tr>
+                                        <td>@lang('translation.salesperson')</td>
+                                        <td>
+                                            @if($proposal['salesperson_id'])
+                                                {{ App\Models\User::find($proposal['salesperson_id'])->FullName }}
+                                            @endif
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>@lang('translation.client')</td>
+                                        <td>
+                                            @if($proposal['contact_id'])
+
+                                                <a href="Javascript:showData(1);" title="find contact">{{ App\Models\Contact::find($proposal['contact_id'])->FullName }}</a>
+
+                                            @endif
+                                                <span style="float:right;"><a href="{{ route('change_client',['id' => $proposal['id']]) }}" class='button' title="Change Client">Change Client</a></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>@lang('translation.proposalclient')</td>
+                                        <td>
+                                            @if($proposal['customer_staff_id'])
+                                                <a href="Javascript:showData(2);"  title="find staff">{{ App\Models\Contact::find($proposal['customer_staff_id'])->FullName }}</a>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>@lang('translation.progressivebilling')</td>
+                                        <td>@if($proposal['progressive_billing'])
+                                                YES
+                                            @else
+                                                NO
+                                            @endif
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>@lang('translation.permit') @lang('translation.required')</td>
+                                        <td>@if($proposal['permit_required'])
+                                                YES
+                                            @else
+                                                NO
+                                            @endif
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>@lang('translation.mot') @lang('translation.required')</td>
+                                        <td>@if($proposal['mot_required'])
+                                                YES
+                                            @else
+                                                NO
+                                            @endif
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>@lang('translation.on_alert')</td>
+                                            @if($proposal['on_alert'])
+                                            <td class="bg-alert">
+                                                YES  &nbsp;&nbsp; Reason: {{$proposal['alert_reason']}}
+                                                <x-href-button url="{{ route('proposal_alert_reset', ['proposal_id' => $proposal['id']]) }}" class="btn-danger ptb2 fr"><i class="fas fa-times"></i>Remove Alert</x-href-button>
+                                            @else
+                                            <td>
+                                                NO
+                                                <x-href-button id="set_alert_button" class="btn-success ptb2 fr"><i class="fas fa-check"></i>Set Alert</x-href-button>
+                                            @endif
+                                        </td>
+                                    </tr>
                                             <td>@lang('translation.salesperson')</td>
                                             <td>
                                                 @if($proposal['salesperson_id'])
