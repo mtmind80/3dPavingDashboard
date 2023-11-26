@@ -13,6 +13,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
+                    <a href="{{route('show_proposal',['id' => $proposal_id])}}">Don't Change Client Return to Proposal</a>
                     <div class="row">
                         <div class="col-sm-6 mb20 xs-hidden"></div>
                         <div class="col-sm-6 mb20">

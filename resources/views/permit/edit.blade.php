@@ -64,7 +64,7 @@
                                                 <option>Not Submitted</option>
                                                 <option>Submitted</option>
                                                 <option>Under Review</option>
-                                                <option>Approved</option>
+                                                <option>Completed</option>
                                                 <option>Comments</option>
                                             </select>
                                         </div>
