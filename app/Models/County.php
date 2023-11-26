@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 
 class County extends Model
 {
@@ -12,16 +13,25 @@ class County extends Model
 
     /** Methods */
 
-    static public function countiesCB($default = [])
+    static public function countiesCB($default = null)
     {
-        $items = self::orderBy('county')->pluck('county', 'county')->toArray();
+        $counties = self::distinct('county')
+            ->orderBy('county')
+            ->pluck('county', 'county')
+            ->toArray();
 
-        if (!empty($default)) {
-            return $default + $items;
-        }
-
-        return $items;
+        return $default !== null ? $default + $counties : $counties;
     }
 
+    static public function citiesCB($countyId, $default = null)
+    {
+        $cities = self::where('county', $countyId)
+            ->distinct()
+            ->orderBy('city')
+            ->pluck('city', 'city')
+            ->toArray();
+
+        return $default !== null ? $default + $cities : $cities;
+    }
 
 }

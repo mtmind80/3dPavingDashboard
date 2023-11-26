@@ -174,6 +174,7 @@ Route::group(['middleware' => ['auth']], function() {
 
 /*************** Permits  ***************/
 
+
 Route::group(['prefix' => 'permits'], function() {
     Route::get('/', 'PermitsController@index')->name('permits');
     Route::match(['get', 'post'], '/search', 'PermitsController@search')->name('permit_search');
@@ -187,6 +188,7 @@ Route::group(['prefix' => 'permits'], function() {
     Route::post('ajax-note-list', 'PermitsController@noteList')->name('ajax_permit_note_list');
     Route::post('/create_permit', 'PermitsController@store')->name('create_permit');
 
+    Route::post('ajax-fetch-cities', [\App\Http\Controllers\PermitsController::class, 'ajaxFetchCities'])->name('ajax_fetch_cities');
 });
 /** END Permits */
 

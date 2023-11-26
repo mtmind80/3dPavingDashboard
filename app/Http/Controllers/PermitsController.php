@@ -85,7 +85,7 @@ class PermitsController extends Controller
         $data['id'] = $id;
         $data['proposal'] = Proposal::where('id', '=', $id)->first();
         $data['statusCB'] = $this->statusCB;
-        $counties = DB::table('counties')->groupBy('county')->get(['county']);
+        $counties = DB::table('counties')->groupBy('county')->orderBy('county')->get(['county']);
         $data['counties'] = $counties;
 
         return view('permit.create', $data);
@@ -104,18 +104,34 @@ class PermitsController extends Controller
         }
     }
 
-    public function edit(Permit $permit)
+    public function edit($permit)
     {
+        if (is_numeric($permit)) {
+            $permit = Permit::with([
+                'proposal',
+                'proposalDetail',
+                'createdBy',
+                'notes' => fn($q) => $q->with(['createdBy'])
+            ])->find($permit);
+        } else if ($permit instanceof Permit){
+            $permit->load([
+                'proposal',
+                'proposalDetail',
+                'createdBy',
+                'notes' => fn($q) => $q->with(['createdBy'])
+            ]);
+        }
+
+        $countiesCB = County::countiesCB();
+
+        $citiesCB = County::citiesCB($permit->county);
+
         $data = [
-            'permit' => $permit->load(['notes' => function ($q){
-                $q->with(['createdBy']);
-            }, 'proposal', 'proposalDetail', 'createdBy']),
+            'permit' => $permit,
+            'statusCB' => $this->statusCB,
+            'countiesCB' => $countiesCB,
+            'citiesCB' => $citiesCB,
         ];
-        $data['statusCB'] = $this->statusCB;
-
-
-        $counties = DB::table('counties')->groupBy('county')->get(['county']);
-        $data['counties'] = $counties;
 
         return view('permit.edit', $data);
     }
@@ -223,6 +239,40 @@ class PermitsController extends Controller
         }
 
         return response()->json($response);
+    }
+
+    public function ajaxFetchCities(Request $request)
+    {
+        if ($request->isMethod('post') && $request->ajax()) {
+            $validator = Validator::make(
+                $request->only(['county']), [
+                    'county' => 'required',
+                ]
+            );
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $validator->messages()->first(),
+                ]);
+            }
+
+            if ($citiesCB = County::citiesCB($request->county)) {
+                return response()->json([
+                    'success' => true,
+                    'data' => $citiesCB,
+                ]);
+            }
+
+            return response()->json([
+                'success' => false,
+                'message' => 'No cities found.',
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid request.',
+            ]);
+        }
     }
 
 }
