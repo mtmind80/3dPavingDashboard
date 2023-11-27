@@ -171,7 +171,7 @@
                 otcost = parseFloat(combinedcost) + parseFloat(materials) + + parseFloat(profit);  // combined striping cost + other cost
 
                 //percent_overhead percentage of service
-                overhead = Math.ceil((percent_overhead * 100) / otcost);
+                overhead = Math.ceil((percent_overhead * otcost) / 100);
                 $("#explain").html(percent_overhead + '%');
 
 
