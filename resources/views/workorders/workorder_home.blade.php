@@ -179,6 +179,7 @@
                                                         <th class="tc">County</th>
                                                         <th class="tc">Number</th>
                                                         <th class="tc">Status</th>
+                                                        <th class="tc">Expires</th>
                                                     </tr>
                                                     @foreach($permits as $permit)
                                                         <tr>
@@ -188,6 +189,7 @@
                                                             <td class="tc">{{$permit->county}}</td>
                                                             <td class="tc">{{$permit->number}}</td>
                                                             <td class="tc">{{$permit->status}}</td>
+                                                            <td class="tc">{{$permit->expires_on->format('M-d-Y')}}</td>
                                                         </tr>
                                                     @endforeach
                                                 </table>
