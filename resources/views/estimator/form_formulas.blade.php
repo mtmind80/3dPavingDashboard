@@ -1176,20 +1176,6 @@
 
                             var combinedcost = results['combined'];
 
-                            profit = $("#form_header_profit").val();
-                            var otcost = Math.ceil(parseFloat(combinedcost) + parseFloat(profit));
-
-                            //percent_overhead percentage of service
-                            overhead = Math.ceil((percent_overhead * 100) / otcost);
-                            //overhead = Math.ceil((otcost / 0.88) - otcost);
-                            $("#form_header_over_head").text(formatCurrency.format(overhead));
-                            $("#explain").html(percent_overhead + '%');
-
-
-                            $("#form_header_break_even").text(formatCurrency.format(breakeven));
-                            breakeven = parseFloat(overhead) + parseFloat(combinedcost);
-                            $("#header_show_customer_price").text(formatCurrency.format(breakeven + profit));
-
 
                             if (proposaltext == '') {
                                 proposaltext = servicedesc.replace('#SQFT#', square_feet);
@@ -1278,18 +1264,6 @@
                                 console.log(results);
                             }
                             var combinedcost = results['combined'];
-
-                            profit = $("#form_header_profit").val();
-                            var otcost = Math.ceil(parseFloat(combinedcost) + parseFloat(profit));
-
-                            //percent_overhead percentage of service
-                            overhead = Math.ceil((percent_overhead * 100) / otcost);
-                            $("#form_header_over_head").text(formatCurrency.format(overhead));
-                            $("#explain").html(percent_overhead + '%');
-
-
-                            breakeven = parseFloat(overhead) + parseFloat(combinedcost);
-                            $("#form_header_break_even").text(formatCurrency.format(breakeven));
 
                             $("#header_show_customer_price").text(formatCurrency.format(breakeven + profit));
 
@@ -1381,18 +1355,6 @@
 
                             var combinedcost = results['combined'];
 
-                            profit = $("#form_header_profit").val();
-                            var otcost = Math.ceil(parseFloat(combinedcost) + parseFloat(profit));
-
-                            //percent_overhead percentage of service
-                            overhead = Math.ceil((percent_overhead * 100) / otcost);
-                            $("#form_header_over_head").text(formatCurrency.format(overhead));
-                            $("#explain").html(percent_overhead + '%');
-
-                            breakeven = parseFloat(overhead) + parseFloat(combinedcost);
-                            $("#form_header_break_even").text(formatCurrency.format(breakeven));
-                            $("#header_show_customer_price").text(formatCurrency.format(breakeven + profit));
-
                             $("#x_material_cost").val(materials);
                             $("#x_linear_feet").val(linear_feet);
                             $("#x_cubic_yards").val(cubic_yards);
@@ -1442,17 +1404,6 @@
 
                             var combinedcost = results['combined'];
 
-                            profit = $("#form_header_profit").val();
-                            var otcost = Math.ceil(parseFloat(combinedcost) + parseFloat(profit));
-
-                            //percent_overhead percentage of service
-                            overhead = Math.ceil((percent_overhead * 100) / otcost);
-                            $("#form_header_over_head").text(formatCurrency.format(overhead));
-                            $("#explain").html(percent_overhead + '%');
-
-                            breakeven = parseFloat(overhead) + parseFloat(combinedcost);
-                            $("#form_header_break_even").text(formatCurrency.format(breakeven));
-                            $("#header_show_customer_price").text(formatCurrency.format(breakeven + profit));
 
                             // set all relevant form values for update
                             $("#x_material_cost").val(materials);
@@ -1498,16 +1449,6 @@
 
                         var combinedcost = results['combined'];
 
-                        profit = $("#form_header_profit").val();
-                        var otcost = Math.ceil(parseFloat(combinedcost) + parseFloat(profit));
-
-                        //percent_overhead percentage of service
-                        overhead = Math.ceil((percent_overhead * 100) / otcost);
-                        $("#form_header_over_head").text(formatCurrency.format(overhead));
-                        $("#explain").html(percent_overhead + '%');
-
-                        breakeven = parseFloat(overhead) + parseFloat(combinedcost);
-                        $("#form_header_break_even").text(formatCurrency.format(breakeven));
 
                         $("#header_show_customer_price").text(formatCurrency.format(breakeven + profit));
 
@@ -1571,17 +1512,6 @@
                         }
                         var combinedcost = results['combined'];
 
-                        profit = $("#form_header_profit").val();
-
-                        var otcost = Math.ceil(parseFloat(combinedcost) + parseFloat(profit));
-
-                        //percent_overhead percentage of service
-                        overhead = Math.ceil((percent_overhead * 100) / otcost);
-                        $("#form_header_over_head").text(formatCurrency.format(overhead));
-                        $("#explain").html(percent_overhead + '%');
-
-                        breakeven = parseFloat(overhead) + parseFloat(combinedcost);
-                        $("#form_header_break_even").text(formatCurrency.format(breakeven));
 
                         $("#header_show_customer_price").text(formatCurrency.format(breakeven + profit));
 
@@ -1620,18 +1550,6 @@
 
                         var combinedcost = results['combined'];
 
-                        profit = $("#form_header_profit").val();
-                        var otcost = Math.ceil(parseFloat(combinedcost) + parseFloat(profit));
-
-                        //percent_overhead percentage of service
-                        overhead = Math.ceil((percent_overhead * 100) / otcost);
-                        $("#form_header_over_head").text(formatCurrency.format(overhead));
-                        $("#explain").html(percent_overhead + '%');
-
-                        breakeven = parseFloat(overhead) + parseFloat(combinedcost);
-                        $("#form_header_break_even").text(formatCurrency.format(breakeven));
-
-                        $("#header_show_customer_price").text(formatCurrency.format(breakeven + profit));
 
                         if (proposaltext == '' || proposaltext == 'proposaltext') {
                             proposaltext = servicedesc;
@@ -1680,18 +1598,6 @@
                         }
 
                         var combinedcost = results['combined'];
-
-                        profit = $("#form_header_profit").val();
-                        var otcost = Math.ceil(parseFloat(combinedcost) + parseFloat(profit));
-
-                        //percent_overhead percentage of service
-                        overhead = Math.ceil((percent_overhead * 100) / otcost);
-                        $("#form_header_over_head").text(formatCurrency.format(overhead));
-                        $("#explain").html(percent_overhead + '%');
-
-                        breakeven = parseFloat(overhead) + parseFloat(combinedcost);
-                        $("#form_header_break_even").text(formatCurrency.format(breakeven));
-                        $("#header_show_customer_price").text(formatCurrency.format(breakeven + profit));
 
                         $("#header_show_materials_cost").text(formatCurrency.format(materials));
                         $("#x_cost_per_day").val(cost_per_day);
@@ -1758,18 +1664,6 @@
                         }
 
                         var combinedcost = results['combined'];
-                        profit = $("#form_header_profit").val();
-                        var otcost = Math.ceil(parseFloat(combinedcost) + parseFloat(profit));
-
-                        //percent_overhead percentage of service
-                        overhead = Math.ceil((percent_overhead * 100) / otcost);
-                        $("#form_header_over_head").text(formatCurrency.format(overhead));
-                        $("#explain").html(percent_overhead + '%');
-
-                        breakeven = parseFloat(overhead) + parseFloat(combinedcost);
-                        $("#form_header_break_even").text(formatCurrency.format(breakeven));
-
-                        $("#header_show_customer_price").text(formatCurrency.format(parseFloat(breakeven) + parseFloat(profit)));
 
                         $("#header_show_materials_cost").text(formatCurrency.format(materials));
                         $("#x_square_feet").val(square_feet);
@@ -1838,18 +1732,6 @@
                         console.log(results);
                         var combinedcost = results['combined'];
 
-                        profit = $("#form_header_profit").val();
-                        var otcost = Math.ceil(parseFloat(combinedcost) + parseFloat(profit));
-
-                        //percent_overhead percentage of service
-                        overhead = Math.ceil((percent_overhead * 100) / otcost);
-                        $("#form_header_over_head").text(formatCurrency.format(overhead));
-                        $("#explain").html(percent_overhead + '%');
-
-                        breakeven = parseFloat(overhead) + parseFloat(combinedcost);
-                        $("#form_header_break_even").text(formatCurrency.format(breakeven));
-                        $("#header_show_customer_price").text(formatCurrency.format(breakeven + profit));
-
                         $("#x_sealer").val(sealer);
                         $("#x_square_feet").val(square_feet);
                         $("#x_fast_set").val(fastset);
@@ -1913,17 +1795,6 @@
                     var combinedcost = results['combined'];
 
 
-                    profit = $("#form_header_profit").val();
-                    var otcost = Math.ceil(parseFloat(combinedcost) + parseFloat(profit));
-
-                    //percent_overhead percentage of service
-                    overhead = Math.ceil((percent_overhead * 100) / otcost);
-                    $("#form_header_over_head").text(formatCurrency.format(overhead));
-                    $("#explain").html(percent_overhead + '%');
-
-                    breakeven = parseFloat(overhead) + parseFloat(combinedcost);
-                    $("#form_header_break_even").text(formatCurrency.format(breakeven));
-                    $("#header_show_customer_price").text(formatCurrency.format(breakeven + profit));
 
                     if (additive = parseInt(additive) && additive > 0) {
                         // we currently are going with a straight 30% and ignoraing any contractor overhead
@@ -1956,7 +1827,23 @@
                     console.log("end sub contractor");
                 }
 
-                //set these fields for all services
+                /*
+                set these fields for all services
+                 */
+
+
+                profit = $("#form_header_profit").val();
+                var otcost = Math.ceil(parseFloat(combinedcost) + parseFloat(profit));
+
+                //percent_overhead percentage of service
+                overhead = Math.ceil((percent_overhead * otcost) / 100);
+                $("#form_header_over_head").text(formatCurrency.format(overhead));
+                $("#explain").html(percent_overhead + '%');
+
+                breakeven = parseFloat(overhead) + parseFloat(combinedcost);
+                $("#form_header_break_even").text(formatCurrency.format(breakeven));
+                $("#header_show_customer_price").text(formatCurrency.format(breakeven + profit));
+
 
                 service_name = $("#service_name").val();
                 $("#x_service_name").val(service_name);
