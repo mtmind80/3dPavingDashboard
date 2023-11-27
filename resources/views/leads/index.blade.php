@@ -31,6 +31,7 @@
                             <th class="td-sortable tc w360">{!! \App\Traits\SortableTrait::link('leads.assigned_to|users.fname', 'Assigned To') !!}</th>
                             <th class="td-sortable tc w200">{!! \App\Traits\SortableTrait::link('leads.status_id|lead_status.status', 'Status') !!}</th>
                             <th class="td-sortable tc w100">{!! \App\Traits\SortableTrait::link('onsite', 'Onsite') !!}</th>
+                            <th class="td-sortable tc">Age</th>
                             <th class="td-sortable tc">Last Note</th>
                             <th class="actions tc">@lang('translation.actions')</th>
                         </tr>
@@ -43,7 +44,8 @@
                                 <td class="tc">{{ $lead->assignedTo->full_name ?? null }}</td>
                                 <td class="tc">{{ $lead->status->status ?? null }}</td>
                                 <td class="tc">{{  !empty($lead->onsite)  ? 'YES' : 'no'}}</td>
-                                <td class="tc">{{ $lead->lastNote->note ?? null }}<br/>{{ $lead->lastNote->created_at ?? null}}</td>
+                                <td class="tc">{{ $lead->DaysOld}} days</td>
+                                <td class="tc">{{ $lead->lastNote->note ?? null }}<br/>{{ $lead->lastNote->DateCreated ?? null}}</td>
                                 <td class="centered actions">
                                     <ul class="nav navbar-nav">
                                         <li class="dropdown">
@@ -68,7 +70,7 @@
                                                     </li>
                                                     <li class="menu-separator"></li>
                                                     <li>
-                                                        <a href="javascript:" class="action" data-action="archive" data-route="{{ route('lead_archive',['lead' => $lead->id]) }}" data-text="Are you sure you want to archive this lead?<br>Lead: <b>{{ $lead->full_name }}</b>">
+                                                        <a href="javascript:" class="action" data-action="archive" data-route="{{ route('lead_archive',['lead' => $lead->id]) }}" data-text="Are you sure you want to archive this lead?  Lead: {{ $lead->full_name }}">
                                                             <span class="far fa-save"></span>@lang('translation.archive')
                                                         </a>
                                                     </li>
@@ -199,14 +201,12 @@
             });
 
             body.on('click', '.actions .action[data-action="archive"]', function(){
-                uiConfirm({callback: 'confirmArchive', text: $(this).attr('data-text'), params: [$(this).attr('data-route')]});
+                var archive = confirm($(this).attr('data-text'));
+                if(archive) {
+                    window.location = $(this).attr('data-route');
+                }
             });
         });
 
-        function confirmArchive(url)
-        {
-            window.location = url;
-        }
     </script>
 @stop
-

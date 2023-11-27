@@ -31,4 +31,10 @@ class LeadNote extends Model
         return !empty($this->created_at) ? $this->created_at->format('m/d/Y') . ' - ' . $this->creator->full_name : null;
     }
 
+    public function getDateCreatedAttribute()
+    {
+        return $this->created_at->format('M-d-Y');
+
+    }
+
 }

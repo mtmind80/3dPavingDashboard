@@ -154,6 +154,13 @@ class Lead extends Model
         return !empty($this->created_at) ? $this->created_at->format('Y') : null;
     }
 
+    public function getDaysOldAttribute()
+    {
+        $datediff = strtotime("now") - strtotime($this->created_at);
+        return round($datediff / (60 * 60 * 24));
+
+    }
+
     public function getFullNameAttribute()
     {
         return trim($this->first_name . ' ' . $this->last_name);
