@@ -165,15 +165,17 @@
                                                         <th class="tc">County</th>
                                                         <th class="tc">Number</th>
                                                         <th class="tc">Status</th>
+                                                        <th class="tc">Expires</th>
                                                     </tr>
                                                     @foreach($permits as $permit)
                                                         <tr>
-                                                            <td class="tc"><a class="tc"><a
-                                                                            href="{{route('permit_show',['permit'=>$permit->id])}}">View
-                                                                        Permit</a></td>
+                                                            <td class="tc">
+                                                                    <a title="View Permit" href="{{route('permit_show',['permit'=>$permit->id])}}">View Permit</a>
+                                                            </td>
                                                             <td class="tc">{{$permit->county}}</td>
                                                             <td class="tc">{{$permit->number}}</td>
                                                             <td class="tc">{{$permit->status}}</td>
+                                                            <td class="tc">{{$permit->expires_on}}</td>
                                                         </tr>
                                                     @endforeach
                                                 </table>
