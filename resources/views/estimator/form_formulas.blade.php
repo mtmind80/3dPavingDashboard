@@ -1107,6 +1107,8 @@
                  greater than or equal to a given number.
                 */
 
+
+                var ohead = 0.7;
                 var percent_overhead = {{ $service->percent_overhead }};
                 var servicedesc = '{!! $service->service_template !!}';
                 var profit = $("#form_header_profit").val();
@@ -1144,6 +1146,7 @@
                     if (serviceId == 19) {
                         {{-- Asphalt Milling --}}
 
+                        var ohead = 0.88;
                         var cost_per_day = $("#cost_per_day").val();
                         var locations = $("#locations").val();
                         var square_feet = $("#square_feet").val();
@@ -1204,7 +1207,9 @@
                     } else {
                         {{-- if(sid == 4 || sid == 5 || sid == 22 || sid == 3 --}}
 
-
+                        if (serviceId == 4 || serviceId == 22 ) {
+                            var ohead = 0.8;
+                        }
                         var square_feet = $("#square_feet").val();
                         var depth = $("#depth").val();
                         var cost_per_day = $("#cost_per_day>option:selected").val();
@@ -1265,7 +1270,6 @@
                             }
                             var combinedcost = results['combined'];
 
-                            $("#header_show_customer_price").text(formatCurrency.format(breakeven + profit));
 
                             // set all relevant form values for update
                             $("#x_material_cost").val(materials);
@@ -1450,8 +1454,6 @@
                         var combinedcost = results['combined'];
 
 
-                        $("#header_show_customer_price").text(formatCurrency.format(breakeven + profit));
-
                         if (proposaltext == '') {
                             proposaltext = servicedesc.replace('#BASINS#', catchbasins);
                             tinymce.activeEditor.setContent(proposaltext);
@@ -1513,8 +1515,6 @@
                         var combinedcost = results['combined'];
 
 
-                        $("#header_show_customer_price").text(formatCurrency.format(breakeven + profit));
-
                         // ok so set square_feet, cost, loads, tons, depth, bill_after, profit, break_even, location_id, overhead, toncost, proposal_text
                         // set all relevant form values for update
                         $("#x_material_cost").val(materials);
@@ -1574,6 +1574,7 @@
 
                     {{--  Paver Brick --}}
 
+                    var ohead =  0.75;
 
                     var cost_per_day = $("#cost_per_day").val();
                     var materials = cost_per_day;
@@ -1832,13 +1833,13 @@
                  */
 
 
-                profit = $("#form_header_profit").val();
+                var profit = $("#form_header_profit").val();
                 var otcost = Math.ceil(parseFloat(combinedcost) + parseFloat(profit));
+                var overhead = Math.ceil((otcost / ohead) - otcost);
 
-                //percent_overhead percentage of service
-                overhead = Math.ceil((percent_overhead * otcost) / 100);
+
                 $("#form_header_over_head").text(formatCurrency.format(overhead));
-                $("#explain").html(percent_overhead + '%');
+                $("#explain").html('Percent Overhead');
 
                 breakeven = parseFloat(overhead) + parseFloat(combinedcost);
                 $("#form_header_break_even").text(formatCurrency.format(breakeven));
