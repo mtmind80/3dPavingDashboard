@@ -58,7 +58,7 @@ class Kernel extends ConsoleKernel
             ->dailyAt('01:00')
             ->timezone(config('app.timezone'))
             ->when(function () {
-                return false;     // change this to true to activate
+                return true;     // change this to true to activate
                 // or to:
                 // return app()->environment() === 'production'; for running only in PRD
             });
@@ -92,7 +92,7 @@ class Kernel extends ConsoleKernel
             ->dailyAt('01:30')
             ->timezone(config('app.timezone'))
             ->when(function () {
-                return false;     // change this to true to activate
+                return true;     // change this to true to activate
                 // or to:
                 // return app()->environment() === 'production'; for running only in PRD
             });
@@ -103,7 +103,7 @@ class Kernel extends ConsoleKernel
             })->everyFiveMinutes()
                 ->timezone(config('app.timezone'))
                 ->when(function () {
-                    return true;     // change this to true to activate
+                    return false;     // change this to true to activate
                     // or to:
                     // return app()->environment() === 'production'; for running only in PRD
                 });
