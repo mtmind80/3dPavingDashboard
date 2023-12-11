@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Traits\SearchTrait;
 use App\Traits\SortableTrait;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -76,9 +77,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Proposal::class, 'salesperson_id');
     }
-    public function notes()
+    public function notes() :HasMany
     {
-        return $this->hasMany(ProposalNote::class, 'id', 'created_by');
+        return $this->hasMany(ProposalNote::class, 'created_by', 'id');
     }
 
     /** scopes */
