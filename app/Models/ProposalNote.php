@@ -19,4 +19,9 @@ class ProposalNote extends Model
         return $this->belongsTo(Proposal::class);
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id', 'created_by');
+    }
+
 }
