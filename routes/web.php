@@ -552,4 +552,12 @@ Route::group(['prefix' => 'leads'], function() {
 /** END Leads */
 
 
+Route::get('test-sending-notifications', function(){
+    $proposal = \App\Models\Proposal::with(['salesPerson'])->find(10680);
+    $user = \App\Models\User::find(20011);
+    $user->notify(new \App\Notifications\OldProposalNotification($proposal));
+    dd('ok');
+});
+
+
 
