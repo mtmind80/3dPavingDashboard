@@ -42,7 +42,7 @@ class Kernel extends ConsoleKernel
                             $proposalNote->remindersent = true;
                             $proposalNote->save();
 
-                            $proposalNote->proposal->salesPerson->notify(new ProposalNoteNotification($proposalNote));
+                            $proposalNote->user->notify(new ProposalNoteNotification($proposalNote));
                             Log::info(env('APP_NAME') . '. Sent proposal note: ' . $proposalNote->proposal->salesPerson->email);
                             $total++;
                         } catch (Exception $e) {
