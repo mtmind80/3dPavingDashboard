@@ -55,7 +55,7 @@ class Kernel extends ConsoleKernel
                 Log::info(env('APP_NAME') . '. Sent ' . $total . ' proposal note ' . Str::plural('reminder', $total) . '.');
             }
         })
-            ->dailyAt('01:00')
+            ->everyMinute()
             ->timezone(config('app.timezone'))
             ->when(function () {
                 return true;     // change this to true to activate
@@ -92,7 +92,7 @@ class Kernel extends ConsoleKernel
             ->dailyAt('01:30')
             ->timezone(config('app.timezone'))
             ->when(function () {
-                return true;     // change this to true to activate
+                return false;     // change this to true to activate
                 // or to:
                 // return app()->environment() === 'production'; for running only in PRD
             });
