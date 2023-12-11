@@ -79,7 +79,7 @@ class User extends Authenticatable
     }
     public function notes() :HasMany
     {
-        return $this->hasMany(ProposalNote::class, 'created_by', 'id');
+        return $this->hasMany(ProposalNote::class, 'created_by');
     }
 
     /** scopes */
