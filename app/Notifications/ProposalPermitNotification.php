@@ -2,21 +2,20 @@
 
 namespace App\Notifications;
 
+use App\Models\Permit;
 use App\Models\Proposal;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class OldProposalNotification extends Notification
+class ProposalPermitNotification extends Notification
 {
-    use Queueable;
+    protected Permit $permit;
 
-    protected Proposal $proposal;
-
-    public function __construct($proposal)
+    public function __construct($permit)
     {
-        $this->proposal = $proposal;
+        $this->permit = $permit;
     }
 
     public function via($notifiable)
@@ -26,13 +25,17 @@ class OldProposalNotification extends Notification
 
     public function toMail($notifiable)
     {
-        $proposal = $this->proposal;
+        $permit = $this->permit;
 
-        $subject = 'Proposal older than 60 days.';
+        $subject = 'Permit Update.';
 
         $content = '<p>Hello, '.$notifiable->fname.'</p>';
-        $content .= '<p>We have sent this notification because you have a proposal in a pending status older than 60 days.</p>';
-        $content .= '<p>Proposal name is: '.$proposal->name.'.</p>';
+        $content .= '<p>We have sent this notification because you have a proposal that had a permit updated today.</p>';
+        $content .= '<p>Proposal name is: '.$permit->proposal->name.'.</p>';
+        $content .= '<p>Permit is:<br>';
+        $content .= $permit->status.'.</p>';
+        $content .= $permit->county.'.</p>';
+        $content .= $permit->expires_on.'.</p>';
         $signer = '<p>System Admin</p>';
 
         $tags = [
