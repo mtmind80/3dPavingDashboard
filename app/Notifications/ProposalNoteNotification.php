@@ -43,7 +43,7 @@ class ProposalNoteNotification extends Notification
 
         return (new MailMessage)
             ->subject($subject)
-            ->from(env('MAIL_FROM_ADDRESS','no-reply@3-dpaving.com'), env('MAIL_FROM_NAME','3D-Paving.Com'))
+            ->from(config('mail.from.name'),config('mail.from.address'))
             ->view('emails.notification', $tags);
     }
 

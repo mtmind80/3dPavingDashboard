@@ -13,6 +13,8 @@ return [
     |
     */
 
+
+
     'default' => env('MAIL_MAILER', 'smtp'),
 
     /*
@@ -84,8 +86,8 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'keith@3dpaving.com'),
-        'name' => env('MAIL_FROM_NAME', 'Keith Daly'),
+        'address' => env('MAIL_FROM_ADDRESS', 'no-reply@3-dpaving.com'),
+        'name' => env('MAIL_FROM_NAME', '3d-Paving.com'),
     ],
 
     /*
