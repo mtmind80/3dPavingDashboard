@@ -55,9 +55,9 @@ class Kernel extends ConsoleKernel
                 Log::info(env('APP_NAME') . '. Sent ' . $total . ' proposal note ' . Str::plural('reminder', $total) . '.');
             }
         })
-            ->everyFiveMinutes()
-            ->timezone(config('app.timezone'))
-            ->when(function () {
+        ->dailyAt('01:00')
+        ->timezone(config('app.timezone'))
+        ->when(function () {
                 return true;     // change this to true to activate
                 // or to:
                 // return app()->environment() === 'production'; for running only in PRD
@@ -66,14 +66,14 @@ class Kernel extends ConsoleKernel
         // Notify old proposals (over 60 days old)
         $schedule->call(function () {
             $total = 0;
-
-            Proposal::whereDate('created_at', now(config('app.timezone'))->subDays(60)->toDateString())
+            $daysold = 60;
+            Proposal::where('on_alert', '=', false)->whereDate('created_at', now(config('app.timezone'))->subDays($daysold)->toDateString())
                 ->with(['salesPerson'])
-                ->chunk(500, function ($proposals) use (& $total) {
+                ->chunk(500, function ($proposals) use (& $total, $daysold) {
                     foreach ($proposals as $proposal) {
                         try {
                             $proposal->on_alert = true;
-                            $proposal->alert_reason = 'Proposal Too Old';
+                            $proposal->alert_reason = "Proposal Older than $daysold  days old";
                             $proposal->save();
 
                             $proposal->salesPerson->notify(new OldProposalNotification($proposal));
@@ -89,7 +89,7 @@ class Kernel extends ConsoleKernel
                 Log::info(env('APP_NAME') . '. Sent ' . $total . ' "Proposal Too Old" ' . Str::plural('notification', $total) . '.');
             }
         })
-            ->dailyAt('01:30')
+            ->everyFourHours()
             ->timezone(config('app.timezone'))
             ->when(function () {
                 return false;     // change this to true to activate

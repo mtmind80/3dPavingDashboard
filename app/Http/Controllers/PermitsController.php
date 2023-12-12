@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PermitNoteRequest;
 use App\Http\Requests\PermitRequest;
 use App\Http\Requests\SearchRequest;
+use App\Notifications\ProposalNoteNotification;
 use Illuminate\Support\Facades\DB;
 use App\Models\Proposal;
 use App\Models\County;
@@ -72,7 +73,8 @@ class PermitsController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
-
+        
+        $permit->proposal->salesperson->notify(new ProposalPermitNotification($permit));
         if (!empty($this->returnTo)) {
             return redirect()->to($this->returnTo)->with('success', 'Permit note added.');
         } else {
