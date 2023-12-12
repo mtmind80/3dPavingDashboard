@@ -43,7 +43,7 @@ class OldProposalNotification extends Notification
 
         return (new MailMessage)
             ->subject($subject)
-            ->from(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'))
+            ->from(env('MAIL_FROM_ADDRESS','no-reply@3-dpaving.com'), env('MAIL_FROM_NAME','3D-Paving.Com'))
             ->view('emails.notification', $tags);
     }
 
