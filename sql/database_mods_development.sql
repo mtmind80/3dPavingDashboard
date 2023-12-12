@@ -1644,8 +1644,10 @@ Update proposal_statuses set status = 'Presented To Client' where id =4;
 /*
 php artisan view:cache
 php artisan route:cache
+php artisan config:clear
 php artisan config:cache
 php artisan cache:clear
+
 */
 
 #Update sale date by job master ID, show chcnage orders in same date as original proposal
