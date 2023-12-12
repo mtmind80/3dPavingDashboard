@@ -32,7 +32,7 @@ class Kernel extends ConsoleKernel
             $total = 0;
             ProposalNote::whereNotNull('reminder_date')
                 ->where('remindersent', false)
-                ->whereDate('reminder_date', now(config('app.timezone'))->toDateString())
+                ->whereDate('reminder_date', '<', now(config('app.timezone'))->toDateString())
                 ->with(['proposal' => function ($q) {
                     $q->with(['salesPerson']);
                 }])
