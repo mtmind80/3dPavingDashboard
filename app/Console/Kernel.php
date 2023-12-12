@@ -55,7 +55,7 @@ class Kernel extends ConsoleKernel
                 Log::info(env('APP_NAME') . '. Sent ' . $total . ' proposal note ' . Str::plural('reminder', $total) . '.');
             }
         })
-            ->everyMinute()
+            ->dailyAt('01:30')
             ->timezone(config('app.timezone'))
             ->when(function () {
                 return true;     // change this to true to activate
