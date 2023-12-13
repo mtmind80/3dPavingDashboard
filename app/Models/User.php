@@ -112,7 +112,7 @@ class User extends Authenticatable
 
     public function scopeManagers($query) //sales  managers and pavement consultants
     {
-        return $query->where('status', 1)->whereIn('role_id', [3,4])->orderBy('lname')->orderBy('fname');
+        return $query->where('status', 1)->whereIn('role_id', [3,4,7])->orderBy('lname')->orderBy('fname');
     }
 
     public function scopeSales($query)  //pavement consultant
