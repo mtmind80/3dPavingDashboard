@@ -75,6 +75,7 @@ class PermitsController extends Controller
         }
 
         $permit->proposal->salesperson->notify(new ProposalPermitNotification($permit));
+
         if (!empty($this->returnTo)) {
             return redirect()->to($this->returnTo)->with('success', 'Permit note added.');
         } else {
