@@ -36,6 +36,10 @@ class ProposalPermitNotification extends Notification
         $content .= $permit->status.'.</p>';
         $content .= $permit->county.'.</p>';
         $content .= $permit->expires_on.'.</p>';
+        foreach($permit->notes as $note)
+        {
+            $content .= $note->note.'.</p>';
+        }
         $signer = '<p>System Admin</p>';
 
         $tags = [
