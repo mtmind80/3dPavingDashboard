@@ -987,6 +987,16 @@ class ProposalController extends Controller
 
         return view('contacts.index_change_client', $data);
     }
+    public function selectclient($contact_id, $proposal_id)
+    {
+
+        $proposal = Proposal::find($proposal_id);
+        $proposal->contact_id = $contact_id;
+        $proposal->update();
+
+        return redirect()->route('show_proposal', ['id' => $proposal_id]);
+
+    }
 
     public function refreshMaterialPricing($id)
     {

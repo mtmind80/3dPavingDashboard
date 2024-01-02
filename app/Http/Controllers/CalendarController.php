@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
 
+
 class CalendarController extends Controller
 {
 
@@ -96,7 +97,7 @@ class CalendarController extends Controller
         ));
     }
 
-    
+
     /**
      * Display the specified resource.
      *

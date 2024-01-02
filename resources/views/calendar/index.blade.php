@@ -1,35 +1,26 @@
 @extends('layouts.master')
 @section('title') Calendarss @endsection
-@section('css')
-    <!-- Plugin css -->
-    <link href="{{ URL::asset('/assets/libs/fullcalendar/fullcalendar.min.css')}}" rel="stylesheet" type="text/css" />
-@endsection
+
 @section('content')
-@component('components.breadcrumb')                
+@component('components.breadcrumb')
     @slot('title') Calendar @endslot
     @slot('li_1') <a href="/dashboard">Home</a> @endslot
     @slot('li_2') Calendar @endslot
-@endcomponent 
+@endcomponent
 
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <div id='calendar'></div>
+                    <div id='calendar'>
+                        <iframe src="https://calendar.google.com/calendar/embed?src=mtmind4media%40gmail.com&ctz=America%2FNew_York" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
 
-                    <div style='clear:both'></div>
+                    </div>
+
                 </div>
             </div>
         </div>
     </div>
-      
-@endsection
-@section('script')
-    <!-- plugin js -->
-    <script src="{{ URL::asset('/assets/libs/moment/moment.min.js')}}"></script>
-    <script src="{{ URL::asset('/assets/libs/fullcalendar/fullcalendar.min.js')}}"></script>
 
-    <!-- Calendar init -->
-    <script src="{{ URL::asset('/assets/js/pages/calendar.init.js')}}"></script>
 @endsection
-   
+
