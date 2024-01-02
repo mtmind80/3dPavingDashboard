@@ -47,6 +47,7 @@ Route::group(['middleware' => ['auth']], function() {
 
     //abandon calendar
     Route::get('/calendar', 'CalendarController@index')->name('calendar');
+    Route::get('/create_event', 'GoogleController@store')->name('create_event');
 
     Route::get('generate-pdf', 'PDFController@generatePDF')->name('generatepdf');
 
@@ -327,6 +328,10 @@ Route::group(['prefix' => 'proposals'], function() {
     Route::get('', 'ProposalController@index')->name('proposals');
 
     Route::match(['get', 'post'], '/{proposal_id}/changeproposalclient', 'ProposalController@changeclient')->name('change_proposal_client');
+
+    //update proposal materials pricing
+    Route::get('/selectclient/{contact_id}/{proposal_id}', 'ProposalController@selectclient')->name('selectclient');
+
 
     //update proposal materials pricing
     Route::get('/MaterialPricing/{id}', 'ProposalController@refreshMaterialPricing')->name('refresh_material');

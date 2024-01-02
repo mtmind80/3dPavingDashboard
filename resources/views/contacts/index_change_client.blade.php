@@ -20,6 +20,7 @@
                             <x-search :needle="$needle" search-route="{{ route('change_proposal_client', ['proposal_id' => $proposal_id]) }}" cancel-route="{{ route('change_proposal_client', ['proposal_id' => $proposal_id]) }}" ></x-search>
                         </div>
                     </div>
+
                     <table class="list-table table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
                             <tr>
@@ -33,6 +34,7 @@
                         </thead>
                         <tbody>
                             @foreach ($contacts as $contact)
+
                                 <tr>
                                     <td class="tc">{{ $contact->full_name }}</td>
                                     <td class="tc">{!! $contact->full_address_two_line !!}</td>
@@ -45,7 +47,7 @@
                                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-angle-down"></i></a>
                                                 <ul class="dropdown-menu animated animated-short flipInX" role="menu">
                                                     <li>
-                                                        <a href="javascript:" class="action">
+                                                        <a href="{{ route('selectclient', ['contact_id'=>$contact->id, 'proposal_id' =>$proposal_id]) }}" class="action">
                                                             Choose Me
                                                         </a>
                                                     </li>

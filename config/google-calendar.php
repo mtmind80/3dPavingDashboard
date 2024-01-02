@@ -2,14 +2,14 @@
 
 
 //project CalendarDevelopment
-//client id 
+//client id
 //784244267523-9rr55n0u96mbe43d9ostfgvhf6t8pqc6.apps.googleusercontent.com
 
 //Client secret: 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
 
 return [
 
-    'default_auth_profile' => env('784244267523-9rr55n0u96mbe43d9ostfgvhf6t8pqc6.apps.googleusercontent.com', 'CalendarDevelopment'),
+    'default_auth_profile' => env('8a603022180fc879194f936b726ec7338f334639', 'service_account'),
 
     'auth_profiles' => [
 
@@ -20,7 +20,7 @@ return [
             /*
              * Path to the json file containing the credentials.
              */
-            'credentials_json' => storage_path('app/google-calendar/service-account-credentials.json'),
+            'credentials_json' => storage_path('app/google-calendar/calendardevelopment-8a603022180f.json'),
         ],
 
         /*

@@ -334,7 +334,7 @@ return [
     "change" => "Change",
     "current_status" => "Current Status",
     "required" => "Required",
-    "mot" => "Modification of Traffic",
+    "mot" => "Maintenance of Traffic",
     "on_alert" => "On Alert",
     "nto" => "Notification to Owner",
     "sent" => "Sent",

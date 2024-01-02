@@ -327,7 +327,7 @@ return [
     "number" => "Número",
     "required" => "Requerido",
     "require" => "Requerir",
-    "mot" => "Modification of Traffic",
+    "mot" => "Mantenimiento del Tráfico",
     "on_alert" => "En Alerta",
     "nto" => "Notificación al Dueño",
     "change_status" => "Cambiar Estado",
