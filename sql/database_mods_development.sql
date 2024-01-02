@@ -1,4 +1,5 @@
 
+
 #DELETE XTRA Herb Trevathan from Contacts
 DELETE From crmtblcontacts Where cntFirstName ='Herb' AND cntIsEmployee = 1 AND cntStatusId =0;
 UPDATE `crmtblcontacts` Set cntCreatedBy = 10 WHERE cntCreatedBy = 100;
@@ -33,7 +34,6 @@ GROUP BY crmtblcontacts.cntCreatedby, crmtblcontacts.cntCreatedBy, users.id
 ORDER BY COUNT(crmtblcontacts.cntId) DESC;
 
     
-
 #USE HOME CONTROLLER TO CREATE USERS
 
 #realign employees to have their old id
@@ -50,6 +50,7 @@ DELETE FROM users where id =2;
 
 #2. Alter old tables to hold some new ids
 ALTER TABLE `crmtblcontacts` 
+MODIFY cntCreatedDate DateTime NULL,
 ADD `contact_id` INT NULL DEFAULT '0' AFTER `cntlogout`, 
 ADD `user_id` INT NULL DEFAULT '0' AFTER `cntlogout`, 
 ADD `location_id` INT NULL AFTER `cntlogout`, 
@@ -274,6 +275,8 @@ UPDATE crmtblcontacts c
 JOIN vendors d on d.old_id = c.cntId
 SET c.contractor_id = d.id;
 
+UPDATE crmtblcontacts set cntCreatedDate = null where
+YEAR(cntCreatedDate) < 2019;
 
 
 # move customers to new contacts table
@@ -1651,94 +1654,96 @@ php artisan cache:clear
 */
 
 #Update sale date by job master ID, show chcnage orders in same date as original proposal
-update proposals set proposal_date = '2020-2-21 09:47:05' where job_master_id ='2018:9:314';
-update proposals set proposal_date = '2020-3-27 01:22:44' where job_master_id ='2019:11:306';
-update proposals set proposal_date = '2020-1-11 08:43:07' where job_master_id ='2019:3:80';
-update proposals set proposal_date = '2019-11-11 12:40:33' where job_master_id ='2019:8:202';
-update proposals set proposal_date = '2020-1-3 08:30:12' where job_master_id ='2019:9:264';
-update proposals set proposal_date = '2019-9-17 11:35:55' where job_master_id ='2020:1:1';
-update proposals set proposal_date = '2019-3-26 10:01:56' where job_master_id ='2020:1:16';
-update proposals set proposal_date = '2019-2-8 08:46:44' where job_master_id ='2020:1:19';
-update proposals set proposal_date = '2019-11-8 02:05:20' where job_master_id ='2020:1:6';
-update proposals set proposal_date = '2019-10-30 08:33:06' where job_master_id ='2020:1:7';
-update proposals set proposal_date = '2020-1-6 12:11:11' where job_master_id ='2020:1:9';
-update proposals set proposal_date = '2020-8-17 01:25:22' where job_master_id ='2020:10:328';
-update proposals set proposal_date = '2019-4-23 11:31:50' where job_master_id ='2020:10:337';
-update proposals set proposal_date = '2020-9-2 09:20:59' where job_master_id ='2020:10:339';
-update proposals set proposal_date = '2020-1-30 02:58:25' where job_master_id ='2020:2:32';
-update proposals set proposal_date = '2020-2-4 08:56:59' where job_master_id ='2020:2:42';
-update proposals set proposal_date = '2018-1-4 11:00:07' where job_master_id ='2020:2:49';
-update proposals set proposal_date = '2020-2-25 01:15:19' where job_master_id ='2020:3:58';
-update proposals set proposal_date = '2019-12-4 10:47:06' where job_master_id ='2020:3:61';
-update proposals set proposal_date = '2020-3-10 08:11:00' where job_master_id ='2020:3:74';
-update proposals set proposal_date = '2020-2-5 07:07:46' where job_master_id ='2020:4:92';
-update proposals set proposal_date = '2020-4-21 03:14:10' where job_master_id ='2020:5:119';
-update proposals set proposal_date = '2020-1-11 10:56:57' where job_master_id ='2020:5:144';
-update proposals set proposal_date = '2020-5-11 09:46:04' where job_master_id ='2020:5:156';
-update proposals set proposal_date = '2020-6-2 08:54:02' where job_master_id ='2020:6:175';
-update proposals set proposal_date = '2020-6-16 11:28:17' where job_master_id ='2020:6:188';
-update proposals set proposal_date = '2019-10-9 07:47:01' where job_master_id ='2020:8:257';
-update proposals set proposal_date = '2019-3-25 11:27:01' where job_master_id ='2020:8:264';
-update proposals set proposal_date = '2020-5-26 11:18:02' where job_master_id ='2020:8:279';
-update proposals set proposal_date = '2019-9-30 09:05:32' where job_master_id ='2020:9:289';
-update proposals set proposal_date = '2019-10-21 10:32:10' where job_master_id ='2020:9:292';
-update proposals set proposal_date = '2020-9-23 01:31:02' where job_master_id ='2020:9:309';
-update proposals set proposal_date = '2020-5-22 09:12:10' where job_master_id ='2021:1:5';
-update proposals set proposal_date = '2021-9-30 11:32:45' where job_master_id ='2021:10:404';
-update proposals set proposal_date = '2020-2-12 11:51:13' where job_master_id ='2021:10:405';
-update proposals set proposal_date = '2020-11-24 06:02:38' where job_master_id ='2021:3:113';
-update proposals set proposal_date = '2021-3-11 12:42:06' where job_master_id ='2021:3:85';
-update proposals set proposal_date = '2020-2-11 07:54:35' where job_master_id ='2021:3:93';
-update proposals set proposal_date = '2021-2-19 01:51:00' where job_master_id ='2021:3:95';
-update proposals set proposal_date = '2021-1-21 12:01:42' where job_master_id ='2021:5:166';
-update proposals set proposal_date = '2021-3-31 02:14:17' where job_master_id ='2021:5:170';
-update proposals set proposal_date = '2021-5-5 06:52:40' where job_master_id ='2021:5:179';
-update proposals set proposal_date = '2021-5-12 06:55:00' where job_master_id ='2021:6:198';
-update proposals set proposal_date = '2021-6-13 12:58:46' where job_master_id ='2021:6:227';
-update proposals set proposal_date = '2021-4-17 04:30:21' where job_master_id ='2021:6:236';
-update proposals set proposal_date = '2020-4-27 02:50:53' where job_master_id ='2021:6:237';
-update proposals set proposal_date = '2018-8-15 12:11:40' where job_master_id ='2021:7:256';
-update proposals set proposal_date = '2021-7-27 05:01:06' where job_master_id ='2021:7:272';
-update proposals set proposal_date = '2021-2-19 02:08:44' where job_master_id ='2021:8:294';
-update proposals set proposal_date = '2021-4-28 07:24:50' where job_master_id ='2021:8:325';
-update proposals set proposal_date = '2021-6-21 04:08:09' where job_master_id ='2021:8:329';
-update proposals set proposal_date = '2021-5-24 03:18:12' where job_master_id ='2021:8:330';
-update proposals set proposal_date = '2019-9-12 09:26:19' where job_master_id ='2021:8:335';
-update proposals set proposal_date = '2021-5-11 03:49:14' where job_master_id ='2021:8:336';
-update proposals set proposal_date = '2021-4-27 01:09:37' where job_master_id ='2021:8:339';
-update proposals set proposal_date = '2021-10-4 11:36:35' where job_master_id ='2022:1:11';
-update proposals set proposal_date = '2021-9-20 01:25:32' where job_master_id ='2022:1:27';
-update proposals set proposal_date = '2022-1-3 06:14:10' where job_master_id ='2022:1:36';
-update proposals set proposal_date = '2021-7-27 03:18:56' where job_master_id ='2022:1:6';
-update proposals set proposal_date = '2021-7-14 07:52:12' where job_master_id ='2022:11:416';
-update proposals set proposal_date = '2022-1-27 12:32:29' where job_master_id ='2022:2:62';
-update proposals set proposal_date = '2022-2-17 01:23:48' where job_master_id ='2022:2:81';
-update proposals set proposal_date = '2021-5-7 05:28:56' where job_master_id ='2022:3:122';
-update proposals set proposal_date = '2022-3-2 06:16:45' where job_master_id ='2022:3:85';
-update proposals set proposal_date = '2022-1-28 02:43:59' where job_master_id ='2022:4:143';
-update proposals set proposal_date = '2022-2-24 04:28:09' where job_master_id ='2022:4:158';
-update proposals set proposal_date = '2022-3-11 04:30:54' where job_master_id ='2022:4:162';
-update proposals set proposal_date = '2022-4-26 01:11:09' where job_master_id ='2022:5:181';
-update proposals set proposal_date = '2022-3-3 06:50:28' where job_master_id ='2022:5:184';
-update proposals set proposal_date = '2022-3-15 04:16:44' where job_master_id ='2022:7:256';
-update proposals set proposal_date = '2022-7-21 02:17:01' where job_master_id ='2022:8:305';
-update proposals set proposal_date = '2022-7-14 11:51:42' where job_master_id ='2022:8:307';
-update proposals set proposal_date = '2020-11-17 11:28:10' where job_master_id ='2022:8:309';
-update proposals set proposal_date = '2021-10-8 12:31:29' where job_master_id ='2022:9:341';
-update proposals set proposal_date = '2022-8-19 01:06:35' where job_master_id ='2022:9:343';
-update proposals set proposal_date = '2022-7-8 08:29:02' where job_master_id ='2022:9:364';
-update proposals set proposal_date = '2023-1-6 01:26:59' where job_master_id ='2023:1:33';
-update proposals set proposal_date = '2021-9-14 01:46:44' where job_master_id ='2023:1:42';
-update proposals set proposal_date = '2023-1-30 06:50:13' where job_master_id ='2023:2:46';
-update proposals set proposal_date = '2023-1-22 02:57:21' where job_master_id ='2023:4:116';
-update proposals set proposal_date = '2022-1-17 02:23:11' where job_master_id ='2023:4:119';
-update proposals set proposal_date = '2023-3-20 05:58:12' where job_master_id ='2023:4:125';
-update proposals set proposal_date = '2021-6-3 01:16:26' where job_master_id ='2023:4:129';
-update proposals set proposal_date = '2023-5-2 11:38:57' where job_master_id ='2023:6:171';
-update proposals set proposal_date = '2022-3-15 11:52:45' where job_master_id ='2023:6:175';
-update proposals set proposal_date = '2023-5-2 12:40:19' where job_master_id ='2023:7:209';
-update proposals set proposal_date = '2023-5-11 04:15:11' where job_master_id ='2023:7:210';
-update proposals set proposal_date = '2023-6-30 05:40:06' where job_master_id ='2023:8:240';
+update proposals set proposal_date = '21/2/2020 09:47:05' where job_master_id =2018:9:314;
+update proposals set proposal_date = '27/3/2020 01:22:44' where job_master_id =2019:11:306;
+update proposals set proposal_date = '11/1/2020 8:43' where job_master_id =2019:3:80;
+update proposals set proposal_date = '11/11/2019 12:40' where job_master_id =2019:8:202;
+update proposals set proposal_date = '3/1/2020 8:30' where job_master_id =2019:9:264;
+update proposals set proposal_date = '17/9/2019 11:35:55' where job_master_id =2020:01:01;
+update proposals set proposal_date = '26/3/2019 10:01:56' where job_master_id =2020:01:16;
+update proposals set proposal_date = '8/2/2019 8:46' where job_master_id =2020:01:19;
+update proposals set proposal_date = '8/11/2019 2:05' where job_master_id =2020:01:06;
+update proposals set proposal_date = '30/10/2019 08:33:06' where job_master_id =2020:01:07;
+update proposals set proposal_date = '6/1/2020 12:11' where job_master_id =2020:01:09;
+update proposals set proposal_date = '17/8/2020 01:25:22' where job_master_id =2020:10:328;
+update proposals set proposal_date = '23/4/2019 11:31:50' where job_master_id =2020:10:337;
+update proposals set proposal_date = '2/9/2020 9:20' where job_master_id =2020:10:339;
+update proposals set proposal_date = '30/1/2020 02:58:25' where job_master_id =2020:02:32;
+update proposals set proposal_date = '4/2/2020 8:56' where job_master_id =2020:02:42;
+update proposals set proposal_date = '4/1/2018 11:00' where job_master_id =2020:02:49;
+update proposals set proposal_date = '25/2/2020 01:15:19' where job_master_id =2020:03:58;
+update proposals set proposal_date = '4/12/2019 10:47' where job_master_id =2020:3:61;
+update proposals set proposal_date = '10/3/2020 8:11' where job_master_id =2020:3:74;
+update proposals set proposal_date = '5/2/2020 7:07' where job_master_id =2020:4:92;
+update proposals set proposal_date = '21/4/2020 03:14:10' where job_master_id =2020:5:119;
+update proposals set proposal_date = '11/1/2020 10:56' where job_master_id =2020:5:144;
+update proposals set proposal_date = '11/5/2020 9:46' where job_master_id =2020:5:156;
+update proposals set proposal_date = '2/6/2020 8:54' where job_master_id =2020:6:175;
+update proposals set proposal_date = '16/6/2020 11:28:17' where job_master_id =2020:6:188;
+update proposals set proposal_date = '9/10/2019 7:47' where job_master_id =2020:8:257;
+update proposals set proposal_date = '25/3/2019 11:27:01' where job_master_id =2020:8:264;
+update proposals set proposal_date = '26/5/2020 11:18:02' where job_master_id =2020:8:279;
+update proposals set proposal_date = '30/9/2019 09:05:32' where job_master_id =2020:9:289;
+update proposals set proposal_date = '21/10/2019 10:32:10' where job_master_id =2020:9:292;
+update proposals set proposal_date = '23/9/2020 01:31:02' where job_master_id =2020:9:309;
+update proposals set proposal_date = '22/5/2020 09:12:10' where job_master_id =2021:01:05;
+update proposals set proposal_date = '30/9/2021 11:32:45' where job_master_id =2021:10:404;
+update proposals set proposal_date = '12/2/2020 11:51' where job_master_id =2021:10:405;
+update proposals set proposal_date = '24/11/2020 06:02:38' where job_master_id =2021:3:113;
+update proposals set proposal_date = '11/3/2021 12:42' where job_master_id =2021:3:85;
+update proposals set proposal_date = '11/2/2020 7:54' where job_master_id =2021:3:93;
+update proposals set proposal_date = '19/2/2021 01:51:00' where job_master_id =2021:3:95;
+update proposals set proposal_date = '21/1/2021 12:01:42' where job_master_id =2021:5:166;
+update proposals set proposal_date = '31/3/2021 02:14:17' where job_master_id =2021:5:170;
+update proposals set proposal_date = '5/5/2021 6:52' where job_master_id =2021:5:179;
+update proposals set proposal_date = '12/5/2021 6:55' where job_master_id =2021:6:198;
+update proposals set proposal_date = '13/6/2021 12:58:46' where job_master_id =2021:6:227;
+update proposals set proposal_date = '17/4/2021 04:30:21' where job_master_id =2021:6:236;
+update proposals set proposal_date = '27/4/2020 02:50:53' where job_master_id =2021:6:237;
+update proposals set proposal_date = '15/8/2018 12:11:40' where job_master_id =2021:7:256;
+update proposals set proposal_date = '27/7/2021 05:01:06' where job_master_id =2021:7:272;
+update proposals set proposal_date = '19/2/2021 02:08:44' where job_master_id =2021:8:294;
+update proposals set proposal_date = '28/4/2021 07:24:50' where job_master_id =2021:8:325;
+update proposals set proposal_date = '21/6/2021 04:08:09' where job_master_id =2021:8:329;
+update proposals set proposal_date = '24/5/2021 03:18:12' where job_master_id =2021:8:330;
+update proposals set proposal_date = '12/9/2019 9:26' where job_master_id =2021:8:335;
+update proposals set proposal_date = '11/5/2021 3:49' where job_master_id =2021:8:336;
+update proposals set proposal_date = '27/4/2021 01:09:37' where job_master_id =2021:8:339;
+update proposals set proposal_date = '4/10/2021 11:36' where job_master_id =2022:01:11;
+update proposals set proposal_date = '20/9/2021 01:25:32' where job_master_id =2022:01:27;
+update proposals set proposal_date = '3/1/2022 6:14' where job_master_id =2022:01:36;
+update proposals set proposal_date = '27/7/2021 03:18:56' where job_master_id =2022:01:06;
+update proposals set proposal_date = '14/7/2021 07:52:12' where job_master_id =2022:11:416;
+update proposals set proposal_date = '27/1/2022 12:32:29' where job_master_id =2022:2:62;
+update proposals set proposal_date = '17/2/2022 01:23:48' where job_master_id =2022:2:81;
+update proposals set proposal_date = '7/5/2021 5:28' where job_master_id =2022:3:122;
+update proposals set proposal_date = '2/3/2022 6:16' where job_master_id =2022:3:85;
+update proposals set proposal_date = '28/1/2022 02:43:59' where job_master_id =2022:4:143;
+update proposals set proposal_date = '24/2/2022 04:28:09' where job_master_id =2022:4:158;
+update proposals set proposal_date = '11/3/2022 4:30' where job_master_id =2022:4:162;
+update proposals set proposal_date = '26/4/2022 01:11:09' where job_master_id =2022:5:181;
+update proposals set proposal_date = '3/3/2022 6:50' where job_master_id =2022:5:184;
+update proposals set proposal_date = '15/3/2022 04:16:44' where job_master_id =2022:7:256;
+update proposals set proposal_date = '21/7/2022 02:17:01' where job_master_id =2022:8:305;
+update proposals set proposal_date = '14/7/2022 11:51:42' where job_master_id =2022:8:307;
+update proposals set proposal_date = '17/11/2020 11:28:10' where job_master_id =2022:8:309;
+update proposals set proposal_date = '8/10/2021 12:31' where job_master_id =2022:9:341;
+update proposals set proposal_date = '19/8/2022 01:06:35' where job_master_id =2022:9:343;
+update proposals set proposal_date = '8/7/2022 8:29' where job_master_id =2022:9:364;
+update proposals set proposal_date = '16/1/2023 07:30:18' where job_master_id =2023:01:26;
+update proposals set proposal_date = '6/1/2023 1:26' where job_master_id =2023:01:33;
+update proposals set proposal_date = '14/9/2021 01:46:44' where job_master_id =2023:01:42;
+update proposals set proposal_date = '30/1/2023 06:50:13' where job_master_id =2023:02:46;
+update proposals set proposal_date = '22/1/2023 02:57:21' where job_master_id =2023:4:116;
+update proposals set proposal_date = '17/1/2022 02:23:11' where job_master_id =2023:4:119;
+update proposals set proposal_date = '20/3/2023 05:58:12' where job_master_id =2023:4:125;
+update proposals set proposal_date = '3/6/2021 1:16' where job_master_id =2023:4:129;
+update proposals set proposal_date = '2/5/2023 11:38' where job_master_id =2023:6:171;
+update proposals set proposal_date = '15/3/2022 11:52:45' where job_master_id =2023:6:175;
+update proposals set proposal_date = '2/5/2023 12:40' where job_master_id =2023:7:209;
+update proposals set proposal_date = '11/5/2023 4:15' where job_master_id =2023:7:210;
+update proposals set proposal_date = '30/6/2023 05:40:06' where job_master_id =2023:8:240;
+
 
 #DROP TABLES
 
