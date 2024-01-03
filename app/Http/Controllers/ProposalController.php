@@ -60,7 +60,7 @@ class ProposalController extends Controller
         $data = array();
         //List active proposals
         $proposals = Proposal::where('proposal_statuses_id', '=', 1)->where(function($q) {
-            $q->where('salesmanager_id', auth()->user()->id)->orWhere('created_by', auth()->user()->id)->orWhere('salesperson_id', auth()->user()->id);
+            $q->where('salesmanager_id', auth()->user()->id)->orWhere('salesperson_id', auth()->user()->id);
         })->get()->toArray();
 
 
@@ -98,6 +98,9 @@ class ProposalController extends Controller
 
             $data['salesPersonsCB'] = json_decode($salesPersonsCB, true);
 
+        if(auth()->user()->isSales()) {
+            return view('proposals.index_sales', $data);
+        }
 
             return view('proposals.index', $data);
 

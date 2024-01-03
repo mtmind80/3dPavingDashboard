@@ -68,6 +68,87 @@ class ContactsController extends Controller
         return $this->index($request);
     }
 
+
+    public function ajaxCheckIfContactExists2(Request $request)
+    {
+        if ($request->isMethod('post') && $request->ajax()) {
+
+            $validator = \Validator::make(
+                $request->only(['first_name', 'last_name', 'email', 'fill_form']),
+                [
+                    'first_name' => 'required|personName',
+                    'last_name'  => 'nullable|personName',
+                    'email'      => 'required|email',
+                    'fill_form'  => 'nullable|boolean',
+                ]
+            );
+
+            if ($validator->fails()) {
+                $response = [
+                    'success' => false,
+                    'message' => $validator->messages()->first(),
+                ];
+            } else {
+                $proposal_id = $request->proposal_id;
+                $query = Contact::where('email', $request->email);
+
+                if (!empty($request->last_name)) {
+                    $query->where(function ($q) use ($request){
+                        $q->orWhere('first_name', 'LIKE', '%' . $request->last_name . '%')->orWhere('last_name', 'LIKE', '%' . $request->last_name . '%');
+                    });
+                } else {
+                    $query->where('first_name', 'LIKE', '%' . $request->last_name . '%');
+                }
+
+                if (!$contacts = $query->get()) {
+                    $response = [
+                        'success'  => true,
+                        'contacts' => 0,
+                    ];
+                } else {
+                    $html = '<h4 class="fs16">' . __('translation.existing_contacts') . ' (' . $contacts->count() . ')</h4>';
+                    foreach ($contacts as $number => $contact) {
+                        $contactData = '';
+                        if (! $request->fill_form) {
+                            $tooltipCaption = 'Go to Contact Details';
+                            $link = route('selectclient', ['contact_id' => $contact->id, 'proposal_id'=>$proposal_id]);
+                        } else {
+                            $tooltipCaption = 'Fill contact info fields';
+                            $link = 'javascript:';
+
+                            $contactData .= 'data-contact_id="'.$contact->id.'"';
+                            $contactData .= 'data-contact_type_id="'.$contact->contact_type_id.'"';
+                            $contactData .= 'data-first_name="'.$contact->first_name.'"';
+                            $contactData .= 'data-last_name="'.$contact->last_name.'"';
+                            $contactData .= 'data-email="'.$contact->email.'"';
+                            $contactData .= 'data-phone="'.$contact->phone.'"';
+                            $contactData .= 'data-address1="'.$contact->address1.'"';
+                            $contactData .= 'data-address2="'.$contact->address2.'"';
+                            $contactData .= 'data-city="'.$contact->city.'"';
+                            $contactData .= 'data-state="'.$contact->state.'"';
+                            $contactData .= 'data-zipcode="'.$contact->zipcode.'"';
+                            $contactData .= 'data-county="'.$contact->county.'"';
+                        }
+
+                        $html .= '<p class="mt0 mb5 fs13 contact-container">' . ($number + 1) . '- <a href="' . $link . '" class="a-link" '.$contactData.'><b>' . $contact->full_name . '</b></a><br>';
+                        $html .= '<span class="pl17">' . $contact->full_address_one_line . '</span>';
+                        $html .= '</span></p>';
+                    }
+
+                    $response = [
+                        'success'  => true,
+                        'contacts' => $contacts->count(),
+                        'html'     => $html,
+                    ];
+                }
+            }
+
+            return response()->json($response, 200);
+        } else {
+            return response()->json(['error' => 'Invalid request.'], 500);
+        }
+    }
+
     public function ajaxCheckIfContactExists(Request $request)
     {
         if ($request->isMethod('post') && $request->ajax()) {
@@ -162,6 +243,77 @@ class ContactsController extends Controller
 
         return view('contacts.create', $data);
     }
+
+
+    public function createforproposal($proposal_id)
+    {
+        $data = [
+            'typesCB'         => ContactType::typesCBActive(['0' => 'Select type']),
+            'sourcesCB'       => LeadSource::sourcesCB(['0' => 'Select source']),
+            'assignedToCB'    => Contact::assignedToCB(['0' => 'Select assigned to']),
+            'countiesCB'      => Location::countiesCB(['' => 'Select county']),
+            'contact_type_id' => null,
+            'proposal_id'     => $proposal_id,
+            'lead_source'     => null,
+            'assigned_to'     => null,
+            'county'          => null,
+        ];
+
+        return view('contacts.createforproposal', $data);
+    }
+
+
+
+    public function storeforcontact(ContactRequest $request)
+    {
+        $contact = new Contact();
+        $contact->fill($request->only([
+            'contact_type_id',
+            'lead_id',
+            'first_name',
+            'last_name',
+            'email',
+            'alt_email',
+            'phone',
+            'alt_phone',
+            'address1',
+            'address2',
+            'city',
+            'county',
+            'state',
+            'postal_code',
+            'billing_address1',
+            'billing_address2',
+            'billing_city',
+            'billing_state',
+            'billing_postal_code',
+            'contact',
+            'note',
+        ]));
+        try {
+            $contact->save();
+            $data['id']= $contact->id;
+
+        } catch (Exception $e) {
+            \Session::flash('message', 'Sorry your entry was not recorded!');
+            return back()->withInput();
+
+        }
+
+        //update proposal
+        $proposal = Proposal::find($request['proposal_id']);
+        $proposal->contact_id = $data['id'];
+        $proposal->update();
+
+        \Session::flash('message', 'New Contact Created!');
+
+        return redirect()->route('show_proposal',['id' => $request['proposal_id']])->with('success', 'Proposal cloned with New Client.');
+
+        //return redirect()->route('contact_details', ['contact'=>$contact->id]);
+
+
+    }
+
 
     public function store(ContactRequest $request)
     {

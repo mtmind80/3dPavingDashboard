@@ -112,7 +112,7 @@ class WorkOrderController extends Controller
 
             $proposal = Workorder::where('id', '=', $id)->where(function ($q) {
                 $q->where('salesmanager_id', auth()->user()->id)->orWhere('salesperson_id', auth()->user()->id);
-            })->first()->toArray();
+            })->first();
             // managers only show if I am on the Workorder
         }
 
@@ -122,6 +122,7 @@ class WorkOrderController extends Controller
             $data['allowSchedule'] = false;
 
             $data['permitsOK'] = $proposal['HasPermits'];
+
             $data['paymentsOK'] = $proposal['HasPayments'];
 
             if($data['paymentsOK'] && $data['permitsOK'])
