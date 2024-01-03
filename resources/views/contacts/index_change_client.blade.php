@@ -13,7 +13,13 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <a href="{{route('show_proposal',['id' => $proposal_id])}}">Don't Change Client Return to Proposal</a>
+                    You have cloned a proposal
+                    <br/>
+                    1. Select a client from our database
+                    <br/>
+                    2. <a href="{{route('createforproposal',['proposal_id' => $proposal_id])}}">Create New Client</a>
+                    <br/>
+                    3. <a href="{{route('show_proposal',['id' => $proposal_id])}}">Keep Same Client Return to Proposal</a>
                     <div class="row">
                         <div class="col-sm-6 mb20 xs-hidden"></div>
                         <div class="col-sm-6 mb20">

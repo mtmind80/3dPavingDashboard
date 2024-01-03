@@ -189,6 +189,11 @@ class User extends Authenticatable
         return in_array($this->role_id, [1,3,4]);
     }
 
+    public function isSales()
+    {
+        return in_array($this->role_id, [3,4]);
+    }
+
     public function isSalesManager()
     {
         return $this->role_id == 3;

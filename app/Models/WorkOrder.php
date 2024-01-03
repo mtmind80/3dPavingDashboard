@@ -155,7 +155,10 @@ class WorkOrder extends Proposal
     {
 
         $permitOK = true; // by default permit ok is true
-
+        if(!$this->permit_required)
+        {
+            return true;
+        }
         if($this->permit_required) // if permits are required then assume they are not completed
         {
             $permitOK = false;
