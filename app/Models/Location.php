@@ -38,6 +38,10 @@ class Location extends Model
         return self::buildFullAddress($this->address_line1, $this->city, null, null, $this->postal_code, '<br>');
     }
 
+    public function getRealShortLocationAttribute()
+    {
+        return self::buildFullAddress($this->address_line1, null, null, null, $this->postal_code, ', ');
+    }
     // Methods:
 
     static public function getIdsPerCountyWithZipCode($county)

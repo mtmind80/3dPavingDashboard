@@ -481,6 +481,9 @@ Route::group(['prefix' => 'contacts', 'middleware' => 'admin'], function() {
 
     // create new contact form
     Route::get('/create', 'ContactsController@create')->name('contact_create');
+
+    Route::get('/createforproposal/{proposal_id}', 'ContactsController@createforproposal')->name('createforproposal');
+
     // show contact details
     Route::get('/{contact}', 'ContactsController@details')->name('contact_details');
     //edi contact form
@@ -494,10 +497,14 @@ Route::group(['prefix' => 'contacts', 'middleware' => 'admin'], function() {
     //save new contact
     Route::post('/', 'ContactsController@store')->name('contact_store');
 
+    Route::post('/', 'ContactsController@storeforcontact')->name('contact_store_proposal');
+
     Route::post('/{contact}/update-note', 'ContactsController@updateNote')->name('contact_field_note_update');
     Route::post('/{contact}/add-note', 'ContactsController@addNote')->name('contact_note_add');
 
     Route::post('/ajax-check-if-contact-exists', 'ContactsController@ajaxCheckIfContactExists')->name('ajax_check_if_contact_exists');
+
+    Route::post('/ajax-check-if-contact-exists2', 'ContactsController@ajaxCheckIfContactExists2')->name('ajax_check_if_contact_exists2');
 
     Route::post('/detach-from-company', 'ContactsController@detachFromCompany')->name('contact_detach_from_company');
     Route::post('/{contact}/add-staff', 'ContactsController@addStaff')->name('contact_add_staff');

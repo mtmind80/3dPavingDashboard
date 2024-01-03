@@ -102,7 +102,7 @@ class Proposal extends Model
         return $this->hasOne(User::class, 'id', 'created_by');
     }
 
-    public function salesManager()
+    public function Manager()
     {
         return $this->hasOne(User::class, 'id', 'salesmanager_id');
     }
