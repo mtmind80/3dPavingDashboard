@@ -16,13 +16,9 @@ class CreateChangeOrdersTable extends Migration
         Schema::create('change_orders', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->id();
-            $table->string('job_master_id',50)->default(null)->index()->nullable();
+            $table->string('job_master_id',50)->index();
             $table->unsignedBigInteger('proposal_id')->index();
-            $table->string('name', 225);
-            $table->integer('change_order_status')->default(1);
-            $table->boolean('mot_required')->default(false);
-            $table->boolean('permit_required')->default(false);
-            $table->boolean('nto_required')->default(false);
+            $table->unsignedBigInteger('new_proposal_id')->index();
             $table->unsignedBigInteger('created_by');
             $table->timestamps();
 

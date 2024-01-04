@@ -30,7 +30,7 @@ class CreateProposalsTable extends Migration
             $table->unsignedBigInteger('salesperson_id')->nullable()->default(null)->index();
             $table->unsignedBigInteger('location_id')->nullable()->default(null);
             $table->unsignedBigInteger('lead_id')->nullable()->default(null);
-            $table->unsignedBigInteger('changeorder')->nullable()->default(null);
+            $table->unsignedBigInteger('changeorder_id')->nullable()->default(null);
             $table->unsignedInteger('discount')->nullable()->default(null);
             $table->boolean('progressive_billing')->default(false);
             $table->boolean('mot_required')->default(false);
