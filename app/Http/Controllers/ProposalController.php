@@ -927,7 +927,7 @@ class ProposalController extends Controller
 
         }
 
-        if($status == 2) // approved
+        if($status == 2 && $proposal->changeorder_id == null) // approved
         {
             // create job master id and set sale date to taday
             $year = date('Y');

@@ -17,7 +17,6 @@ class CreateProposalDetailsTable extends Migration
             $table->engine = 'InnoDB';
             $table->id();
             $table->unsignedBigInteger('proposal_id');
-            $table->unsignedBigInteger('change_order_id')->nullable()->default(null);
             $table->unsignedBigInteger('services_id')->default(0);
             $table->unsignedBigInteger('contractor_id')->nullable()->default(null);
             $table->string('contractor_bid',191)->nullable()->default(null);
@@ -72,10 +71,10 @@ class CreateProposalDetailsTable extends Migration
             $table->timestamps();
 
             $table->foreign('proposal_id')->references('id')->on('proposals');
-            
-            
+
+
         });
-        
+
     }
 
     /**
