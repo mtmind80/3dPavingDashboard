@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PaymentRequest;
 use App\Http\Requests\SearchRequest;
 use App\Models\AcceptedDocuments;
+use App\Models\ChangeOrders;
 use App\Models\Contact;
 use App\Models\Location;
 use App\Models\MediaType;
@@ -35,7 +36,7 @@ class WorkOrderController extends Controller
             $query->where('salesperson_id', auth()->user()->id);
         }
 
-        $workorders = $query->with(['location', 'contact', 'status', 'salesManager'])->paginate($perPage);
+        $workorders = $query->with(['location', 'contact', 'status', 'salesPerson'])->paginate($perPage);
 
         $data = [
             'workorders' => $workorders,
@@ -103,6 +104,7 @@ class WorkOrderController extends Controller
      */
     public function show(Request $request, $id)
     {
+
 
         $data = array();
         //what kind of access do i have
@@ -174,11 +176,19 @@ class WorkOrderController extends Controller
     {
         $workorder = WorkOrder::where('id' , '=', $id)->first();
 
-            $proposal = new Proposal();
+        $changeorder = new ChangeOrders();
+        $changeorder->proposal_id = $id;
+        $changeorder->job_master_id = $workorder->job_master_id;
+        $changeorder->created_by = auth()->user()->id;
+        $changeorder->save();
+        $changeorder_id = $changeorder->id;
+
+        $proposal = new Proposal();
         // set the job id when converted to a work order
        // $proposal->job_master_id = $workorder->job_master_id;
-        $proposal->name = $workorder->name;
+        $proposal->name = "Change Order: " . $workorder->name;
         $proposal->proposal_statuses_id = 1;
+        $proposal->job_master_id = $workorder->job_master_id;
         $proposal->proposal_date  = $workorder->proposal_date;
         $proposal->sale_date = $workorder->sale_date;
         $proposal->created_by = auth()->user()->id;
@@ -188,10 +198,15 @@ class WorkOrderController extends Controller
         $proposal->salesperson_id = $workorder->salesperson_id;
         $proposal->location_id = $workorder->location_id;
         $proposal->lead_id = $workorder->lead_id;
-        $proposal->changeorder = $workorder->id;
+        $proposal->changeorder_id = $changeorder_id;
         $proposal->save();
+        $proposal_id = $proposal->id;
+        $changeorder = ChangeOrders::where('id', '=', $changeorder_id)->get();
+        $changeorder->new_proposal_id = $proposal_id;
+        $changeorder->update();
 
-        return route('show_proposal', ['id'=>$proposal->id])->with('success', 'Change Order Created for Job.');
+        \Session::flash('info', 'Your change order was created');
+        return redirect()->route('show_proposal', ['id' => $proposal->id]);
     }
 
     public function doassignmanager(Request $request, $id, $detail_id)

@@ -205,8 +205,10 @@ class ProposalDetailController extends Controller
         $proposal_detail = ProposalDetail::where('id', '=', $formfields['id'])->first();
         unset($formfields['_token']);
         unset ($formfields['id']);
+        if(!isset($formfields['bill_after']))  {
+            $formfields['bill_after'] = 0;
+        }
         //unset ($formfields['material_cost']);
-
         //print_r($formfields);
         //exit();
 
