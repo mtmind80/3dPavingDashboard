@@ -13,7 +13,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    You have cloned a proposal
+                    <h4>Change Client on Proposal: {{ App\Models\Contact::find($proposal['contact_id'])->FullName }}</h4>
                     <br/>
                     1. Select a client from our database
                     <br/>

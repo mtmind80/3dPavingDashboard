@@ -14,7 +14,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <form method="POST" action="{{ route('contact_store_proposal') }}" accept-charset="UTF-8" id="admin_form" class="admin-form">
+                    <form method="POST" action="{{ route('contact_proposal') }}" accept-charset="UTF-8" id="admin_form" class="admin-form">
                         @csrf
                         <input type="hidden" name="proposal_id" value="{{$proposal_id}}" >
                         @include('contacts._form2', ['cancel_caption' => Lang::get('translation.cancel'), 'submit_caption' => Lang::get('translation.save')])
