@@ -26,6 +26,7 @@ class ContactsController extends Controller
 
     public function index(Request $request)
     {
+
         $needle = $request->needle ?? null;
         $perPage = $request->perPage ?? 10;
 
@@ -35,10 +36,6 @@ class ContactsController extends Controller
             'contacts' => $contacts,
             'needle'   => $needle,
         ];
-
-        //   $contact = Contact::with(['contactType', 'company'])->find(685);
-
-        //   dd($contact->toArray());
 
         return view('contacts.index', $data);
     }
@@ -264,7 +261,7 @@ class ContactsController extends Controller
 
 
 
-    public function storeforcontact(ContactRequest $request)
+    public function storeforproposal(ContactRequest $request)
     {
         $contact = new Contact();
         $contact->fill($request->only([
@@ -307,7 +304,7 @@ class ContactsController extends Controller
 
         \Session::flash('message', 'New Contact Created!');
 
-        return redirect()->route('show_proposal',['id' => $request['proposal_id']])->with('success', 'Proposal cloned with New Client.');
+        return redirect()->route('show_proposal',['id' => $request['proposal_id']])->with('info', 'Proposal cloned with New Client.');
 
         //return redirect()->route('contact_details', ['contact'=>$contact->id]);
 

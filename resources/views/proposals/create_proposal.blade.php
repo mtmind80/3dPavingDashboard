@@ -49,7 +49,7 @@
 
                         </div>
 
-                        
+
                         <div class="row">
                             <div class="col-lg-12">
                                 <h3>Proposal Information</h3>
@@ -59,7 +59,7 @@
                         <div class="row">
                             <div class="col-lg-6 col-md-6 col-sm-6 admin-form-item-widget">
 
-                                
+
                                 <x-form-text id="name" name="name" class="check-lead"
                                              :params="['label' => 'Proposal Name', 'iconClass' => 'fas fa-circle', 'required' => true]">{{ $proposal['name'] ?? $contact->FullName . " Proposal Name" }}</x-form-text>
                             </div>
@@ -70,7 +70,12 @@
                             </div>
 
                         </div>
+                        @if($isSales)
+                            <input type="hidden" name="salesmanager_id" value="10">
 
+                            <input type="hidden" name="salesperson_id" value="{{ $user_id}}">
+
+                        @else
                         <div class="row">
                             <div class="col-lg-6 col-md-6 col-sm-6 admin-form-item-widget">
                                 <x-form-select name="salesmanager_id" :items="$salesManagersCB"
@@ -79,12 +84,14 @@
                             </div>
 
                             <div class="col-lg-6 col-md-6 col-sm-6 admin-form-item-widget">
-                                <x-form-select name="salesperson_id" :items="$salesPersonsCB"
+
+                                    <x-form-select name="salesperson_id" :items="$salesPersonsCB"
                                                selected="{{ $proposal->salesperson_id ?? null }}"
                                                :params="['label' => 'Sales Person', 'required' => false]"></x-form-select>
-                            </div>
-
                         </div>
+                        @endif
+                        </div>
+
                         <div class="row">
                             <div class="col-lg-4 col-md-4 col-sm-6 admin-form-item-widget">
                                 <x-form-check-box name="mot_required" id="mot_required" value="1"
@@ -142,7 +149,7 @@
                                 <x-form-text name="postal_code" :params="['label' => 'Zipcode', 'iconClass' => 'fas fa-building', 'required' => true]">{{ $contact->postal_code ?? null }}</x-form-text>
                             </div>
                         </div>
-                        
+
 
                         <div class="row">
                             <div class="col-lg-4 col-md-4 col-sm-12 admin-form-item-widget">
@@ -163,7 +170,7 @@
 
                         </div>
 
-                        
+
                         <div class="row buttons">
                             <div class="col-sm-12 tr">
                                 <x-button id="cancel_button" class="btn-light"><i
@@ -188,7 +195,7 @@
                 rules: {
                     name: {
                         required: true,
-                        personName: true
+                        alpha_numeric: true
                     },
                 },
                 messages: {

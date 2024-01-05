@@ -165,7 +165,7 @@
                                                 <a href="Javascript:showData(1);" title="find contact">{{ App\Models\Contact::find($proposal['contact_id'])->FullName }}</a>
 
                                             @endif
-                                                <span style="float:right;"><a href="{{ route('change_client',['id' => $proposal['id']]) }}" class='button' title="Change Client">Change Client</a></span>
+                                                <span style="float:right;"><a href="{{ route('change_client',['proposal_id' => $proposal['id']]) }}" class='button' title="Change Client">Change Client</a></span>
                                         </td>
                                     </tr>
                                     <tr>
@@ -269,26 +269,6 @@
                                                     NO
                                                 @endif
                                             </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>@lang('translation.on_alert')</td>
-                                            @if($proposal['on_alert'])
-                                                <td class="bg-alert">
-                                                    YES &nbsp;&nbsp; Reason: {{$proposal['alert_reason']}}
-                                                    <x-href-button
-                                                        url="{{ route('proposal_alert_reset', ['proposal_id' => $proposal['id']]) }}"
-                                                        class="btn-danger ptb2 fr"><i class="fas fa-times"></i>Remove
-                                                        Alert
-                                                    </x-href-button>
-                                            @else
-                                                <td>
-                                                    NO
-                                                    <x-href-button id="set_alert_button" class="btn-success ptb2 fr"><i
-                                                            class="fas fa-check"></i>Set Alert
-                                                    </x-href-button>
-                                                    @endif
-                                                </td>
                                         </tr>
 
                                         <tr>
