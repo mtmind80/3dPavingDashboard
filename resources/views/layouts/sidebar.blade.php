@@ -24,7 +24,7 @@
                         </a>
                     </li>
                 @endif
-                @if (auth()->user()->isAdmin())
+                @if (auth()->user()->isAllSales())
                     <li class="contacts-controller">
                         <a href="{{ route('contact_list') }}" class="waves-effect index-function create-function edit-function show-function search-function">
                             <i class="ri-customer-service-2-line"></i>

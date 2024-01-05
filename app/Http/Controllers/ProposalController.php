@@ -162,8 +162,14 @@ class ProposalController extends Controller
 
     public function new()
     {
-        \Session::flash('error', 'To begin a new proposal first select a contact, or create a new one.');
-        return \Redirect::to('contacts');
+
+       // dd('we are here');
+
+        //\Session::flash('info', 'To begin a new proposal first select a contact, or create a new one.');
+        //redirect()->route('contacts');
+        return redirect()->route('contact_create');
+
+        //return \Redirect::to('contacts');
 
     }
 
@@ -240,6 +246,8 @@ class ProposalController extends Controller
             return json_encode($salesPersonsCB);
 
         });
+        $data['isSales'] = auth()->user()->isSales();
+        $data['user_id'] = auth()->user()->id;
         $data['locationTypesCB'] = Location::locationTypesCB();
         $data['countiesCB'] = Location::countiesCB();
         $data['salesPersonsCB'] = json_decode($salesPersonsCB, true);
@@ -474,7 +482,7 @@ class ProposalController extends Controller
             $w->orderBy('dsort', $orderType);
         }]);
 
-        if (! auth()->user()->isAdmin()) {
+        if (!auth()->user()->isAdmin()) {
             $query->where(function($q) {
                 $q->orWhere('salesmanager_id', auth()->user()->id)
                     ->orWhere('salesperson_id', auth()->user()->id);
@@ -483,6 +491,7 @@ class ProposalController extends Controller
         }
 
         if (!$proposal = $query->find($id)) {
+
             abort(404);
         }
 
@@ -746,7 +755,7 @@ class ProposalController extends Controller
         $newProposal->proposal_date = Carbon::now();
         $newProposal->proposal_statuses_id = 1;
         $newProposal->job_master_id = null;
-        $newProposal->changeorder = null;
+        $newProposal->changeorder_id = null;
         $newProposal->sale_date = NULL;
         $newProposal->created_by = auth()->user()->id;
         $newProposal->save();
@@ -972,7 +981,7 @@ class ProposalController extends Controller
 
     }
 
-    public function changeclient($proposal_id, Request $request)
+    public function changeclient(Request $request, $proposal_id)
     {
         $proposal = Proposal::find($proposal_id);
 

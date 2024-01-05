@@ -186,7 +186,7 @@ class User extends Authenticatable
 
     public function isAllSales()
     {
-        return in_array($this->role_id, [1,3,4]);
+        return in_array($this->role_id, [1,2,3,4,7]);
     }
 
     public function isSales()

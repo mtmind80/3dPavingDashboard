@@ -339,7 +339,7 @@ Route::group(['prefix' => 'proposals'], function() {
     // close get ready to bill specific proposal
     Route::get('/close/{id}', 'ProposalController@closeproposal')->name('close_proposal');
 
-    Route::get('/change_client/{id}', 'ProposalController@changeclient')->name('change_client');
+    Route::get('/change_client/{proposal_id}', 'ProposalController@changeclient')->name('change_client');
 
     Route::get('/clone_proposal/{id}', 'ProposalController@clone')->name('clone_proposal');
 
@@ -468,10 +468,9 @@ Route::group(['prefix' => 'resources'], function() {
 
 /*************** Contacts  ***************/
 
-Route::group(['prefix' => 'contacts', 'middleware' => 'admin'], function() {
-    Route::model('contact', \App\Models\Contact::class);
+Route::group(['prefix' => 'contacts'], function() {
 
-
+    //Route::model('contact', \App\Models\Contact::class);
 
     Route::get('/change_contact/{id}', 'ContactsController@changeclient')->name('change_contact');
 
@@ -494,10 +493,11 @@ Route::group(['prefix' => 'contacts', 'middleware' => 'admin'], function() {
 
     //save contact update
     Route::patch('/{contact}', 'ContactsController@update')->name('contact_update');
-    //save new contact
-    Route::post('/', 'ContactsController@store')->name('contact_store');
+    //create contact for a proposal
+    Route::post('/contact_for_proposal', 'ContactsController@storeforproposal')->name('contact_proposal');
 
-    Route::post('/', 'ContactsController@storeforcontact')->name('contact_store_proposal');
+    //save new contact
+    Route::post('/contact_store', 'ContactsController@store')->name('contact_store');
 
     Route::post('/{contact}/update-note', 'ContactsController@updateNote')->name('contact_field_note_update');
     Route::post('/{contact}/add-note', 'ContactsController@addNote')->name('contact_note_add');

@@ -35,14 +35,13 @@
                     <div class="tab-content active text-muted">
                         <div class="tab-pane active" id="dashboard_1" role="tabpanel">
 
-
                             @if (auth()->user()->role_id <= 4 || auth()->user()->role_id == 7 )
                                 <div class="row">
                                     <div class="col-md-12">
-                                        @if ((auth()->user()->isSuperAdmin() || auth()->user()->canHaveLeads()) && !empty($leads))
+                                        @if (!empty($leads))
                                             <div class="card">
                                                 <div class="card-body">
-                                                    <h4 class="card-title mb20">@lang('translation.assignLeads')</h4>
+                                                    <h4 class="card-title mb20">@lang('translation.Leads')</h4>
                                                     {{ $leads->links() }}
                                                     <div class="table-responsive">
                                                         <table class="table mb-0">
@@ -99,6 +98,7 @@
                     </div>
                     @endif
                     <div class="row">
+                        @if(auth()->user()->isAdmin())
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-body">
@@ -133,6 +133,7 @@
                             </div>
 
                         </div>
+                            @endif
                     </div>
 
                 </div>

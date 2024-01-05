@@ -27,16 +27,16 @@ class CreateProposalsTable extends Migration
             $table->unsignedBigInteger('contact_id')->index();
             $table->unsignedBigInteger('customer_staff_id')->nullable()->default(null);
             $table->unsignedBigInteger('salesmanager_id')->nullable()->default(10)->index();
-            $table->unsignedBigInteger('salesperson_id')->nullable()->default(null)->index();
+            $table->unsignedBigInteger('salesperson_id')->nullable()->default(10)->index();
             $table->unsignedBigInteger('location_id')->nullable()->default(null);
             $table->unsignedBigInteger('lead_id')->nullable()->default(null);
             $table->unsignedBigInteger('changeorder_id')->nullable()->default(null);
             $table->unsignedInteger('discount')->nullable()->default(null);
-            $table->boolean('progressive_billing')->default(false);
-            $table->boolean('mot_required')->default(false);
-            $table->boolean('permit_required')->default(false);
-            $table->boolean('nto_required')->default(false);
-            $table->boolean('on_alert')->default(false);
+            $table->boolean('progressive_billing')->nullable()->default(false);
+            $table->boolean('mot_required')->nullable()->default(false);
+            $table->boolean('permit_required')->nullable()->default(false);
+            $table->boolean('nto_required')->nullable()->default(false);
+            $table->boolean('on_alert')->nullable()->default(false);
             $table->unsignedBigInteger('old_id')->default(0)->nullable();
             $table->timestamps();
 
