@@ -131,4 +131,18 @@ class Controller extends BaseController
 
     }
 
+
+    public function getEnumValues($enum)
+    {
+
+        switch ($enum) {
+            case 'type':
+                return ['Building','Engineering','Miscellaneous'];
+                break;
+            case 'status':
+                return ['Not Submitted','Submitted','Under Review','Comments'];
+                break;
+        }
+        return false;
+    }
 }

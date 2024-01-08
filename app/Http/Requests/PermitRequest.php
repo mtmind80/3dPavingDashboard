@@ -16,10 +16,10 @@ class PermitRequest extends Request
             'proposal_id'        => 'required|positive',
             'proposal_detail_id' => 'nullable|integer|min:0',
             'status' => [
-                Rule::in(['Approved','Completed','Not Submitted','Submitted','Under Review']),
+                Rule::in(['Not Submitted','Submitted','Under Review','Comments']),
             ],
             'type' => [
-                Rule::in(['Regular', 'Special', 'Other']),
+                Rule::in(['Building','Engineering','Miscellaneous']),
             ],
             'expires_on'         => 'nullable|date',
             'county'             => 'required|plainText',

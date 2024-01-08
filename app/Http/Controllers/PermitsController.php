@@ -90,6 +90,9 @@ class PermitsController extends Controller
         $data['statusCB'] = $this->statusCB;
         $counties = DB::table('counties')->groupBy('county')->orderBy('county')->get(['county']);
         $data['counties'] = $counties;
+        $data['types'] = $this->getEnumValues('type');
+        $data['statuses'] = $this->getEnumValues('status');
+
 
         return view('permit.create', $data);
     }
@@ -135,6 +138,9 @@ class PermitsController extends Controller
             'countiesCB' => $countiesCB,
             'citiesCB' => $citiesCB,
         ];
+
+        $data['types'] = $this->getEnumValues('type');
+        $data['statuses'] = $this->getEnumValues('status');
 
         return view('permit.edit', $data);
     }
