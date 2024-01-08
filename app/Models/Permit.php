@@ -97,8 +97,15 @@ class Permit extends Model
 
     public function getStatusOptionsAttributes() : array
     {
-        return ['Approved','Not Submitted','Submitted','Under Review','Comments'];
+        return ['Not Submitted','Submitted','Under Review','Comments'];
     }
+
+    public function getTypeOptionsAttributes() : array
+    {
+        return ['Building','Engineering','Miscellaneous'];
+    }
+
+
 
 
     /** Methods */
