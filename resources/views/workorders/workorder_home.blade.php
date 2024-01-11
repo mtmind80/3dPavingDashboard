@@ -6,12 +6,13 @@
 
 <style>
     .list-item {
-        font-size:1.25EM;
+        font-size: 1.25EM;
         margin-bottom: 9px;
     }
-    .bg_lightning{
-        color:#000000;
-        background-color:#E8F8F5;
+
+    .bg_lightning {
+        color: #000000;
+        background-color: #E8F8F5;
     }
 
 </style>
@@ -66,33 +67,33 @@
                         <div class="tab-pane active" id="proposal" role="tabpanel">
                             <div class="row">
                                 <table width="100%" class="table-centered table-bordered font-size-20">
-@if($proposal->proposal_statuses_id == 5)
-                                    <tr>
-                                        <td class="tc w-25">
+                                    @if($proposal->proposal_statuses_id == 5)
+                                        <tr>
+                                            <td class="w-25">
 
-                                    <a href="{{route('edit_workorder',['id'=> $proposal['id']])}}"
-                                       title="@lang('translation.edit') @lang('translation.proposal')"
-                                       class="{{$site_button_class}}">
-                                        <i class="fas fa-plus"></i> @lang('translation.edit') @lang('translation.work_order')
-                                    </a>
-                                        </td>
-                                        <td class="tc w-75">
-                                        </td>
-                                    </tr>
-@endif
+                                                <a href="{{route('edit_workorder',['id'=> $proposal['id']])}}"
+                                                   title="@lang('translation.edit') @lang('translation.proposal')"
+                                                   class="{{$site_button_class}}">
+                                                    <i class="fas fa-plus"></i> @lang('translation.edit') @lang('translation.work_order')
+                                                </a>
+                                            </td>
+                                            <td class="tc w-75">
+                                            </td>
+                                        </tr>
+                                    @endif
                                     <tr>
                                         <td class="tc w-25">
                                             {{$proposal['name']}}
                                         </td>
                                         <td class="tc w-75">
-                                           STATUS: {{ App\Models\ProposalStatus::find($proposal['proposal_statuses_id'])->status }}
+                                            STATUS: {{ App\Models\ProposalStatus::find($proposal['proposal_statuses_id'])->status }}
                                         </td>
                                     </tr>
 
                                     <tr>
                                         <td><b>@lang('translation.workorderid')</b></td>
                                         <td>
-                                                Work Order ID:{{$proposal['job_master_id']}}
+                                            Work Order ID:{{$proposal['job_master_id']}}
                                         </td>
                                     </tr>
 
@@ -163,12 +164,14 @@
                                         <td>@if($proposal['permit_required'])
                                                 YES
                                                 &nbsp; &nbsp;
-                                                <button class="{{$site_button_class}}" id="addpermit">Add Permit</button>
+                                                <button class="{{$site_button_class}}" id="addpermit">Add Permit
+                                                </button>
                                             @else
                                                 NO
                                             @endif
                                         </td>
                                     </tr>
+
                                     @if($proposal['permit_required'] && $permits)
                                         <tr>
                                             <td>Current @lang('translation.permits')</td>
@@ -184,7 +187,8 @@
                                                     @foreach($permits as $permit)
                                                         <tr>
                                                             <td class="tc">
-                                                                <a href="{{route('permit_show',['permit'=>$permit->id])}}">View Permit</a>
+                                                                <a href="{{route('permit_show',['permit'=>$permit->id])}}">View
+                                                                    Permit</a>
                                                             </td>
                                                             <td class="tc">{{$permit->county}}</td>
                                                             <td class="tc">{{$permit->number}}</td>
@@ -199,6 +203,34 @@
                                         </tr>
                                     @endif
 
+                                    @if($changeorders)
+
+                                        <tr>
+                                            <td>Change Orders</td>
+                                            <td>
+                                                <table width="80%">
+                                                    <tr>
+                                                        <th class="tc">View</th>
+                                                        <th class="tc">Name</th>
+                                                        <th class="tc">Created</th>
+                                                    </tr>
+                                                    @foreach($changeorders as $changeorder)
+                                                        <tr>
+                                                            <td class="tc">
+                                                                <a href="{{route('show_proposal',['id'=>$changeorder->new_proposal_id])}}">
+                                                                    View Change Order</a>
+                                                            </td>
+                                                            <td class="tc">{{\App\Models\Proposal::where('id', '=', $changeorder->new_proposal_id)->first()->name}}</td>
+                                                            <td class="tc">{{\App\Models\Proposal::where('id', '=', $changeorder->new_proposal_id)->first()->created_at->format('Y-m-d')}}</td>
+                                                        </tr>
+                                                    @endforeach
+                                                </table>
+
+
+                                            </td>
+                                        </tr>
+
+                                    @endif
                                     <tr>
                                         <td>@lang('translation.mot') @lang('translation.required')</td>
                                         <td>@if($proposal['mot_required'])
@@ -229,16 +261,18 @@
                                             @endif
                                         </td>
                                     </tr>
-    @if(!$proposal['changeorder'])
-                                    <tr>
-                                        <td>Create Change Order</td>
-                                        <td>
-                                            <a href="Javascript:AREYOUSURE('You want to create a change order for this workorder? Are you sure?','{{route('create_changeorder',['id'=>$proposal['id']])}}');" title="Create Change Order for this Work Order">Create Change Order</a>
+                                    @if(!$proposal['changeorder'])
+                                        <tr>
+                                            <td>Create Change Order</td>
+                                            <td>
+                                                <a href="Javascript:AREYOUSURE('You want to create a change order for this workorder? Are you sure?','{{route('create_changeorder',['id'=>$proposal['id']])}}');"
+                                                   title="Create Change Order for this Work Order">Create Change
+                                                    Order</a>
 
-                                        </td>
-                                    </tr>
-    @endif
-<!--                                        <tr>
+                                            </td>
+                                        </tr>
+                                    @endif
+                                    <!--                                        <tr>
                                         <td>Clone Work Order</td>
                                         <td>
                                             <a href="Javascript:AREYOUSURE('You are about to clone this work order. Are you sure?','{{route('clone_proposal',['id'=>$proposal['id']])}}');" title="Clone this proposal">Clone This Work Order</a>
@@ -256,7 +290,8 @@
                                 <div class="col-lg-12">
                                     @if($services)
 
-                                        <table style="width:100%" class="list-table table table-centered table-bordered">
+                                        <table style="width:100%"
+                                               class="list-table table table-centered table-bordered">
                                             <thead>
                                             <tr style="background:#E5E8E8;color:#000;">
                                                 <td class="w250"><b>@lang('translation.workorderservices')</b></td>
@@ -264,7 +299,7 @@
                                                 <td class="w230"><b>@lang('translation.location')</b></td>
                                                 <td class="w200"><b>@lang('translation.fieldmanager')</b></td>
                                                 <td class="w120"><b>@lang('translation.cost')</b></td>
-                                                <td class="actions tc" ><b>@lang('translation.actions')</b></td>
+                                                <td class="actions tc"><b>@lang('translation.actions')</b></td>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -272,9 +307,9 @@
                                                 <tr>
 
                                                     <td>
-                                                            <a href="{{route('view_service', ['proposal_id'=>$proposal['id'],'id'=>$service->id])}}">{{$service->service_name}}</a>
+                                                        <a href="{{route('view_service', ['proposal_id'=>$proposal['id'],'id'=>$service->id])}}">{{$service->service_name}}</a>
 
-                                                            </br>
+                                                        </br>
                                                     </td>
                                                     <td>
                                                         @if($service->status_id)
@@ -302,13 +337,17 @@
                                                     <td class="centered actions">
                                                         <ul class="nav navbar-nav">
                                                             <li class="dropdown">
-                                                                <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-angle-down"></i></a>
-                                                                <ul class="dropdown-menu animated animated-short flipInX" role="menu">
+                                                                <a class="dropdown-toggle" data-toggle="dropdown"
+                                                                   href="#"><i class="fa fa-angle-down"></i></a>
+                                                                <ul class="dropdown-menu animated animated-short flipInX"
+                                                                    role="menu">
                                                                     @if($allowSchedule)
                                                                         @if($service->status_id == 1)
                                                                             <li>
-                                                                                <a href="{{route('schedule_service', ['service_id'=>$service->id])}}" class="action list-group-item-action">
-                                                                                    <span class="far fa-calendar-check"></span>
+                                                                                <a href="{{route('schedule_service', ['service_id'=>$service->id])}}"
+                                                                                   class="action list-group-item-action">
+                                                                                    <span
+                                                                                        class="far fa-calendar-check"></span>
                                                                                     &nbsp; @lang('translation.schedule')
                                                                                 </a>
                                                                             </li>
@@ -316,7 +355,8 @@
                                                                             <li>
                                                                                 <a href="{{route('schedule_service', ['service_id'=>$service->id])}}"
                                                                                    class="list-group-item-action">
-                                                                                    <span class="far fa-calendar-check"></span>
+                                                                                    <span
+                                                                                        class="far fa-calendar-check"></span>
                                                                                     &nbsp; @lang('translation.changeschedule')
                                                                                 </a>
                                                                             </li>
@@ -325,9 +365,10 @@
                                                                         <li>
                                                                             <a href="Javascript:alert('Until a deposit is recorded and all permits are completed you cannot schedule this work. Check Payments and Permits');"
                                                                                class="list-group-item-action">
-                                                                                <span class="far fa-calendar-check"></span>
+                                                                                <span
+                                                                                    class="far fa-calendar-check"></span>
                                                                                 &nbsp; @lang('translation.cantschedule')
-                                                                            </a>                                                                        </li>
+                                                                            </a></li>
 
                                                                     @endif
                                                                     <li>
@@ -346,7 +387,8 @@
                                                                     </li>
                                                                     <li>
                                                                         <a href="{{ route('workorder_details', ['proposal_detail_id' => $service->id]) }}">
-                                                                            <span class="fas fa-eye mr10"></span>@lang('translation.fieldreport')
+                                                                            <span
+                                                                                class="fas fa-eye mr10"></span>@lang('translation.fieldreport')
                                                                         </a>
                                                                     </li>
                                                                 </ul>
@@ -367,7 +409,8 @@
                                    data-action="add-note"
                                    data-route="{{ route('proposal_note_store', ['proposal' => $proposal['id']]) }}"
                                    data-proposal_name="{{ $proposal['name'] }}">
-                                    <span class="fas fa-sticky-note"></span>@lang('translation.add') @lang('translation.note')
+                                    <span
+                                        class="fas fa-sticky-note"></span>@lang('translation.add') @lang('translation.note')
                                 </a>
 
                             </div>
@@ -466,7 +509,8 @@
                                     <li>Set Alert</li>
                                     <li>Cancel Workorder</li>
                                     <li>
-                                        <a href="{{route('create_payment',['id'=>$proposal['id']])}}">Record Payments</a>
+                                        <a href="{{route('create_payment',['id'=>$proposal['id']])}}">Record
+                                            Payments</a>
                                     </li>
                                 </ul>
                             </div>
@@ -499,8 +543,7 @@
     <script>
 
 
-
-        function AREYOUSURE(msg, url){
+        function AREYOUSURE(msg, url) {
 
             Swal.fire({
                 title: msg,
@@ -515,12 +558,11 @@
                 }
             }).then((result) => {
                 if (result.isConfirmed) {
-                    return window.location.href=url; //'{{route('clone_proposal',['id'=>$proposal['id']])}}';
+                    return window.location.href = url; //'{{route('clone_proposal',['id'=>$proposal['id']])}}';
                 } else if (result.isDenied) {
                     Swal.fire('Cancelled', 'Cancelled', 'info')
                 }
             })
-
 
 
         }
@@ -534,10 +576,9 @@
             var note = $('#note');
 
 
-
             $('#addpermit').click(function () {
 
-                window.location.href='{{ route('add_permit',['id'=>$proposal->id]) }}';
+                window.location.href = '{{ route('add_permit',['id'=>$proposal->id]) }}';
             });
 
 
