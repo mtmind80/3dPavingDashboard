@@ -19,7 +19,9 @@
 </div>
 
 @push('partials-scripts')
-    <script src="{{ URL::asset('/assets/js/tinymce/tinymce.min.js')}}"></script>
+    <!-- Place the first <script> tag in your HTML's <head> -->
+    <script src="https://cdn.tiny.cloud/1/jmt0st0lpkf5qqjya17xfrl95nx25h6826aqh6ecql6b9g7a/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+
 
     <script>
         tinymce.init({
@@ -105,25 +107,25 @@
                         cubic_yards = Math.ceil(linear_feet / 25);
                     }
 
-                    
+
                     servicedesc = servicedesc.replace('#TONS#', cubic_yards);
-                    
-                    
+
+
                 } else if (serviceId >= 12) {
                     var cubic_yards = $("#cubic_yards").val();
                     var depth = $("#depth").val();
                     servicedesc = servicedesc.replace('#TONS#', cubic_yards);
                     servicedesc = servicedesc.replace('#INCHES#', depth);
-                    
+
                 }
             }
 
             if (serviceCategoryId == 3) {
                 {{--Drainage and Catchbasins--}}
-                
+
                 servicedesc = servicedesc.replace('#BASINS#', catchbasins);
 
-                    
+
             }
 
             if (serviceCategoryId == 4) {
@@ -153,7 +155,7 @@
             if (serviceCategoryId == 7) {
                 {{--  Rock --}}
                     servicedesc = servicedesc.replace('#INCHES#', depth);
-                
+
             }
 
 
@@ -163,7 +165,7 @@
 
                 servicedesc = servicedesc.replace('#SQFT#', square_feet);
                 servicedesc = servicedesc.replace('#PHASES#', phases);
-                
+
 
             }
 

@@ -172,7 +172,16 @@
                     Edit the Global Terms and Conditions used in all proposals.
                 </td>
             </tr>
-
+            <tr>
+                <td class="tc">
+                    <a class="resourceLink"
+                       href="{{ route('getmodel', ['model' => 'TermsOfService'], false) }}">@lang('translation.serviceterms')</a><br/>
+                </td>
+                <td class="tc">
+                    Edit the Global Service Terms.
+                </td>
+            </tr>
+<!--
             <tr>
                 <td class="tc">
                     <a class="resourceLink"
@@ -182,7 +191,7 @@
                     Edit the current overhead percentage for each service.
                 </td>
             </tr>
-
+-->
         </table>
 
     </div>

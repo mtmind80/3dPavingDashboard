@@ -180,6 +180,7 @@ class WorkOrderController extends Controller
         $changeorder->proposal_id = $id;
         $changeorder->job_master_id = $workorder->job_master_id;
         $changeorder->created_by = auth()->user()->id;
+        $changeorder->created_at = date('Y-m-d');
         $changeorder->save();
         $changeorder_id = $changeorder->id;
 
@@ -199,13 +200,17 @@ class WorkOrderController extends Controller
         $proposal->location_id = $workorder->location_id;
         $proposal->lead_id = $workorder->lead_id;
         $proposal->changeorder_id = $changeorder_id;
+
         $proposal->save();
+
         $proposal_id = $proposal->id;
+        //update changeorder with proposal id
         $changeorder = ChangeOrders::where('id', '=', $changeorder_id)->get();
         $changeorder->new_proposal_id = $proposal_id;
-        $changeorder->update();
+        $changeorder->save();
 
         \Session::flash('info', 'Your change order was created');
+
         return redirect()->route('show_proposal', ['id' => $proposal->id]);
     }
 

@@ -11,7 +11,7 @@
 
     <!-- Scripts -->
     <script src="{{ URL::asset('/assets/js/app.js')}}" defer></script>
-
+    <script src="https://cdn.tiny.cloud/1/jmt0st0lpkf5qqjya17xfrl95nx25h6826aqh6ecql6b9g7a/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">

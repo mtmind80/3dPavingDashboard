@@ -2,7 +2,7 @@
 <input type="hidden" name="tab" value="{{ $tabSelected ?? null }}">
 <div class="row">
     <div class="col-lg-3 col-md-6 col-sm-6 admin-form-item-widget">
-        <x-form-select name="contact_type_id" :items="$typesCB" selected="{{ $contact->contact_type_id ?? null }}" :params="['label' => 'Contact Type', 'required' => true]"></x-form-select>
+        <x-form-select name="contact_type_id" :items="$typesCB" selected="{{ $contact->contact_type_id ?? old('contact_type_id') ?? null }}" :params="['label' => 'Contact Type', 'required' => true]"></x-form-select>
     </div>
     {{--
     <div class="col-lg-3 col-md-6 col-sm-6 admin-form-item-widget">
@@ -18,38 +18,38 @@
 </div>
 <div class="row">
     <div class="col-lg-3 col-md-6 col-sm-6 admin-form-item-widget">
-        <x-form-text name="first_name" class="check-contact" :params="['label' => 'First Name', 'iconClass' => 'fas fa-user', 'required' => true]">{{ $contact->first_name ?? null }}</x-form-text>
+        <x-form-text name="first_name" class="check-contact" :params="['label' => 'First Name', 'iconClass' => 'fas fa-user', 'required' => true]">{{ $contact->first_name ?? old('first_name') ?? null }}</x-form-text>
     </div>
     <div class="col-lg-3 col-md-6 col-sm-6 admin-form-item-widget">
-        <x-form-text name="last_name" class="check-contact" :params="['label' => 'Last Name', 'iconClass' => 'fas fa-user', 'required' => false]">{{ $contact->last_name ?? null }}</x-form-text>
+        <x-form-text name="last_name" class="check-contact" :params="['label' => 'Last Name', 'iconClass' => 'fas fa-user', 'required' => false]">{{ $contact->last_name ?? old('email') ?? null }}</x-form-text>
     </div>
     <div class="col-lg-3 col-md-6 col-sm-6 admin-form-item-widget">
-        <x-form-text name="email" class="check-contact" :params="['label' => 'Email', 'iconClass' => 'fas fa-envelope', 'required' => true]">{{ $contact->email ?? null }}</x-form-text>
+        <x-form-text name="email" class="check-contact" :params="['label' => 'Email', 'iconClass' => 'fas fa-envelope', 'required' => true]">{{ $contact->email ??  old('email') ?? null }}</x-form-text>
     </div>
     <div class="col-lg-3 col-md-6 col-sm-6 admin-form-item-widget">
-        <x-form-text name="alt_email" :params="['label' => 'Alt Email', 'iconClass' => 'fas fa-envelope', 'required' => false]">{{ $contact->alt_email ?? null }}</x-form-text>
+        <x-form-text name="alt_email" :params="['label' => 'Alt Email', 'iconClass' => 'fas fa-envelope', 'required' => false]">{{ $contact->alt_email ?? old('alt_email') ?? null }}</x-form-text>
     </div>
 </div>
 <div class="row">
     <div class="col-lg-3 col-md-6 col-sm-6 admin-form-item-widget">
-        <x-form-text name="phone" :params="['label' => 'Phone', 'iconClass' => 'fas fa-phone', 'required' => true]">{{ $contact->phone ?? null }}</x-form-text>
+        <x-form-text name="phone" :params="['label' => 'Phone', 'iconClass' => 'fas fa-phone', 'required' => true]">{{ $contact->phone ?? old('phone') ?? null }}</x-form-text>
     </div>
     <div class="col-lg-3 col-md-6 col-sm-6 admin-form-item-widget">
-        <x-form-text name="alt_phone" :params="['label' => 'Alt Phone', 'iconClass' => 'fas fa-phone', 'required' => false]">{{ $contact->alt_phone ?? null }}</x-form-text>
+        <x-form-text name="alt_phone" :params="['label' => 'Alt Phone', 'iconClass' => 'fas fa-phone', 'required' => false]">{{ $contact->alt_phone ?? old('alt_phone') ?? null }}</x-form-text>
     </div>
     <div class="col-lg-4 col-md-8 col-sm-8 admin-form-item-widget">
-        <x-form-text name="address1" :params="['label' => 'Address', 'iconClass' => 'fas fa-building', 'required' => true]">{{ $contact->address1 ?? null }}</x-form-text>
+        <x-form-text name="address1" :params="['label' => 'Address', 'iconClass' => 'fas fa-building', 'required' => true]">{{ $contact->address1 ?? old('address1') ?? null }}</x-form-text>
     </div>
     <div class="col-lg-2 col-md-4 col-sm-4 admin-form-item-widget">
-        <x-form-text name="address2" :params="['label' => 'Address 2', 'iconClass' => 'fas fa-building', 'required' => false]">{{ $contact->address2 ?? null }}</x-form-text>
+        <x-form-text name="address2" :params="['label' => 'Address 2', 'iconClass' => 'fas fa-building', 'required' => false]">{{ $contact->address2 ?? old('address2') ?? null }}</x-form-text>
     </div>
 </div>
 <div class="row">
     <div class="col-lg-4 col-md-6 col-sm-6 admin-form-item-widget">
-        <x-form-text name="city" :params="['label' => 'City', 'iconClass' => 'fas fa-building', 'required' => true]">{{ $contact->city ?? null }}</x-form-text>
+        <x-form-text name="city" :params="['label' => 'City', 'iconClass' => 'fas fa-building', 'required' => true]">{{ $contact->city ?? old('city') ?? null }}</x-form-text>
     </div>
     <div class="col-lg-3 col-md-6 col-sm-6 admin-form-item-widget">
-        <x-form-select name="county" :items="$countiesCB" selected="{{ $contact->county ?? null }}"  :params="['label' => 'County', 'required' => true]"></x-form-select>
+        <x-form-select name="county" :items="$countiesCB" selected="{{ $contact->county ?? old('county') ?? null }}"  :params="['label' => 'County', 'required' => true]"></x-form-select>
     </div>
     {{--
     <div class="col-lg-3 col-md-6 col-sm-6 admin-form-item-widget">
@@ -57,44 +57,44 @@
     </div>
     --}}
     <div class="col-lg-3 col-md-8 col-sm-8 admin-form-item-widget">
-        <x-form-text name="state" :params="['label' => 'State', 'iconClass' => 'fas fa-building', 'required' => true]">{{ $contact->state ?? null }}</x-form-text>
+        <x-form-text name="state" :params="['label' => 'State', 'iconClass' => 'fas fa-building', 'required' => true]">{{ $contact->state ?? old('state') ?? null }}</x-form-text>
     </div>
     <div class="col-lg-2 col-md-4 col-sm-4 admin-form-item-widget">
-        <x-form-text name="postal_code" :params="['label' => 'Zipcode', 'iconClass' => 'fas fa-building', 'required' => true]">{{ $contact->postal_code ?? null }}</x-form-text>
+        <x-form-text name="postal_code" :params="['label' => 'Zipcode', 'iconClass' => 'fas fa-building', 'required' => true]">{{ $contact->postal_code ?? old('postal_code') ?? null }}</x-form-text>
     </div>
 </div>
 <div class="row">
     <div class="col-lg-3 col-md-6 col-sm-6 admin-form-item-widget">
-        <x-form-check-box class="not-xs-mt10" name="same_billing_address" id="same_billing_address" value="1" checked="{{ !empty($contact->same_billing_address) }}">Same Billing Address</x-form-check-box>
+        <x-form-check-box class="not-xs-mt10" name="same_billing_address" id="same_billing_address" value="1" checked="{{ !empty($contact->same_billing_address)  }}">Same Billing Address</x-form-check-box>
     </div>
     <div class="col-lg-2 col-md-4 col-sm-4 admin-form-item-widget xs-hidden"></div>
 </div>
 <div class="row">
     <div class="col-lg-3 col-md-8 col-sm-9 admin-form-item-widget">
-        <x-form-text name="billing_address1" :params="['label' =>  'Billing Address', 'iconClass' => 'fas fa-building', 'required' => true]">{{ $contact->billing_address1 ?? null }}</x-form-text>
+        <x-form-text name="billing_address1" :params="['label' =>  'Billing Address', 'iconClass' => 'fas fa-building', 'required' => true]">{{ $contact->billing_address1 ?? old('billing_address1') ?? null }}</x-form-text>
     </div>
     <div class="col-lg-2 col-md-4 col-sm-3 admin-form-item-widget">
-        <x-form-text name="billing_address2" :params="['label' => 'Billing Address 2', 'iconClass' => 'fas fa-building', 'required' => false]">{{ $contact->billing_address2 ?? null }}</x-form-text>
+        <x-form-text name="billing_address2" :params="['label' => 'Billing Address 2', 'iconClass' => 'fas fa-building', 'required' => false]">{{ $contact->billing_address2 ?? old('billing_address2') ?? null }}</x-form-text>
     </div>
     <div class="col-lg-3 col-md-7 col-sm-6 admin-form-item-widget">
-        <x-form-text name="billing_city" :params="['label' => 'Billing City', 'iconClass' => 'fas fa-building', 'required' => true]">{{ $contact->billing_city ?? null }}</x-form-text>
+        <x-form-text name="billing_city" :params="['label' => 'Billing City', 'iconClass' => 'fas fa-building', 'required' => true]">{{ $contact->billing_city ?? old('billing_city') ?? null }}</x-form-text>
     </div>
     <div class="col-lg-2 col-md-3 col-sm-3 admin-form-item-widget">
-        <x-form-text name="billing_state" :params="['label' => 'Billing State', 'iconClass' => 'fas fa-building', 'required' => true]">{{ $contact->billing_state ?? null }}</x-form-text>
+        <x-form-text name="billing_state" :params="['label' => 'Billing State', 'iconClass' => 'fas fa-building', 'required' => true]">{{ $contact->billing_state ?? old('billing_state') ?? null }}</x-form-text>
     </div>
     <div class="col-lg-2 col-md-2 col-sm-3 admin-form-item-widget">
-        <x-form-text name="billing_postal_code" :params="['label' => 'Billing Zipcode', 'iconClass' => 'fas fa-building', 'required' => true]">{{ $contact->billing_postal_code ?? null }}</x-form-text>
+        <x-form-text name="billing_postal_code" :params="['label' => 'Billing Zipcode', 'iconClass' => 'fas fa-building', 'required' => true]">{{ $contact->billing_postal_code ?? old('billing_postal_code') ?? null }}</x-form-text>
     </div>
 </div>
 <div class="row">
     <div class="col-lg-6 col-md-6 col-sm-12 admin-form-item-widget">
-        <x-form-text name="contact" :params="['label' =>  'Contact', 'iconClass' => 'fas fa-user', 'required' => false]">{{ $contact->contact ?? null }}</x-form-text>
+        <x-form-text name="contact" :params="['label' =>  'Contact', 'iconClass' => 'fas fa-user', 'required' => false]">{{ $contact->contact ?? old('contact') ?? null }}</x-form-text>
     </div>
     <div class="col-lg-6 col-md-6 col-sm-12 admin-form-item-widget xs-hidden"></div>
 </div>
 <div class="row">
     <div class="col-lg-12 col-md-12 col-sm-12 admin-form-item-widget">
-        <x-form-textarea style="height:135px" name="note" :params="['label' =>  'Note', 'iconClass' => 'fas fa-sticky-note', 'required' => false]">{{ $contact->note ?? null }}</x-form-textarea>
+        <x-form-textarea style="height:135px" name="note" :params="['label' =>  'Note', 'iconClass' => 'fas fa-sticky-note', 'required' => false]">{{ $contact->note ?? old('note') ?? null }}</x-form-textarea>
     </div>
 </div>
 
@@ -114,6 +114,12 @@
 @section('page-js')
     <script>
         $(document).ready(function(){
+
+            var zipCode = '33234';
+
+            //alert(isZipCode(zipCode));
+
+
             //var isLead = $('#is_lead');
             var sameBillingAddress = $('#same_billing_address');
             var address1 = $('#address1');
@@ -186,7 +192,7 @@
                     },
                     last_name: {
                         required: false,
-                        personName: true
+                        plainText: true
                     },
                     email: {
                         required: true,

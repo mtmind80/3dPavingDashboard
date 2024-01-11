@@ -403,6 +403,7 @@ return [
     "cantschedule" => "Can't Schedule",
     "all" => "Todo",
     "fees" => "Fees",
+    "serviceterms" => "Términos de servicio",
 
 
 ];
