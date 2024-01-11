@@ -15,17 +15,22 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use NumberFormatter;
-
+use \App\Helpers\EnumFieldValues;
 class PermitsController extends Controller
 {
 
-    public $statusCB = [
-        'Not Submitted' => 'Not Submitted',
-        'Submitted'     => 'Submitted',
-        'Under Review'  => 'Under Review',
-        'Approved'      => 'Approved',
-        'Comments'      => 'Comments',
-    ];
+
+    public $statusCB;
+    public $typesCB;
+    public function __construct()
+    {
+        parent::__construct();
+        //EnumFieldValues::get($table, $column);
+        $this->statusCB = EnumFieldValues::get('permits', 'status');
+        $this->typesCB = EnumFieldValues::get('permits', 'type');
+
+    }
+
 
     public function index(Request $request)
     {
@@ -90,8 +95,9 @@ class PermitsController extends Controller
         $data['statusCB'] = $this->statusCB;
         $counties = DB::table('counties')->groupBy('county')->orderBy('county')->get(['county']);
         $data['counties'] = $counties;
-        $data['types'] = $this->getEnumValues('type');
-        $data['statuses'] = $this->getEnumValues('status');
+
+        $data['statuses'] = $this->statusCB;
+        $data['types'] = $this->typesCB;
 
 
         return view('permit.create', $data);
@@ -137,17 +143,10 @@ class PermitsController extends Controller
             'statusCB' => $this->statusCB,
             'countiesCB' => $countiesCB,
             'citiesCB' => $citiesCB,
+            'statuses' => $this->statusCB,
+            'types' => $this->typesCB
         ];
 
-        $data['types'] = $this->getEnumValues('type');
-        $data['statuses'] = $this->getEnumValues('status');
-
-        return view('permit.edit', $data);
-    }
-
-    public function editX(Permit $permit)
-    {
-        $data = ['permit'=>$permit];
         return view('permit.edit', $data);
     }
 

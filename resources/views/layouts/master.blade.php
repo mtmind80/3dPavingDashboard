@@ -18,7 +18,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mr+De+Haviland&display=swap" rel="stylesheet">
-
+    <script src="https://cdn.tiny.cloud/1/jmt0st0lpkf5qqjya17xfrl95nx25h6826aqh6ecql6b9g7a/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     @include('layouts.head')
 
     @stack('components-styles')

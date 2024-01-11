@@ -9,5 +9,5 @@
             toolbar: 'undo redo | formatselect| bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist | code | table'
         });
     </script>
-    
+
 </div>

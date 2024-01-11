@@ -9,7 +9,7 @@
         <meta content="Themesbrand" name="author" />
         <!-- App favicon -->
         <link rel="shortcut icon" href="{{ URL::asset('/assets/images/favicon.ico')}}">
-        
+
         @include('layouts.head')
     </head>
 
@@ -28,18 +28,18 @@
                     @yield('content')
                 </div> <!-- content -->
             </div>
-            @include('layouts.footer')    
+            @include('layouts.footer')
         </div>
         <!-- ============================================================== -->
         <!-- End Right content here -->
         <!-- ============================================================== -->
     </div>
     <!-- END wrapper -->
-    
+
     <!-- Right Sidebar -->
     @include('layouts.right-sidebar')
     <!-- END Right Sidebar -->
 
-    @include('layouts.vendor-scripts')    
+    @include('layouts.vendor-scripts')
     </body>
 </html>
