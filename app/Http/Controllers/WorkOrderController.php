@@ -132,6 +132,10 @@ class WorkOrderController extends Controller
                 $data['allowSchedule'] = true;
             }
 
+
+            //does this work order have change orders?
+            $changeorders = ChangeOrders::where('proposal_id', '=',$proposal->id)->get();
+
             $data['fieldmanagers'] = User::where('role_id', 6)->where('status', 1)->get()->toArray();
             $data['mediatypes'] = MediaType::all()->toArray();
 
@@ -147,6 +151,7 @@ class WorkOrderController extends Controller
             $data['fieldmanagersCB'] = User::fieldmanagersCB(['0' => 'Select a Manager']);
             $data['hostwithHttp'] = $hostwithHttp;
 
+            $data['changeorders'] = $changeorders;
             $data['id'] = $id;
             $data['proposal'] = $proposal;
             $data['permits'] = $permits;
@@ -205,9 +210,11 @@ class WorkOrderController extends Controller
 
         $proposal_id = $proposal->id;
         //update changeorder with proposal id
-        $changeorder = ChangeOrders::where('id', '=', $changeorder_id)->get();
+        $changeorder = ChangeOrders::where('id', '=', $changeorder_id)->first();
+
         $changeorder->new_proposal_id = $proposal_id;
-        $changeorder->save();
+        //dd($changeorder);
+        $changeorder->update();
 
         \Session::flash('info', 'Your change order was created');
 
