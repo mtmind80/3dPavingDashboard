@@ -1,7 +1,10 @@
 <?php namespace App\Http\Requests;
 
+use App\Helpers\EnumFieldValues;
 use App\Http\Requests\Request;
 use Illuminate\Validation\Rule;
+
+
 
 class PermitRequest extends Request
 {
@@ -12,14 +15,17 @@ class PermitRequest extends Request
 
     public function rules()
     {
+
+        $statusRule = EnumFieldValues::get('permits', 'status');
+        $typeRule = EnumFieldValues::get('permits', 'type');
         return [
             'proposal_id'        => 'required|positive',
             'proposal_detail_id' => 'nullable|integer|min:0',
             'status' => [
-                Rule::in(['Approved','Completed','Not Submitted','Submitted','Under Review']),
+                Rule::in($statusRule),
             ],
             'type' => [
-                Rule::in(['Regular', 'Special', 'Other']),
+                Rule::in($typeRule),
             ],
             'expires_on'         => 'nullable|date',
             'county'             => 'required|plainText',

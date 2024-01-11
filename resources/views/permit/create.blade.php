@@ -39,19 +39,18 @@
                                         <div class="col-lg-2">
                                             <label>Status:</label>
                                             <select class="form-control" name="status">
-                                                <option>Not Submitted</option>
-                                                <option>Submitted</option>
-                                                <option>Under Review</option>
-                                                <option>Approved</option>
-                                                <option>Comments</option>
+                                                @foreach($statuses as $status)
+                                                    <option>{{$status}}</option>
+                                                @endforeach
                                             </select>
                                         </div>
                                         <div class="col-lg-2">
                                             <label>Type:</label>
                                             <select class="form-control" name="type">
-                                                <option>Regular</option>
-                                                <option>Special</option>
-                                                <option>Other</option>
+                                                @foreach($types as $type)
+                                                    <option>{{$type}}</option>
+                                                @endforeach
+
                                             </select>
                                         </div>
                                         <div class="col-lg-2">
