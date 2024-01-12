@@ -18,7 +18,7 @@ class CreateChangeOrdersTable extends Migration
             $table->id();
             $table->string('job_master_id',50)->index();
             $table->unsignedBigInteger('proposal_id')->index();
-            $table->unsignedBigInteger('new_proposal_id')->index();
+            $table->unsignedBigInteger('new_proposal_id')->nullable()->index();
             $table->unsignedBigInteger('created_by');
             $table->timestamps();
 
