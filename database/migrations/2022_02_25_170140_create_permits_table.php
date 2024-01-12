@@ -19,7 +19,7 @@ class CreatePermitsTable extends Migration
             $table->unsignedBigInteger('proposal_id')->index();
             $table->unsignedBigInteger('proposal_detail_id')->default(null)->nullable();
             $table->enum('status', ['Approved','Completed', 'Not Submitted', 'Submitted', 'Under Review','Comments'])->default('Not Submitted');
-            $table->enum('type', ['Regular', 'Special'])->default('Regular')->nullable();
+            $table->enum('type', ['Building', 'Engineering', 'Miscellaneous'])->default('Regular')->nullable();
             $table->string('number', 25)->default(null)->nullable();
             $table->string('county', 100)->default(null)->nullable();
             $table->unsignedBigInteger('created_by');
