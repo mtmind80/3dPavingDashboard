@@ -55,10 +55,18 @@
                         <tr>
                             <td>
                             {{$proposal['name']}}
+                            </td>
                             <td class="tc">
                                 STATUS: {{ App\Models\ProposalStatus::find($proposal['proposal_statuses_id'])->status }}
                             </td>
                         </tr>
+                        @if($changeorder)
+                        <tr>
+                            <td colspan="2" class="font-size-12 p10">
+                                This is a change order for workorder {{$changeorder['job_master_id']}} (<a href="{{route("show_workorder", ['id'=>$changeorder['proposal_id']])}}">view work order</a>)
+                            </td>
+                        </tr>
+                        @endif
                     </table>
                     <!-- Tab panes -->
                     <div class="tab-content plr0 pt30 pb0 text-muted">
@@ -591,7 +599,18 @@
         $(document).ready(function () {
 
 
+            function checkform(){
+
+                @if($proposal['salesperson_id'])
+                return true;
+                @else
+                    return false;
+                @endif
+            }
             $("#printproposal").click(function () {
+
+
+                if(checkform()) {
 
                 let timerInterval
                 var print_date = $("#print_date").val();
@@ -601,14 +620,16 @@
                     icon: 'info',
                     heightAuto: false,
                     timerProgressBar: true,
-                    timer: 3000,
+                    timer: 4000,
                     width: '80em',
                     showConfirmButton: true,
                 })
 
                 window.location.href = "/print/proposal/?proposal_id={{$proposal['id']}}&print_date=" + print_date;
+                    return;
 
-                return;
+                }
+                alert("You must select a sales person before printing the contract. Edit the proposal and select a sales person.")
 
             })
 

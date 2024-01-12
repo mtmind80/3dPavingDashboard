@@ -95,10 +95,7 @@ class Permit extends Model
         return !empty($this->expires_on) ? $this->expires_on->format('j F, Y') : null;
     }
 
-    public function getStatusOptionsAttributes() : array
-    {
-        return ['Approved','Not Submitted','Submitted','Under Review','Comments'];
-    }
+
 
 
     /** Methods */

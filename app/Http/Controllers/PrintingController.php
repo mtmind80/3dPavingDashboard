@@ -78,9 +78,16 @@ class PrintingController extends Controller
         $TermsOfService = TermsOfService::orderBy('section')->get()->toArray();
 
         $terms = Term::orderBy('section')->get()->toArray();
+        //provide values incase they are missing an id
+        $manager = ['fname'=>'Unknown','lname'=>'Soldier'];
+        $sales = ['fname'=>'Unknown','lname'=>'Soldier'];
 
-        $sales = User::where('id','=',$proposal['salesperson_id'])->first()->toArray();
-        $manager = User::where('id','=',$proposal['salesmanager_id'])->first()->toArray();
+        if($proposal['salesperson_id']) {
+            $sales = User::where('id', '=', $proposal['salesperson_id'])->first()->toArray();
+        }
+        if($proposal['salesmanager_id']) {
+            $manager = User::where('id','=',$proposal['salesmanager_id'])->first()->toArray();
+        }
 
         \Debugbar::disable();
 
@@ -110,29 +117,44 @@ class PrintingController extends Controller
         //return view('pdf.proposal_build', $data);
 
         //create the new pdf
-        $pdf = PDF::loadView('pdf.proposal_build', $data);
+        // if this is a change order print other contract
+        if($proposal['changeorder_id']){
+            //dd('change order');
+            $pdf = PDF::loadView('pdf.proposal_build_change_order', $data);
+            //save the file to local disk
+            $pdf->save($this->storage_path . $pdfname);
 
-        //save the file to local disk
-        $pdf->save($this->storage_path . $pdfname);
+            $newpdfname = "Contract_" . $pdfname;
 
-        //merge with cover sheet
-        $mergepdf = new \Jurosh\PDFMerge\PDFMerger;
+            rename($this->storage_path . $pdfname, $this->storage_path . $newpdfname);
 
-        // add as many pdfs as you want
-        $mergepdf->addPDF($this->storage_path . "coversheet.pdf", 'all', 'vertical')
-            ->addPDF($this->storage_path . $pdfname, 'all');
 
-        //rename the merged file
-        $newpdfname = "Contract_" . $pdfname;
-        // call merge, output format `file`
-        $mergepdf->merge('file', $this->storage_path . $newpdfname);
-        //delete the pdf
-        unlink($this->storage_path . $pdfname);
+        } else {
+            //dd('no change order');
+            $pdf = PDF::loadView('pdf.proposal_build', $data);
+
+            //save the file to local disk
+            $pdf->save($this->storage_path . $pdfname);
+
+            //merge with cover sheet
+            $mergepdf = new \Jurosh\PDFMerge\PDFMerger;
+
+            // add as many pdfs as you want
+            $mergepdf->addPDF($this->storage_path . "coversheet.pdf", 'all', 'vertical')
+                ->addPDF($this->storage_path . $pdfname, 'all');
+
+            //rename the merged file
+            $newpdfname = "Contract_" . $pdfname;
+            // call merge, output format `file`
+            $mergepdf->merge('file', $this->storage_path . $newpdfname);
+            //delete the pdf
+
+        }
+
 
         //return the merged file
 
         // Set the appropriate headers
-
 
         header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
         header("Cache-Control: public"); // needed for internet explorer
@@ -142,12 +164,8 @@ class PrintingController extends Controller
         header("Content-Disposition: attachment; filename=$newpdfname");
         readfile($this->storage_path . $newpdfname);
 
-        // Read the file content and output it
-        //readfile($this->storage_path.$newpdfname);
-        //return $pdf->download($pdfname);
-
-        return;
-        //back()->withSuccess('PDF saved');
+        unlink($this->storage_path . $pdfname);
+       // unlink($this->storage_path . $newpdfname);
 
     }
 

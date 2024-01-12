@@ -6,6 +6,7 @@ use App\Helpers\ExceptionError;
 use App\Http\Requests\SearchRequest;
 use App\Http\Requests\ProposalNoteRequest;
 use App\Models\AcceptedDocuments;
+use App\Models\ChangeOrders;
 use App\Models\County;
 use Carbon\Carbon;
 use App\Models\Location;
@@ -492,7 +493,16 @@ class ProposalController extends Controller
 
         if (!$proposal = $query->find($id)) {
 
-            abort(404);
+            //try to send it work order
+            return redirect()->route('show_workorder', ['id' => $id]);
+
+        }
+
+
+        $changeorder = 0;
+        //is proposal a change order
+        if($proposal->changeorder_id) {
+            $changeorder = ChangeOrders::where('id', '=', $proposal->changeorder_id)->first()->toArray();
         }
 
         $currencyTotalDetailCosts = $proposal->currency_total_details_costs;
@@ -506,6 +516,8 @@ class ProposalController extends Controller
         $proposal['IsEditable'] = $IsEditable;
 
         $data = [];
+
+        $data['changeorder'] = $changeorder;
 
         $data['mediatypes'] = MediaType::all()->toArray();
 
@@ -574,7 +586,7 @@ class ProposalController extends Controller
 
         $redirectTo = route('show_proposal', ['id' => $request->proposal_id]) . '?tab=servicestab';
 
-        return redirect()->to($redirectTo)->with('success', 'Service order updated.');
+//        return redirect()->to($redirectTo)->with('success', 'Service order updated.');
     }
 
     /**

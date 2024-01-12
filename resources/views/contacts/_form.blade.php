@@ -192,7 +192,7 @@
                     },
                     last_name: {
                         required: false,
-                        personName: true
+                        plainText: true
                     },
                     email: {
                         required: true,

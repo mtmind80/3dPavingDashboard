@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 class ResourceController extends Controller
 {
     // allowed to edit these
-    public $models = ['Equipment', 'RockVendorsCosts','AsphaltVendorCost','MediaType', 'Material', 'Vehicle', 'VehicleType','LaborRate', 'StripingCost', 'StripingService', 'Service', 'LeadSource', 'OfficeLocations', 'WebConfig', 'Term'];
+    public $models = ['Equipment', 'RockVendorsCosts','AsphaltVendorCost','MediaType', 'Material', 'Vehicle', 'VehicleType','LaborRate', 'StripingCost', 'StripingService', 'Service', 'LeadSource', 'OfficeLocations', 'WebConfig', 'Term', 'TermsOfService'];
     public $orderby = [
         'Equipment' => ['name'],
         'Service' => ['name'],
@@ -24,6 +24,7 @@ class ResourceController extends Controller
         'OfficeLocations' => ['id'],
         'WebConfig' => ['id'],
         'Term' => ['section'],
+        'TermsOfService' => ['section'],
         'LeadSource' => ['id'],
         'MediaType' => ['id'],
         'AsphaltVendorCost' => ['vendor_name'],
@@ -42,6 +43,7 @@ class ResourceController extends Controller
         'OfficeLocations' => ['id','name', 'address', 'city', 'state', 'zip', 'phone', 'manager'],
         'WebConfig' => ['id', 'key', 'value'],
         'Term' => ['id', 'text', 'section', 'title'],
+        'TermsOfService' => ['id', 'text', 'section', 'title'],
         'LeadSource' => ['id', 'name'],
         'MediaType' => ['id', 'type'],
         'AsphaltVendorCost' => ['id','vendor_name','cost'],
@@ -61,6 +63,7 @@ class ResourceController extends Controller
         'OfficeLocations' => ['Edit','Name', 'Address', 'Phone', 'Manager'],
         'WebConfig' => ['Edit', 'key', 'value'],
         'Term' => ['Edit', 'Section', 'Text'],
+        'TermsOfService' => ['Edit', 'Section', 'Text'],
         'LeadSource' => ['Edit', 'Source'],
         'MediaType' => ['Edit', 'Type'],
         'AsphaltVendorCost' => ['Edit', 'Name', 'Cost'],
@@ -79,6 +82,7 @@ class ResourceController extends Controller
         'OfficeLocations' => "resources.office",
         'WebConfig' => "resources.webconfig",
         'Term' => "resources.terms",
+        'TermsOfService' => "resources.serviceterms",
         'LeadSource' => "resources.leadsource",
         'MediaType' => "resources.mediatype",
         'AsphaltVendorCost' => "resources.asphalttype",
@@ -98,6 +102,7 @@ class ResourceController extends Controller
         'OfficeLocations' => "Office Locations",
         'WebConfig' => "Web Defaults",
         'Term' => "Terms and Conditions",
+        'TermsOfService' => "Terms of Service",
         'LeadSource' => "Lead Sources",
         'MediaType' => 'Proposal Media Types',
         'AsphaltVendorCost' => "Asphalt Options",

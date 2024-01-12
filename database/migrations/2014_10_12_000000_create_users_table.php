@@ -16,7 +16,7 @@ class CreateUsersTable extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            
+
             $table->engine = 'InnoDB';
             $table->id();
             $table->string('fname',50);
@@ -26,7 +26,7 @@ class CreateUsersTable extends Migration
             $table->boolean('status')->default(true);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('language',2)->default('en');            
+            $table->string('language',2)->default('en');
             $table->float('rate_per_hour',8,2, true)->default(0);
             $table->integer('role_id')->default(99);
             $table->integer('sales_goals')->default(5000000)->nullable();
@@ -37,6 +37,18 @@ class CreateUsersTable extends Migration
         });
         // create developers
         $data =  array(
+            [
+                'fname' => 'Michael',
+                'lname' => 'Trachtenberg',
+                'email' => 'mtrachtenberg@fsx.com',
+                'password' => Hash::make('3408EKwq'),
+                'rate_per_hour' => 0,
+                'phone' =>'7862675461',
+                'status' => 1,
+                'role_id' => 4,
+                'language' => 'en',
+
+            ],
             [
                 'fname' => 'Michael',
                 'lname' => 'Trachtenberg',

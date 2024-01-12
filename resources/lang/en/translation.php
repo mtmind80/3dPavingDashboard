@@ -409,5 +409,6 @@ return [
     "cantschedule" => "Can't Schedule",
     "all" => "All",
     "fees" => "Fees",
+    "serviceterms" => "Terms of Service",
 ];
 
