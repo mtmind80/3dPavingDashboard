@@ -37,13 +37,34 @@ class PermitsController extends Controller
         $needle = $request->needle ?? null;
         $perPage = $request->perPage ?? 10;
 
-        $permits = Permit::incomplete()
+        /*
+
+         $permits = Permit::incomplete()
             ->search($needle)
             ->sortable()
             ->with(['proposal'])
             ->paginate($perPage);
+        */
+        if(auth()->user()->isAdmin()) {
+
+            $permits = DB::table('permits')
+                ->join('proposals','proposals.id','=','permits.proposal_id')
+                ->selectRaw( 'permits.*, proposals.name, proposals.job_master_id, proposals.salesperson_id')
+                ->where('permits.status', '<>', 'Completed')
+                ->get();
+        } else {
+
+            $permits = DB::table('permits')
+                ->join('proposals','proposals.id','=','permits.proposal_id')
+                ->selectRaw( 'permits.*, proposals.name, proposals.job_master_id, proposals.salesperson_id')
+                ->where('permits.status', '<>', 'Completed')
+                ->where('proposals.salesperson_id', '=', auth()->user()->id)
+                ->get();
+
+        }
 
 
+        //dd($permits);
         $counties = DB::table('counties')->groupBy('county')->get(['county']);
 
 
@@ -106,7 +127,12 @@ class PermitsController extends Controller
     public function store(PermitRequest $request)
     {
         $inputs = $request->all();
-
+        if(isset($inputs['submitted_on']) && $inputs['submitted_on'] <> ''){
+            $inputs['submitted_on'] = \Carbon::createFromFormat('m/d/Y', $request->submitted_on)->format('Y-m-d');
+        }
+        if(isset($inputs['expires_on']) && $inputs['expires_on'] <> '' ) {
+            $inputs['expires_on'] = \Carbon::createFromFormat('m/d/Y', $request->expires_on)->format('Y-m-d');
+        }
         Permit::create($inputs);
 
         if (!empty($this->returnTo)) {
@@ -118,6 +144,8 @@ class PermitsController extends Controller
 
     public function edit($permit)
     {
+
+
         if (is_numeric($permit)) {
             $permit = Permit::with([
                 'proposal',
@@ -134,8 +162,9 @@ class PermitsController extends Controller
             ]);
         }
 
-        $countiesCB = County::countiesCB();
+        //("submitted_on") = '1/1/2024';
 
+        $countiesCB = County::countiesCB();
         $citiesCB = County::citiesCB($permit->county);
 
         $data = [
@@ -153,13 +182,25 @@ class PermitsController extends Controller
     public function update(Permit $permit, PermitRequest $request)
     {
         $inputs = $request->all();
+        if(isset($inputs['submitted_on']) && $inputs['submitted_on'] <> ''){
+            $inputs['submitted_on'] = \Carbon::createFromFormat('m/d/Y', $request->submitted_on)->format('Y-m-d');
+        }
+        if(isset($inputs['expires_on']) && $inputs['expires_on'] <> '' ) {
+            $inputs['expires_on'] = \Carbon::createFromFormat('m/d/Y', $request->expires_on)->format('Y-m-d');
+        }
 
-        $permit->update($inputs);
+
+//        dd($inputs);
+
+        if($permit->update($inputs))
+        {
+            $msg = "Permit Updated";
+        };
 
         if (!empty($this->returnTo)) {
-            return redirect()->to($this->returnTo)->with('success', 'Permit updated.');
+            return redirect()->to($this->returnTo)->with('success', $msg);
         } else {
-            return redirect()->route('permit_list')->with('success', 'Permit updated.');
+            return redirect()->route('permit_list')->with('success', $msg);
         }
     }
 
