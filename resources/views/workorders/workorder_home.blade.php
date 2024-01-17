@@ -160,21 +160,26 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>@lang('translation.permit') @lang('translation.required')</td>
-                                        <td>@if($proposal['permit_required'])
-                                                YES
-                                                &nbsp; &nbsp;
-                                                <button class="{{$site_button_class}}" id="addpermit">Add Permit
-                                                </button>
-                                            @else
-                                                NO
-                                            @endif
-                                        </td>
+                                            <td>
+                                            @lang('translation.permit') @lang('translation.required')
+                                            </td>
+
+                                            <td>@if($proposal['permit_required'])
+                                                    YES
+                                                    @if(auth()->user()->isAdmin())
+                                                        <button class="{{$site_button_class}}" id="addpermit">Add Permit
+                                                        </button>
+                                                    @endif
+                                                @else
+                                                    NO
+                                                @endif
+                                            </td>
                                     </tr>
 
                                     @if($proposal['permit_required'] && $permits)
                                         <tr>
-                                            <td>Current @lang('translation.permits')</td>
+                                            <td style="background-color:#A4F9F9;">
+                                                Current @lang('translation.permits')</td>
                                             <td>
                                                 <table width="80%">
                                                     <tr>
@@ -182,6 +187,7 @@
                                                         <th class="tc">County</th>
                                                         <th class="tc">Number</th>
                                                         <th class="tc">Status</th>
+                                                        <th class="tc">Submitted</th>
                                                         <th class="tc">Expires</th>
                                                     </tr>
                                                     @foreach($permits as $permit)
@@ -193,7 +199,8 @@
                                                             <td class="tc">{{$permit->county}}</td>
                                                             <td class="tc">{{$permit->number}}</td>
                                                             <td class="tc">{{$permit->status}}</td>
-                                                            <td class="tc">{{$permit->expires_on->format('M-d-Y')}}</td>
+                                                            <td class="tc">@if($permit->submitted_on){{$permit->submitted_on->format('M-d-Y')}}@endif</td>
+                                                            <td class="tc">@if($permit->expires_on){{$permit->expires_on->format('M-d-Y')}}@endif</td>
                                                         </tr>
                                                     @endforeach
                                                 </table>
@@ -203,34 +210,6 @@
                                         </tr>
                                     @endif
 
-                                    @if($changeorders)
-
-                                        <tr>
-                                            <td>Change Orders</td>
-                                            <td>
-                                                <table width="80%">
-                                                    <tr>
-                                                        <th class="tc">View</th>
-                                                        <th class="tc">Name</th>
-                                                        <th class="tc">Created</th>
-                                                    </tr>
-                                                    @foreach($changeorders as $changeorder)
-                                                        <tr>
-                                                            <td class="tc">
-                                                                <a href="{{route('show_proposal',['id'=>$changeorder->new_proposal_id])}}">
-                                                                    View Change Order</a>
-                                                            </td>
-                                                            <td class="tc">{{\App\Models\Proposal::where('id', '=', $changeorder->new_proposal_id)->first()->name}}</td>
-                                                            <td class="tc">{{\App\Models\Proposal::where('id', '=', $changeorder->new_proposal_id)->first()->created_at->format('Y-m-d')}}</td>
-                                                        </tr>
-                                                    @endforeach
-                                                </table>
-
-
-                                            </td>
-                                        </tr>
-
-                                    @endif
                                     <tr>
                                         <td>@lang('translation.mot') @lang('translation.required')</td>
                                         <td>@if($proposal['mot_required'])
@@ -271,6 +250,37 @@
 
                                             </td>
                                         </tr>
+
+
+                                        @if($changeorders)
+
+                                                <td style="background-color:#A4F9F9;">
+                                                    Change Orders
+                                                </td>
+                                                <td>
+                                                    <table width="80%">
+                                                        <tr>
+                                                            <th class="tc">View</th>
+                                                            <th class="tc">Name</th>
+                                                            <th class="tc">Created</th>
+                                                        </tr>
+                                                        @foreach($changeorders as $changeorder)
+                                                            <tr>
+                                                                <td class="tc">
+                                                                    <a href="{{route('show_proposal',['id'=>$changeorder->new_proposal_id])}}">
+                                                                        View Change Order</a>
+                                                                </td>
+                                                                <td class="tc">{{\App\Models\Proposal::where('id', '=', $changeorder->new_proposal_id)->first()->name}}</td>
+                                                                <td class="tc">{{\App\Models\Proposal::where('id', '=', $changeorder->new_proposal_id)->first()->created_at->format('Y-m-d')}}</td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </table>
+
+
+                                                </td>
+                                            </tr>
+
+                                        @endif
                                     @endif
                                     <!--                                        <tr>
                                         <td>Clone Work Order</td>
