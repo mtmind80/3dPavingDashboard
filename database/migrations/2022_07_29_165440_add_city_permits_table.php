@@ -11,15 +11,16 @@ class AddCityPermitsTable extends Migration
      *
      * @return void
      */
-    
+
         public function up()
     {
         Schema::table('permits', function($table) {
             $table->string('city', 80)->after('county')->nullable()->default(null);
             $table->date('expires_on')->after('number')->nullable()->default(null);
+            $table->date('submitted_on')->after('number')->nullable()->default(null);
         });
     }
-    
+
 
     /**
      * Reverse the migrations.
@@ -32,6 +33,6 @@ class AddCityPermitsTable extends Migration
             $table->dropColumn('city');
             $table->dropColumn('expires_on');
         });
-        
+
     }
 }

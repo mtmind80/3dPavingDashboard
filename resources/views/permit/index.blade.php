@@ -23,12 +23,14 @@
                 <div class="card-body">
                     <div class="row mt5">
                         <div class="col-md-8 col-sm-6 mb15">
-                            {{ $permits->links() }}
+
                         </div>
+<!--
                         <div class="col-md-4 col-sm-6 mb15">
                             <x-search :needle="$needle" search-route="{{ route('permit_search') }}"
                                       cancel-route="{{ route('permits') }}"></x-search>
                         </div>
+                        -->
                     </div>
                     <table class="list-table table table-bordered dt-responsive nowrap"
                            style="border-collapse: collapse; border-spacing: 0; width: 100%;">
@@ -47,7 +49,7 @@
 
                         <tbody>
 
-                        @if(!$permits)
+                        @if(!count($permits))
                             <tr class="even">
                                 <td colspan='7' class="text-dark fw-bold">@lang('translation.norecordsfound')</td>
                             </tr>
@@ -60,8 +62,8 @@
                                         @endif
 
                                         <td class="tc"><a
-                                                href="{{route('permit_show',['permit'=>$permit->id])}}">{{ $permit->proposal->name }}</a>
-                                            <br/>{{ $permit->proposal->WorkOrderNumber }}
+                                                href="{{route('permit_show',['permit'=>$permit->id])}}">{{ $permit->name }}</a>
+                                            <br/>{{ $permit->job_master_id }}
                                         </td>
                                         <td class="tc">{{ $permit->county }}</td>
                                         <td class="tc text-dark fw-bold">{{ $permit->city }}</td>
@@ -70,7 +72,7 @@
                                         <td class="tc">
                                             {{ $permit->status }}
                                             <br/>
-                                            {{ $permit->HtmlExpiredOn }}
+                                            {{ $permit->expires_on }}
                                         </td>
                                         <td class="centered actions">
                                             <ul class="nav navbar-nav">
@@ -79,13 +81,14 @@
                                                             class="fa fa-angle-down"></i></a>
                                                     <ul class="dropdown-menu animated animated-short flipInX"
                                                         role="menu">
-                                                        @if ($permit->notes->count())
+                                                        @if (\App\Models\PermitNote::where('permit_id','=', $permit->id))
+
                                                             <li>
                                                                 <a href="javascript:"
                                                                    class="action"
                                                                    data-action="list-notes"
                                                                    data-permit_id="{{ $permit->id }}"
-                                                                   data-proposal_name="{{ $permit->proposal->name }}"
+                                                                   data-proposal_name="{{ $permit->name }}"
                                                                    data-permit_number="{{ $permit->number }}"
                                                                 >
                                                                     <span
@@ -99,7 +102,7 @@
                                                                    class="action"
                                                                    data-action="add-note"
                                                                    data-route="{{ route('permit_note_add', ['permit' => $permit->id]) }}"
-                                                                   data-proposal_name="{{ $permit->proposal->name }}"
+                                                                   data-proposal_name="{{ $permit->name }}"
                                                                    data-permit_number="{{ $permit->number }}"
                                                                 >
                                                                     <span
@@ -111,7 +114,7 @@
                                                                    class="action"
                                                                    data-action="change-status"
                                                                    data-route="{{ route('permit_status_change', ['permit' => $permit->id]) }}"
-                                                                   data-proposal_name="{{ $permit->proposal->name }}"
+                                                                   data-proposal_name="{{ $permit->name }}"
                                                                    data-permit_number="{{ $permit->number }}"
                                                                    data-status="{{ $permit->status }}"
                                                                 >
@@ -142,8 +145,7 @@
                         </tbody>
                     </table>
 
-                    <x-paginator :collection="$permits" route-name="permits" :needle="$needle"
-                                 :params="['lang' => $lang]" class="mt10"></x-paginator>
+
                 </div>
                 <table class="table w220">
                     <tr>

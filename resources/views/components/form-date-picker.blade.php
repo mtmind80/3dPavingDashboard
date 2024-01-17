@@ -5,9 +5,9 @@
     <input type="text"
         @if (!empty($params['value']))
             @if ($params['value'] instanceof \Carbon\Carbon)
-                value="{{ $params['value']->format(!empty($params['language']) && $params['language'] === 'es' ? 'Y-m-d' : 'Y-m-d') }}"
+                value="{{ $params['value']->format(!empty($params['language']) && $params['language'] === 'es' ? 'm/d/Y' : 'm/d/Y') }}"
             @else
-                value="{{ $params['value']->format('Y-m-d')}}"
+                value="{{ $params['value']->format('m/d/Y')}}"
             @endif
         @else
             value=""
