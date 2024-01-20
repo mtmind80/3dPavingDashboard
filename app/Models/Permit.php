@@ -12,7 +12,10 @@ class Permit extends Model
 
     protected $casts = [
         'expires_on' => 'date',
+        'submitted_on' => 'date',
     ];
+
+
 
     public $fillable = [
         'proposal_id',
@@ -22,6 +25,7 @@ class Permit extends Model
         'number',
         'city',
         'expires_on',
+        'submitted_on',
         'county',
         'created_by',
         'last_updated_by',
@@ -89,6 +93,7 @@ class Permit extends Model
     }
 
     /** Accessor(get) and Mutators(set) */
+
 
     public function getHtmlExpiredOnAttribute()
     {

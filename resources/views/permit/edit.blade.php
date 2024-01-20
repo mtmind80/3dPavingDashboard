@@ -60,7 +60,7 @@
                                     <input type="hidden" name="proposal_id" value="{{$permit->proposal->id}}">
 
                                     <div class="row">
-                                        <div class="col-lg-2">
+                                        <div class="col-lg-1">
                                             <label>Status:</label>
                                             <select class="form-control" name="status">
                                                 <option>{{$permit->status}}</option>
@@ -79,7 +79,7 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                        <div class="col-lg-2">
+                                        <div class="col-lg-1">
                                             <x-form-text name="number"
                                                          :params="['label' => 'Permit Number', 'iconClass' => 'fas fa-folder']">{{ $permit->number }}</x-form-text>
                                         </div>
@@ -116,6 +116,18 @@
                                                          params="['label' => 'City', 'iconClass' => 'fas fa-file','required' => true]">{{ $permit->city }}</x-form-text>
                                         </div>
                                         --}}
+                                        <div class="col-lg-2">
+                                            <x-form-date-picker
+                                                name="submitted_on"
+                                                :params="[
+                                    'id' => 'submitted_on',
+                                    'label' => 'Submitted On',
+                                    'iconClass' => 'fas fa-calendar',
+                                    'value' => $permit->submitted_on,
+                                ]"
+                                            ></x-form-date-picker>
+
+                                        </div>
                                         <div class="col-lg-2">
                                             <x-form-date-picker
                                                 name="expires_on"

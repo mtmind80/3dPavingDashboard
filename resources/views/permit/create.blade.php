@@ -36,7 +36,7 @@
 
 
                                     <div class="row">
-                                        <div class="col-lg-2">
+                                        <div class="col-lg-1">
                                             <label>Status:</label>
                                             <select class="form-control" name="status">
                                                 @foreach($statuses as $status)
@@ -44,7 +44,7 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                        <div class="col-lg-2">
+                                        <div class="col-lg-1">
                                             <label>Type:</label>
                                             <select class="form-control" name="type">
                                                 @foreach($types as $type)
@@ -53,7 +53,7 @@
 
                                             </select>
                                         </div>
-                                        <div class="col-lg-2">
+                                        <div class="col-lg-1">
                                             <x-form-text name="number"
                                                          :params="['label' => 'Permit Number', 'iconClass' => 'fas fa-folder', 'required' => true]"></x-form-text>
                                         </div>
@@ -66,7 +66,7 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                        <div class="col-lg-2">
+                                        <div class="col-lg-3">
                                             <label>City:</label>
                                             <select name="city" id="city" class="form-control">
                                                 <option value="0">Select county first</option>
@@ -78,6 +78,18 @@
                                                          params="['label' => 'City', 'iconClass' => 'fas fa-file','required' => true]"></x-form-text>
                                         </div>
                                         --}}
+                                        <div class="col-lg-2">
+                                            <x-form-date-picker
+                                                name="submitted_on"
+                                                :params="[
+                                    'id' => 'submitted_on',
+                                    'label' => 'Submitted On',
+                                    'iconClass' => 'fas fa-calendar',
+
+                                ]"
+                                            ></x-form-date-picker>
+
+                                        </div>
                                         <div class="col-lg-2">
                                             <x-form-date-picker
                                                 name="expires_on"
