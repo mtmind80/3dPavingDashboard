@@ -54,60 +54,51 @@
                     <div class="tab-content plr0 pt30 pb0 text-muted">
                         <div class="tab-pane active" id="profile" role="tabpanel">
                             <div class="row">
-                                <div class="col-md-12 col-sm-6 mb20">
+                                <div class="col-md-8 col-sm-6 mb20">
                                     <x-href-button url="{{ route('contact_edit', ['contact' => $contact->id, 'returnTo' => Request::url(), 'tab' => 'profile']) }}" class="btn-info"><i class="fas fa-edit"></i>@lang('translation.edit')</x-href-button>
                                 </div>
+                                <div class="col-md-4 col-sm-6 mb20"></div>
                             </div>
                             <div class="row">
-                                <div class="col-lg-6 col-md-6 col-sm-6 admin-form-item-widget">
-                                    <x-form-show :params="['label' => 'Type', 'iconClass' => 'fas fa-sticky-note']">{{ $contact->contactType->type ?? null }}</x-form-show>
+                                <div class="col-lg-2 col-md-3 col-sm-6 admin-form-item-widget">
+                                   <span class="fas fa-sticky-note"> </span> Contact Type :{{ $contact->contactType->type ?? null }}
                                 </div>
-                                <div class="col-lg-6 col-md-6 col-sm-6 admin-form-item-widget">
-                                    <x-form-show :params="['label' => 'Name', 'iconClass' => 'fas fa-user']">{{ $contact->full_name }}</x-form-show>
+                                <div class="col-lg-4 col-md-3 col-sm-6 admin-form-item-widget">
+                                   <span class="fas fa-user"> </span> Contact Name: {{ $contact->full_name }}
                                 </div>
                             </div>
-                            @if (!empty($contact->is_lead))
-                                <div class="row">
-                                    <div class="col-lg-6 col-md-6 col-sm-6 admin-form-item-widget">
-                                        <x-form-show :params="['label' => 'Lead Source', 'iconClass' => 'fas fa-sticky-note']">{{ $contact->lead_source ?? null }}</x-form-show>
-                                    </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 admin-form-item-widget">
-                                        <x-form-show :params="['label' => 'Assigned To', 'iconClass' => 'fas fa-user']">{{ $contact->assignedTo->full_name ?? null }}</x-form-show>
-                                    </div>
-                                </div>
-                            @endif
                             <div class="row">
-                                <div class="col-lg-2 col-md-3 col-sm-6 admin-form-item-widget">
-                                    <x-form-show :params="['label' => 'Phone', 'iconClass' => 'fas fa-phone']">{{ $contact->phone }}</x-form-show>
+                                <div class="col-lg-3 col-md-3 col-sm-6 admin-form-item-widget">
+                                    <span class="fas fa-phone"> </span> Phone: {{ $contact->phone }}
                                 </div>
-                                <div class="col-lg-2 col-md-3 col-sm-6 admin-form-item-widget">
-                                    <x-form-show :params="['label' => 'Alt Phone', 'iconClass' => 'fas fa-phone']">{{ $contact->alt_phone }}</x-form-show>
+                                <div class="col-lg-3 col-md-3 col-sm-6 admin-form-item-widget">
+                                    <span class="fas fa-phone"> </span> Alt Phone:{{ $contact->alt_phone }}
                                 </div>
-                                <div class="col-lg-4 col-md-3 col-sm-6 admin-form-item-widget">
-                                    <x-form-show :params="['label' => 'Email', 'iconClass' => 'fas fa-envelope']">{{ $contact->email }}</x-form-show>
+                                <div class="col-lg-3 col-md-3 col-sm-6 admin-form-item-widget">
+                                    <span class="fas fa-envelope"> </span> Email: <a href="mailto:{{ $contact->email }}">{{ $contact->email }}</a>
                                 </div>
-                                <div class="col-lg-4 col-md-3 col-sm-6 admin-form-item-widget">
-                                    <x-form-show :params="['label' => 'Alt Email', 'iconClass' => 'fas fa-envelope']">{{ $contact->alt_email }}</x-form-show>
+                                <div class="col-lg-3 col-md-3 col-sm-6 admin-form-item-widget">
+                                    <span class="fas fa-envelope"> </span> Alt Email: {{ $contact->alt_email }}
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-lg-6 col-md-6 col-sm-12 admin-form-item-widget">
-                                    <x-form-show :params="['label' => 'Address', 'iconClass' => 'fas fa-building']">{{ $contact->full_address_one_line }}</x-form-show>
+                                    <span class="fas fa-building"> </span> Address: {{ $contact->full_address_one_line }}
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-sm-12 admin-form-item-widget">
-                                    <x-form-show :params="['label' => 'Billing Address', 'iconClass' => 'fas fa-building']">{{ $contact->full_billing_address_one_line }}</x-form-show>
+                                    <span class="fas fa-building"> </span> Billing Address: {{ $contact->full_billing_address_one_line }}
                                 </div>
                             </div>
                             @if (!empty($contact->contact) || !empty($contact->relatedTo))
                                 <div class="row">
                                     @if (!empty($contact->contact))
                                         <div class="col-lg-6 col-md-6 col-sm-12 admin-form-item-widget">
-                                            <x-form-show :params="['label' => 'Contact', 'iconClass' => 'fas fa-user']">{{ $contact->contact ?? null }}</x-form-show>
+                                            <span class="fas fa-user-alt"> </span> Primary Contact: {{ $contact->contact ?? null }}
                                         </div>
                                     @endif
                                     @if (!empty($contact->relatedTo))
                                         <div class="col-lg-6 col-md-6 col-sm-12 admin-form-item-widget">
-                                            <x-form-show :params="['label' => 'Related To', 'iconClass' => 'fas fa-user']"><a class="a-link" href="{{ route('contact_details', ['contact' => $contact->relatedTo->id, 'returnTo' => $returnTo]) }}" data-toggle="tooltip" title="See contact details">{{ $contact->relatedTo->full_name }}</a></x-form-show>
+                                            <span class="fas fa-user-alt"> </span> <a class="a-link" href="{{ route('contact_details', ['contact' => $contact->relatedTo->id, 'returnTo' => $returnTo]) }}" data-toggle="tooltip" title="See contact details">{{ $contact->relatedTo->full_name }}</a>
                                         </div>
                                     @endif
                                 </div>
@@ -142,59 +133,59 @@
                         @if (!empty($contact->staff))
                             <div class="tab-pane" id="staff" role="tabpanel">
                                 <div class="row">
-                                    <div class="col-lg-12 col-md-12 col-sm-12 mb20">
-                                        <div class="form-group">
+                                    <div class="col-lg-10 col-md-12 col-sm-12 mb20">
+                                        <div class="form-group select2-wraper">
                                             <form method="POST" action="{{ route('contact_add_new_staff', ['contact' => $contact->id]) }}" accept-charset="UTF-8" id="addStaffForm" class="admin-form">
                                                 @csrf
                                                 <input type="hidden" name="returnTo" value="{{ Request::url() }}">
                                                 <input type="hidden" name="tab" value="staff">
-                                                <div class="mb20">
-                                                    <x-button id="attach_staff" type="submit" class="btn-success"><i class="fas fa-plus"></i>@lang('translation.add') @lang('translation.staff')</x-button>
-                                                </div>
                                                 @include('contacts._add_staff_form')
-                                            </form>
-                                        </div>
+       </div>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-12 col-md-12 col-sm-12 mb20">
-                                        <table class="list-table table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                                            <thead>
-                                                <tr>
-                                                    <th class="tc w120">Name</th>
-                                                    <th class="tc w280">Address</th>
-                                                    <th class="tc w120">Phones</th>
-                                                    <th class="tc w140">Emails</th>
-                                                    <th class="actions">Actions</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach ($contact->staff as $staff)
-                                                    <tr>
-                                                        <td class="tc">{{ $staff->full_name }}</td>
-                                                        <td class="tc">{!! $staff->full_address_two_line !!}</td>
-                                                        <td class="tc">{!! $staff->phones !!}</td>
-                                                        <td class="tc">{!! $staff->emails !!}</td>
-                                                        <td class="centered actions">
-                                                            <ul class="nav navbar-nav">
-                                                                <li class="dropdown">
-                                                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-angle-down"></i></a>
-                                                                    <ul class="dropdown-menu animated animated-short flipInX" role="menu">
-                                                                        <li>
-                                                                            <a href="javascript:" class="action" data-action="confirm" data-id="{{ $staff->id }}" data-callback="confirmDetach" data-text="Are you sure you want to detach <b>{{ $staff->full_name }}</b> from <b>{{ $staff->company->full_name ?? 'unknown' }}</b>?">
-                                                                                <span class="fas fa-unlink"></span>@lang('translation.detach_from_company')
-                                                                            </a>
-                                                                        </li>
-                                                                    </ul>
-                                                                </li>
-                                                            </ul>
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
+                                    <div class="col-lg-2 mb20">
+
+                                        <x-button id="attach_staff" type="submit" class="btn-success"><i class="fas fa-plus"></i>@lang('translation.add') @lang('translation.staff')</x-button>
+
+
                                     </div>
+                                    </form>
+
                                 </div>
+                                <table class="list-table table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                    <thead>
+                                    <tr>
+                                        <th class="tc w120">Name</th>
+                                        <th class="tc w280">Address</th>
+                                        <th class="tc w120">Phones</th>
+                                        <th class="tc w140">Emails</th>
+                                        <th class="actions">Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach ($contact->staff as $staff)
+                                        <tr>
+                                            <td class="tc">{{ $staff->full_name }}</td>
+                                            <td class="tc">{!! $staff->full_address_two_line !!}</td>
+                                            <td class="tc">{!! $staff->phones !!}</td>
+                                            <td class="tc">{!! $staff->emails !!}</td>
+                                            <td class="centered actions">
+                                                <ul class="nav navbar-nav">
+                                                    <li class="dropdown">
+                                                        <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-angle-down"></i></a>
+                                                        <ul class="dropdown-menu animated animated-short flipInX" role="menu">
+                                                            <li>
+                                                                <a href="javascript:" class="action" data-action="confirm" data-id="{{ $staff->id }}" data-callback="confirmDetach" data-text="Are you sure you want to detach <b>{{ $staff->full_name }}</b> from <b>{{ $staff->company->full_name ?? 'unknown' }}</b>?">
+                                                                    <span class="fas fa-unlink"></span>@lang('translation.detach_from_company')
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
                             </div>
                         @endif
                         @if (!empty($contact->proposals))
@@ -205,6 +196,8 @@
                                     </div>
                                     <div class="col-md-4 col-sm-6 mb20"></div>
                                 </div>
+
+
                                 <table class="list-table table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                     <thead>
                                         <tr>
