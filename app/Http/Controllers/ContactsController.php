@@ -368,10 +368,14 @@ class ContactsController extends Controller
         return view('contacts.detailsfull', $data);
     }
 
-    public function edit(Contact $contact)
+    public function edit($contactId)
     {
+        if (! $contact = Contact::with(['contactType'])->find($contactId)){
+            return view('pages-404');
+        }
+
         $data = [
-            'contact'      => $contact->load(['contactType']),
+            'contact'      => $contact,
             'typesCB'      => ContactType::typesCBActive(),
             'sourcesCB'    => LeadSource::sourcesCB(['0' => 'Select source']),
             'assignedToCB' => Contact::assignedToCB(['0' => 'Select assigned to']),
