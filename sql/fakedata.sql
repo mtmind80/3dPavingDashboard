@@ -48,7 +48,7 @@ UPDATE `lead_status` SET `color` = 'd0d0d0' WHERE `lead_status`.`id` = 1;
 
 
 #create some permit records
-INSERT INTO `permits` (`id`, `proposal_id`, `proposal_detail_id`, `status`, `type`, `number`, `city`,`county`, `expires_on`,`created_by`, `created_at`, `updated_at`) VALUES (NULL, '8549', NULL, 'Not Submitted', 'Regular', '12345','Ft. Lauderdale', 'Broward', '2022-11-17 13:58:27','10840', '2022-11-17 13:58:27', NULL);
+INSERT INTO `permits` (`id`, `proposal_id`, `proposal_detail_id`, `status`, `type`, `number`, `city`,`county`, `expires_on`,`created_by`, `created_at`, `updated_at`) VALUES (NULL, '10680', NULL, 'Not Submitted', 'Building', '12345','Ft. Lauderdale', 'Broward', '2022-11-17 13:58:27','10840', '2022-11-17 13:58:27', NULL);
 INSERT INTO `permits` (`id`, `proposal_id`, `proposal_detail_id`, `status`, `type`, `number`, `city`,`county`, `expires_on`,`created_by`, `created_at`, `updated_at`) VALUES (NULL, '5878', NULL, 'Not Submitted', 'Regular', '12345','Ft. Lauderdale', 'Broward','2022-11-17 13:58:27', '10840', '2022-11-17 13:58:27', NULL);
 INSERT INTO `permits` (`id`, `proposal_id`, `proposal_detail_id`, `status`, `type`, `number`, `city`,`county`, `expires_on`,`created_by`, `created_at`, `updated_at`) VALUES (NULL, '5878', NULL, 'Not Submitted', 'Regular', '12345', 'Ft. Lauderdale','Broward','2022-11-17 13:58:27', '10840', '2022-11-17 13:58:27', NULL);
 INSERT INTO `permits` (`id`, `proposal_id`, `proposal_detail_id`, `status`, `type`, `number`, `city`,`county`, `expires_on`,`created_by`, `created_at`, `updated_at`) VALUES (NULL, '5889', '7883', 'Not Submitted', 'Regular', '32443','Ft. Lauderdale', 'Broward', '2022-11-17 13:58:27','10', '2022-11-17 14:01:46', NULL);
