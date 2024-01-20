@@ -1,21 +1,4 @@
 /** from backend css */
-.list-item {
-    font-size:1.25EM;
-    margin-bottom: 9px;
-}
-.bg_lightning{
-    color:#000000;
-    background-color:#E8F8F5;
-}
-
-.footer {
-    position: absolute;
-    z-index:1000;
-    bottom: 0;
-    width: 100%;
-    color: #000;
-    background-color: #fff;
-}
 .error,
 .danger,
 .color-red {
@@ -478,19 +461,20 @@ body.xs #spinner i {
         text-align: left;
         padding-left: 14px; }
 
-/* END Spinner */
-/** END spinner */
-.show-container .form-field-value {
-  border: 1px solid #ddd;
-  padding: 12px;
-  min-height: 40px; }
-  .show-container .form-field-value.prepend-icon {
-    position: relative;
-    padding-left: 36px; }
-  .show-container .form-field-value .field-value {
-    font-size: 13px; }
-  .show-container .form-field-value .field-icon {
-    top: 1px; }
+/** END Spinner */
+.show-container {
+  width: 100%; }
+  .show-container .form-field-value {
+    border: 1px solid #ddd;
+    padding: 12px;
+    min-height: 40px; }
+    .show-container .form-field-value.prepend-icon {
+      position: relative;
+      padding-left: 36px; }
+    .show-container .form-field-value .field-value {
+      font-size: 13px; }
+    .show-container .form-field-value .field-icon {
+      top: 1px; }
 
 .a-link {
   color: #1c6ca1;
