@@ -338,6 +338,7 @@ class ContactsController extends Controller
             'contact',
             'note',
          ]));
+
         try {
             $contact->save();
             $data['id']= $contact->id;
@@ -382,10 +383,32 @@ class ContactsController extends Controller
 
     public function update(Contact $contact, ContactRequest $request)
     {
-        $inputs = $request->all();
+        $inputs = $request->only([
+            'contact_type_id',
+            'lead_id',
+            'first_name',
+            'last_name',
+            'email',
+            'alt_email',
+            'phone',
+            'alt_phone',
+            'address1',
+            'address2',
+            'city',
+            'county',
+            'state',
+            'postal_code',
+            'billing_address1',
+            'billing_address2',
+            'billing_city',
+            'billing_state',
+            'billing_postal_code',
+            'contact',
+            'note',
+        ]);
 
-        if (empty($inputs['is_lead'])) {
-            $inputs['is_lead'] = false;
+        if (empty($request['is_lead'])) {
+            //$inputs['is_lead'] = false;
             $inputs['lead_source'] = null;
             $inputs['assigned_to'] = null;
         }

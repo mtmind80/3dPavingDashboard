@@ -139,10 +139,7 @@ class Contact extends Model
         return $this->belongsTo(Contact::class, 'related_to');
     }
 
-    public function leads()
-    {
-        return $this->hasMany(Lead::class, 'contact_id');
-    }
+
 
     /** scopes */
 
