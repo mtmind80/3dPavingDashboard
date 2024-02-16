@@ -66,6 +66,12 @@
                                 <div class="col-lg-4 col-md-3 col-sm-6 admin-form-item-widget">
                                    <span class="fas fa-user"> </span> Contact Name: {{ $contact->full_name }}
                                 </div>
+                                @if($contact->related_to)
+                                    <div class="col-lg-4 col-md-3 col-sm-6 admin-form-item-widget">
+                                        <span class="fas fa-user"> </span> Related To: <a href ="{{route("contact_details",['contact' => $contact['related_to']])}}">{{ App\Models\Contact::find($contact['related_to'])->FullName }}</a>
+                                    </div>
+                                @endif
+
                             </div>
                             <div class="row">
                                 <div class="col-lg-3 col-md-3 col-sm-6 admin-form-item-widget">
@@ -164,10 +170,10 @@
                                     <tbody>
                                     @foreach ($contact->staff as $staff)
                                         <tr>
-                                            <td class="tc">{{ $staff->full_name }}</td>
-                                            <td class="tc">{!! $staff->full_address_two_line !!}</td>
-                                            <td class="tc">{!! $staff->phones !!}</td>
-                                            <td class="tc">{!! $staff->emails !!}</td>
+                                            <td class="tc"><a href="{{route("contact_details",['contact' => $staff['id']])}}">{{ $staff->full_name }}</a></td>
+                                            <td class="tc">{!! $staff->address1 !!}</td>
+                                            <td class="tc">{!! $staff->phone !!}</td>
+                                            <td class="tc">{!! $staff->email !!}</td>
                                             <td class="centered actions">
                                                 <ul class="nav navbar-nav">
                                                     <li class="dropdown">
