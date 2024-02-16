@@ -156,6 +156,7 @@ class ProposalController extends Controller
 
         //save current material pricing
         $this->setMaterialPricing($proposal_id);
+        \Session::flash('message', 'Your proposal was created!');
 
         return redirect()->route('show_proposal', ['id' => $proposal_id]);
 
@@ -252,6 +253,7 @@ class ProposalController extends Controller
         $data['locationTypesCB'] = Location::locationTypesCB();
         $data['countiesCB'] = Location::countiesCB();
         $data['salesPersonsCB'] = json_decode($salesPersonsCB, true);
+        \Session::flash('message', 'Your proposal was created!');
 
         return view('proposals.create_proposal', $data);
     }
@@ -874,6 +876,9 @@ class ProposalController extends Controller
             }
 
         }
+
+
+        //push materials
 
         \Session::flash('success', 'Proposal cloned with services. To change the client on this proposal, select an existing client or create a new one!');
 
