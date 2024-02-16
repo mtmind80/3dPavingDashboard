@@ -180,7 +180,7 @@
                                         <td>@lang('translation.proposalclient')</td>
                                         <td>
                                             @if($proposal['customer_staff_id'])
-                                                <a href="Javascript:showData(2);"  title="find staff">{{ App\Models\Contact::find($proposal['customer_staff_id'])->FullName }}</a>
+                                                <a href="{{route("contact_details",['contact' => $proposal['customer_staff_id']])}}"  title="find staff">{{ App\Models\Contact::find($proposal['customer_staff_id'])->FullName }}</a>
                                             @endif
                                         </td>
                                     </tr>
@@ -224,60 +224,7 @@
                                                 <x-href-button id="set_alert_button" class="btn-success ptb2 fr"><i class="fas fa-check"></i>Set Alert</x-href-button>
                                             @endif
                                         </td>
-                                    </tr>
-                                            <td>@lang('translation.salesperson')</td>
-                                            <td>
-                                                @if($proposal['salesperson_id'])
-                                                    {{ App\Models\User::find($proposal['salesperson_id'])->FullName }}
-                                                @endif
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>@lang('translation.client')</td>
-                                            <td>
-                                                @if($proposal['contact_id'])
 
-                                                    <a href="Javascript:showData(1);"
-                                                       title="find contact">{{ App\Models\Contact::find($proposal['contact_id'])->FullName }}</a>
-                                                @endif
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>@lang('translation.proposalclient')</td>
-                                            <td>
-                                                @if($proposal['customer_staff_id'])
-                                                    <a href="Javascript:showData(2);"
-                                                       title="find staff">{{ App\Models\Contact::find($proposal['customer_staff_id'])->FullName }}</a>
-                                                @endif
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>@lang('translation.progressivebilling')</td>
-                                            <td>@if($proposal['progressive_billing'])
-                                                    YES
-                                                @else
-                                                    NO
-                                                @endif
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>@lang('translation.permit') @lang('translation.required')</td>
-                                            <td>@if($proposal['permit_required'])
-                                                    YES
-                                                @else
-                                                    NO
-                                                @endif
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>@lang('translation.mot') @lang('translation.required')</td>
-                                            <td>@if($proposal['mot_required'])
-                                                    YES
-                                                @else
-                                                    NO
-                                                @endif
-                                            </td>
-                                        </tr>
 
                                         <tr>
                                             <td>Clone Proposal</td>
