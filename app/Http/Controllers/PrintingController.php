@@ -68,6 +68,7 @@ class PrintingController extends Controller
         $currencyTotalDetailCosts = $proposal->currency_total_details_costs;
 
         $services = $proposal->details;
+        $services_count = count($services);
 
         $service_overhead = Service::all()->toArray();
 
@@ -89,12 +90,14 @@ class PrintingController extends Controller
             $manager = User::where('id','=',$proposal['salesmanager_id'])->first()->toArray();
         }
 
+        //disable any debugbar code
         \Debugbar::disable();
 
         $data = [
             'title' => $pdfname,
             'print_date' => $print_date,
             'terms' => $terms,
+            'services_count' => $services_count,
             'service_overhead' => $service_overhead,
             'ServiceTerms' => $TermsOfService,
             'date' => date('m/d/Y'),
