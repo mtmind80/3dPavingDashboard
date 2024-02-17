@@ -29,6 +29,7 @@
             font-style: italic;
 
         }
+
         .totalcolor {
             font-size: 20px;
             background-color: #ffffff;
@@ -159,13 +160,12 @@
 </p>
 <h3>Service Listings</h3>
 <table>
-
     @php
         $totalcost = 0;
     @endphp
     @foreach ($services as $service)
         @php
-            $totalcost += $service->cost;
+            $totalcost = $totalcost + $service->cost;
         @endphp
 
         <tr style="border:5px solid #000000;">
@@ -178,128 +178,130 @@
         </tr>
     @endforeach
 </table>
-<p class="pb">
-</p>
-<h3>Service Summary</h3>
-<table>
-    @foreach ($services as $service)
-        <tr>
+    @if($services_count > 4)
+        <p class="pb">
+    @endif
+    </p>
+    <h3>Service Summary</h3>
+    <table>
+        @foreach ($services as $service)
+            <tr>
+                <td class="small_normal tl">
+                    {{$service->service_name}}
+                </td>
+                <td class="small_normal tl">
+                    {{ \App\Helpers\Currency::format($service->cost ?? '0.0') }}
+                </td>
+            </tr>
+
+        @endforeach
+        <tr class='totalcolor'>
             <td class="small_normal tl">
-                {{$service->service_name}}
+                Total
             </td>
             <td class="small_normal tl">
-                {{ \App\Helpers\Currency::format($service->cost ?? '0.0') }}
+                {{$currency_total_details_costs}}
             </td>
         </tr>
+    </table>
+    <p class="pb">
+    </p>
+    <h3>Acceptances of proposal</h3>
 
-    @endforeach
-    <tr class='totalcolor'>
-        <td class="small_normal tl">
-            Total
-        </td>
-        <td class="small_normal tl">
-            {{$currency_total_details_costs}}
-        </td>
-    </tr>
-</table>
-<p class="pb">
-</p>
-<h3>Acceptances of proposal</h3>
-
-We would like to thank you for the opportunity to visit your property and the possibility to earn your
-business. We are committed to providing our customers with great service and workmanship on all
-of our projects. Our commitment to customers is why we always warranty our projects and stand
-behind our work.
-<br/>
-<br/>
-To proceed with our proposal please execute below and return to 3-D Paving and Sealcoating, LLC
-via e-mail. Upon execution this proposal becomes a binding contract. Customer acknowledges it
-has read this entire document including "General Terms and Conditions" and "Service Terms and
-Conditions".
-<br/>
-<br/>
-Payment Terms: 40% Deposit Due Upon Signed Contract, 60% Due Upon Completion.
-This proposal expires thirty (30) days from the date hereof, but may be accepted at any later date
-at the sole option of 3-D Paving.
-</br></br>
-<table class="w-100">
-    <tr class='totalcolor'>
+    We would like to thank you for the opportunity to visit your property and the possibility to earn your
+    business. We are committed to providing our customers with great service and workmanship on all
+    of our projects. Our commitment to customers is why we always warranty our projects and stand
+    behind our work.
+    <br/>
+    <br/>
+    To proceed with our proposal please execute below and return to 3-D Paving and Sealcoating, LLC
+    via e-mail. Upon execution this proposal becomes a binding contract. Customer acknowledges it
+    has read this entire document including "General Terms and Conditions" and "Service Terms and
+    Conditions".
+    <br/>
+    <br/>
+    Payment Terms: 40% Deposit Due Upon Signed Contract, 60% Due Upon Completion.
+    This proposal expires thirty (30) days from the date hereof, but may be accepted at any later date
+    at the sole option of 3-D Paving.
+    </br></br>
+    <table class="w-100">
+        <tr class='totalcolor'>
+            <td class="tl">
+                Services Estimated Total
+            </td>
+            <td class="tl">
+                {{$currency_total_details_costs}}
+            </td>
+        </tr>
+        <tr>
+    </table>
+    <table class='bordered'>
         <td class="tl">
-            Services Estimated Total
-        </td>
-        <td class="tl">
-            {{$currency_total_details_costs}}
-        </td>
-    </tr>
-    <tr>
-</table>
-<table class='bordered'>
-    <td class="tl">
-        3-D Paving
+            3-D Paving
             </br></br>
-        Authorized By: {{$sales['fname']}} {{$sales['lname']}}
+            Authorized By: {{$sales['fname']}} {{$sales['lname']}}
             </br></br>
 
             Title:Pavement Consultant
             </br></br>
-        <div class="signaturefontd">    {{$sales['fname']}} {{$sales['lname']}}</div>
-        Date:
+            <div class="signaturefontd">    {{$sales['fname']}} {{$sales['lname']}}</div>
+            Date:
             {{$print_date}}
 
 
-   </td>
-    <td class="tl">
-        {{$proposal['contact']['first_name']}}
-        </br></br>
-        Accepted By:________________________
-        </br><span class="small_italics">Name , Please print</span>
-        </br></br>
-        Title:_______________________________
-        </br></br>
-        Signature:___________________________
-        </br></br>
-        Date:________________
-
-    </td>
-    </tr>
-</table>
-<p class="pb">
-</p>
-<h1>General Terms</h1>
-<table>
-    <tr>
-        <td class="small_normal tl">
-            @foreach($terms as $term)
-                @if($loop->even && $loop->index > 1)
         </td>
-        <td class="small_normal tl">
-            @endif
-            <strong style="color:#585657;"><u>{{$term['title']}}:</u></strong> <br/><br/>
-            {!!$term['text']!!}
-            @endforeach
-        </td>
-    </tr>
-</table>
+        <td class="tl">
+            {{$proposal['contact']['first_name']}}
+            </br></br>
+            Accepted By:________________________
+            </br><span class="small_italics">Name , Please print</span>
+            </br></br>
+            Title:_______________________________
+            </br></br>
+            Signature:___________________________
+            </br></br>
+            Date:________________
 
-<p class="pb">
-</p>
+        </td>
+        </tr>
+    </table>
+    <p class="pb">
+    </p>
+    <h1>General Terms</h1>
+    <table>
+        <tr>
+            <td class="small_normal tl">
+                @foreach($terms as $term)
+                    @if($loop->even && $loop->index > 1)
+            </td>
+            <td class="small_normal tl">
+                @endif
+                <strong style="color:#585657;"><u>{{$term['title']}}:</u></strong> <br/><br/>
+                {!!$term['text']!!}
+                @endforeach
+            </td>
+        </tr>
+    </table>
+
+    <p class="pb">
+    </p>
 
 
-<h1>Service Terms and Conditions</h1>
-<table>
-    <tr>
-        <td class="small_normal tl">
-            @foreach($ServiceTerms as $sterm)
-                @if($loop->index ==2 )
-        </td>
-        <td class="small_normal tl">
-            @endif
-            <strong style="color:#585657;"><u>{{$sterm['title']}}:</u></strong> <br/>
-            {!!$sterm['text']!!}
-            @endforeach
-        </td>
-    </tr>
-</table>
+    <h1>Service Terms and Conditions</h1>
+    <table>
+        <tr>
+            <td class="small_normal tl">
+                @foreach($ServiceTerms as $sterm)
+                    @if($loop->index ==2 )
+            </td>
+            <td class="small_normal tl">
+                @endif
+                <strong style="color:#585657;"><u>{{$sterm['title']}}:</u></strong> <br/>
+                {!!$sterm['text']!!}
+                @endforeach
+            </td>
+        </tr>
+    </table>
 
 
 </body>
