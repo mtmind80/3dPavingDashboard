@@ -212,6 +212,9 @@
     </p>
         @foreach ($medias as $media)
             <img src='{{ URL::asset('/media/projects/'. $media->file_name)}}' width='700px'>
+<br/>
+            {{ $media->description}}
+
             <p class="pb">
             </p>
         @endforeach
@@ -262,6 +265,7 @@
         </td>
         <td class="tl">
             {{$proposal['contact']['first_name']}}
+            {{$proposal['contact']['last_name']}}
             </br></br>
             Accepted By:________________________
             </br><span class="small_italics">Name , Please print</span>
