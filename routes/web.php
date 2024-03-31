@@ -308,6 +308,9 @@ Route::group(['prefix' => 'print'], function() {
 
     //Print report
     Route::post('/proposal/', 'PrintingController@proposal')->name('print_proposal');
+    Route::post('/proposalwimages/', 'PrintingController@proposalWImages')->name('print_proposal_with_images');
+    //Print report
+    Route::post('/setup/', 'PrintingController@setup')->name('setup_proposal');
 
     //Print report
     Route::get('/printcoversheet', 'PrintingController@coversheet')->name('print_coversheet');

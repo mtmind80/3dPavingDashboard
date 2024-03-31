@@ -410,5 +410,6 @@ return [
     "all" => "All",
     "fees" => "Fees",
     "serviceterms" => "Terms of Service",
+    "my" => "My",
 ];
 

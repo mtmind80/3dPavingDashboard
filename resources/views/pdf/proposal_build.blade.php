@@ -137,14 +137,18 @@
         <td><h2>Prepared For</h2></td>
     </tr>
     <tr>
-        <td class="normaltext">{{$proposal['contact']['first_name']}}</td>
+        <td class="normaltext">
+            {{$proposal['contact']['first_name']}}
+            {{$proposal['contact']['last_name']}}</td>
     </tr>
     <tr>
-        <td>
-            @php
-                $address = \App\Models\Location::where('id', '=', $proposal['contact']['id'])->first()->toArray();
-            @endphp
-            {!!$address['full_location_two_lines']!!}
+        <td class="normaltext">
+            {!!$proposal['contact']['address1']!!}
+            {!!$proposal['contact']['address2']!!}
+            <br/>
+            {!!$proposal['contact']['city']!!} &nbsp;
+            {!!$proposal['contact']['state']!!} &nbsp;
+            {!!$proposal['contact']['postal_code']!!}
 
         </td>
     </tr>
@@ -206,6 +210,10 @@
     </table>
     <p class="pb">
     </p>
+        @foreach ($medias as $media)
+            <img src='{{ URL::asset('/media/projects/'. $media->file_name)}}' width='700px'>
+        @endforeach
+
     <h3>Acceptances of proposal</h3>
 
     We would like to thank you for the opportunity to visit your property and the possibility to earn your

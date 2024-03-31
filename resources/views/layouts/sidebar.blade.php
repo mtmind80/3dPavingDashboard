@@ -13,14 +13,16 @@
                 <li class="dashboard-controller">
                     <a href="{{url('dashboard')}}" class="waves-effect dashboard-function">
                         <i class="ri-home-3-line"></i><span class="badge badge-pill badge-success float-right">3</span>
-                        <span>@lang('translation.Dashboard')</span>
+                        <span>@if (auth()->user()->isSales()) @lang('translation.my') @endif
+                            @lang('translation.Dashboard')</span>
                     </a>
                 </li>
                 @if (auth()->user()->canHaveLeads())
                     <li class="leads-controller">
                         <a href="{{ url('leads') }}" class="waves-effect index-function create-function edit-function show-function search-function">
                             <i class="ri-chat-follow-up-line"></i>
-                            <span>@lang('translation.Leads')</span>
+                            <span>@if (auth()->user()->isSales()) @lang('translation.my') @endif
+                                @lang('translation.Leads')</span>
                         </a>
                     </li>
                 @endif
@@ -39,10 +41,13 @@
                         </a>
                     </li>
 -->
+
                     <li class="permits-controller">
                         <a href="{{route('permits')}}" class="waves-effect index-function create-function edit-function show-function search-function">
                             <i class="ri-car-line"></i>
-                            <span>@lang('translation.menu_permits')</span>
+                            <span>
+                                @if (auth()->user()->isSales()) @lang('translation.my') @endif
+                                    @lang('translation.menu_permits')</span>
                         </a>
                     </li>
 
@@ -50,13 +55,16 @@
                 <li class="proposal-controller">
                     <a href="{{route('proposals')}}" class="waves-effect index-function create-function edit-function show-function search-function">
                         <i class="ri-compasses-2-line"></i>
-                        <span>@lang('translation.menu_proposal')</span>
+                        <span>@if (auth()->user()->isSales()) @lang('translation.my') @endif
+                            @lang('translation.menu_proposal')</span>
                     </a>
                 </li>
                 <li class="workorder-controller">
                     <a href="{{route('workorders')}}" class="waves-effect index-function create-function edit-function show-function search-function">
                         <i class="ri-money-dollar-circle-line"></i>
-                        <span>@lang('translation.menu_workorders')</span>
+                        <span>
+                            @if (auth()->user()->isSales()) @lang('translation.my') @endif
+                                @lang('translation.menu_workorders')</span>
                     </a>
                 </li>
                 <!-- calendar will be done in another way
