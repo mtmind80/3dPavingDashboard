@@ -212,6 +212,8 @@
     </p>
         @foreach ($medias as $media)
             <img src='{{ URL::asset('/media/projects/'. $media->file_name)}}' width='700px'>
+            <p class="pb">
+            </p>
         @endforeach
 
     <h3>Acceptances of proposal</h3>
