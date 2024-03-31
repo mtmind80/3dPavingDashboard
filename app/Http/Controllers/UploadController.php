@@ -122,7 +122,7 @@ class UploadController extends Controller
         $data['description'] = $description;
         $data['created_by'] = auth()->user()->id;
         $data['original_name'] = basename($_FILES["file"]["name"]);
-        $data['file_ext'] = $extension;
+        $data['file_ext'] = strtolower($extension);
         $data['file_size'] = $file_size;
         $data['IsImage'] = $IsImage;
         $data['image_height'] = $image_height;
