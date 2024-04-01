@@ -1,5 +1,5 @@
 <!-- Modal -->
-<div class="modal fade modal-medium info" id="formNoteModal" data-backdrop="static" 
+<div class="modal fade modal-medium info" id="formNoteModal" data-backdrop="static"
      tabindex="-1" role="dialog" aria-labelledby="formNoteModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content admin-form">
@@ -17,15 +17,16 @@
                 <div class="modal-body plr10 pt10 pb0">
                     <x-form-textarea style="height:135px" name="note" :params="['label' =>  __('translation.note'), 'iconClass' => 'fas fa-sticky-note', 'required' => false]"></x-form-textarea>
                 </div>
-
-                <div class="modal-body plr10 pt10 pb0">
+<!--
+                <div class="modal-body p10 plr10 pt10 pb0">
+                        @lang('translation.reminder')
                         <x-form-check-box name="reminder" id="reminder" value="1"
-                                          :checked="false">
-                            @lang('translation.reminder')
-                        </x-form-check-box>
+                                    :checked="false"></x-form-check-box>
                 </div>
+-->
                 <div class="modal-body plr10 pt10 pb0">
-                    <x-form-date_picker name="reminder_date" :params="['label' =>  __('translation.reminderdate'), 'iconClass' => 'fas fa-calendar', 'required' => false]"></x-form-date_picker>
+                    <x-form-date_picker name="reminder_date" :params="['label' =>  __('translation.reminderdate'), 'iconClass' => 'fas fa-calendar', 'required' => false]">
+                    </x-form-date_picker>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light waves-effect" data-dismiss="modal">@lang('translation.close')</button>

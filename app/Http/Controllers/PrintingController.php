@@ -19,6 +19,7 @@ class PrintingController extends Controller
 {
 
     public $storage_path;
+    public $pdf_path;
 
     public function __construct(Request $request)
     {
@@ -26,6 +27,9 @@ class PrintingController extends Controller
 
         $this->storage_path = storage_path('app/public/');
 
+        $this->pdf_path = 'D:/Work/3dPavingDashboard/public/media/projects/';
+
+//        $this->pdf_path = asset('/media/projects');
     }
 
     /**
@@ -178,9 +182,18 @@ public function setup(Request $request)
             $mergepdf = new \Jurosh\PDFMerge\PDFMerger;
 
             // add as many pdfs as you want
-            $mergepdf->addPDF($this->storage_path . "coversheet.pdf", 'all', 'vertical')
-                ->addPDF($this->storage_path . $pdfname, 'all');
+            if(count($mediasPDF)) {
+                foreach($mediasPDF as $media) {
+                    $file = $media->file_name;
+                }
+                $mergepdf->addPDF($this->storage_path . "coversheet.pdf", 'all', 'vertical')
+                    ->addPDF($this->storage_path . $pdfname, 'all')
+                    ->addPDF($this->pdf_path . $file, 'all');
+            }  else {
+                $mergepdf->addPDF($this->storage_path . "coversheet.pdf", 'all', 'vertical')
+                    ->addPDF($this->storage_path . $pdfname, 'all');
 
+            }
             //rename the merged file
             $newpdfname = "Contract_" . $pdfname;
             // call merge, output format `file`
