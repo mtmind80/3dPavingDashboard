@@ -210,9 +210,6 @@
     </table>
     <p class="pb">
     </p>
-        @foreach ($medias as $media)
-            <img src='{{ URL::asset('/media/projects/'. $media->file_name)}}' width='700px'>
-        @endforeach
 
     <h3>Acceptances of proposal</h3>
 

@@ -1073,16 +1073,20 @@ class ProposalController extends Controller
     {
 
         $reminderDate = $request->reminder_date ?? null;
+        $reminder = 0;
+        $msg = 'Proposal note added.';
         if($reminderDate) {
             $reminderDate = date('Y-m-d', strtotime($reminderDate));
+            $reminder = 1;
+            $msg = 'Proposal note added. And a reminder email will be sent on ' .$reminderDate;
         }
         try {
-            DB::transaction(function() use ($request, $reminderDate) {
+            DB::transaction(function() use ($request, $reminderDate, $reminder) {
                 $data = [
                     'proposal_id' => $request->proposal_id,
                     'created_by' => auth()->user()->id,
                     'note' => $request->note,
-                    'reminder' => $request->reminder ?? 0,
+                    'reminder' => $reminder,
                     'reminder_date' => $reminderDate,
                 ];
 
@@ -1098,9 +1102,9 @@ class ProposalController extends Controller
             $this->returnTo = $referer . '?type=note';
         }
         if(!empty($this->returnTo)) {
-            return redirect()->to($this->returnTo)->with('success', 'Proposal note added.');
+            return redirect()->to($this->returnTo)->with('success', $msg);
         } else {
-            return redirect()->back()->with('success', 'Proposal note added.');
+            return redirect()->back()->with('success', $msg);
         }
     }
 
