@@ -598,7 +598,7 @@ class ProposalController extends Controller
 
         $redirectTo = route('show_proposal', ['id' => $request->proposal_id]) . '?tab=servicestab';
 
-//        return redirect()->to($redirectTo)->with('success', 'Service order updated.');
+        return redirect()->to($redirectTo)->with('success', 'Service order updated.');
     }
 
     /**
