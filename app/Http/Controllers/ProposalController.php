@@ -414,6 +414,16 @@ class ProposalController extends Controller
             $accepted_filetypes = AcceptedDocuments::all()->pluck('extension')->toArray();
             $data['doctypes'] = implode(',', $accepted_filetypes);
 
+            $changeorder = 0;
+            //is proposal a change order
+            if($proposal->changeorder_id) {
+                $changeorder = ChangeOrders::where('id', '=', $proposal->changeorder_id)->first()->toArray();
+            }
+            $data['changeorder'] = $changeorder;
+
+            $currencyTotalDetailCosts = $proposal->currency_total_details_costs;
+            $data['currency_total_details_costs'] = $currencyTotalDetailCosts;
+
             //print_r($services);
             //exit();
 
