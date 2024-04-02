@@ -369,7 +369,7 @@ Route::group(['prefix' => 'proposals'], function() {
     Route::get('/start_proposal/{id}', 'ProposalController@start')->name('start_proposal');
 
     //  show alert
-    Route::get('/alert/{id}', 'ProposalController@alertproposal')->name('alert_proposal');
+    Route::get('/alert/{id}', 'ProposalController@show')->name('alert_proposal');
 
     // set alert
     Route::post('set-alert', 'ProposalController@setAlert')->name('proposal_alert_set');

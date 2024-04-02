@@ -27,7 +27,7 @@ class PrintingController extends Controller
 
         $this->storage_path = storage_path('app/public/');
 
-        $this->pdf_path = 'D:/Work/3dPavingDashboard/public/media/projects/';
+        $this->pdf_path = public_path('media/projects/');
 
 //        $this->pdf_path = asset('/media/projects');
     }
