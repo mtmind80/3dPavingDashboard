@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PermitNoteRequest;
 use App\Http\Requests\PermitRequest;
 use App\Http\Requests\SearchRequest;
-use App\Mail\LeadAssignedToManager;
+use App\Mail\PermitUpdateToManager;
 use App\Notifications\ProposalPermitNotification;
 use Illuminate\Support\Facades\DB;
 use App\Models\Proposal;
@@ -195,7 +195,7 @@ class PermitsController extends Controller
 
 
         //updated permit so get sames person email
-        $proposal = Proposal::where('id','=', $permit->proposal_id)->with(['contact', 'salesPerson'])->get();
+        $proposal = Proposal::where('id','=', $permit->proposal_id)->with(['salesPerson'])->first()->toArray();
 
 //        dd($inputs);
 
@@ -203,7 +203,7 @@ class PermitsController extends Controller
         {
             $subject = 'You have received a notification from  '. env('APP_NAME');
             $msg = "Permit Updated";
-            Mail::to($proposal->salesPerson->email)->send(new PermitUpdateToManager($permit, $proposal->salesperson_id, $subject));
+            Mail::to($proposal['sales_person']['email'])->send(new PermitUpdateToManager($permit, $subject));
 
         };
 

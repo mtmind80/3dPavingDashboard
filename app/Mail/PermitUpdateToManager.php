@@ -14,7 +14,6 @@ class PermitUpdateToManager extends Mailable
     use Queueable, SerializesModels;
 
     public $permit;
-    public $manager;
     public $subject;
 
     /**
@@ -22,10 +21,9 @@ class PermitUpdateToManager extends Mailable
      *
      * @return void
      */
-    public function __construct(Permit $permit, $salesperson, $subject = null)
+    public function __construct(Permit $permit,  $subject = null)
     {
         $this->permit = $permit;
-        $this->manager = $salesperson;
         $this->subject = $subject ?? 'You have received a notification from  '. env('APP_NAME');
     }
 
