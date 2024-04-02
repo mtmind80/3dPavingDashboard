@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PermitNoteRequest;
 use App\Http\Requests\PermitRequest;
 use App\Http\Requests\SearchRequest;
+use App\Mail\PermitUpdateToManager;
 use App\Notifications\ProposalPermitNotification;
 use Illuminate\Support\Facades\DB;
 use App\Models\Proposal;
@@ -12,6 +13,7 @@ use App\Models\County;
 use App\Models\Permit;
 use App\Models\PermitNote;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use NumberFormatter;
@@ -45,6 +47,8 @@ class PermitsController extends Controller
             ->with(['proposal'])
             ->paginate($perPage);
         */
+
+
         if(auth()->user()->isAdmin()) {
 
             $permits = DB::table('permits')
@@ -190,11 +194,17 @@ class PermitsController extends Controller
         }
 
 
+        //updated permit so get sames person email
+        $proposal = Proposal::where('id','=', $permit->proposal_id)->with(['salesPerson'])->first()->toArray();
+
 //        dd($inputs);
 
         if($permit->update($inputs))
         {
+            $subject = 'You have received a notification from  '. env('APP_NAME');
             $msg = "Permit Updated";
+            Mail::to($proposal['sales_person']['email'])->send(new PermitUpdateToManager($permit, $subject));
+
         };
 
         if (!empty($this->returnTo)) {

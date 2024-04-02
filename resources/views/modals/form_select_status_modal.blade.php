@@ -14,10 +14,12 @@
                 </div>
                 <div class="modal-body plr10 pt10 pb0">
                     <p>@lang('translation.current_status'): <b><span id="current_status"></span></b></p>
-                    <x-form-select name="new_status"
-                       :items="$statusCB"
-                       :params="['label' => __('translation.new') . ' ' . __('translation.status'), 'required' => true]">
-                    </x-form-select>
+                    <select class="form-control" name="new_status">
+                        <option>{{$permit->status}}</option>
+                        @foreach($statusCB as $status)
+                            <option>{{$status}}</option>
+                        @endforeach
+                    </select>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light waves-effect" data-dismiss="modal">@lang('translation.close')</button>
