@@ -17,6 +17,12 @@
                         <div class="col-md-8 col-sm-6 mb20">
                             @if (auth()->user()->isAdmin())
                                 <x-href-button url="{{ route('lead_create') }}" class="{{$site_button_class}}"><i class="fas fa-plus"></i>@lang('translation.create') @lang('translation.new') @lang('translation.lead')</x-href-button>
+                                @if($showall != 1)
+                                    <x-href-button url="{{ route('lead_list', ['showall'=>1]) }}" class="{{$site_button_class2}}">@lang('translation.showall') @lang('translation.leads')</x-href-button>
+                                @else
+                                    <x-href-button url="{{ route('lead_list') }}" class="{{$site_button_class2}}">Show Active @lang('translation.leads')</x-href-button>
+
+                                @endif
                             @endif
                         </div>
                         <div class="col-md-4 col-sm-6 mb20">

@@ -185,7 +185,7 @@
                                 <option value='0'>Select Asphalt Type</option>
                                 @foreach($asphaltMaterials as $materials)
                                     <option value='{{$materials['cost']}}'
-                                            @if($materials['cost'] == $proposalDetail->cost_per_day)
+                                            @if($materials['name'] == $proposalDetail->materials_name)
                                                 selected
                                             @endif
                                     >{{$materials['name']}}</option>
@@ -1052,9 +1052,9 @@
 
 
         @if($proposal->progressive_billing)
-            <div class="row card-body">
-                <div class="col-sm-8">
-                    <strong> Progressive Billing:</strong> <br/>Do you want to bill the customer after this service is
+            <div class="row card-body m20 p20" style="background:#E8F8F5;">
+                <div class="col-sm-4">
+                    <strong> <b>You indicated that you want to use "Progressive Billing" on this proposal:</b></strong> <br/>Do you want to bill the customer after this service is
                     completed?
                 </div>
                 <div class="col-sm-2">
@@ -1068,7 +1068,10 @@
                         NO <input type="radio" class="form-control" name="bill_after" id="bill_after2" value="0"
                                   @if(!$proposalDetail->bill_after) checked @endif >
                     </div>
-                </div>
+                    <div class="col-sm-4">
+                    &nbsp;
+                    </div>
+                    </div>
             </div>
         @else
             <input type="hidden" name="bill_after" value="0">
@@ -1147,7 +1150,11 @@
                         {{-- Asphalt Milling --}}
 
                         var ohead = 0.88;
-                        var cost_per_day = $("#cost_per_day").val();
+                        //var cost_per_day = $("#cost_per_day").val();
+                        var cost_per_day = $("#cost_per_day>option:selected").val();
+                        var materials_name = $('#cost_per_day').find('option:selected').text();
+
+
                         var locations = $("#locations").val();
                         var square_feet = $("#square_feet").val();
                         var depth = $("#depth").val();
@@ -1194,6 +1201,7 @@
                             $("#x_locations").val(locations);
                             $("#x_loads").val(loads);
                             $("#x_cost_per_day").val(cost_per_day);
+                            $("#x_materials_name").val(materials_name);
 
                         } else {
 
@@ -1213,6 +1221,8 @@
                         var square_feet = $("#square_feet").val();
                         var depth = $("#depth").val();
                         var cost_per_day = $("#cost_per_day>option:selected").val();
+                        var materials_name = $('#cost_per_day').find('option:selected').text();
+
                         var locations = $("#locations").val();
 
 
@@ -1277,6 +1287,7 @@
                             $("#x_depth").val(depth);
                             $("#x_locations").val(locations);
                             $("#x_cost_per_day").val(cost_per_day);
+                            $("#x_materials_name").val(materials_name);
 
                             $("#x_curbmix").val(curbmix);
                             $("#x_drummix").val(drummix);
@@ -1523,6 +1534,7 @@
                         $("#x_loads").val(loads);
                         $("#x_tons").val(tons);
                         $("#x_cost_per_day").val(cost_per_day);
+                        $("#x_materials_name").val(materials_name);
                         console.log("end excavation");
 
                     }

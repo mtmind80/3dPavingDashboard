@@ -141,6 +141,7 @@
                                         </td>
                                     </tr>
                                     @endforeach
+                                    @include('modals.form_select_status_modal')
                                 @endif
                         </tbody>
                     </table>
@@ -158,7 +159,7 @@
     </div>
     @include('modals.list_notes_modal')
     @include('modals.form_permit_note_modal')
-    @include('modals.form_select_status_modal')
+
 @stop
 
 @section('page-js')

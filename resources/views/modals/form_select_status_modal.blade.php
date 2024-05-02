@@ -12,6 +12,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
+                @if($permits)
                 <div class="modal-body plr10 pt10 pb0">
                     <p>@lang('translation.current_status'): <b><span id="current_status"></span></b></p>
                     <select class="form-control" name="new_status">
@@ -21,6 +22,7 @@
                         @endforeach
                     </select>
                 </div>
+                @endif
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light waves-effect" data-dismiss="modal">@lang('translation.close')</button>
                     <button type="submit" class="btn btn-dark waves-effect waves-light">@lang('translation.save')</button>
