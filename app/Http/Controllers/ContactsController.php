@@ -537,13 +537,7 @@ class ContactsController extends Controller
             }
         }
 
-        if (!$staff = Staff::find($request->staff_id)) {
-            if (!empty($this->returnTo)) {
-                return redirect()->to($this->returnTo)->with('error', 'Staff not found.');
-            } else {
-                return redirect()->back()->with('error', 'Staff not found.');
-            }
-        }
+        $staff = New Contact();
 
         $staff->related_to = $contact->id;
         $staff->save();
