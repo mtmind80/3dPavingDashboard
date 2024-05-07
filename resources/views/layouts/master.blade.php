@@ -141,8 +141,7 @@
             });
         });
     </script>
-
-    @yield('page-js')
+    @stack('page-js')
 
     @stack('partials-scripts')
 </body>

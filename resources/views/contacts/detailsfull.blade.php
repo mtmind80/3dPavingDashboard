@@ -278,7 +278,9 @@
             var formFieldTab = $('#form_note_modal_tab');
             var formFieldContactId = $('#form_note_contact_id');
 
-            $('#add_note_button').on('click', function(){
+            $('#add_note_button').click(function(){
+
+                alert("Here");
                 let el = $(this);
                 let contactNameContainer = $('#formNoteModalLabel').find('span');
                 let url = el.data('route');
