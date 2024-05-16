@@ -52,6 +52,10 @@
                         required: false,
                         phone: true
                     },
+                    title: {
+                        required: false,
+                        plainText: true
+                    },
                 },
                 messages: {
                     first_name: {
@@ -62,6 +66,18 @@
                         required: "@lang('translation.field_required')",
                         personName: 'Invalid last name.'
                     },
+                    email: {
+                        required: "@lang('translation.field_required')",
+                        email: 'Invalid email.'
+                    },
+                    phone: {
+                        required: "@lang('translation.field_required')",
+                        phone: 'Invalid phone.'
+                    },
+                    title: {
+                        required: "@lang('translation.field_required')",
+                        plainText: 'Invalid title.'
+                    },
                 },
                 submitHandler: function (form) {
                     let errors = false;
@@ -71,8 +87,6 @@
                     }
                 }
             });
-
-
         });
     </script>
 @stop

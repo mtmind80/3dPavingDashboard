@@ -133,6 +133,7 @@
             var currentNote;
 
             $('body').on('click', '.actions .action[data-action="add-note"]', function(){
+
                 let el = $(this);
                 let contactNameContainer = $('#formNoteModalLabel').find('span');
                 let url = el.data('route');

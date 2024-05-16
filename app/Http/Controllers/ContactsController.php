@@ -13,6 +13,7 @@ use App\Models\Proposal;
 use Exception;
 use Illuminate\Http\Request;
 use App\Models\Contact;
+use Validator;
 
 class ContactsController extends Controller
 {
@@ -490,7 +491,7 @@ class ContactsController extends Controller
 
     public function addStaff(Contact $contact, Request $request)
     {
-        $validator = \Validator::make(
+        $validator = Validator::make(
             $request->only(['staff_id']), [
                 'staff_id' => 'required|positive',
             ]
@@ -521,12 +522,17 @@ class ContactsController extends Controller
         }
     }
 
-
-    public function addNewStaff(Contact $contact, Request $request)
+    public function addNewStaff(Request $request)
     {
-        $validator = \Validator::make(
-            $request->only(['staff_id']), [
-                'staff_id' => 'required|positive',
+        $validator = Validator::make(
+            $request->all(), [
+                'contact_id' => 'required|positive',
+                'first_name' => 'required|personName',
+                'last_name' => 'required|personName',
+                'address1' => 'required|plainText',
+                'email' => 'nullable|email',
+                'phone' => 'nullable|phone',
+                'title' => 'nullable|plainText',
             ]
         );
         if ($validator->fails()) {
@@ -537,21 +543,18 @@ class ContactsController extends Controller
             }
         }
 
-        if (!$staff = Staff::find($request->staff_id)) {
-            if (!empty($this->returnTo)) {
-                return redirect()->to($this->returnTo)->with('error', 'Staff not found.');
-            } else {
-                return redirect()->back()->with('error', 'Staff not found.');
-            }
-        }
+        $inputs = $validator->safe()->all();
+        $inputs['contact_type_id'] = 18;      // General Contact
+        $inputs['related_to'] = $request->contact_id;
 
-        $staff->related_to = $contact->id;
-        $staff->save();
+        // address1,
+
+        $staff = Staff::create($inputs);
 
         if (!empty($this->returnTo)) {
-            return redirect()->to($this->returnTo)->with('success', 'Contact <b>' . $staff->full_name . '</b> added as staff to "' . $contact->full_name . '".');
+            return redirect()->to($this->returnTo)->with('success', $staff->full_name . ' added.');
         } else {
-            return redirect()->back()->with('success', 'Contact <b>' . $staff->full_name . '</b> added as staff to "' . $contact->full_name . '".');
+            return redirect()->back()->with('success', $staff->full_name . ' added.');
         }
     }
 
