@@ -13,7 +13,6 @@ use App\Models\Proposal;
 use Exception;
 use Illuminate\Http\Request;
 use App\Models\Contact;
-use Validator;
 
 class ContactsController extends Controller
 {
@@ -491,7 +490,7 @@ class ContactsController extends Controller
 
     public function addStaff(Contact $contact, Request $request)
     {
-        $validator = Validator::make(
+        $validator = \Validator::make(
             $request->only(['staff_id']), [
                 'staff_id' => 'required|positive',
             ]
@@ -522,19 +521,25 @@ class ContactsController extends Controller
         }
     }
 
-    public function addNewStaff(Request $request)
+
+    public function addNewStaff(Contact $contact, Request $request)
     {
-        $validator = Validator::make(
-            $request->all(), [
-                'contact_id' => 'required|positive',
+
+        $validator = \Validator::make(
+            [
+                'first_name' => $request->first_name,
+                'address1'  => $request->address1,
+                'phone'      => $request->phone,
+                'email'      => $request->email,
+            ],
+            [
                 'first_name' => 'required|personName',
-                'last_name' => 'required|personName',
-                'address1' => 'required|plainText',
-                'email' => 'nullable|email',
-                'phone' => 'nullable|phone',
-                'title' => 'nullable|plainText',
+                'last_name'  => 'nullable|personName',
+                'email'      => 'required|email',
+                'phone'      => 'required|text',
             ]
         );
+
         if ($validator->fails()) {
             if (!empty($this->returnTo)) {
                 return redirect()->to($this->returnTo)->with('error', $validator->messages()->first());
@@ -543,18 +548,21 @@ class ContactsController extends Controller
             }
         }
 
-        $inputs = $validator->safe()->all();
-        $inputs['contact_type_id'] = 18;      // General Contact
-        $inputs['related_to'] = $request->contact_id;
-
-        // address1,
-
-        $staff = Staff::create($inputs);
+        $staff = New Contact();
+        $staff->contact_type_id = 18;
+        $staff->first_name = $request->first_name;
+        $staff->address1  = $request->address1;
+        $staff->phone = $request->phone;
+        $staff->city = $request->city;
+        $staff->state = $request->state;
+        $staff->email = $request->email;
+        $staff->related_to = $contact->id;
+        $staff->save();
 
         if (!empty($this->returnTo)) {
-            return redirect()->to($this->returnTo)->with('success', $staff->full_name . ' added.');
+            return redirect()->to($this->returnTo)->with('success', 'Contact <b>' . $staff->full_name . '</b> added as staff to "' . $contact->full_name . '".');
         } else {
-            return redirect()->back()->with('success', $staff->full_name . ' added.');
+            return redirect()->back()->with('success', 'Contact <b>' . $staff->full_name . '</b> added as staff to "' . $contact->full_name . '".');
         }
     }
 

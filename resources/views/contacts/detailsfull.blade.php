@@ -35,7 +35,7 @@
                             <li class="nav-item">
                                 <a id="tab_link_staff" class="nav-link" data-toggle="tab" href="#staff" role="tab">
                                     <span class="d-block d-sm-none"><i class="far fa-envelope"></i></span>
-                                    <span class="d-none d-sm-block">Authorized Contact</span>
+                                    <span class="d-none d-sm-block">Authorized Contacts</span>
                                 </a>
                             </li>
                         @endif
@@ -170,14 +170,14 @@
                                                     <x-form-text
                                                         name="email"
                                                         class="check-contact"
-                                                        :params="['label' => 'Email', 'iconClass' => 'fas fa-envelope', 'required' => false]"
-                                                    ></x-form-text>
+                                                        :params="['label' => 'Email', 'iconClass' => 'fas fa-envelope', 'required' => true]"
+                                                    >{{$contact->email}}</x-form-text>
                                                 </div>
                                                 <div class="col-lg-3 col-md-4 col-sm-6 admin-form-item-widget">
                                                     <x-form-text
                                                         name="phone"
-                                                        :params="['label' => 'Phone', 'iconClass' => 'fas fa-phone', 'required' => false]"
-                                                    ></x-form-text>
+                                                        :params="['label' => 'Phone', 'iconClass' => 'fas fa-phone', 'required' => true]"
+                                                    >{{$contact->phone}}</x-form-text>
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -185,7 +185,7 @@
                                                     <x-form-text
                                                         name="address1"
                                                         :params="['label' => 'Address', 'iconClass' => 'fas fa-map-marker-alt', 'required' => true]"
-                                                    ></x-form-text>
+                                                    >{{$contact->address1}}</x-form-text>
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-6 admin-form-item-widget">
                                                     <x-form-text
@@ -194,16 +194,33 @@
                                                     ></x-form-text>
                                                 </div>
                                             </div>
+
                                             <div class="row">
-                                                <div class="col-lg-2">
+                                                <div class="col-lg-6 col-md-6 col-sm-6 admin-form-item-widget">
+                                                    <x-form-text
+                                                        name="city"
+                                                        :params="['label' => 'City', 'iconClass' => 'fas fa-map-marker-alt', 'required' => false]"
+                                                    >{{$contact->city}}</x-form-text>
+                                                </div>
+                                                <div class="col-lg-6 col-md-6 col-sm-6 admin-form-item-widget">
+                                                    <x-form-text
+                                                        name="state"
+                                                        :params="['label' => 'State', 'iconClass' => 'fas fa-circle', 'required' => false]"
+                                                    >{{$contact->state}}</x-form-text>
+                                                </div>
+
+
+
+                                                <div class="row">
+                                                <div class="col-lg-12">
                                                     <x-button
                                                         type="submit"
-                                                        class="btn-success"
-                                                    >
+                                                        class="btn-success">
                                                         <i class="fas fa-plus"></i>
-                                                        Add Authorized Contact
+                                                        Add Contact
                                                     </x-button>
                                                 </div>
+                                            </div>
                                             </div>
                                         </form>
                                     </div>
@@ -400,11 +417,11 @@
                         plainText: true
                     },
                     email: {
-                        required: false,
+                        required: true,
                         email: true
                     },
                     phone: {
-                        required: false,
+                        required: true,
                         phone: true
                     },
                 },
@@ -422,9 +439,11 @@
                         plainText: 'Invalid address.'
                     },
                     email: {
+                        required: "@lang('translation.field_required')",
                         email: 'Invalid email.'
                     },
                     phone: {
+                        required: "@lang('translation.field_required')",
                         phone: 'Invalid phone.'
                     },
                     title: {
