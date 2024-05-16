@@ -24,9 +24,15 @@ class LeadsController extends Controller
         $needle = $request->needle ?? null;
         $perPage = $request->perPage ?? 10;
         //don't show archived leads
-        $leads = Lead::search($needle)->sortable('status_id')->where('status_id', '<>', '4')->with(['status', 'assignedTo', 'previousAssignedTo', 'lastNote'])->paginate($perPage);
+        $showall = $request->showall ?? null;
+        if($showall){
+            $leads = Lead::search($needle)->sortable('status_id')->with(['status', 'assignedTo', 'previousAssignedTo', 'lastNote'])->paginate($perPage);
+        } else {
+            $leads = Lead::search($needle)->sortable('status_id')->where('status_id', '<>', '4')->with(['status', 'assignedTo', 'previousAssignedTo', 'lastNote'])->paginate($perPage);
+        }
 
         $data = [
+            'showall' => $showall,
             'leads'      => $leads,
             'managersCB' => User::managersCB(),
             'needle'     => $needle,

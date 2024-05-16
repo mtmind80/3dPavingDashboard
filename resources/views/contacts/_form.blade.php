@@ -65,7 +65,7 @@
 </div>
 <div class="row">
     <div class="col-lg-3 col-md-6 col-sm-6 admin-form-item-widget">
-        <x-form-check-box class="not-xs-mt10" name="same_billing_address" id="same_billing_address" value="1" checked="{{ !empty($contact->same_billing_address)  }}">Same Billing Address</x-form-check-box>
+        <x-form-check-box class="not-xs-mt10" name="same_billing_address" id="same_billing_address" value="1" checked="{{ !empty($contact->same_billing_address)  }}">Billing Address Same as Above</x-form-check-box>
     </div>
     <div class="col-lg-2 col-md-4 col-sm-4 admin-form-item-widget xs-hidden"></div>
 </div>

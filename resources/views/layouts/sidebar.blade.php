@@ -19,7 +19,7 @@
                 </li>
                 @if (auth()->user()->canHaveLeads())
                     <li class="leads-controller">
-                        <a href="{{ url('leads') }}" class="waves-effect index-function create-function edit-function show-function search-function">
+                                <a href="{{ url('leads') }}" class="waves-effect index-function create-function edit-function show-function search-function">
                             <i class="ri-chat-follow-up-line"></i>
                             <span>@if (auth()->user()->isSales()) @lang('translation.my') @endif
                                 @lang('translation.Leads')</span>

@@ -524,11 +524,22 @@ class ContactsController extends Controller
 
     public function addNewStaff(Contact $contact, Request $request)
     {
+
         $validator = \Validator::make(
-            $request->only(['staff_id']), [
-                'staff_id' => 'required|positive',
+            [
+                'first_name' => $request->first_name,
+                'address1'  => $request->address1,
+                'phone'      => $request->phone,
+                'email'      => $request->email,
+            ],
+            [
+                'first_name' => 'required|personName',
+                'last_name'  => 'nullable|personName',
+                'email'      => 'required|email',
+                'phone'      => 'required|text',
             ]
         );
+
         if ($validator->fails()) {
             if (!empty($this->returnTo)) {
                 return redirect()->to($this->returnTo)->with('error', $validator->messages()->first());
@@ -537,14 +548,14 @@ class ContactsController extends Controller
             }
         }
 
-        if (!$staff = Staff::find($request->staff_id)) {
-            if (!empty($this->returnTo)) {
-                return redirect()->to($this->returnTo)->with('error', 'Staff not found.');
-            } else {
-                return redirect()->back()->with('error', 'Staff not found.');
-            }
-        }
-
+        $staff = New Contact();
+        $staff->contact_type_id = 18;
+        $staff->first_name = $request->first_name;
+        $staff->address1  = $request->address1;
+        $staff->phone = $request->phone;
+        $staff->city = $request->city;
+        $staff->state = $request->state;
+        $staff->email = $request->email;
         $staff->related_to = $contact->id;
         $staff->save();
 

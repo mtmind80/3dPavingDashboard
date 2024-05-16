@@ -12,7 +12,6 @@
     @endcomponent
 
     <div class="row admin-form">
-
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
@@ -36,7 +35,7 @@
                             <li class="nav-item">
                                 <a id="tab_link_staff" class="nav-link" data-toggle="tab" href="#staff" role="tab">
                                     <span class="d-block d-sm-none"><i class="far fa-envelope"></i></span>
-                                    <span class="d-none d-sm-block">@lang('translation.staffs')</span>
+                                    <span class="d-none d-sm-block">Authorized Contacts</span>
                                 </a>
                             </li>
                         @endif
@@ -71,7 +70,6 @@
                                         <span class="fas fa-user"> </span> Related To: <a href ="{{route("contact_details",['contact' => $contact['related_to']])}}">{{ App\Models\Contact::find($contact['related_to'])->FullName }}</a>
                                     </div>
                                 @endif
-
                             </div>
                             <div class="row">
                                 <div class="col-lg-3 col-md-3 col-sm-6 admin-form-item-widget">
@@ -122,7 +120,15 @@
                             <div class="tab-pane" id="notes" role="tabpanel">
                                 <div class="row">
                                     <div class="col-md-8 col-sm-6 mb20">
-                                        <x-href-button id="add_note_button" class="btn-success" data-route="{{ route('contact_note_store') }}" data-id="{{ $contact->id }}" data-contact_name="{{ $contact->full_name }}"><i class="fas fa-plus"></i>@lang('translation.add')</x-href-button>
+                                        <x-href-button
+                                            id="add_note_button" class="btn-success"
+                                            data-route="{{ route('contact_note_store') }}"
+                                            data-id="{{ $contact->id }}"
+                                            data-contact_name="{{ $contact->full_name }}"
+                                        >
+                                            <i class="fas fa-plus"></i>
+                                            @lang('translation.add')
+                                        </x-href-button>
                                     </div>
                                     <div class="col-md-4 col-sm-6 mb20"></div>
                                 </div>
@@ -138,29 +144,91 @@
                         @endif
                         @if (!empty($contact->staff))
                             <div class="tab-pane" id="staff" role="tabpanel">
-                                <div class="row">
-                                    <div class="col-lg-10 col-md-12 col-sm-12 mb20">
-                                        <div class="form-group select2-wraper">
-                                            <form method="POST" action="{{ route('contact_add_new_staff', ['contact' => $contact->id]) }}" accept-charset="UTF-8" id="addStaffForm" class="admin-form">
-                                                @csrf
-                                                <input type="hidden" name="returnTo" value="{{ Request::url() }}">
-                                                <input type="hidden" name="tab" value="staff">
-                                                @include('contacts._add_staff_form')
-       </div>
+                                <div class="row mb10">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 mb20">
+                                        <form method="POST" action="{{ route('contact_add_new_staff', ['contact' => $contact->id]) }}" accept-charset="UTF-8" id="addStaffForm" class="admin-form">
+                                            @csrf
+                                            <input type="hidden" name="contact_id" value="{{ $contact->id }}">
+                                            <input type="hidden" name="returnTo" value="{{ $returnTo ?? null }}">
+                                            <input type="hidden" name="tab" value="{{ $tabSelected ?? null }}">
+                                            <div class="row">
+                                                <div class="col-lg-3 col-md-6 col-sm-6 admin-form-item-widget">
+                                                    <x-form-text
+                                                        name="first_name"
+                                                        class="check-contact"
+                                                        :params="['label' => 'First Name', 'iconClass' => 'fas fa-user', 'required' => true]"
+                                                    ></x-form-text>
+                                                </div>
+                                                <div class="col-lg-3 col-md-6 col-sm-6 admin-form-item-widget">
+                                                    <x-form-text
+                                                        name="last_name"
+                                                        class="check-contact"
+                                                        :params="['label' => 'Last Name', 'iconClass' => 'fas fa-user', 'required' => true]"
+                                                    ></x-form-text>
+                                                </div>
+                                                <div class="col-lg-3 col-md-4 col-sm-6 admin-form-item-widget">
+                                                    <x-form-text
+                                                        name="email"
+                                                        class="check-contact"
+                                                        :params="['label' => 'Email', 'iconClass' => 'fas fa-envelope', 'required' => true]"
+                                                    >{{$contact->email}}</x-form-text>
+                                                </div>
+                                                <div class="col-lg-3 col-md-4 col-sm-6 admin-form-item-widget">
+                                                    <x-form-text
+                                                        name="phone"
+                                                        :params="['label' => 'Phone', 'iconClass' => 'fas fa-phone', 'required' => true]"
+                                                    >{{$contact->phone}}</x-form-text>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-6 col-md-6 col-sm-6 admin-form-item-widget">
+                                                    <x-form-text
+                                                        name="address1"
+                                                        :params="['label' => 'Address', 'iconClass' => 'fas fa-map-marker-alt', 'required' => true]"
+                                                    >{{$contact->address1}}</x-form-text>
+                                                </div>
+                                                <div class="col-lg-6 col-md-6 col-sm-6 admin-form-item-widget">
+                                                    <x-form-text
+                                                        name="title"
+                                                        :params="['label' => 'Title', 'iconClass' => 'fas fa-circle', 'required' => false]"
+                                                    ></x-form-text>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-lg-6 col-md-6 col-sm-6 admin-form-item-widget">
+                                                    <x-form-text
+                                                        name="city"
+                                                        :params="['label' => 'City', 'iconClass' => 'fas fa-map-marker-alt', 'required' => false]"
+                                                    >{{$contact->city}}</x-form-text>
+                                                </div>
+                                                <div class="col-lg-6 col-md-6 col-sm-6 admin-form-item-widget">
+                                                    <x-form-text
+                                                        name="state"
+                                                        :params="['label' => 'State', 'iconClass' => 'fas fa-circle', 'required' => false]"
+                                                    >{{$contact->state}}</x-form-text>
+                                                </div>
+
+
+
+                                                <div class="row">
+                                                <div class="col-lg-12">
+                                                    <x-button
+                                                        type="submit"
+                                                        class="btn-success">
+                                                        <i class="fas fa-plus"></i>
+                                                        Add Contact
+                                                    </x-button>
+                                                </div>
+                                            </div>
+                                            </div>
+                                        </form>
                                     </div>
-                                    <div class="col-lg-2 mb20">
-
-                                        <x-button id="attach_staff" type="submit" class="btn-success"><i class="fas fa-plus"></i>@lang('translation.add') @lang('translation.staff')</x-button>
-
-
-                                    </div>
-                                    </form>
-
                                 </div>
                                 <table class="list-table table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                     <thead>
                                     <tr>
-                                        <th class="tc w120">Name</th>
+                                        <th class="tc w220">Name</th>
                                         <th class="tc w280">Address</th>
                                         <th class="tc w120">Phones</th>
                                         <th class="tc w140">Emails</th>
@@ -202,8 +270,6 @@
                                     </div>
                                     <div class="col-md-4 col-sm-6 mb20"></div>
                                 </div>
-
-
                                 <table class="list-table table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                     <thead>
                                         <tr>
@@ -246,13 +312,13 @@
     @include('modals.form_note_modal')
 @stop
 
-@section('css')
-    <link href="{{ URL::asset('/assets/libs/select2/select2.min.css')}}" rel="stylesheet" type="text/css" />
-@endsection
+@section('css-files')
+    <link href="{{ URL::asset('/assets/libs/select2/select2.min.css') }}" rel="stylesheet">
+@stop
 
-@section('script')
+@section('js-plugin-files')
     <script src="{{ URL::asset('/assets/libs/select2/select2.min.js')}}"></script>
-@endsection
+@stop
 
 @section('page-js')
     <script>
@@ -278,7 +344,7 @@
             var formFieldTab = $('#form_note_modal_tab');
             var formFieldContactId = $('#form_note_contact_id');
 
-            $('#add_note_button').on('click', function(){
+            $('#add_note_button').click(function(){
                 let el = $(this);
                 let contactNameContainer = $('#formNoteModalLabel').find('span');
                 let url = el.data('route');
@@ -338,16 +404,51 @@
 
             addStaffForm.validate({
                 rules: {
-                    staff_id: {
-                        required : true,
-                        positive: true
-                    }
+                    first_name: {
+                        required: true,
+                        personName: true
+                    },
+                    last_name: {
+                        required: false,
+                        personName: true
+                    },
+                    address1: {
+                        required: true,
+                        plainText: true
+                    },
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    phone: {
+                        required: true,
+                        phone: true
+                    },
                 },
                 messages: {
-                    staff_id: {
+                    first_name: {
                         required: "@lang('translation.field_required')",
-                        positive: "@lang('translation.select_item')"
-                    }
+                        personName: "@lang('translation.invalid_entry')"
+                    },
+                    last_name: {
+                        required: "@lang('translation.field_required')",
+                        personName: 'Invalid last name.'
+                    },
+                    address1: {
+                        required: "@lang('translation.field_required')",
+                        plainText: 'Invalid address.'
+                    },
+                    email: {
+                        required: "@lang('translation.field_required')",
+                        email: 'Invalid email.'
+                    },
+                    phone: {
+                        required: "@lang('translation.field_required')",
+                        phone: 'Invalid phone.'
+                    },
+                    title: {
+                        plainText: 'Invalid title.'
+                    },
                 },
                 submitHandler: function(form){
                     console.log('en form');

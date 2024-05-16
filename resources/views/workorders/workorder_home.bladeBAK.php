@@ -27,7 +27,7 @@
             <a href="/dashboard">@lang('translation.Dashboard')</a>
         @endslot
         @slot('li_2')
-            <a href="/proposals">@lang('translation.menu_workorders')</a>
+            <a href="/workorders">@lang('translation.menu_workorders')</a>
         @endslot
     @endcomponent
 

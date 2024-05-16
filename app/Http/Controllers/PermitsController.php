@@ -67,7 +67,6 @@ class PermitsController extends Controller
 
         }
 
-
         //dd($permits);
         $counties = DB::table('counties')->groupBy('county')->get(['county']);
 
@@ -167,10 +166,11 @@ class PermitsController extends Controller
         }
 
         //("submitted_on") = '1/1/2024';
-
+        $citiesCB = ['0'=>'Select a County'];
         $countiesCB = County::countiesCB();
-        $citiesCB = County::citiesCB($permit->county);
-
+        if($permit) {
+            $citiesCB = County::citiesCB($permit->county);
+        }
         $data = [
             'permit' => $permit,
             'statusCB' => $this->statusCB,

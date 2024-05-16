@@ -42,6 +42,7 @@ class CreateProposalDetailsTable extends Migration
             $table->double('profit')->nullable()->default(0);
             $table->double('days')->unsigned()->nullable()->default(0);
             $table->double('cost_per_day')->unsigned()->nullable()->default(0);
+            $table->string('materials_name', 50)->nullable();
             $table->double('break_even')->nullable()->default(0);
             $table->double('primer')->unsigned()->nullable()->default(0);
             $table->double('yield')->unsigned()->nullable()->default(0);

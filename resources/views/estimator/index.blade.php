@@ -51,6 +51,8 @@
             <input type="hidden" name="profit" id="x_profit" value="{{ $proposalDetail->profit }}">
             <input type="hidden" name="days" id="x_days" value="{{ $proposalDetail->days }}">
             <input type="hidden" name="cost_per_day" id="x_cost_per_day" value="{{ $proposalDetail->cost_per_day }}">
+            <input type="hidden" name="materials_name" id="x_materials_name" value="{{ $proposalDetail->materials_name }}">
+
             <input type="hidden" name="break_even" id="x_break_even" value="{{ $proposalDetail->break_even }}">
             <input type="hidden" name="bill_after" id="x_bill_after" value="{{ $proposalDetail->bill_after }}">
             <input type="hidden" name="proposal_text" id="x_proposal_text" value="{{ $proposalDetail->proposal_text }}">

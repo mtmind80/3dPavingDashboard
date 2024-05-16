@@ -308,7 +308,7 @@ class Proposal extends Model
 
     public function getWorkOrderNumberAttribute()
     {
-        $pieces = explode(":", $this->job_master_id);
+        $pieces = explode(":", $this->job_master_id ?? '');
         if (count($pieces) == 3) {
             return $pieces[0] . '-' . $pieces[1] . '-' . str_pad($pieces[2], 5, "0", STR_PAD_LEFT);
         }
