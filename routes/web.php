@@ -511,7 +511,7 @@ Route::group(['prefix' => 'contacts'], function() {
 
     Route::post('/detach-from-company', 'ContactsController@detachFromCompany')->name('contact_detach_from_company');
     Route::post('/{contact}/add-staff', 'ContactsController@addStaff')->name('contact_add_staff');
-    Route::post('/{contact}/add-newstaff', 'ContactsController@addNewStaff')->name('contact_add_new_staff');
+    Route::post('/add-newstaff', 'ContactsController@addNewStaff')->name('contact_add_new_staff');
     Route::post('/{contact}/remove-staff', 'ContactsController@removeStaff')->name('contact_remove_staff');
 
     //soft delete contact
