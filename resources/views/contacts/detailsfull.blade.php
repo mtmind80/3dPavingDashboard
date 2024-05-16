@@ -35,7 +35,7 @@
                             <li class="nav-item">
                                 <a id="tab_link_staff" class="nav-link" data-toggle="tab" href="#staff" role="tab">
                                     <span class="d-block d-sm-none"><i class="far fa-envelope"></i></span>
-                                    <span class="d-none d-sm-block">Authorized Contact</span>
+                                    <span class="d-none d-sm-block">Authorized Contacts</span>
                                 </a>
                             </li>
                         @endif
@@ -220,6 +220,7 @@
                                                         Add Contact
                                                     </x-button>
                                                 </div>
+                                            </div>
                                             </div>
                                         </form>
                                     </div>
