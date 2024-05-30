@@ -34,9 +34,9 @@
                     </div>
 
                 </div>
-
+<div class="row p10">
             {{ $datum->links() }}
-            
+</div>
             <table id='usertable' class="list-table table table-bordered dt-responsive nowrap"
                    style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                 <thead>
@@ -49,7 +49,7 @@
                     @endforeach
                 </thead>
                 </tr>
-                
+
                 @foreach ($datum as $data)
                     <tr @if(!$data['status']) class="alert-danger" @endif >
                         <td id="tooltip-container8">

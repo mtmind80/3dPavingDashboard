@@ -17,7 +17,7 @@ class UserController extends Controller
         parent::__construct();
 
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -120,6 +120,8 @@ class UserController extends Controller
     {
         // edit form for user
         $data['id'] = $id;
+        $languageAry = ['en' => 'English', 'es' => 'Spanish'];
+        $data['languageAry'] = $languageAry;
         $data['record'] = User::find($id)->toArray();
         return view('users.edit', $data);
 
@@ -134,11 +136,11 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        
+
         //save update
-        //save new 
+        //save new
         $data = $request->all();
-        
+
         $saveuser['fname'] = $data['fname'];
         $saveuser['lname'] = $data['lname'];
         $saveuser['email'] = $data['email'];
@@ -156,12 +158,43 @@ class UserController extends Controller
         $user->update($saveuser);
 
         \Session::flash('info', 'Your record was updated!');
-    
+
         return redirect()->route('users');
 
-    
-}
 
+    }
+
+
+    public function updatepassword(Request $request, $id)
+    {
+
+        $validator = \Validator::make(
+            [
+                'password' => $request->password,
+            ],
+            [
+                'password' => 'required|text',
+            ]
+        );
+
+        if ($validator->fails()) {
+
+            \Session::flash('info', $validator->messages()->first());
+
+        } else {
+
+            //save update
+            $data = $request->all();
+            $saveuser['password'] = Hash::make($data['password']);
+            $user = User::find($id);
+            $user->update($saveuser);
+
+            \Session::flash('info', 'Your record was updated!');
+        }
+        return redirect()->route('edit_user',['id'=>$id]);
+
+
+    }
     /**
      * Add the specified resource to storage.
      *
@@ -170,7 +203,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //save new 
+        //save new
         $data = $request->all();
         $saveuser['password'] = Hash::make($data['password']);
         $saveuser['fname'] = $data['fname'];
@@ -187,7 +220,7 @@ class UserController extends Controller
 
         $user = User::where('email', '=', $saveuser['email'])->first();
 
-        if($user === null) {
+        if ($user === null) {
             $user = new User();
             $user->create($saveuser);
             \Session::flash('info', 'A new employee was created!');
@@ -226,5 +259,5 @@ class UserController extends Controller
         return $this->indexAll($request);
     }
 
-    
+
 }

@@ -29,27 +29,27 @@
                       id="newform">
                     <input type="hidden" name="status" value="1">
                     @csrf
-                    
+
                     <div class="row">
                         <div class="form-group col-lg-6">
                             <label>@lang('translation.fname')</label>
-                            <input name="fname" id="fname" size='34' 
-                                   data-parsley-type="alphanum" 
+                            <input name="fname" id="fname" size='34'
+                                   data-parsley-type="alphanum"
                                    data-parsley-required="true" type="text"
                                    class="form-control" placeholder="First Name"
                                    value="">
                         </div>
                         <div class="form-group col-lg-6">
                             <label>@lang('translation.lname')</label>
-                            <input name="lname" id="lname" size='34'  
-                                   data-parsley-type="alphanum" 
+                            <input name="lname" id="lname" size='34'
+                                   data-parsley-type="alphanum"
                                    data-parsley-required="true"
                                    type="text"
                                    class="form-control" placeholder="Last name"
                                    value="">
                         </div>
                     </div>
-                    
+
                     <div class="row">
                         <div class="form-group col-lg-6">
                             <label>@lang('translation.email')</label>
@@ -61,7 +61,7 @@
                         </div>
                         <div class="form-group col-lg-6">
                             <label>@lang('translation.phone')</label>
-                            <input name="phone" id="phone" data-parsley-type="number" 
+                            <input name="phone" id="phone" data-parsley-type="number"
                                    size='24' type="text"
                                    data-parsley-required="true"
                                    class="form-control" placeholder="Phone"
@@ -98,8 +98,7 @@
                         </div>
 
                     </div>
-
-                    <div class="row">
+                     <div class="row">
                         <div class="form-group col-lg-6">
                             <label>@lang('translation.password')</label>
                             <input name="password" id="password" size='34'
@@ -135,7 +134,7 @@
 
             </div>
 
-            
+
     </div>
 
     </div>
@@ -153,7 +152,7 @@
                 return true;
 
             });
-            
+
 
             $("#submitbutton").click(function (event) {
                 form = $("#newform");
@@ -177,11 +176,11 @@
                     return;
 
                 }
-                
+
                 form.submit();
                 return;
 
-                
+
             }
 
 

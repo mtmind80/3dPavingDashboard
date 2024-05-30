@@ -219,6 +219,8 @@ Route::group(['prefix' => 'users'], function() {
     //update user
     Route::post('/updateuser/{id}', 'UserController@update')->name('update_user');
 
+    Route::post('/updatepassword/{id}', 'UserController@updatepassword')->name('update_password');
+
 });
 /** END users */
 //contractors

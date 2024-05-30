@@ -32,23 +32,23 @@
                     <div class="row">
                         <div class="form-group col-lg-6">
                             <label><span style="color:red;">*</span> @lang('translation.fname')</label>
-                            <input name="fname" id="fname" size='34' 
-                                   data-parsley-type="alphanum" 
+                            <input name="fname" id="fname" size='34'
+                                   data-parsley-type="alphanum"
                                    data-parsley-required="true" type="text"
                                    class="form-control" placeholder="First Name"
                                    value="{{ $record['fname'] }}">
                         </div>
                         <div class="form-group col-lg-6">
                             <label><span style="color:red;">*</span> @lang('translation.lname')</label>
-                            <input name="lname" id="lname" size='34'  
-                                   data-parsley-type="alphanum" 
+                            <input name="lname" id="lname" size='34'
+                                   data-parsley-type="alphanum"
                                    data-parsley-required="true"
                                    type="text"
                                    class="form-control" placeholder="Last name"
                                    value="{{ $record['lname'] }}">
                         </div>
                     </div>
-                    
+
                     <div class="row">
                         <div class="form-group col-lg-6">
                             <label><span style="color:red;">*</span> @lang('translation.email')</label>
@@ -60,7 +60,7 @@
                         </div>
                         <div class="form-group col-lg-6">
                             <label><span style="color:red;">*</span> @lang('translation.phone')</label>
-                            <input name="phone" id="phone"  
+                            <input name="phone" id="phone"
                                    size='24' type="text"
                                    data-parsley-required="true"
                                    class="form-control" placeholder="Phone"
@@ -91,7 +91,7 @@
                             <label>@lang('translation.language')</label>
                             <select name="language" id="language"
                                     class="form-control" >
-                                <option value="{{ $record['language'] }}" selected>{{ $record['language'] }}</option>
+                                <option value="{{ $record['language'] }}" selected>{{ $languageAry[$record['language']] }}</option>
                                 <option value="en">English</option>
                                 <option value="es">Spanish</option>
                             </select>
@@ -103,7 +103,7 @@
                         <div class="form-group col-lg-3">
                             <label>@lang('translation.active')</label>
                             <input name="status" id="2status"
-                                   type="checkbox" 
+                                   type="checkbox"
                                    class="form-control"
                                    value="1"
                             @if($record['status'])
@@ -124,7 +124,7 @@
                                        data-parsley-type="number"
                                        class="form-control input-sm" placeholder="Sales Goals"
                                        value="{{ $record['sales_goals'] }}">
-                            
+
                         </div>
 
                     </div>
@@ -148,8 +148,29 @@
 
             </div>
 
-            
-    </div>
+
+            <div class="card-body">
+                <form class="custom-validation"
+                      action="{{ route('update_password',['id'=>$id]) }}" novalidate=""
+                      method="POST"
+                      id="newpassform">
+                    @csrf
+                    <input type="hidden" name="id" id="id" value="$id">
+
+                <div class="row">
+                    <div class="form-group col-lg-6">
+                        <label>Change @lang('translation.password')</label>
+                        <input name="password" id="password" size='34'
+                               type="text"
+                               class="form-control" placeholder="New Password"
+                               value="">
+                    </div>
+                    <div class="form-group col-lg-6">
+                            <button type="button" id='submitbutton2'
+                                    class="btn btn-primary waves-effect waves-light m20 ">Change Password
+                            </button>
+                    </div>
+                </div>
 
     </div>
 
@@ -161,15 +182,22 @@
         $(document).ready(function () {
 
 
+
             $("#cancelbutton").click(function (event) {
                 window.location.href='{{route('users')}}';
                 return true;
 
             });
-            
+
             $("#submitbutton").click(function (event) {
                 form = $("#newform");
                 checkit(form);
+
+            });
+
+            $("#submitbutton2").click(function (event) {
+                form = $("#newpassform");
+                checkit2(form);
 
             });
 
@@ -189,11 +217,24 @@
                     return;
 
                 }
-                
+
                 form.submit();
                 return;
 
-                
+
+            }
+
+            function checkit2(form) {
+
+                password = $("#password").val();
+                if (password == '' || password.length < 8) {
+                    alert("You must fill in a password at least 8 characters long");
+                    return;
+                }
+                form.submit();
+                return;
+
+
             }
 
 
