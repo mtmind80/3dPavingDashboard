@@ -55,7 +55,7 @@
                             </tr>
                         @else
                             @foreach ($permits as $permit)
-                                @if (date($permit->expires_on,strtotime("-1 days")) <= date('Y-m-d',strtotime("+1 days")) )
+                                @if (strtotime($permit->expires_on) <= strtotime(date('Y-m-d')) )
                                     <tr class="alert-danger">
                                 @else
                                     <tr>
@@ -64,6 +64,7 @@
                                         <td class="tc"><a
                                                 href="{{route('permit_show',['permit'=>$permit->id])}}">{{ $permit->name }}</a>
                                             <br/>{{ $permit->job_master_id }}
+
                                         </td>
                                         <td class="tc">{{ $permit->county }}</td>
                                         <td class="tc text-dark fw-bold">{{ $permit->city }}</td>
@@ -72,7 +73,7 @@
                                         <td class="tc">
                                             {{ $permit->status }}
                                             <br/>
-                                            {{ $permit->expires_on }}
+                                            Expires:{{ $permit->expires_on }}
                                         </td>
                                         <td class="centered actions">
                                             <ul class="nav navbar-nav">
