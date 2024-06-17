@@ -187,7 +187,7 @@
                             console.log('Critical error has occurred.');
                         } else if (response.success) {
                             let data = response.data;
-                            let html = '';
+                            let html = '<option>NA</option>';
 
                             $.each(data, function(key, value){
                                 html += '<option>'+ value +'</option>';
