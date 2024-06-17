@@ -201,6 +201,7 @@
                     let errors = false;
 
                     if (!errors) {
+                        $("#submitme").prop("disabled",true);
                         managersForm.submit();
                     }
                 }

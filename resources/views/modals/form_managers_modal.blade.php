@@ -25,7 +25,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light waves-effect" data-dismiss="modal">@lang('translation.close')</button>
-                    <button type="submit" class="btn btn-dark waves-effect waves-light">@lang('translation.assign')</button>
+                    <button type="submit" id='submitme' class="btn btn-dark waves-effect waves-light">@lang('translation.assign')</button>
                 </div>
             </form>
         </div>
