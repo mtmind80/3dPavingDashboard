@@ -38,6 +38,8 @@ class ChromeOsDevice extends \Google\Collection
    * @var string
    */
   public $autoUpdateExpiration;
+  protected $backlightInfoType = BacklightInfo::class;
+  protected $backlightInfoDataType = 'array';
   /**
    * @var string
    */
@@ -56,6 +58,10 @@ class ChromeOsDevice extends \Google\Collection
    * @var string
    */
   public $deviceId;
+  /**
+   * @var string
+   */
+  public $deviceLicenseType;
   protected $diskVolumeReportsType = ChromeOsDeviceDiskVolumeReports::class;
   protected $diskVolumeReportsDataType = 'array';
   /**
@@ -242,6 +248,20 @@ class ChromeOsDevice extends \Google\Collection
     return $this->autoUpdateExpiration;
   }
   /**
+   * @param BacklightInfo[]
+   */
+  public function setBacklightInfo($backlightInfo)
+  {
+    $this->backlightInfo = $backlightInfo;
+  }
+  /**
+   * @return BacklightInfo[]
+   */
+  public function getBacklightInfo()
+  {
+    return $this->backlightInfo;
+  }
+  /**
    * @param string
    */
   public function setBootMode($bootMode)
@@ -324,6 +344,20 @@ class ChromeOsDevice extends \Google\Collection
   public function getDeviceId()
   {
     return $this->deviceId;
+  }
+  /**
+   * @param string
+   */
+  public function setDeviceLicenseType($deviceLicenseType)
+  {
+    $this->deviceLicenseType = $deviceLicenseType;
+  }
+  /**
+   * @return string
+   */
+  public function getDeviceLicenseType()
+  {
+    return $this->deviceLicenseType;
   }
   /**
    * @param ChromeOsDeviceDiskVolumeReports[]

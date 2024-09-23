@@ -43,6 +43,7 @@ class AdvertisersTargetingTypesAssignedTargetingOptions extends \Google\Service\
    * @param AssignedTargetingOption $postBody
    * @param array $optParams Optional parameters.
    * @return AssignedTargetingOption
+   * @throws \Google\Service\Exception
    */
   public function create($advertiserId, $targetingType, AssignedTargetingOption $postBody, $optParams = [])
   {
@@ -63,6 +64,7 @@ class AdvertisersTargetingTypesAssignedTargetingOptions extends \Google\Service\
    * targeting option to delete.
    * @param array $optParams Optional parameters.
    * @return DisplayvideoEmpty
+   * @throws \Google\Service\Exception
    */
   public function delete($advertiserId, $targetingType, $assignedTargetingOptionId, $optParams = [])
   {
@@ -85,6 +87,7 @@ class AdvertisersTargetingTypesAssignedTargetingOptions extends \Google\Service\
    * option being requested.
    * @param array $optParams Optional parameters.
    * @return AssignedTargetingOption
+   * @throws \Google\Service\Exception
    */
   public function get($advertiserId, $targetingType, $assignedTargetingOptionId, $optParams = [])
   {
@@ -105,13 +108,15 @@ class AdvertisersTargetingTypesAssignedTargetingOptions extends \Google\Service\
    * @param array $optParams Optional parameters.
    *
    * @opt_param string filter Allows filtering by assigned targeting option
-   * properties. Supported syntax: * Filter expressions are made up of one or more
-   * restrictions. * Restrictions can be combined by the logical operator `OR`. *
-   * A restriction has the form of `{field} {operator} {value}`. * The operator
-   * must be `EQUALS (=)`. * Supported fields: - `assignedTargetingOptionId`
-   * Examples: * AssignedTargetingOption with ID 123456
-   * `assignedTargetingOptionId="123456"` The length of this field should be no
-   * more than 500 characters.
+   * fields. Supported syntax: * Filter expressions are made up of one or more
+   * restrictions. * Restrictions can be combined by the `OR` logical operator. *
+   * A restriction has the form of `{field} {operator} {value}`. * All fields must
+   * use the `EQUALS (=)` operator. Supported fields: *
+   * `assignedTargetingOptionId` Examples: * `AssignedTargetingOption` with ID
+   * 123456: `assignedTargetingOptionId="123456"` The length of this field should
+   * be no more than 500 characters. Reference our [filter `LIST`
+   * requests](/display-video/api/guides/how-tos/filters) guide for more
+   * information.
    * @opt_param string orderBy Field by which to sort the list. Acceptable values
    * are: * `assignedTargetingOptionId` (default) The default sorting order is
    * ascending. To specify descending order for a field, a suffix "desc" should be
@@ -124,6 +129,7 @@ class AdvertisersTargetingTypesAssignedTargetingOptions extends \Google\Service\
    * the previous call to `ListAdvertiserAssignedTargetingOptions` method. If not
    * specified, the first page of results will be returned.
    * @return ListAdvertiserAssignedTargetingOptionsResponse
+   * @throws \Google\Service\Exception
    */
   public function listAdvertisersTargetingTypesAssignedTargetingOptions($advertiserId, $targetingType, $optParams = [])
   {

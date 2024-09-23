@@ -117,6 +117,13 @@ class VitalsErrorsIssues extends \Google\Service\Resource
    * would be represented as { seconds: -14400 }.
    * @opt_param int interval.startTime.year Optional. Year of date. Must be from 1
    * to 9999, or 0 if specifying a datetime without a year.
+   * @opt_param string orderBy Specifies a field that will be used to order the
+   * results. ** Supported dimensions:** * `errorReportCount`: Orders issues by
+   * number of error reports. * `distinctUsers`: Orders issues by number of unique
+   * affected users. ** Supported operations:** * `asc` for ascending order. *
+   * `desc` for descending order. Format: A field and an operation, e.g.,
+   * `errorReportCount desc` *Note:* currently only one field is supported at a
+   * time.
    * @opt_param int pageSize The maximum number of error issues to return. The
    * service may return fewer than this value. If unspecified, at most 50 error
    * issues will be returned. The maximum value is 1000; values above 1000 will be
@@ -125,7 +132,11 @@ class VitalsErrorsIssues extends \Google\Service\Resource
    * Provide this to retrieve the subsequent page. When paginating, all other
    * parameters provided to the request must match the call that provided the page
    * token.
+   * @opt_param int sampleErrorReportLimit Optional. Number of sample error
+   * reports to return per ErrorIssue. If unspecified, 0 will be used. *Note:*
+   * currently only 0 and 1 are supported.
    * @return GooglePlayDeveloperReportingV1beta1SearchErrorIssuesResponse
+   * @throws \Google\Service\Exception
    */
   public function search($parent, $optParams = [])
   {

@@ -19,6 +19,10 @@ namespace Google\Service\DatabaseMigrationService;
 
 class MigrationJob extends \Google\Model
 {
+  /**
+   * @var string
+   */
+  public $cmekKeyName;
   protected $conversionWorkspaceType = ConversionWorkspaceInfo::class;
   protected $conversionWorkspaceDataType = '';
   /**
@@ -63,6 +67,8 @@ class MigrationJob extends \Google\Model
    * @var string
    */
   public $name;
+  protected $performanceConfigType = PerformanceConfig::class;
+  protected $performanceConfigDataType = '';
   /**
    * @var string
    */
@@ -75,6 +81,8 @@ class MigrationJob extends \Google\Model
   public $source;
   protected $sourceDatabaseType = DatabaseType::class;
   protected $sourceDatabaseDataType = '';
+  protected $sqlserverHomogeneousMigrationJobConfigType = SqlServerHomogeneousMigrationJobConfig::class;
+  protected $sqlserverHomogeneousMigrationJobConfigDataType = '';
   /**
    * @var string
    */
@@ -92,6 +100,20 @@ class MigrationJob extends \Google\Model
   protected $vpcPeeringConnectivityType = VpcPeeringConnectivity::class;
   protected $vpcPeeringConnectivityDataType = '';
 
+  /**
+   * @param string
+   */
+  public function setCmekKeyName($cmekKeyName)
+  {
+    $this->cmekKeyName = $cmekKeyName;
+  }
+  /**
+   * @return string
+   */
+  public function getCmekKeyName()
+  {
+    return $this->cmekKeyName;
+  }
   /**
    * @param ConversionWorkspaceInfo
    */
@@ -275,6 +297,20 @@ class MigrationJob extends \Google\Model
     return $this->name;
   }
   /**
+   * @param PerformanceConfig
+   */
+  public function setPerformanceConfig(PerformanceConfig $performanceConfig)
+  {
+    $this->performanceConfig = $performanceConfig;
+  }
+  /**
+   * @return PerformanceConfig
+   */
+  public function getPerformanceConfig()
+  {
+    return $this->performanceConfig;
+  }
+  /**
    * @param string
    */
   public function setPhase($phase)
@@ -329,6 +365,20 @@ class MigrationJob extends \Google\Model
   public function getSourceDatabase()
   {
     return $this->sourceDatabase;
+  }
+  /**
+   * @param SqlServerHomogeneousMigrationJobConfig
+   */
+  public function setSqlserverHomogeneousMigrationJobConfig(SqlServerHomogeneousMigrationJobConfig $sqlserverHomogeneousMigrationJobConfig)
+  {
+    $this->sqlserverHomogeneousMigrationJobConfig = $sqlserverHomogeneousMigrationJobConfig;
+  }
+  /**
+   * @return SqlServerHomogeneousMigrationJobConfig
+   */
+  public function getSqlserverHomogeneousMigrationJobConfig()
+  {
+    return $this->sqlserverHomogeneousMigrationJobConfig;
   }
   /**
    * @param string
