@@ -23,10 +23,6 @@ class TravelFlightsAirlineConfig extends \Google\Collection
   /**
    * @var string
    */
-  public $adwordsCid;
-  /**
-   * @var string
-   */
   public $alliance;
   protected $baggageCarryonLimitationsUrlsType = TravelFlightsNameCatalogProto::class;
   protected $baggageCarryonLimitationsUrlsDataType = '';
@@ -48,6 +44,8 @@ class TravelFlightsAirlineConfig extends \Google\Collection
    * @var string[]
    */
   public $fqtvPartnerCode;
+  protected $greenFaresInfoType = TravelFlightsAirlineConfigGreenFaresInfo::class;
+  protected $greenFaresInfoDataType = '';
   /**
    * @var string
    */
@@ -76,6 +74,8 @@ class TravelFlightsAirlineConfig extends \Google\Collection
   public $popularity;
   protected $shortNamesType = TravelFlightsNameCatalogProto::class;
   protected $shortNamesDataType = '';
+  protected $sustainabilityProgramUrlsType = TravelFlightsNameCatalogProto::class;
+  protected $sustainabilityProgramUrlsDataType = '';
   /**
    * @var string
    */
@@ -85,20 +85,6 @@ class TravelFlightsAirlineConfig extends \Google\Collection
   protected $waiverSummaryUrlsType = TravelFlightsNameCatalogProto::class;
   protected $waiverSummaryUrlsDataType = '';
 
-  /**
-   * @param string
-   */
-  public function setAdwordsCid($adwordsCid)
-  {
-    $this->adwordsCid = $adwordsCid;
-  }
-  /**
-   * @return string
-   */
-  public function getAdwordsCid()
-  {
-    return $this->adwordsCid;
-  }
   /**
    * @param string
    */
@@ -210,6 +196,20 @@ class TravelFlightsAirlineConfig extends \Google\Collection
   public function getFqtvPartnerCode()
   {
     return $this->fqtvPartnerCode;
+  }
+  /**
+   * @param TravelFlightsAirlineConfigGreenFaresInfo
+   */
+  public function setGreenFaresInfo(TravelFlightsAirlineConfigGreenFaresInfo $greenFaresInfo)
+  {
+    $this->greenFaresInfo = $greenFaresInfo;
+  }
+  /**
+   * @return TravelFlightsAirlineConfigGreenFaresInfo
+   */
+  public function getGreenFaresInfo()
+  {
+    return $this->greenFaresInfo;
   }
   /**
    * @param string
@@ -336,6 +336,20 @@ class TravelFlightsAirlineConfig extends \Google\Collection
   public function getShortNames()
   {
     return $this->shortNames;
+  }
+  /**
+   * @param TravelFlightsNameCatalogProto
+   */
+  public function setSustainabilityProgramUrls(TravelFlightsNameCatalogProto $sustainabilityProgramUrls)
+  {
+    $this->sustainabilityProgramUrls = $sustainabilityProgramUrls;
+  }
+  /**
+   * @return TravelFlightsNameCatalogProto
+   */
+  public function getSustainabilityProgramUrls()
+  {
+    return $this->sustainabilityProgramUrls;
   }
   /**
    * @param string

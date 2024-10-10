@@ -33,6 +33,14 @@ class GceInstance extends \Google\Collection
    */
   public $disablePublicIpAddresses;
   /**
+   * @var bool
+   */
+  public $disableSsh;
+  /**
+   * @var bool
+   */
+  public $enableNestedVirtualization;
+  /**
    * @var string
    */
   public $machineType;
@@ -48,6 +56,10 @@ class GceInstance extends \Google\Collection
    * @var string
    */
   public $serviceAccount;
+  /**
+   * @var string[]
+   */
+  public $serviceAccountScopes;
   protected $shieldedInstanceConfigType = GceShieldedInstanceConfig::class;
   protected $shieldedInstanceConfigDataType = '';
   /**
@@ -112,6 +124,34 @@ class GceInstance extends \Google\Collection
     return $this->disablePublicIpAddresses;
   }
   /**
+   * @param bool
+   */
+  public function setDisableSsh($disableSsh)
+  {
+    $this->disableSsh = $disableSsh;
+  }
+  /**
+   * @return bool
+   */
+  public function getDisableSsh()
+  {
+    return $this->disableSsh;
+  }
+  /**
+   * @param bool
+   */
+  public function setEnableNestedVirtualization($enableNestedVirtualization)
+  {
+    $this->enableNestedVirtualization = $enableNestedVirtualization;
+  }
+  /**
+   * @return bool
+   */
+  public function getEnableNestedVirtualization()
+  {
+    return $this->enableNestedVirtualization;
+  }
+  /**
    * @param string
    */
   public function setMachineType($machineType)
@@ -166,6 +206,20 @@ class GceInstance extends \Google\Collection
   public function getServiceAccount()
   {
     return $this->serviceAccount;
+  }
+  /**
+   * @param string[]
+   */
+  public function setServiceAccountScopes($serviceAccountScopes)
+  {
+    $this->serviceAccountScopes = $serviceAccountScopes;
+  }
+  /**
+   * @return string[]
+   */
+  public function getServiceAccountScopes()
+  {
+    return $this->serviceAccountScopes;
   }
   /**
    * @param GceShieldedInstanceConfig

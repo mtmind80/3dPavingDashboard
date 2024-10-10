@@ -38,6 +38,10 @@ class NodeConfig extends \Google\Collection
    * @var string
    */
   public $diskType;
+  /**
+   * @var bool
+   */
+  public $enableConfidentialStorage;
   protected $ephemeralStorageLocalSsdConfigType = EphemeralStorageLocalSsdConfig::class;
   protected $ephemeralStorageLocalSsdConfigDataType = '';
   protected $fastSocketType = FastSocket::class;
@@ -96,14 +100,22 @@ class NodeConfig extends \Google\Collection
    * @var string[]
    */
   public $resourceLabels;
+  protected $resourceManagerTagsType = ResourceManagerTags::class;
+  protected $resourceManagerTagsDataType = '';
   protected $sandboxConfigType = SandboxConfig::class;
   protected $sandboxConfigDataType = '';
+  protected $secondaryBootDiskUpdateStrategyType = SecondaryBootDiskUpdateStrategy::class;
+  protected $secondaryBootDiskUpdateStrategyDataType = '';
+  protected $secondaryBootDisksType = SecondaryBootDisk::class;
+  protected $secondaryBootDisksDataType = 'array';
   /**
    * @var string
    */
   public $serviceAccount;
   protected $shieldedInstanceConfigType = ShieldedInstanceConfig::class;
   protected $shieldedInstanceConfigDataType = '';
+  protected $soleTenantConfigType = SoleTenantConfig::class;
+  protected $soleTenantConfigDataType = '';
   /**
    * @var bool
    */
@@ -202,6 +214,20 @@ class NodeConfig extends \Google\Collection
   public function getDiskType()
   {
     return $this->diskType;
+  }
+  /**
+   * @param bool
+   */
+  public function setEnableConfidentialStorage($enableConfidentialStorage)
+  {
+    $this->enableConfidentialStorage = $enableConfidentialStorage;
+  }
+  /**
+   * @return bool
+   */
+  public function getEnableConfidentialStorage()
+  {
+    return $this->enableConfidentialStorage;
   }
   /**
    * @param EphemeralStorageLocalSsdConfig
@@ -470,6 +496,20 @@ class NodeConfig extends \Google\Collection
     return $this->resourceLabels;
   }
   /**
+   * @param ResourceManagerTags
+   */
+  public function setResourceManagerTags(ResourceManagerTags $resourceManagerTags)
+  {
+    $this->resourceManagerTags = $resourceManagerTags;
+  }
+  /**
+   * @return ResourceManagerTags
+   */
+  public function getResourceManagerTags()
+  {
+    return $this->resourceManagerTags;
+  }
+  /**
    * @param SandboxConfig
    */
   public function setSandboxConfig(SandboxConfig $sandboxConfig)
@@ -482,6 +522,34 @@ class NodeConfig extends \Google\Collection
   public function getSandboxConfig()
   {
     return $this->sandboxConfig;
+  }
+  /**
+   * @param SecondaryBootDiskUpdateStrategy
+   */
+  public function setSecondaryBootDiskUpdateStrategy(SecondaryBootDiskUpdateStrategy $secondaryBootDiskUpdateStrategy)
+  {
+    $this->secondaryBootDiskUpdateStrategy = $secondaryBootDiskUpdateStrategy;
+  }
+  /**
+   * @return SecondaryBootDiskUpdateStrategy
+   */
+  public function getSecondaryBootDiskUpdateStrategy()
+  {
+    return $this->secondaryBootDiskUpdateStrategy;
+  }
+  /**
+   * @param SecondaryBootDisk[]
+   */
+  public function setSecondaryBootDisks($secondaryBootDisks)
+  {
+    $this->secondaryBootDisks = $secondaryBootDisks;
+  }
+  /**
+   * @return SecondaryBootDisk[]
+   */
+  public function getSecondaryBootDisks()
+  {
+    return $this->secondaryBootDisks;
   }
   /**
    * @param string
@@ -510,6 +578,20 @@ class NodeConfig extends \Google\Collection
   public function getShieldedInstanceConfig()
   {
     return $this->shieldedInstanceConfig;
+  }
+  /**
+   * @param SoleTenantConfig
+   */
+  public function setSoleTenantConfig(SoleTenantConfig $soleTenantConfig)
+  {
+    $this->soleTenantConfig = $soleTenantConfig;
+  }
+  /**
+   * @return SoleTenantConfig
+   */
+  public function getSoleTenantConfig()
+  {
+    return $this->soleTenantConfig;
   }
   /**
    * @param bool
