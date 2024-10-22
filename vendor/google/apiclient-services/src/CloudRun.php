@@ -210,7 +210,17 @@ class CloudRun extends \Google\Service
         'executions',
         [
           'methods' => [
-            'delete' => [
+            'cancel' => [
+              'path' => 'v2/{+name}:cancel',
+              'httpMethod' => 'POST',
+              'parameters' => [
+                'name' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ],
+              ],
+            ],'delete' => [
               'path' => 'v2/{+name}',
               'httpMethod' => 'DELETE',
               'parameters' => [
@@ -468,6 +478,10 @@ class CloudRun extends \Google\Service
                 'allowMissing' => [
                   'location' => 'query',
                   'type' => 'boolean',
+                ],
+                'updateMask' => [
+                  'location' => 'query',
+                  'type' => 'string',
                 ],
                 'validateOnly' => [
                   'location' => 'query',
