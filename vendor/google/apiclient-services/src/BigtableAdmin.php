@@ -72,6 +72,7 @@ class BigtableAdmin extends \Google\Service
   public $projects_instances_tables;
   public $projects_instances_tables_authorizedViews;
   public $projects_locations;
+  public $rootUrlTemplate;
 
   /**
    * Constructs the internal representation of the BigtableAdmin service.
@@ -84,6 +85,7 @@ class BigtableAdmin extends \Google\Service
   {
     parent::__construct($clientOrConfig);
     $this->rootUrl = $rootUrl ?: 'https://bigtableadmin.googleapis.com/';
+    $this->rootUrlTemplate = $rootUrl ?: 'https://bigtableadmin.UNIVERSE_DOMAIN/';
     $this->servicePath = '';
     $this->batchPath = 'batch';
     $this->version = 'v2';
@@ -797,6 +799,16 @@ class BigtableAdmin extends \Google\Service
                   'type' => 'string',
                 ],
               ],
+            ],'getIamPolicy' => [
+              'path' => 'v2/{+resource}:getIamPolicy',
+              'httpMethod' => 'POST',
+              'parameters' => [
+                'resource' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ],
+              ],
             ],'list' => [
               'path' => 'v2/{+parent}/authorizedViews',
               'httpMethod' => 'GET',
@@ -835,6 +847,26 @@ class BigtableAdmin extends \Google\Service
                 'updateMask' => [
                   'location' => 'query',
                   'type' => 'string',
+                ],
+              ],
+            ],'setIamPolicy' => [
+              'path' => 'v2/{+resource}:setIamPolicy',
+              'httpMethod' => 'POST',
+              'parameters' => [
+                'resource' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ],
+              ],
+            ],'testIamPermissions' => [
+              'path' => 'v2/{+resource}:testIamPermissions',
+              'httpMethod' => 'POST',
+              'parameters' => [
+                'resource' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
                 ],
               ],
             ],

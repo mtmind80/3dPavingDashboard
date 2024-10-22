@@ -17,6 +17,7 @@
 
 namespace Google\Service\Aiplatform\Resource;
 
+use Google\Service\Aiplatform\GoogleLongrunningListOperationsResponse;
 use Google\Service\Aiplatform\GoogleLongrunningOperation;
 use Google\Service\Aiplatform\GoogleProtobufEmpty;
 
@@ -53,6 +54,23 @@ class ProjectsLocationsTuningJobsOperations extends \Google\Service\Resource
     return $this->call('cancel', [$params], GoogleProtobufEmpty::class);
   }
   /**
+   * Deletes a long-running operation. This method indicates that the client is no
+   * longer interested in the operation result. It does not cancel the operation.
+   * If the server doesn't support this method, it returns
+   * `google.rpc.Code.UNIMPLEMENTED`. (operations.delete)
+   *
+   * @param string $name The name of the operation resource to be deleted.
+   * @param array $optParams Optional parameters.
+   * @return GoogleProtobufEmpty
+   * @throws \Google\Service\Exception
+   */
+  public function delete($name, $optParams = [])
+  {
+    $params = ['name' => $name];
+    $params = array_merge($params, $optParams);
+    return $this->call('delete', [$params], GoogleProtobufEmpty::class);
+  }
+  /**
    * Gets the latest state of a long-running operation. Clients can use this
    * method to poll the operation result at intervals as recommended by the API
    * service. (operations.get)
@@ -67,6 +85,26 @@ class ProjectsLocationsTuningJobsOperations extends \Google\Service\Resource
     $params = ['name' => $name];
     $params = array_merge($params, $optParams);
     return $this->call('get', [$params], GoogleLongrunningOperation::class);
+  }
+  /**
+   * Lists operations that match the specified filter in the request. If the
+   * server doesn't support this method, it returns `UNIMPLEMENTED`.
+   * (operations.listProjectsLocationsTuningJobsOperations)
+   *
+   * @param string $name The name of the operation's parent resource.
+   * @param array $optParams Optional parameters.
+   *
+   * @opt_param string filter The standard list filter.
+   * @opt_param int pageSize The standard list page size.
+   * @opt_param string pageToken The standard list page token.
+   * @return GoogleLongrunningListOperationsResponse
+   * @throws \Google\Service\Exception
+   */
+  public function listProjectsLocationsTuningJobsOperations($name, $optParams = [])
+  {
+    $params = ['name' => $name];
+    $params = array_merge($params, $optParams);
+    return $this->call('list', [$params], GoogleLongrunningListOperationsResponse::class);
   }
 }
 

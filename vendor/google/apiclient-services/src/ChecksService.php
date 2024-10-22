@@ -40,7 +40,9 @@ class ChecksService extends \Google\Service
   public $accounts_apps;
   public $accounts_apps_operations;
   public $accounts_apps_reports;
+  public $accounts_repos_operations;
   public $media;
+  public $rootUrlTemplate;
 
   /**
    * Constructs the internal representation of the ChecksService service.
@@ -53,6 +55,7 @@ class ChecksService extends \Google\Service
   {
     parent::__construct($clientOrConfig);
     $this->rootUrl = $rootUrl ?: 'https://checks.googleapis.com/';
+    $this->rootUrlTemplate = $rootUrl ?: 'https://checks.UNIVERSE_DOMAIN/';
     $this->servicePath = '';
     $this->batchPath = 'batch';
     $this->version = 'v1alpha';
@@ -212,6 +215,26 @@ class ChecksService extends \Google\Service
                 'pageToken' => [
                   'location' => 'query',
                   'type' => 'string',
+                ],
+              ],
+            ],
+          ]
+        ]
+    );
+    $this->accounts_repos_operations = new ChecksService\Resource\AccountsReposOperations(
+        $this,
+        $this->serviceName,
+        'operations',
+        [
+          'methods' => [
+            'get' => [
+              'path' => 'v1alpha/{+name}',
+              'httpMethod' => 'GET',
+              'parameters' => [
+                'name' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
                 ],
               ],
             ],

@@ -21,13 +21,45 @@ class GoogleCloudAiplatformV1GenerationConfig extends \Google\Collection
 {
   protected $collection_key = 'stopSequences';
   /**
+   * @var bool
+   */
+  public $audioTimestamp;
+  /**
    * @var int
    */
   public $candidateCount;
   /**
+   * @var float
+   */
+  public $frequencyPenalty;
+  /**
+   * @var int
+   */
+  public $logprobs;
+  /**
    * @var int
    */
   public $maxOutputTokens;
+  /**
+   * @var float
+   */
+  public $presencePenalty;
+  /**
+   * @var bool
+   */
+  public $responseLogprobs;
+  /**
+   * @var string
+   */
+  public $responseMimeType;
+  protected $responseSchemaType = GoogleCloudAiplatformV1Schema::class;
+  protected $responseSchemaDataType = '';
+  protected $routingConfigType = GoogleCloudAiplatformV1GenerationConfigRoutingConfig::class;
+  protected $routingConfigDataType = '';
+  /**
+   * @var int
+   */
+  public $seed;
   /**
    * @var string[]
    */
@@ -46,6 +78,20 @@ class GoogleCloudAiplatformV1GenerationConfig extends \Google\Collection
   public $topP;
 
   /**
+   * @param bool
+   */
+  public function setAudioTimestamp($audioTimestamp)
+  {
+    $this->audioTimestamp = $audioTimestamp;
+  }
+  /**
+   * @return bool
+   */
+  public function getAudioTimestamp()
+  {
+    return $this->audioTimestamp;
+  }
+  /**
    * @param int
    */
   public function setCandidateCount($candidateCount)
@@ -60,6 +106,34 @@ class GoogleCloudAiplatformV1GenerationConfig extends \Google\Collection
     return $this->candidateCount;
   }
   /**
+   * @param float
+   */
+  public function setFrequencyPenalty($frequencyPenalty)
+  {
+    $this->frequencyPenalty = $frequencyPenalty;
+  }
+  /**
+   * @return float
+   */
+  public function getFrequencyPenalty()
+  {
+    return $this->frequencyPenalty;
+  }
+  /**
+   * @param int
+   */
+  public function setLogprobs($logprobs)
+  {
+    $this->logprobs = $logprobs;
+  }
+  /**
+   * @return int
+   */
+  public function getLogprobs()
+  {
+    return $this->logprobs;
+  }
+  /**
    * @param int
    */
   public function setMaxOutputTokens($maxOutputTokens)
@@ -72,6 +146,90 @@ class GoogleCloudAiplatformV1GenerationConfig extends \Google\Collection
   public function getMaxOutputTokens()
   {
     return $this->maxOutputTokens;
+  }
+  /**
+   * @param float
+   */
+  public function setPresencePenalty($presencePenalty)
+  {
+    $this->presencePenalty = $presencePenalty;
+  }
+  /**
+   * @return float
+   */
+  public function getPresencePenalty()
+  {
+    return $this->presencePenalty;
+  }
+  /**
+   * @param bool
+   */
+  public function setResponseLogprobs($responseLogprobs)
+  {
+    $this->responseLogprobs = $responseLogprobs;
+  }
+  /**
+   * @return bool
+   */
+  public function getResponseLogprobs()
+  {
+    return $this->responseLogprobs;
+  }
+  /**
+   * @param string
+   */
+  public function setResponseMimeType($responseMimeType)
+  {
+    $this->responseMimeType = $responseMimeType;
+  }
+  /**
+   * @return string
+   */
+  public function getResponseMimeType()
+  {
+    return $this->responseMimeType;
+  }
+  /**
+   * @param GoogleCloudAiplatformV1Schema
+   */
+  public function setResponseSchema(GoogleCloudAiplatformV1Schema $responseSchema)
+  {
+    $this->responseSchema = $responseSchema;
+  }
+  /**
+   * @return GoogleCloudAiplatformV1Schema
+   */
+  public function getResponseSchema()
+  {
+    return $this->responseSchema;
+  }
+  /**
+   * @param GoogleCloudAiplatformV1GenerationConfigRoutingConfig
+   */
+  public function setRoutingConfig(GoogleCloudAiplatformV1GenerationConfigRoutingConfig $routingConfig)
+  {
+    $this->routingConfig = $routingConfig;
+  }
+  /**
+   * @return GoogleCloudAiplatformV1GenerationConfigRoutingConfig
+   */
+  public function getRoutingConfig()
+  {
+    return $this->routingConfig;
+  }
+  /**
+   * @param int
+   */
+  public function setSeed($seed)
+  {
+    $this->seed = $seed;
+  }
+  /**
+   * @return int
+   */
+  public function getSeed()
+  {
+    return $this->seed;
   }
   /**
    * @param string[]

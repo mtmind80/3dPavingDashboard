@@ -23,10 +23,6 @@ class GoogleCloudAiplatformV1ResourceRuntime extends \Google\Model
    * @var string[]
    */
   public $accessUris;
-  /**
-   * @var string
-   */
-  public $notebookRuntimeTemplate;
 
   /**
    * @param string[]
@@ -41,20 +37,6 @@ class GoogleCloudAiplatformV1ResourceRuntime extends \Google\Model
   public function getAccessUris()
   {
     return $this->accessUris;
-  }
-  /**
-   * @param string
-   */
-  public function setNotebookRuntimeTemplate($notebookRuntimeTemplate)
-  {
-    $this->notebookRuntimeTemplate = $notebookRuntimeTemplate;
-  }
-  /**
-   * @return string
-   */
-  public function getNotebookRuntimeTemplate()
-  {
-    return $this->notebookRuntimeTemplate;
   }
 }
 

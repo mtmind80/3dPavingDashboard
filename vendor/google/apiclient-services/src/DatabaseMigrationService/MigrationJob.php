@@ -48,6 +48,10 @@ class MigrationJob extends \Google\Model
   /**
    * @var string
    */
+  public $dumpType;
+  /**
+   * @var string
+   */
   public $duration;
   /**
    * @var string
@@ -67,6 +71,8 @@ class MigrationJob extends \Google\Model
    * @var string
    */
   public $name;
+  protected $oracleToPostgresConfigType = OracleToPostgresConfig::class;
+  protected $oracleToPostgresConfigDataType = '';
   protected $performanceConfigType = PerformanceConfig::class;
   protected $performanceConfigDataType = '';
   /**
@@ -215,6 +221,20 @@ class MigrationJob extends \Google\Model
   /**
    * @param string
    */
+  public function setDumpType($dumpType)
+  {
+    $this->dumpType = $dumpType;
+  }
+  /**
+   * @return string
+   */
+  public function getDumpType()
+  {
+    return $this->dumpType;
+  }
+  /**
+   * @param string
+   */
   public function setDuration($duration)
   {
     $this->duration = $duration;
@@ -295,6 +315,20 @@ class MigrationJob extends \Google\Model
   public function getName()
   {
     return $this->name;
+  }
+  /**
+   * @param OracleToPostgresConfig
+   */
+  public function setOracleToPostgresConfig(OracleToPostgresConfig $oracleToPostgresConfig)
+  {
+    $this->oracleToPostgresConfig = $oracleToPostgresConfig;
+  }
+  /**
+   * @return OracleToPostgresConfig
+   */
+  public function getOracleToPostgresConfig()
+  {
+    return $this->oracleToPostgresConfig;
   }
   /**
    * @param PerformanceConfig

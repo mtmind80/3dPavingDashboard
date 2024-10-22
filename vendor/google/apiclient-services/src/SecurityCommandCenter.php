@@ -76,6 +76,7 @@ class SecurityCommandCenter extends \Google\Service
   public $organizations_sources;
   public $organizations_sources_findings;
   public $organizations_sources_findings_externalSystems;
+  public $organizations_valuedResources;
   public $projects_assets;
   public $projects_bigQueryExports;
   public $projects_eventThreatDetectionSettings;
@@ -90,6 +91,7 @@ class SecurityCommandCenter extends \Google\Service
   public $projects_sources;
   public $projects_sources_findings;
   public $projects_sources_findings_externalSystems;
+  public $rootUrlTemplate;
 
   /**
    * Constructs the internal representation of the SecurityCommandCenter
@@ -103,6 +105,7 @@ class SecurityCommandCenter extends \Google\Service
   {
     parent::__construct($clientOrConfig);
     $this->rootUrl = $rootUrl ?: 'https://securitycenter.googleapis.com/';
+    $this->rootUrlTemplate = $rootUrl ?: 'https://securitycenter.UNIVERSE_DOMAIN/';
     $this->servicePath = '';
     $this->batchPath = 'batch';
     $this->version = 'v1';
@@ -2186,6 +2189,42 @@ class SecurityCommandCenter extends \Google\Service
                   'required' => true,
                 ],
                 'updateMask' => [
+                  'location' => 'query',
+                  'type' => 'string',
+                ],
+              ],
+            ],
+          ]
+        ]
+    );
+    $this->organizations_valuedResources = new SecurityCommandCenter\Resource\OrganizationsValuedResources(
+        $this,
+        $this->serviceName,
+        'valuedResources',
+        [
+          'methods' => [
+            'list' => [
+              'path' => 'v1/{+parent}/valuedResources',
+              'httpMethod' => 'GET',
+              'parameters' => [
+                'parent' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ],
+                'filter' => [
+                  'location' => 'query',
+                  'type' => 'string',
+                ],
+                'orderBy' => [
+                  'location' => 'query',
+                  'type' => 'string',
+                ],
+                'pageSize' => [
+                  'location' => 'query',
+                  'type' => 'integer',
+                ],
+                'pageToken' => [
                   'location' => 'query',
                   'type' => 'string',
                 ],
