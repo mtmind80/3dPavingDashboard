@@ -46,6 +46,7 @@ class NetworkSecurity extends \Google\Service
   public $projects_locations;
   public $projects_locations_addressGroups;
   public $projects_locations_authorizationPolicies;
+  public $projects_locations_authzPolicies;
   public $projects_locations_clientTlsPolicies;
   public $projects_locations_firewallEndpointAssociations;
   public $projects_locations_gatewaySecurityPolicies;
@@ -54,6 +55,7 @@ class NetworkSecurity extends \Google\Service
   public $projects_locations_serverTlsPolicies;
   public $projects_locations_tlsInspectionPolicies;
   public $projects_locations_urlLists;
+  public $rootUrlTemplate;
 
   /**
    * Constructs the internal representation of the NetworkSecurity service.
@@ -66,6 +68,7 @@ class NetworkSecurity extends \Google\Service
   {
     parent::__construct($clientOrConfig);
     $this->rootUrl = $rootUrl ?: 'https://networksecurity.googleapis.com/';
+    $this->rootUrlTemplate = $rootUrl ?: 'https://networksecurity.UNIVERSE_DOMAIN/';
     $this->servicePath = '';
     $this->batchPath = 'batch';
     $this->version = 'v1';
@@ -821,6 +824,50 @@ class NetworkSecurity extends \Google\Service
                 'updateMask' => [
                   'location' => 'query',
                   'type' => 'string',
+                ],
+              ],
+            ],'setIamPolicy' => [
+              'path' => 'v1/{+resource}:setIamPolicy',
+              'httpMethod' => 'POST',
+              'parameters' => [
+                'resource' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ],
+              ],
+            ],'testIamPermissions' => [
+              'path' => 'v1/{+resource}:testIamPermissions',
+              'httpMethod' => 'POST',
+              'parameters' => [
+                'resource' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ],
+              ],
+            ],
+          ]
+        ]
+    );
+    $this->projects_locations_authzPolicies = new NetworkSecurity\Resource\ProjectsLocationsAuthzPolicies(
+        $this,
+        $this->serviceName,
+        'authzPolicies',
+        [
+          'methods' => [
+            'getIamPolicy' => [
+              'path' => 'v1/{+resource}:getIamPolicy',
+              'httpMethod' => 'GET',
+              'parameters' => [
+                'resource' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ],
+                'options.requestedPolicyVersion' => [
+                  'location' => 'query',
+                  'type' => 'integer',
                 ],
               ],
             ],'setIamPolicy' => [

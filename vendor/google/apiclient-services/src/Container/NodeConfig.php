@@ -30,6 +30,8 @@ class NodeConfig extends \Google\Collection
   public $bootDiskKmsKey;
   protected $confidentialNodesType = ConfidentialNodes::class;
   protected $confidentialNodesDataType = '';
+  protected $containerdConfigType = ContainerdConfig::class;
+  protected $containerdConfigDataType = '';
   /**
    * @var int
    */
@@ -38,6 +40,10 @@ class NodeConfig extends \Google\Collection
    * @var string
    */
   public $diskType;
+  /**
+   * @var string
+   */
+  public $effectiveCgroupMode;
   /**
    * @var bool
    */
@@ -123,6 +129,10 @@ class NodeConfig extends \Google\Collection
   /**
    * @var string[]
    */
+  public $storagePools;
+  /**
+   * @var string[]
+   */
   public $tags;
   protected $taintsType = NodeTaint::class;
   protected $taintsDataType = 'array';
@@ -188,6 +198,20 @@ class NodeConfig extends \Google\Collection
     return $this->confidentialNodes;
   }
   /**
+   * @param ContainerdConfig
+   */
+  public function setContainerdConfig(ContainerdConfig $containerdConfig)
+  {
+    $this->containerdConfig = $containerdConfig;
+  }
+  /**
+   * @return ContainerdConfig
+   */
+  public function getContainerdConfig()
+  {
+    return $this->containerdConfig;
+  }
+  /**
    * @param int
    */
   public function setDiskSizeGb($diskSizeGb)
@@ -214,6 +238,20 @@ class NodeConfig extends \Google\Collection
   public function getDiskType()
   {
     return $this->diskType;
+  }
+  /**
+   * @param string
+   */
+  public function setEffectiveCgroupMode($effectiveCgroupMode)
+  {
+    $this->effectiveCgroupMode = $effectiveCgroupMode;
+  }
+  /**
+   * @return string
+   */
+  public function getEffectiveCgroupMode()
+  {
+    return $this->effectiveCgroupMode;
   }
   /**
    * @param bool
@@ -606,6 +644,20 @@ class NodeConfig extends \Google\Collection
   public function getSpot()
   {
     return $this->spot;
+  }
+  /**
+   * @param string[]
+   */
+  public function setStoragePools($storagePools)
+  {
+    $this->storagePools = $storagePools;
+  }
+  /**
+   * @return string[]
+   */
+  public function getStoragePools()
+  {
+    return $this->storagePools;
   }
   /**
    * @param string[]

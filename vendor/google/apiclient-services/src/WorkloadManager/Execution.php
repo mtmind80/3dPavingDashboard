@@ -17,8 +17,9 @@
 
 namespace Google\Service\WorkloadManager;
 
-class Execution extends \Google\Model
+class Execution extends \Google\Collection
 {
+  protected $collection_key = 'ruleResults';
   /**
    * @var string
    */
@@ -27,6 +28,8 @@ class Execution extends \Google\Model
    * @var string
    */
   public $evaluationId;
+  protected $externalDataSourcesType = ExternalDataSources::class;
+  protected $externalDataSourcesDataType = 'array';
   /**
    * @var string
    */
@@ -39,6 +42,8 @@ class Execution extends \Google\Model
    * @var string
    */
   public $name;
+  protected $ruleResultsType = RuleExecutionResult::class;
+  protected $ruleResultsDataType = 'array';
   /**
    * @var string
    */
@@ -81,6 +86,20 @@ class Execution extends \Google\Model
     return $this->evaluationId;
   }
   /**
+   * @param ExternalDataSources[]
+   */
+  public function setExternalDataSources($externalDataSources)
+  {
+    $this->externalDataSources = $externalDataSources;
+  }
+  /**
+   * @return ExternalDataSources[]
+   */
+  public function getExternalDataSources()
+  {
+    return $this->externalDataSources;
+  }
+  /**
    * @param string
    */
   public function setInventoryTime($inventoryTime)
@@ -121,6 +140,20 @@ class Execution extends \Google\Model
   public function getName()
   {
     return $this->name;
+  }
+  /**
+   * @param RuleExecutionResult[]
+   */
+  public function setRuleResults($ruleResults)
+  {
+    $this->ruleResults = $ruleResults;
+  }
+  /**
+   * @return RuleExecutionResult[]
+   */
+  public function getRuleResults()
+  {
+    return $this->ruleResults;
   }
   /**
    * @param string

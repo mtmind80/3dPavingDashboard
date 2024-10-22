@@ -66,6 +66,10 @@ class Repository extends \Google\Model
   /**
    * @var bool
    */
+  public $satisfiesPzi;
+  /**
+   * @var bool
+   */
   public $satisfiesPzs;
   /**
    * @var string
@@ -77,6 +81,8 @@ class Repository extends \Google\Model
   public $updateTime;
   protected $virtualRepositoryConfigType = VirtualRepositoryConfig::class;
   protected $virtualRepositoryConfigDataType = '';
+  protected $vulnerabilityScanningConfigType = VulnerabilityScanningConfig::class;
+  protected $vulnerabilityScanningConfigDataType = '';
 
   /**
    * @param CleanupPolicy[]
@@ -263,6 +269,20 @@ class Repository extends \Google\Model
   /**
    * @param bool
    */
+  public function setSatisfiesPzi($satisfiesPzi)
+  {
+    $this->satisfiesPzi = $satisfiesPzi;
+  }
+  /**
+   * @return bool
+   */
+  public function getSatisfiesPzi()
+  {
+    return $this->satisfiesPzi;
+  }
+  /**
+   * @param bool
+   */
   public function setSatisfiesPzs($satisfiesPzs)
   {
     $this->satisfiesPzs = $satisfiesPzs;
@@ -315,6 +335,20 @@ class Repository extends \Google\Model
   public function getVirtualRepositoryConfig()
   {
     return $this->virtualRepositoryConfig;
+  }
+  /**
+   * @param VulnerabilityScanningConfig
+   */
+  public function setVulnerabilityScanningConfig(VulnerabilityScanningConfig $vulnerabilityScanningConfig)
+  {
+    $this->vulnerabilityScanningConfig = $vulnerabilityScanningConfig;
+  }
+  /**
+   * @return VulnerabilityScanningConfig
+   */
+  public function getVulnerabilityScanningConfig()
+  {
+    return $this->vulnerabilityScanningConfig;
   }
 }
 

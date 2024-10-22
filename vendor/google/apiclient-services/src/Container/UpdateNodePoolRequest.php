@@ -19,13 +19,17 @@ namespace Google\Service\Container;
 
 class UpdateNodePoolRequest extends \Google\Collection
 {
-  protected $collection_key = 'locations';
+  protected $collection_key = 'storagePools';
+  protected $acceleratorsType = AcceleratorConfig::class;
+  protected $acceleratorsDataType = 'array';
   /**
    * @var string
    */
   public $clusterId;
   protected $confidentialNodesType = ConfidentialNodes::class;
   protected $confidentialNodesDataType = '';
+  protected $containerdConfigType = ContainerdConfig::class;
+  protected $containerdConfigDataType = '';
   /**
    * @var string
    */
@@ -88,6 +92,10 @@ class UpdateNodePoolRequest extends \Google\Collection
   protected $resourceLabelsDataType = '';
   protected $resourceManagerTagsType = ResourceManagerTags::class;
   protected $resourceManagerTagsDataType = '';
+  /**
+   * @var string[]
+   */
+  public $storagePools;
   protected $tagsType = NetworkTags::class;
   protected $tagsDataType = '';
   protected $taintsType = NodeTaints::class;
@@ -103,6 +111,20 @@ class UpdateNodePoolRequest extends \Google\Collection
    */
   public $zone;
 
+  /**
+   * @param AcceleratorConfig[]
+   */
+  public function setAccelerators($accelerators)
+  {
+    $this->accelerators = $accelerators;
+  }
+  /**
+   * @return AcceleratorConfig[]
+   */
+  public function getAccelerators()
+  {
+    return $this->accelerators;
+  }
   /**
    * @param string
    */
@@ -130,6 +152,20 @@ class UpdateNodePoolRequest extends \Google\Collection
   public function getConfidentialNodes()
   {
     return $this->confidentialNodes;
+  }
+  /**
+   * @param ContainerdConfig
+   */
+  public function setContainerdConfig(ContainerdConfig $containerdConfig)
+  {
+    $this->containerdConfig = $containerdConfig;
+  }
+  /**
+   * @return ContainerdConfig
+   */
+  public function getContainerdConfig()
+  {
+    return $this->containerdConfig;
   }
   /**
    * @param string
@@ -424,6 +460,20 @@ class UpdateNodePoolRequest extends \Google\Collection
   public function getResourceManagerTags()
   {
     return $this->resourceManagerTags;
+  }
+  /**
+   * @param string[]
+   */
+  public function setStoragePools($storagePools)
+  {
+    $this->storagePools = $storagePools;
+  }
+  /**
+   * @return string[]
+   */
+  public function getStoragePools()
+  {
+    return $this->storagePools;
   }
   /**
    * @param NetworkTags

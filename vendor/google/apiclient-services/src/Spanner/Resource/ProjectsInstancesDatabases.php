@@ -17,6 +17,7 @@
 
 namespace Google\Service\Spanner\Resource;
 
+use Google\Service\Spanner\ChangeQuorumRequest;
 use Google\Service\Spanner\CreateDatabaseRequest;
 use Google\Service\Spanner\Database;
 use Google\Service\Spanner\GetDatabaseDdlResponse;
@@ -43,11 +44,34 @@ use Google\Service\Spanner\UpdateDatabaseDdlRequest;
 class ProjectsInstancesDatabases extends \Google\Service\Resource
 {
   /**
-   * Creates a new Cloud Spanner database and starts to prepare it for serving.
-   * The returned long-running operation will have a name of the format
-   * `/operations/` and can be used to track preparation of the database. The
-   * metadata field type is CreateDatabaseMetadata. The response field type is
-   * Database, if successful. (databases.create)
+   * `ChangeQuorum` is strictly restricted to databases that use dual-region
+   * instance configurations. Initiates a background operation to change the
+   * quorum of a database from dual-region mode to single-region mode or vice
+   * versa. The returned long-running operation has a name of the format
+   * `projects//instances//databases//operations/` and can be used to track
+   * execution of the `ChangeQuorum`. The metadata field type is
+   * ChangeQuorumMetadata. Authorization requires `spanner.databases.changequorum`
+   * permission on the resource database. (databases.changequorum)
+   *
+   * @param string $name Required. Name of the database in which to apply
+   * `ChangeQuorum`. Values are of the form `projects//instances//databases/`.
+   * @param ChangeQuorumRequest $postBody
+   * @param array $optParams Optional parameters.
+   * @return Operation
+   * @throws \Google\Service\Exception
+   */
+  public function changequorum($name, ChangeQuorumRequest $postBody, $optParams = [])
+  {
+    $params = ['name' => $name, 'postBody' => $postBody];
+    $params = array_merge($params, $optParams);
+    return $this->call('changequorum', [$params], Operation::class);
+  }
+  /**
+   * Creates a new Spanner database and starts to prepare it for serving. The
+   * returned long-running operation will have a name of the format `/operations/`
+   * and can be used to track preparation of the database. The metadata field type
+   * is CreateDatabaseMetadata. The response field type is Database, if
+   * successful. (databases.create)
    *
    * @param string $parent Required. The name of the instance that will serve the
    * new database. Values are of the form `projects//instances/`.
