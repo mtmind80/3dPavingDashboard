@@ -187,8 +187,8 @@ class ProposalDetailController extends Controller
 
         if ($proposalDetail->service->id == 18) { // striping costs
 
-            $sorted = $data['striping']->sortBy(['service.dsort', 'description']);
-            $data['striping'] = $sorted;
+            //$sorted = $data['striping']->sortBy(['service.dsort', 'description']);
+            //$data['striping'] = $sorted;
             return view('estimator.striping', $data);
 
         }

@@ -147,7 +147,7 @@
                     </div>
 
                 @else
-                    {{-- * all other asphalt types --}}
+                    {{-- * all other types --}}
 
                     <br/>
                     <div class="row">
@@ -184,8 +184,9 @@
                             <select class="form-control" required name="cost_per_day" id="cost_per_day">
                                 <option value='0'>Select Asphalt Type</option>
                                 @foreach($asphaltMaterials as $materials)
+                                    @php($matname = $proposalDetail->materials_name . ' - ' . $materials['cost']);
                                     <option value='{{$materials['cost']}}'
-                                            @if($materials['name'] == $proposalDetail->materials_name)
+                                            @if($materials['name'] == $matname)
                                                 selected
                                             @endif
                                     >{{$materials['name']}}</option>
@@ -1221,7 +1222,10 @@
                         var square_feet = $("#square_feet").val();
                         var depth = $("#depth").val();
                         var cost_per_day = $("#cost_per_day>option:selected").val();
-                        var materials_name = $('#cost_per_day').find('option:selected').text();
+                        //var materials_name = $('#cost_per_day').find('option:selected').text();
+                        var materials_name = $( "#cost_per_day option:selected" ).text();
+
+                        alert (cost_per_day + '-' + materials_name);
 
                         var locations = $("#locations").val();
 
