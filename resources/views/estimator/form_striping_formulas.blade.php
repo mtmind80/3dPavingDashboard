@@ -42,7 +42,7 @@
                 @php($cost_total = 0)
 
                 @foreach($striping as $stripe)
-                    @if($name != $stripe->name)
+                    @if($name != $stripe->name)  {{-- build a header --}}
                         <tr>
                             <td class="info" colspan="4'"><h4>{{$stripe->name}}</h4></td>
                         </tr>
@@ -168,25 +168,28 @@
                     proposaltext = servicedesc;
                 }
 
-                otcost = parseFloat(combinedcost) + parseFloat(materials) + + parseFloat(profit);  // combined striping cost + other cost
-
+                //otcost = parseFloat(combinedcost) + parseFloat(materials) + + parseFloat(profit);  // combined striping cost + other cost
                 //percent_overhead percentage of service
-                overhead = Math.ceil((percent_overhead * otcost) / 100);
+                //overhead = Math.ceil((percent_overhead * otcost) / 100);
+                //breakeven = (parseFloat(overhead) + parseFloat(otcost));
                 $("#explain").html(percent_overhead + '%');
 
+
+                //new set over head
+                otcost = Math.ceil(parseFloat(combinedcost) + parseFloat(profit));
+                overhead = Math.ceil((otcost / 0.7) - otcost);
+                breakeven = Math.ceil(parseFloat(overhead) + parseFloat(combinedcost))
+                //end new
 
                 console.log(percent_overhead + '%: = ' + overhead);
 
                 headerElOverHead.text(formatCurrency.format(overhead));
 
-
-                breakeven = (parseFloat(overhead) + parseFloat(otcost));
-
                 console.log('breakeven:' + breakeven);
 
                 headerElBreakEven.text(formatCurrency.format(breakeven));
 
-                var total_cost = parseFloat(breakeven) + parseFloat(profit);
+                var total_cost = parseFloat(breakeven) + parseFloat(profit)+ parseFloat(materials);
 
                 headerElCustomerPrice.text(formatCurrency.format(total_cost));
 

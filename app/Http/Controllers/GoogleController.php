@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Schema;
 use Spatie\GoogleCalendar\Event;
 
 
+
+
 class GoogleController extends Controller
 {
 
@@ -51,31 +53,31 @@ class GoogleController extends Controller
             'responseStatus' => 'needsAction',
         ]);
         $event->addAttendee(['email' => 'mike.trachtenberg@gmail.com']);
-        $event->addMeetLink(); // optionally add a google meet link to the event
+        //$event->addMeetLink(); // optionally add a google meet link to the event
 
         $event->save();
         return ('Event created: %s\n' . $event->htmlLink. $event->Id);
 
     }
 
-public function getEvents()
-{// get all future events on a calendar
-    return $events = Event::get();
-}
+    public function getEvents()
+    {
+        // get all future events on a calendar
+        return $events = Event::get();
+    }
 
-public function UpdateEvent(Request $request)
-{
-// get all future events on a calendar
-    $events = Event::get();
+    public function UpdateEvent(Request $request)
+    {
+        $events = new Event;
 
-// update existing event
-    $firstEvent = $events->first();
-    $firstEvent->name = 'updated name';
-    $firstEvent->save();
+        // update existing event
+        $firstEvent = $events->first();
+        $firstEvent->name = 'updated name';
+        $firstEvent->save();
 
-    $firstEvent->update(['name' => 'updated again']);
+        $firstEvent->update(['name' => 'updated again']);
 
-}
+    }
 
 
     /**
@@ -100,17 +102,6 @@ public function UpdateEvent(Request $request)
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
 
     /**
      * Remove the specified resource from storage.

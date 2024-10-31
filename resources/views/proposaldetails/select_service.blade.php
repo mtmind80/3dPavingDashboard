@@ -30,7 +30,7 @@
                             method="POST"
                             id="editform">
                         @csrf
-                        
+
                         <input type="hidden" name="location_id" value="{{$proposal['location_id']}}">
                         <div class="row">
                             <div class="form-group col-lg-12">
@@ -71,24 +71,24 @@
                                         </td>
                                     </tr>
                                     -->
-                              
+
                                 </table>
 
 
                             </div>
                         </div>
-                        <table class="table-centered font-size-16" width="90%">
+                        <table class="table-centered font-size-16" width="70%">
                             <tr>
-                                <td class='tc'>
+                                <td class='tr'>
                                     Select
                                 </td>
-                                <td class='tc'>
+                                <td class='tl'>
                                     Name
                                 </td>
-                                <td class='tc'>
+                                <td class='tr'>
                                     Select
                                 </td>
-                                <td class='tc'>
+                                <td class='tl'>
                                     Name
                                 </td>
                                 @php($c =1)
@@ -98,10 +98,10 @@
                             </tr>
                             <tr>
                                 @endif
-                                <td class='tc'>
+                                <td class='tr'>
                                     <input type="radio" name="servicecat" value="{{$cat['id']}}">
                                 </td>
-                                <td class='tc'>
+                                <td class='tl'>
                                     {{$cat['name']}}
                                 </td>
 
@@ -142,7 +142,7 @@
 
                 window.location.href='{{ route('show_proposal',['id'=>$proposalId]) }}';
             });
-            
+
             $("#submitbutton").click(function (event) {
                 form = $("#editform");
                 if(!checkit(form)){
