@@ -158,9 +158,12 @@ class ProposalDetailController extends Controller
         $sealcoatMaterials = ProposalMaterial::where('proposal_id', $proposal_id)->byServiceCategory(8);
         $materialsCB = ProposalMaterial::where('proposal_id', $proposal_id)->pluck('cost', 'material_id')->toArray();
 
+
         $color = ServiceCategory::where('id', '=', $proposalDetail->service->service_category_id)->first();
 
         $data = [
+            'service_id' => $proposalDetail->service->id,
+            'service_cat' => $proposalDetail->service->service_category_id,
             'header_name' => 'Build Service Estimate',
             'proposalDetail' => $proposalDetail,
             'proposal' => $proposalDetail->proposal,
