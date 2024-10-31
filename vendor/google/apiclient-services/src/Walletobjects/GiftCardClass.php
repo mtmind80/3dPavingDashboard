@@ -19,7 +19,7 @@ namespace Google\Service\Walletobjects;
 
 class GiftCardClass extends \Google\Collection
 {
-  protected $collection_key = 'textModulesData';
+  protected $collection_key = 'valueAddedModuleData';
   /**
    * @var bool
    */
@@ -28,6 +28,8 @@ class GiftCardClass extends \Google\Collection
    * @var bool
    */
   public $allowMultipleUsersPerObject;
+  protected $appLinkDataType = AppLinkData::class;
+  protected $appLinkDataDataType = '';
   protected $callbackOptionsType = CallbackOptions::class;
   protected $callbackOptionsDataType = '';
   /**
@@ -99,6 +101,10 @@ class GiftCardClass extends \Google\Collection
   /**
    * @var string
    */
+  public $notifyPreference;
+  /**
+   * @var string
+   */
   public $pinLabel;
   protected $programLogoType = Image::class;
   protected $programLogoDataType = '';
@@ -116,6 +122,8 @@ class GiftCardClass extends \Google\Collection
   protected $securityAnimationDataType = '';
   protected $textModulesDataType = TextModuleData::class;
   protected $textModulesDataDataType = 'array';
+  protected $valueAddedModuleDataType = ValueAddedModuleData::class;
+  protected $valueAddedModuleDataDataType = 'array';
   /**
    * @var string
    */
@@ -156,6 +164,20 @@ class GiftCardClass extends \Google\Collection
   public function getAllowMultipleUsersPerObject()
   {
     return $this->allowMultipleUsersPerObject;
+  }
+  /**
+   * @param AppLinkData
+   */
+  public function setAppLinkData(AppLinkData $appLinkData)
+  {
+    $this->appLinkData = $appLinkData;
+  }
+  /**
+   * @return AppLinkData
+   */
+  public function getAppLinkData()
+  {
+    return $this->appLinkData;
   }
   /**
    * @param CallbackOptions
@@ -496,6 +518,20 @@ class GiftCardClass extends \Google\Collection
   /**
    * @param string
    */
+  public function setNotifyPreference($notifyPreference)
+  {
+    $this->notifyPreference = $notifyPreference;
+  }
+  /**
+   * @return string
+   */
+  public function getNotifyPreference()
+  {
+    return $this->notifyPreference;
+  }
+  /**
+   * @param string
+   */
   public function setPinLabel($pinLabel)
   {
     $this->pinLabel = $pinLabel;
@@ -590,6 +626,20 @@ class GiftCardClass extends \Google\Collection
   public function getTextModulesData()
   {
     return $this->textModulesData;
+  }
+  /**
+   * @param ValueAddedModuleData[]
+   */
+  public function setValueAddedModuleData($valueAddedModuleData)
+  {
+    $this->valueAddedModuleData = $valueAddedModuleData;
+  }
+  /**
+   * @return ValueAddedModuleData[]
+   */
+  public function getValueAddedModuleData()
+  {
+    return $this->valueAddedModuleData;
   }
   /**
    * @param string

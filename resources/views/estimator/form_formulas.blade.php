@@ -147,7 +147,7 @@
                     </div>
 
                 @else
-                    {{-- * all other asphalt types --}}
+                    {{-- * all other types --}}
 
                     <br/>
                     <div class="row">
@@ -1123,6 +1123,7 @@
                 var square_feet = 0;
                 //Materials
                 var tackcost = {{$materialsCB[14]}};
+
                 var curbmix = {{$materialsCB[9]}};
                 var drummix = {{$materialsCB[10]}};
                 var sealercost = {{$materialsCB[1]}};
@@ -1221,7 +1222,10 @@
                         var square_feet = $("#square_feet").val();
                         var depth = $("#depth").val();
                         var cost_per_day = $("#cost_per_day>option:selected").val();
-                        var materials_name = $('#cost_per_day').find('option:selected').text();
+                        //var materials_name = $('#cost_per_day').find('option:selected').text();
+                        var materials_name = $( "#cost_per_day option:selected" ).text();
+
+                        //alert (cost_per_day + '-' + materials_name);
 
                         var locations = $("#locations").val();
 
@@ -1243,6 +1247,9 @@
                             var sqyrd = Math.ceil(square_feet / 9);
                             $("#square_yards").val(sqyrd);
                             $("#x_square_yards").val(sqyrd);
+
+
+
                             var tonamount = Math.ceil((square_feet * depth) / 162);
                             $("#x_tons").val(tonamount);
 
@@ -1253,11 +1260,14 @@
                                 var tackamount = Math.ceil(square_feet / 108);
 
                             }
+
                             var totaltackcost = tackcost * tackamount;
                             $("#TackCost").text(formatCurrency.format(totaltackcost));
 
                             var totaltonscost = cost_per_day * tonamount;
                             $("#TonCost").text(formatCurrency.format(totaltonscost));
+
+
 
                             $("#form_header_over_head").text(formatCurrency.format(overhead));
 

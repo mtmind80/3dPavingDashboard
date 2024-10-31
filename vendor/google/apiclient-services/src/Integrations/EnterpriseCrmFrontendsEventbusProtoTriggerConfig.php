@@ -37,6 +37,10 @@ class EnterpriseCrmFrontendsEventbusProtoTriggerConfig extends \Google\Collectio
    */
   public $errorCatcherId;
   /**
+   * @var string[]
+   */
+  public $inputVariables;
+  /**
    * @var string
    */
   public $label;
@@ -44,6 +48,10 @@ class EnterpriseCrmFrontendsEventbusProtoTriggerConfig extends \Google\Collectio
    * @var string
    */
   public $nextTasksExecutionPolicy;
+  /**
+   * @var string[]
+   */
+  public $outputVariables;
   /**
    * @var bool
    */
@@ -62,6 +70,10 @@ class EnterpriseCrmFrontendsEventbusProtoTriggerConfig extends \Google\Collectio
    * @var string
    */
   public $triggerId;
+  /**
+   * @var string
+   */
+  public $triggerName;
   /**
    * @var string
    */
@@ -142,6 +154,20 @@ class EnterpriseCrmFrontendsEventbusProtoTriggerConfig extends \Google\Collectio
     return $this->errorCatcherId;
   }
   /**
+   * @param string[]
+   */
+  public function setInputVariables($inputVariables)
+  {
+    $this->inputVariables = $inputVariables;
+  }
+  /**
+   * @return string[]
+   */
+  public function getInputVariables()
+  {
+    return $this->inputVariables;
+  }
+  /**
    * @param string
    */
   public function setLabel($label)
@@ -168,6 +194,20 @@ class EnterpriseCrmFrontendsEventbusProtoTriggerConfig extends \Google\Collectio
   public function getNextTasksExecutionPolicy()
   {
     return $this->nextTasksExecutionPolicy;
+  }
+  /**
+   * @param string[]
+   */
+  public function setOutputVariables($outputVariables)
+  {
+    $this->outputVariables = $outputVariables;
+  }
+  /**
+   * @return string[]
+   */
+  public function getOutputVariables()
+  {
+    return $this->outputVariables;
   }
   /**
    * @param bool
@@ -252,6 +292,20 @@ class EnterpriseCrmFrontendsEventbusProtoTriggerConfig extends \Google\Collectio
   public function getTriggerId()
   {
     return $this->triggerId;
+  }
+  /**
+   * @param string
+   */
+  public function setTriggerName($triggerName)
+  {
+    $this->triggerName = $triggerName;
+  }
+  /**
+   * @return string
+   */
+  public function getTriggerName()
+  {
+    return $this->triggerName;
   }
   /**
    * @param string

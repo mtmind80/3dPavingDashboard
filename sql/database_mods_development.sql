@@ -1600,7 +1600,9 @@ ALTER TABLE equipment
   
   ALTER TABLE striping_costs
       DROP COLUMN old_id;
-      
+
+
+#add Maintenance Company to contact types      
       
       
 #  ALTER TABLE contractors  DROP COLUMN old_id;

@@ -19,11 +19,13 @@ namespace Google\Service\Walletobjects;
 
 class OfferClass extends \Google\Collection
 {
-  protected $collection_key = 'textModulesData';
+  protected $collection_key = 'valueAddedModuleData';
   /**
    * @var bool
    */
   public $allowMultipleUsersPerObject;
+  protected $appLinkDataType = AppLinkData::class;
+  protected $appLinkDataDataType = '';
   protected $callbackOptionsType = CallbackOptions::class;
   protected $callbackOptionsDataType = '';
   protected $classTemplateInfoType = ClassTemplateInfo::class;
@@ -95,6 +97,10 @@ class OfferClass extends \Google\Collection
   /**
    * @var string
    */
+  public $notifyPreference;
+  /**
+   * @var string
+   */
   public $provider;
   /**
    * @var string
@@ -124,6 +130,8 @@ class OfferClass extends \Google\Collection
   public $title;
   protected $titleImageType = Image::class;
   protected $titleImageDataType = '';
+  protected $valueAddedModuleDataType = ValueAddedModuleData::class;
+  protected $valueAddedModuleDataDataType = 'array';
   /**
    * @var string
    */
@@ -150,6 +158,20 @@ class OfferClass extends \Google\Collection
   public function getAllowMultipleUsersPerObject()
   {
     return $this->allowMultipleUsersPerObject;
+  }
+  /**
+   * @param AppLinkData
+   */
+  public function setAppLinkData(AppLinkData $appLinkData)
+  {
+    $this->appLinkData = $appLinkData;
+  }
+  /**
+   * @return AppLinkData
+   */
+  public function getAppLinkData()
+  {
+    return $this->appLinkData;
   }
   /**
    * @param CallbackOptions
@@ -504,6 +526,20 @@ class OfferClass extends \Google\Collection
   /**
    * @param string
    */
+  public function setNotifyPreference($notifyPreference)
+  {
+    $this->notifyPreference = $notifyPreference;
+  }
+  /**
+   * @return string
+   */
+  public function getNotifyPreference()
+  {
+    return $this->notifyPreference;
+  }
+  /**
+   * @param string
+   */
   public function setProvider($provider)
   {
     $this->provider = $provider;
@@ -640,6 +676,20 @@ class OfferClass extends \Google\Collection
   public function getTitleImage()
   {
     return $this->titleImage;
+  }
+  /**
+   * @param ValueAddedModuleData[]
+   */
+  public function setValueAddedModuleData($valueAddedModuleData)
+  {
+    $this->valueAddedModuleData = $valueAddedModuleData;
+  }
+  /**
+   * @return ValueAddedModuleData[]
+   */
+  public function getValueAddedModuleData()
+  {
+    return $this->valueAddedModuleData;
   }
   /**
    * @param string

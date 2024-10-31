@@ -20,6 +20,8 @@ namespace Google\Service\WorkloadManager;
 class SapDiscoveryResourceInstanceProperties extends \Google\Collection
 {
   protected $collection_key = 'clusterInstances';
+  protected $appInstancesType = SapDiscoveryResourceInstancePropertiesAppInstance::class;
+  protected $appInstancesDataType = 'array';
   /**
    * @var string[]
    */
@@ -31,8 +33,30 @@ class SapDiscoveryResourceInstanceProperties extends \Google\Collection
   /**
    * @var string
    */
+  public $instanceRole;
+  /**
+   * @var bool
+   */
+  public $isDrSite;
+  /**
+   * @var string
+   */
   public $virtualHostname;
 
+  /**
+   * @param SapDiscoveryResourceInstancePropertiesAppInstance[]
+   */
+  public function setAppInstances($appInstances)
+  {
+    $this->appInstances = $appInstances;
+  }
+  /**
+   * @return SapDiscoveryResourceInstancePropertiesAppInstance[]
+   */
+  public function getAppInstances()
+  {
+    return $this->appInstances;
+  }
   /**
    * @param string[]
    */
@@ -60,6 +84,34 @@ class SapDiscoveryResourceInstanceProperties extends \Google\Collection
   public function getInstanceNumber()
   {
     return $this->instanceNumber;
+  }
+  /**
+   * @param string
+   */
+  public function setInstanceRole($instanceRole)
+  {
+    $this->instanceRole = $instanceRole;
+  }
+  /**
+   * @return string
+   */
+  public function getInstanceRole()
+  {
+    return $this->instanceRole;
+  }
+  /**
+   * @param bool
+   */
+  public function setIsDrSite($isDrSite)
+  {
+    $this->isDrSite = $isDrSite;
+  }
+  /**
+   * @return bool
+   */
+  public function getIsDrSite()
+  {
+    return $this->isDrSite;
   }
   /**
    * @param string

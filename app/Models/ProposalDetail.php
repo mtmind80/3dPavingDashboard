@@ -27,6 +27,7 @@ class ProposalDetail extends Model
         'cost',
         'cost_per_linear_feet',
         'material_cost',
+        'materials_name',
         'service_name',
         'service_desc',
         'bill_after',

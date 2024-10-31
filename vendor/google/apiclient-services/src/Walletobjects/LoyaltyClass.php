@@ -19,7 +19,7 @@ namespace Google\Service\Walletobjects;
 
 class LoyaltyClass extends \Google\Collection
 {
-  protected $collection_key = 'textModulesData';
+  protected $collection_key = 'valueAddedModuleData';
   /**
    * @var string
    */
@@ -32,6 +32,8 @@ class LoyaltyClass extends \Google\Collection
    * @var bool
    */
   public $allowMultipleUsersPerObject;
+  protected $appLinkDataType = AppLinkData::class;
+  protected $appLinkDataDataType = '';
   protected $callbackOptionsType = CallbackOptions::class;
   protected $callbackOptionsDataType = '';
   protected $classTemplateInfoType = ClassTemplateInfo::class;
@@ -96,6 +98,10 @@ class LoyaltyClass extends \Google\Collection
    * @var string
    */
   public $multipleDevicesAndHoldersAllowedStatus;
+  /**
+   * @var string
+   */
+  public $notifyPreference;
   protected $programLogoType = Image::class;
   protected $programLogoDataType = '';
   /**
@@ -132,6 +138,8 @@ class LoyaltyClass extends \Google\Collection
   protected $securityAnimationDataType = '';
   protected $textModulesDataType = TextModuleData::class;
   protected $textModulesDataDataType = 'array';
+  protected $valueAddedModuleDataType = ValueAddedModuleData::class;
+  protected $valueAddedModuleDataDataType = 'array';
   /**
    * @var string
    */
@@ -186,6 +194,20 @@ class LoyaltyClass extends \Google\Collection
   public function getAllowMultipleUsersPerObject()
   {
     return $this->allowMultipleUsersPerObject;
+  }
+  /**
+   * @param AppLinkData
+   */
+  public function setAppLinkData(AppLinkData $appLinkData)
+  {
+    $this->appLinkData = $appLinkData;
+  }
+  /**
+   * @return AppLinkData
+   */
+  public function getAppLinkData()
+  {
+    return $this->appLinkData;
   }
   /**
    * @param CallbackOptions
@@ -538,6 +560,20 @@ class LoyaltyClass extends \Google\Collection
     return $this->multipleDevicesAndHoldersAllowedStatus;
   }
   /**
+   * @param string
+   */
+  public function setNotifyPreference($notifyPreference)
+  {
+    $this->notifyPreference = $notifyPreference;
+  }
+  /**
+   * @return string
+   */
+  public function getNotifyPreference()
+  {
+    return $this->notifyPreference;
+  }
+  /**
    * @param Image
    */
   public function setProgramLogo(Image $programLogo)
@@ -690,6 +726,20 @@ class LoyaltyClass extends \Google\Collection
   public function getTextModulesData()
   {
     return $this->textModulesData;
+  }
+  /**
+   * @param ValueAddedModuleData[]
+   */
+  public function setValueAddedModuleData($valueAddedModuleData)
+  {
+    $this->valueAddedModuleData = $valueAddedModuleData;
+  }
+  /**
+   * @return ValueAddedModuleData[]
+   */
+  public function getValueAddedModuleData()
+  {
+    return $this->valueAddedModuleData;
   }
   /**
    * @param string

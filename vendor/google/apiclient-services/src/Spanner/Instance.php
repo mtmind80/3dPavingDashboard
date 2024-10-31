@@ -19,7 +19,9 @@ namespace Google\Service\Spanner;
 
 class Instance extends \Google\Collection
 {
-  protected $collection_key = 'endpointUris';
+  protected $collection_key = 'replicaComputeCapacity';
+  protected $autoscalingConfigType = AutoscalingConfig::class;
+  protected $autoscalingConfigDataType = '';
   /**
    * @var string
    */
@@ -32,6 +34,10 @@ class Instance extends \Google\Collection
    * @var string
    */
   public $displayName;
+  /**
+   * @var string
+   */
+  public $edition;
   /**
    * @var string[]
    */
@@ -58,6 +64,8 @@ class Instance extends \Google\Collection
    * @var int
    */
   public $processingUnits;
+  protected $replicaComputeCapacityType = ReplicaComputeCapacity::class;
+  protected $replicaComputeCapacityDataType = 'array';
   /**
    * @var string
    */
@@ -67,6 +75,20 @@ class Instance extends \Google\Collection
    */
   public $updateTime;
 
+  /**
+   * @param AutoscalingConfig
+   */
+  public function setAutoscalingConfig(AutoscalingConfig $autoscalingConfig)
+  {
+    $this->autoscalingConfig = $autoscalingConfig;
+  }
+  /**
+   * @return AutoscalingConfig
+   */
+  public function getAutoscalingConfig()
+  {
+    return $this->autoscalingConfig;
+  }
   /**
    * @param string
    */
@@ -108,6 +130,20 @@ class Instance extends \Google\Collection
   public function getDisplayName()
   {
     return $this->displayName;
+  }
+  /**
+   * @param string
+   */
+  public function setEdition($edition)
+  {
+    $this->edition = $edition;
+  }
+  /**
+   * @return string
+   */
+  public function getEdition()
+  {
+    return $this->edition;
   }
   /**
    * @param string[]
@@ -206,6 +242,20 @@ class Instance extends \Google\Collection
   public function getProcessingUnits()
   {
     return $this->processingUnits;
+  }
+  /**
+   * @param ReplicaComputeCapacity[]
+   */
+  public function setReplicaComputeCapacity($replicaComputeCapacity)
+  {
+    $this->replicaComputeCapacity = $replicaComputeCapacity;
+  }
+  /**
+   * @return ReplicaComputeCapacity[]
+   */
+  public function getReplicaComputeCapacity()
+  {
+    return $this->replicaComputeCapacity;
   }
   /**
    * @param string

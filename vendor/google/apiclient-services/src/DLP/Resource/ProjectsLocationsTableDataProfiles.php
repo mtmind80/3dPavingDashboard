@@ -19,6 +19,7 @@ namespace Google\Service\DLP\Resource;
 
 use Google\Service\DLP\GooglePrivacyDlpV2ListTableDataProfilesResponse;
 use Google\Service\DLP\GooglePrivacyDlpV2TableDataProfile;
+use Google\Service\DLP\GoogleProtobufEmpty;
 
 /**
  * The "tableDataProfiles" collection of methods.
@@ -30,6 +31,22 @@ use Google\Service\DLP\GooglePrivacyDlpV2TableDataProfile;
  */
 class ProjectsLocationsTableDataProfiles extends \Google\Service\Resource
 {
+  /**
+   * Delete a TableDataProfile. Will not prevent the profile from being
+   * regenerated if the table is still included in a discovery configuration.
+   * (tableDataProfiles.delete)
+   *
+   * @param string $name Required. Resource name of the table data profile.
+   * @param array $optParams Optional parameters.
+   * @return GoogleProtobufEmpty
+   * @throws \Google\Service\Exception
+   */
+  public function delete($name, $optParams = [])
+  {
+    $params = ['name' => $name];
+    $params = array_merge($params, $optParams);
+    return $this->call('delete', [$params], GoogleProtobufEmpty::class);
+  }
   /**
    * Gets a table data profile. (tableDataProfiles.get)
    *
@@ -68,7 +85,7 @@ class ProjectsLocationsTableDataProfiles extends \Google\Service\Resource
    * status_code = 1` * `project_id = 12345 AND sensitivity_level = HIGH` *
    * `project_id = 12345 AND resource_visibility = PUBLIC` The length of this
    * field should be no more than 500 characters.
-   * @opt_param string orderBy Comma separated list of fields to order by,
+   * @opt_param string orderBy Comma-separated list of fields to order by,
    * followed by `asc` or `desc` postfix. This list is case insensitive. The
    * default sorting order is ascending. Redundant space characters are
    * insignificant. Only one order field at a time is allowed. Examples: *
