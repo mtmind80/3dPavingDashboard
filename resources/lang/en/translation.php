@@ -411,5 +411,6 @@ return [
     "fees" => "Fees",
     "serviceterms" => "Terms of Service",
     "my" => "My",
+    "memo" => "Update Memo",
 ];
 

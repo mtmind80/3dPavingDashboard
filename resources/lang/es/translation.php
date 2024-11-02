@@ -405,4 +405,5 @@ return [
     "fees" => "Fees",
     "serviceterms" => "Términos de servicio",
     "my" => "Mi",
+    "memo" => "Update Memo",
 ];
