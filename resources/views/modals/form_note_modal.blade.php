@@ -8,7 +8,7 @@
                 <input id="form_note_modal_tab" name="tab" type="hidden">
                 <input id="form_note_contact_id" name="contact_id" type="hidden">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="formNoteModalLabel"><b><span></span></b> - @lang('translation.add') @lang('translation.note')</h5>
+                    <h5 class="modal-title" id="formNoteModalLabel"><b><span></span></b> - @lang('translation.add') @lang('translation.note') Or @lang('translation.memo')</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
