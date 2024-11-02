@@ -28,18 +28,19 @@
                             <th class="td-sortable tc w400">{!! \App\Traits\SortableTrait::link('county', 'Address') !!}</th>
                             <th class="td-sortable tc w160">{!! \App\Traits\SortableTrait::link('phone', 'Phones') !!}</th>
                             <th class="td-sortable tc w380">{!! \App\Traits\SortableTrait::link('email', 'Emails') !!}</th>
-                            <th class="td-sortable tc w200">{!! \App\Traits\SortableTrait::link('contacts.contact_type_id|contact_types.type', 'Contact Type') !!}</th>
+                            <th class="td tc w200">Memo</th>
                             <th class="actions">Actions</th>
                         </tr>
                         </thead>
                         <tbody>
                         @foreach ($contacts as $contact)
                             <tr class="{{ $contact->isDeleted() ? 'disabled' : '' }}" data-id="{{ $contact->id }}">
-                                <td class="tc"><a href="{{ route('contact_details', ['contact' => $contact->id]) }}">{{ $contact->full_name }}</a>{!! !empty($contact->company->full_name) ? '<br><span class="fs13">retaled to: '.$contact->company->full_name.'</span>' : null !!}</td>
+                                <td class="tc"><a href="{{ route('contact_details', ['contact' => $contact->id]) }}">{{ $contact->full_name }}</a>{!! !empty($contact->company->full_name) ? '<br><span class="fs13">retaled to: '.$contact->company->full_name.'</span>' : null !!}
+                                </br>{{ !empty($contact->contactType) ? $contact->contactType->type : null }}</td>
                                 <td class="tc">{!! $contact->full_address_two_line !!}</td>
                                 <td class="tc">{!! $contact->phones_two_lines !!}</td>
                                 <td class="tc">{!! $contact->emails_two_lines !!}</td>
-                                <td class="tc">{{ !empty($contact->contactType) ? $contact->contactType->type : null }}</td>
+                                <td class="tc">{{ !empty($contact->note) ? $contact->note : null }}</td>
                                 <td class="centered actions">
                                     <ul class="nav navbar-nav">
                                         <li class="dropdown">
@@ -47,7 +48,7 @@
                                             <ul class="dropdown-menu animated animated-short flipInX" role="menu">
                                                 <li>
                                                     <a href="javascript:" class="action" data-action="add-note" data-route="{{ route('contact_field_note_update', ['contact' => $contact->id]) }}" data-contact_name="{{ $contact->full_name }}">
-                                                        <span class="fas fa-sticky-note"></span>@lang('translation.note')
+                                                        <span class="fas fa-sticky-note"></span>@lang('translation.memo')
                                                         <span class="hidden contact-note">{!! $contact->note !!}</span>
                                                     </a>
                                                 </li>
