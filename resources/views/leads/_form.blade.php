@@ -20,13 +20,13 @@
     </div>
     <div class="col-lg-6 col-md-6 col-sm-6 admin-form-item-widget">
         <x-form-text name="last_name" class="check-lead"
-                     :params="['label' => 'Caller Last Name', 'iconClass' => 'fas fa-user', 'required' => false]">{{ $lead->last_name ?? null }}</x-form-text>
+                     :params="['label' => 'Caller Last Name', 'iconClass' => 'fas fa-user', 'required' => true]">{{ $lead->last_name ?? null }}</x-form-text>
     </div>
 </div>
 <div class="row">
     <div class="col-lg-6 col-md-6 col-sm-6 admin-form-item-widget">
         <x-form-text name="email" class="check-lead"
-                     :params="['label' => 'Email', 'iconClass' => 'fas fa-envelope', 'required' => false]">{{ $lead->email ?? null }}</x-form-text>
+                     :params="['label' => 'Email', 'iconClass' => 'fas fa-envelope', 'required' => true]">{{ $lead->email ?? null }}</x-form-text>
     </div>
     <div class="col-lg-6 col-md-6 col-sm-6 admin-form-item-widget">
         <x-form-text name="phone"
@@ -98,11 +98,7 @@
         <x-form-textarea style="height:135px" name="type_of_work_needed"
                          :params="['label' =>  'Type Of Work Needed', 'iconClass' => 'fas fa-sticky-note', 'required' => true]">{{ $lead->type_of_work_needed ?? null }}</x-form-textarea>
     </div>
-    <div class="col-lg-3 col-md-6 col-sm-6 admin-form-item-widget">
-        <x-form-text name="best_days"
-                     :params="['label' => 'Best Day/Time to Call', 'iconClass' => 'fas fa-bookmark', 'required' => true]">{{ $lead->best_days ?? null }}</x-form-text>
-    </div>
-    <div class="col-lg-3 not-lg-hidden admin-form-item-widget"></div>
+    <div class="col-lg-6 not-lg-hidden admin-form-item-widget"></div>
 </div>
 <div class="row buttons">
     <div class="col-sm-12 tr">
@@ -182,10 +178,6 @@
                         required: false,
                         boolean: true
                     },
-                    best_days: {
-                        required: true,
-                        plainText: true
-                    }
                 },
                 messages: {
                     first_name: {
@@ -242,10 +234,6 @@
                     },
                     onsite: {
                         boolean: true
-                    },
-                    best_days: {
-                        required: "@lang('translation.field_required')",
-                        plainText: "@lang('translation.invalid_entry')"
                     }
                 },
                 submitHandler: function (form) {

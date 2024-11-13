@@ -91,11 +91,8 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-lg-2 col-md-3 col-sm-4 admin-form-item-widget">
+                                <div class="col-lg-3 col-md-3 col-sm-4 admin-form-item-widget">
                                     <x-form-show :params="['label' => 'Onsite', 'iconClass' => 'fas fa-question']">{{ $lead->onsite ? 'Yes' : 'No' }}</x-form-show>
-                                </div>
-                                <div class="col-lg-6 col-md-5 col-sm-4 admin0xEe92902a284987283769F9350711f4A3369D34c2-form-item-widget">
-                                    <x-form-show :params="['label' => 'Best Days', 'iconClass' => 'fas fa-bookmark']">{{ $lead->best_days }}</x-form-show>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 admin-form-item-widget">
                                     <x-form-show :params="['label' => 'Created By', 'iconClass' => 'fas fa-user']">{{ $lead->creator->full_name ?? null }}</x-form-show>
