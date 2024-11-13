@@ -31,13 +31,13 @@
                         <li class="nav-item  no-border">
                             <a class="nav-link active" data-toggle="tab" href="#permits" role="tab">
                                 <span class="d-block list-item"><i
-                                        class="ri-building-2-line"></i>@lang('translation.edit') @lang('translation.permit')</span>
+                                        class="ri-edit-box-line"></i>@lang('translation.edit') @lang('translation.permit')</span>
                             </a>
                         </li>
 
                         <li class="nav-item">
                             <a id="tab_link_notes" class="nav-link" data-toggle="tab" href="#notes" role="tab">
-                                <span class="d-block list-item"><i class="ri-inbox-line"></i>@lang('translation.notes') / @lang('translation.fees')</span>
+                                <span class="d-block list-item"><i class="ri-money-dollar-box-line"></i>@lang('translation.notes') / @lang('translation.fees')</span>
                             </a>
                         </li>
                     </ul>
@@ -60,7 +60,7 @@
                                     <input type="hidden" name="proposal_id" value="{{$permit->proposal->id}}">
 
                                     <div class="row">
-                                        <div class="col-lg-1">
+                                        <div class="col-lg-4">
                                             <label>Status:</label>
                                             <select class="form-control" name="status">
                                                 <option>{{$permit->status}}</option>
@@ -70,7 +70,7 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                        <div class="col-lg-2">
+                                        <div class="col-lg-4">
                                             <label>Type:</label>
                                             <select class="form-control" name="type">
                                                 <option>{{$permit->type}}</option>
@@ -79,12 +79,14 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                        <div class="col-lg-1">
+                                        <div class="col-lg-4">
                                             <x-form-text name="number"
                                                          :params="['label' => 'Permit Number', 'iconClass' => 'fas fa-folder']">{{ $permit->number }}</x-form-text>
                                         </div>
+                                    </div>
+                                    <div class="row">
 
-                                        <div class="col-lg-2">
+                                    <div class="col-lg-3">
                                             <label>County:</label>
                                             <select name="county" id="county" class="form-control">
                                                 @foreach($countiesCB as $county)
@@ -92,7 +94,7 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                        <div class="col-lg-2">
+                                        <div class="col-lg-3">
                                             <label>City:</label>
                                             <select name="city" id="city" class="form-control">
                                                 @foreach($citiesCB as $city)
@@ -111,12 +113,12 @@
 
                                             </select>
                                         </div>
-                                        <div class="col-lg-2">
+                                        <div class="col-lg-3">
                                             <x-form-text name="city" :
                                                          params="['label' => 'City', 'iconClass' => 'fas fa-file','required' => true]">{{ $permit->city }}</x-form-text>
                                         </div>
                                         --}}
-                                        <div class="col-lg-2">
+                                        <div class="col-lg-3">
                                             <x-form-date-picker
                                                 name="submitted_on"
                                                 :params="[
@@ -128,7 +130,7 @@
                                             ></x-form-date-picker>
 
                                         </div>
-                                        <div class="col-lg-2">
+                                        <div class="col-lg-3">
                                             <x-form-date-picker
                                                 name="expires_on"
                                                 :params="[

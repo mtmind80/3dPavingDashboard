@@ -111,7 +111,7 @@
                             @if (!empty($contact->note))
                                 <div class="row">
                                     <div class="col-lg-12 col-md-12 col-sm-12 admin-form-item-widget">
-                                        <x-form-show class="mh-100" :params="['label' => 'Note', 'iconClass' => 'fas fa-sticky-note']">{{ $contact->note ?? null }}</x-form-show>
+                                        <x-form-show class="mh-100" :params="['label' => 'Memo', 'iconClass' => 'fas fa-sticky-note']">{{ $contact->note ?? null }}</x-form-show>
                                     </div>
                                 </div>
                             @endif

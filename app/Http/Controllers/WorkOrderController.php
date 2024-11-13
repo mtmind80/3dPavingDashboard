@@ -262,7 +262,8 @@ class WorkOrderController extends Controller
         $payments = Payment::where('proposal_id','=',$id)->get()->toArray();
         $data['payments'] = $payments;
         $data['workorder'] = $workorder;
-        $data['payment_types'] = ['Deposit' =>'Deposit','Interim Payment' =>'Interim Payment','Additional Payment'=>'Additional Payment','Final Payment'=>'Final Payment'];
+        $data['payment_types'] = ['Deposit' =>'Deposit','Progress Billing' =>'Progress Billing','Final Payment'=>'Final Payment','Permit Fee'=>'Permit Fee'];
+        $data['cert_holders'] = ['APEX','3D', 'NONE'];
         return view('workorders.paymentmanager', $data);
 
     }
@@ -278,7 +279,8 @@ class WorkOrderController extends Controller
         $data['id'] = $id;
         $data['payments'] = $payments;
         $data['workorder'] = $workorder;
-        $data['payment_types'] = ['Deposit' =>'Deposit','Interim Payment' =>'Interim Payment','Additional Payment'=>'Additional Payment','Final Payment'=>'Final Payment'];
+        $data['payment_types'] = ['Deposit' =>'Deposit','Progress Billing' =>'Progress Billing','Final Payment'=>'Final Payment','Permit Fee'=>'Permit Fee'];
+        $data['cert_holders'] = ['APEX','3D', 'NONE'];
 
         return $this->payments($id)->with('success', "Nice Work!");;
 //        return view('workorders.paymentmanager', $data)->with('success', "Nice Work!");
