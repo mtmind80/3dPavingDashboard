@@ -32,7 +32,6 @@ class LeadRequest extends Request
             'lead_source'               => 'required|plainText',
             'how_related'               => 'nullable|plainText',
             'onsite'                    => 'nullable|boolean',
-            'best_days'                 => 'required|plainText',
         ];
     }
 

@@ -94,7 +94,7 @@
 </div>
 <div class="row">
     <div class="col-lg-12 col-md-12 col-sm-12 admin-form-item-widget">
-        <x-form-textarea style="height:135px" name="note" :params="['label' =>  'Note', 'iconClass' => 'fas fa-sticky-note', 'required' => false]">{{ $contact->note ?? old('note') ?? null }}</x-form-textarea>
+        <x-form-textarea style="height:135px" name="note" :params="['label' =>  'Memo', 'iconClass' => 'fas fa-sticky-note', 'required' => false]">{{ $contact->note ?? old('note') ?? null }}</x-form-textarea>
     </div>
 </div>
 

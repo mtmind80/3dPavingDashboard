@@ -38,7 +38,6 @@ class Lead extends Model
         'how_related',
         'community_name',
         'onsite',
-        'best_days',
     ];
 
     public $sortable = [

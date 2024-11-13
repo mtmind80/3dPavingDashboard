@@ -54,21 +54,21 @@ class PermitsController extends Controller
             $permits = DB::table('permits')
                 ->join('proposals','proposals.id','=','permits.proposal_id')
                 ->selectRaw( 'permits.*, proposals.name, proposals.job_master_id, proposals.salesperson_id')
-                ->where('permits.status', '<>', 'Completed')
+                ->where('permits.status', '<>', 'Approved')
                 ->get();
         } else {
 
             $permits = DB::table('permits')
                 ->join('proposals','proposals.id','=','permits.proposal_id')
                 ->selectRaw( 'permits.*, proposals.name, proposals.job_master_id, proposals.salesperson_id')
-                ->where('permits.status', '<>', 'Completed')
+                ->where('permits.status', '<>', 'Approved')
                 ->where('proposals.salesperson_id', '=', auth()->user()->id)
                 ->get();
 
         }
 
         //dd($permits);
-        $counties = DB::table('counties')->groupBy('county')->get(['county']);
+        $counties = DB::table('florida_counties')->groupBy('county')->get(['county']);
 
 
         $data = [
@@ -117,7 +117,7 @@ class PermitsController extends Controller
         $data['id'] = $id;
         $data['proposal'] = Proposal::where('id', '=', $id)->first();
         $data['statusCB'] = $this->statusCB;
-        $counties = DB::table('counties')->groupBy('county')->orderBy('county')->get(['county']);
+        $counties = DB::table('florida_counties')->groupBy('county')->orderBy('county')->get(['county']);
         $data['counties'] = $counties;
 
         $data['statuses'] = $this->statusCB;
@@ -219,7 +219,7 @@ class PermitsController extends Controller
         $validator = Validator::make(
             $request->only(['new_status']), [
                 'status' => [
-                    Rule::in(['Approved', 'Completed', 'Not Submitted', 'Submitted', 'Under Review']),
+                    Rule::in(['Approved','Comments','Not Submitted', 'Submitted', 'Under Review']),
                 ],
             ]
         );
