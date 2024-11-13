@@ -37,7 +37,7 @@
                             <tr class="{{ $contact->isDeleted() ? 'disabled' : '' }}" data-id="{{ $contact->id }}">
                                 <td class="tc"><a href="{{ route('contact_details', ['contact' => $contact->id]) }}">{{ $contact->full_name }}</a>{!! !empty($contact->company->full_name) ? '<br><span class="fs13">retaled to: '.$contact->company->full_name.'</span>' : null !!}
                                 </br>{{ !empty($contact->contactType) ? $contact->contactType->type : null }}</td>
-                                <td class="tc">{!! $contact->full_address_two_line !!}</td>
+                                <td class="tc">{!! $contact->full_address_one_line !!}</td>
                                 <td class="tc">{!! $contact->phones_two_lines !!}</td>
                                 <td class="tc">{!! $contact->emails_two_lines !!}</td>
                                 <td class="tc">{{ !empty($contact->note) ? $contact->note : null }}</td>
