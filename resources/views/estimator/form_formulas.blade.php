@@ -1151,8 +1151,9 @@
                         {{-- Asphalt Milling --}}
 
                         var ohead = 0.88;
+                        console.log("overhead:" + ohead);
                         //var cost_per_day = $("#cost_per_day").val();
-                        var cost_per_day = $("#cost_per_day>option:selected").val();
+                        var cost_per_day = $("#cost_per_day").val();
                         var materials_name = $('#cost_per_day').find('option:selected').text();
 
 
@@ -1162,6 +1163,7 @@
                         var days = $("#days").val();
 
                         if (parseFloat(cost_per_day) == cost_per_day && parseFloat(days) == days && parseFloat(square_feet) == square_feet && parseFloat(depth) == depth) {
+                            //alert(cost_per_day + " "  + days + " " + square_feet + " " + depth);
 
                             var square_yards = Math.ceil(square_feet / 9);
 
@@ -1206,7 +1208,7 @@
 
                         } else {
 
-                            showInfoAlert('You can only enter numbers for Square Feet, Depth, and Cost.', headerAlert);
+                            showInfoAlert('You must only enter numbers for Square Feet, Depth, Days of Milling and Cost Per Day.', headerAlert);
                             return;
 
 
@@ -1404,6 +1406,7 @@
 
                         if (square_feet == parseInt(square_feet) && depth == parseInt(depth)) {
 
+
                             var cubic_yards = Math.ceil((square_feet * depth) / 300);
 
                             $("#cubic_yards").val(cubic_yards);
@@ -1560,7 +1563,7 @@
                     var cost_per_day = $("#cost_per_day").val();
                     var alt_desc = $("#alt_desc").val();
                     var locations = $("#locations").val();
-
+                    var overhead = 0;
                     if (cost_per_day == parseInt(cost_per_day)) {
                         materials = 0;
 
@@ -1858,7 +1861,11 @@
                 var profit = $("#form_header_profit").val();
                 var otcost = Math.ceil(parseFloat(combinedcost) + parseFloat(profit));
                 var overhead = Math.ceil((otcost / ohead) - otcost);
+                if (serviceCategoryId == 5) {
+                    var overhead = 0;
 
+                }
+                //console.log("otcost" + otcost + " OHEAD" + ohead);
 
                 $("#form_header_over_head").text(formatCurrency.format(overhead));
                 $("#explain").html('Percent Overhead');
