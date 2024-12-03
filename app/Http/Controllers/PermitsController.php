@@ -68,7 +68,7 @@ class PermitsController extends Controller
         }
 
         //dd($permits);
-        $counties = DB::table('florida_counties')->groupBy('county')->get(['county']);
+        $counties = DB::table('counties')->groupBy('county')->get(['county']);
 
 
         $data = [

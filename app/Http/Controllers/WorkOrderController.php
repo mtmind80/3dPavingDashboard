@@ -36,7 +36,7 @@ class WorkOrderController extends Controller
             $query->where('salesperson_id', auth()->user()->id);
         }
 
-        $workorders = $query->with(['location', 'contact', 'status', 'salesPerson'])->paginate($perPage);
+        $workorders = $query->with(['location', 'contact', 'status', 'salesPerson'])->orderBy('proposal_date','DESC')->paginate($perPage);
 
         $data = [
             'workorders' => $workorders,
@@ -120,6 +120,10 @@ class WorkOrderController extends Controller
 
 
         if ($proposal) {
+
+            $currencyTotalDetailCosts = $proposal->currency_total_details_costs;
+
+            $data['currency_total_details_costs'] = $currencyTotalDetailCosts;
 
             $data['allowSchedule'] = false;
 

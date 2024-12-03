@@ -9,7 +9,7 @@ class County extends Model
 {
     public $timestamps = false;
 
-    protected $table = 'florida_counties';
+    protected $table = 'counties';
 
     /** Methods */
 

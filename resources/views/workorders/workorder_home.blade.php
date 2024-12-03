@@ -160,20 +160,20 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                            <td>
+                                        <td>
                                             @lang('translation.permit') @lang('translation.required')
-                                            </td>
+                                        </td>
 
-                                            <td>@if($proposal['permit_required'])
-                                                    YES
-                                                    @if(auth()->user()->isAdmin())
-                                                        <button class="{{$site_button_class}}" id="addpermit">Add Permit
-                                                        </button>
-                                                    @endif
-                                                @else
-                                                    NO
+                                        <td>@if($proposal['permit_required'])
+                                                YES
+                                                @if(auth()->user()->isAdmin())
+                                                    <button class="{{$site_button_class}}" id="addpermit">Add Permit
+                                                    </button>
                                                 @endif
-                                            </td>
+                                            @else
+                                                NO
+                                            @endif
+                                        </td>
                                     </tr>
 
                                     @if($proposal['permit_required'] && $permits)
@@ -199,8 +199,12 @@
                                                             <td class="tc">{{$permit->county}}</td>
                                                             <td class="tc">{{$permit->number}}</td>
                                                             <td class="tc">{{$permit->status}}</td>
-                                                            <td class="tc">@if($permit->submitted_on){{$permit->submitted_on->format('M-d-Y')}}@endif</td>
-                                                            <td class="tc">@if($permit->expires_on){{$permit->expires_on->format('M-d-Y')}}@endif</td>
+                                                            <td class="tc">@if($permit->submitted_on)
+                                                                    {{$permit->submitted_on->format('M-d-Y')}}
+                                                                @endif</td>
+                                                            <td class="tc">@if($permit->expires_on)
+                                                                    {{$permit->expires_on->format('M-d-Y')}}
+                                                                @endif</td>
                                                         </tr>
                                                     @endforeach
                                                 </table>
@@ -254,30 +258,30 @@
 
                                         @if($changeorders)
 
-                                                <td style="background-color:#A4F9F9;">
-                                                    Change Orders
-                                                </td>
-                                                <td>
-                                                    <table width="80%">
+                                            <td style="background-color:#A4F9F9;">
+                                                Change Orders
+                                            </td>
+                                            <td>
+                                                <table width="80%">
+                                                    <tr>
+                                                        <th class="tc">View</th>
+                                                        <th class="tc">Name</th>
+                                                        <th class="tc">Created</th>
+                                                    </tr>
+                                                    @foreach($changeorders as $changeorder)
                                                         <tr>
-                                                            <th class="tc">View</th>
-                                                            <th class="tc">Name</th>
-                                                            <th class="tc">Created</th>
+                                                            <td class="tc">
+                                                                <a href="{{route('show_proposal',['id'=>$changeorder->new_proposal_id])}}">
+                                                                    View Change Order</a>
+                                                            </td>
+                                                            <td class="tc">{{\App\Models\Proposal::where('id', '=', $changeorder->new_proposal_id)->first()->name}}</td>
+                                                            <td class="tc">{{\App\Models\Proposal::where('id', '=', $changeorder->new_proposal_id)->first()->created_at->format('Y-m-d')}}</td>
                                                         </tr>
-                                                        @foreach($changeorders as $changeorder)
-                                                            <tr>
-                                                                <td class="tc">
-                                                                    <a href="{{route('show_proposal',['id'=>$changeorder->new_proposal_id])}}">
-                                                                        View Change Order</a>
-                                                                </td>
-                                                                <td class="tc">{{\App\Models\Proposal::where('id', '=', $changeorder->new_proposal_id)->first()->name}}</td>
-                                                                <td class="tc">{{\App\Models\Proposal::where('id', '=', $changeorder->new_proposal_id)->first()->created_at->format('Y-m-d')}}</td>
-                                                            </tr>
-                                                        @endforeach
-                                                    </table>
+                                                    @endforeach
+                                                </table>
 
 
-                                                </td>
+                                            </td>
                                             </tr>
 
                                         @endif
@@ -313,7 +317,15 @@
                                             </tr>
                                             </thead>
                                             <tbody>
+                                            @php
+                                                $totalcost = 0;
+                                            @endphp
+
                                             @foreach($services as $service)
+                                                @php
+
+                                                    $totalcost = $totalcost + $service->cost;
+                                                @endphp
                                                 <tr>
 
                                                     <td>
@@ -408,6 +420,13 @@
                                                 </tr>
                                             @endforeach
                                             </tbody>
+                                            <tfoot>
+                                            <tr class="pt10 no-border">
+                                                <td class="tr" colspan="4">Grand Total:</td>
+                                                <td class="tc">{{ $currency_total_details_costs }}</td>
+                                                <td class="tr"></td>
+                                            </tr>
+                                            </tfoot>
                                         </table>
                                     @endif
                                 </div>

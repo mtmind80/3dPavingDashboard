@@ -41,6 +41,11 @@ class WorkOrder extends Proposal
         $this->hasMany(Permit::class, 'proposal_id', 'id');
 
     }
+    public function services()
+    {
+        $this->hasMany(ProposalDetail::class, 'proposal_id', 'id');
+
+    }
     public function payment()
     {
         $this->hasMany(Payment::class, 'proposal_id', 'id');

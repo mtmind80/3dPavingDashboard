@@ -3,12 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Currency;
+use App\Models\AcceptedDocuments;
 use App\Models\Contractor;
 use App\Models\Equipment;
+use App\Models\LaborRate;
 use App\Models\Material;
+use App\Models\Proposal;
+use App\Models\ProposalMaterial;
+use App\Models\ServiceCategory;
 use App\Models\User;
 use App\Models\Vehicle;
 use App\Models\ProposalDetail;
+use App\Models\VehicleType;
 use App\Models\WorkorderEquipment;
 use App\Models\WorkorderMaterial;
 use App\Models\WorkorderSubcontractor;
@@ -494,5 +500,80 @@ class WorkOrderDetailsController extends Controller
             ]);
         }
     }
+
+
+
+    public function view_service($proposal_id, $id)
+    {
+
+        if (!$proposalDetail = ProposalDetail::with([
+            'proposal' => function ($q) {
+                $q->with(['contact']);
+            },
+            'service',
+            'striping',
+            'location',
+            'vehicles',
+            'equipment' => function ($w) {
+                $w->with(['equipment']);
+            },
+            'labor',
+            'additionalCosts',
+            'subcontractors' => function ($e) {
+                $e->with(['contractor']);
+            },
+            'service' => function ($r) {
+                $r->with(['category']);
+            },
+        ])->find($id)) {
+            return view('pages-404');
+        }
+
+        $asphaltMaterials = ProposalMaterial::where('proposal_id', $proposal_id)->byServiceCategory(1);
+        $rockMaterials = ProposalMaterial::where('proposal_id', $proposal_id)->byServiceCategory(7);
+        $sealcoatMaterials = ProposalMaterial::where('proposal_id', $proposal_id)->byServiceCategory(8);
+        $materialsCB = ProposalMaterial::where('proposal_id', $proposal_id)->pluck('cost', 'material_id')->toArray();
+        $color = ServiceCategory::where('id', '=', $proposalDetail->service->service_category_id)->first();
+
+        $data = [
+            'service_id' => $proposalDetail->service->id,
+            'service_cat' => $proposalDetail->service->service_category_id,
+            'header_name' => 'Build Service Estimate',
+            'proposalDetail' => $proposalDetail,
+            'proposal' => $proposalDetail->proposal,
+            'contact' => $proposalDetail->proposal->contact,
+            'sealcoatMaterials' => $sealcoatMaterials,
+            'rockMaterials' => $rockMaterials,
+            'asphaltMaterials' => $asphaltMaterials,
+            'striping' => $proposalDetail->striping,
+            'service' => $proposalDetail->service,
+            'color' => $color,
+            'service_category_name' => $proposalDetail->service->category->name,
+            'equipmentCollection' => Equipment::available()->orderBy('name')->get(),
+            'materialsCB' => $materialsCB,
+            'vehiclesCB' => VehicleType::get(),
+            'laborCB' => LaborRate::LaborWithRatesCB(['0' => 'Select labor']),
+            'contractorsCB' => Contractor::contractorsCB(['0' => 'Select contractor']),
+            'contractors' => Contractor::orderBy('name')->get(),
+            'allowedFileExtensions' => AcceptedDocuments::extensionsStrCid(),
+            //'strippingCB' => StripingCost::strippingCB(['0' => 'Select contractor']),
+            'typesCB' => ['0' => 'Select type', 'Dump Fee' => 'Dump Fee', 'Other' => 'Other'],
+        ];
+
+//            'vehiclesCB' => Vehicle::vehiclesCB(['0' => 'Select vehicle']),
+
+        if ($proposalDetail->service->id == 18) { // striping costs
+
+            //$sorted = $data['striping']->sortBy(['service.dsort', 'description']);
+            //$data['striping'] = $sorted;
+            return view('workorders.striping', $data);
+
+        }
+
+        return view('workorders.view_service', $data);
+
+
+    }
+
 
 }
