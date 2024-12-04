@@ -22,7 +22,7 @@ class Controller extends BaseController
 
     protected $returnTo;
     protected $tabSelected;
-
+    public $showprices;
 
     public function __construct()
     {
@@ -54,6 +54,14 @@ class Controller extends BaseController
                     $this->returnTo .= '&tab=' . $this->tabSelected;
                 }
             }
+
+
+            $this->showprices = false; // don't show pricing field agents, employees
+            if (auth()->user()->isAllSales()) {
+                $this->showprices = true;
+            }
+            view()->share('showprices', $this->showprices);
+
 
             view()->share('lang', \Lang::locale());
             view()->share('returnTo', $this->returnTo);

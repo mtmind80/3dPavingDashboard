@@ -61,6 +61,7 @@
                                                 <a href="{{ route('show_workorder',['id'=>$workorder->id]) }}" title="@lang('translation.view')">
                                                     {{ $workorder->name }}
                                                 </a>
+                                            </br>{{ \Carbon\Carbon::parse($workorder['proposal_date'])->format('F j, Y') }}
                                             </td>
                                             <td class="tc">
                                                 <a href="{{ route('contact_details', ['contact'=>$workorder->contact_id]) }}" title="@lang('translation.contact')">

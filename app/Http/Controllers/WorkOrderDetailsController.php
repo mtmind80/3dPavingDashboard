@@ -3,12 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Currency;
+use App\Models\AcceptedDocuments;
 use App\Models\Contractor;
 use App\Models\Equipment;
+use App\Models\LaborRate;
 use App\Models\Material;
+use App\Models\Proposal;
+use App\Models\ProposalDetailSubcontractor;
+use App\Models\ProposalDetailEquipment;
+use App\Models\ProposalMaterial;
+use App\Models\ServiceCategory;
 use App\Models\User;
 use App\Models\Vehicle;
 use App\Models\ProposalDetail;
+use App\Models\VehicleType;
 use App\Models\WorkorderEquipment;
 use App\Models\WorkorderMaterial;
 use App\Models\WorkorderSubcontractor;
@@ -20,6 +28,7 @@ use Validator;
 
 class WorkOrderDetailsController extends Controller
 {
+
     public function details($proposal_detail_id, Request $request)
     {
         if (!$proposalDetail = ProposalDetail::with([
@@ -494,5 +503,82 @@ class WorkOrderDetailsController extends Controller
             ]);
         }
     }
+
+
+
+    public function view_service($proposal_id, $id)
+    {
+
+        if (!$proposalDetail = ProposalDetail::with([
+            'proposal' => function ($q) {
+                $q->with(['contact']);
+            },
+            'service',
+            'striping',
+            'location',
+            'vehicles',
+            'equipment' => function ($w) {
+                $w->with(['equipment']);
+            },
+            'labor',
+            'additionalCosts',
+            'subcontractors' => function ($e) {
+                $e->with(['contractor']);
+            },
+            'service' => function ($r) {
+                $r->with(['category']);
+            },
+        ])->find($id)) {
+            return view('pages-404');
+        }
+
+        $proposalDetailSubcontractors = ProposalDetailSubcontractor::where('proposal_detail_id', $id)->where('accepted', '=', 1)->with('contractor')->get()->toArray();
+
+        $proposalEquipment = ProposalDetailEquipment::where('proposal_detail_id', $id)->with('equipment')->get()->toArray();
+
+        $asphaltMaterials = ProposalMaterial::where('proposal_id', $proposal_id)->byServiceCategory(1);
+        $rockMaterials = ProposalMaterial::where('proposal_id', $proposal_id)->byServiceCategory(7);
+        $sealcoatMaterials = ProposalMaterial::where('proposal_id', $proposal_id)->byServiceCategory(8);
+        $color = ServiceCategory::where('id', '=', $proposalDetail->service->service_category_id)->first();
+
+//echo "<pre>";
+//print_r($proposalEquipment);
+//exit();
+
+
+
+        $data = [
+            'proposalDetailSubcontractors' => $proposalDetailSubcontractors,
+            'service_id' => $proposalDetail->service->id,
+            'service_cat' => $proposalDetail->service->service_category_id,
+            'header_name' => 'Build Service Estimate',
+            'proposalDetail' => $proposalDetail,
+            'proposal' => $proposalDetail->proposal,
+            'contact' => $proposalDetail->proposal->contact,
+            'sealcoatMaterials' => $sealcoatMaterials,
+            'rockMaterials' => $rockMaterials,
+            'asphaltMaterials' => $asphaltMaterials,
+            'striping' => $proposalDetail->striping,
+            'service' => $proposalDetail->service,
+            'color' => $color,
+            'service_category_name' => $proposalDetail->service->category->name,
+            'proposalEquipment' => $proposalEquipment,
+            'vehiclesCB' => VehicleType::get(),
+            'laborCB' => LaborRate::LaborWithRatesCB(['0' => 'Select labor']),
+            //'allowedFileExtensions' => AcceptedDocuments::extensionsStrCid(),
+            //'strippingCB' => StripingCost::strippingCB(['0' => 'Select contractor']),
+        ];
+
+        if ($proposalDetail->service->id == 18) { // striping costs
+
+            return view('workorders.striping', $data);
+
+        }
+
+        return view('workorders.view_service', $data);
+
+
+    }
+
 
 }
