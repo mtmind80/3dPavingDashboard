@@ -62,19 +62,16 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('/{id}/changeorder', 'WorkOrderController@changeorder')->name('create_changeorder');
         Route::get('/{id}/show', 'WorkOrderController@show')->name('show_workorder');
         Route::get('/{id}/{detail_id}/assignmanager', 'WorkOrderController@assignmanager')->name('assignmanager');
-        Route::post('/{id}/{detail_id}/doassignmanager', 'WorkOrderController@doassignmanager')->name('doassignmanager');
-        Route::post('/{work_order}/add-note', 'WorkOrderController@storeNote')->name('workorder_note_store');
-        Route::get('/view_service/{proposal_id}/{id}', 'WorkOrderController@view_service')->name('view_service');
-
-
-        Route::get('/edit_workorder/{id}', 'WorkOrderController@edit')->name('edit_workorder');
-        Route::post('/update_workorder/{id}', 'WorkOrderController@update')->name('update_workorder');
-
-        Route::post('/add_payments/', 'WorkOrderController@add_payments')->name('add_payment');
         Route::get('/{id}/make_payments', 'WorkOrderController@payments')->name('create_payment');
         Route::get('/delete_payment/{proposal_id}/{id}', 'WorkOrderController@delete_payment')->name('delete_payment');
-
         Route::get('/{id}/manage_permits', 'WorkOrderController@permits')->name('manage_permits');
+        Route::get('/edit_workorder/{id}', 'WorkOrderController@edit')->name('edit_workorder');
+
+        Route::post('/{id}/{detail_id}/doassignmanager', 'WorkOrderController@doassignmanager')->name('doassignmanager');
+        Route::post('/{work_order}/add-note', 'WorkOrderController@storeNote')->name('workorder_note_store');
+        Route::post('/update_workorder/{id}', 'WorkOrderController@update')->name('update_workorder');
+        Route::post('/add_payments/', 'WorkOrderController@add_payments')->name('add_payment');
+
 
 
         /*************** Timesheets  ***************/
@@ -147,6 +144,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::group(['prefix' => 'details'], function() {
             Route::get('/{proposal_detail_id}', 'WorkOrderDetailsController@details')->name('workorder_details');
 
+
             // timesheet:
             Route::post('/ajax-timesheet-store', 'WorkOrderDetailsController@ajaxTimeSheetStore')->name('ajax_workorder_timesheet_store');
             Route::post('/ajax-timesheet-destroy', 'WorkOrderDetailsController@ajaxTimeSheetDestroy')->name('ajax_workorder_timesheet_destroy');
@@ -166,6 +164,9 @@ Route::group(['middleware' => ['auth']], function() {
             // subcontractor:
             Route::post('/ajax-subcontractor-store', 'WorkOrderDetailsController@ajaxSubcontractorStore')->name('ajax_workorder_subcontractor_store');
             Route::post('/ajax-subcontractor-destroy', 'WorkOrderDetailsController@ajaxSubcontractorDestroy')->name('ajax_workorder_subcontractor_destroy');
+            //view
+            Route::get('/view_service/{proposal_id}/{id}', 'WorkOrderDetailsController@view_service')->name('view_service');
+
         });
         /** END Details */
     });

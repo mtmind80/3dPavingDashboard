@@ -18,6 +18,9 @@ class ProposalDetailSubcontractor extends Model
         'created_by',
     ];
 
+    protected $appends = ['total_cost'];
+
+
     /** relationships */
 
     public function proposalDetails()

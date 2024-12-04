@@ -50,7 +50,7 @@
     </tbody>
     <tfoot>
         <tr class="pt10 no-border">
-            <td class="tr" colspan="4">Grand Total:</td>
+            <td class="tr" colspan="3">Grand Total:</td>
             <td class="tc">{{ $currency_total_details_costs }}</td>
             <td class="tr" colspan="2"></td>
         </tr>
