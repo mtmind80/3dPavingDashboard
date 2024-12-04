@@ -63,7 +63,7 @@
 
                     <div class="col-sm-3">
                         Asphalt Cost:
-                        {{$materials['cost']}}
+                        {{$proposalDetail->material_cost}}
                         {{$proposalDetail->materials_name}}
 
 
@@ -78,7 +78,7 @@
                 <br/>
                 <div class="row">
                     <div class="col-sm-3">
-                        SSquare Yards: {{$proposalDetail->square_yards}}
+                        Square Yards: {{$proposalDetail->square_yards}}
 
                     </div>
                     <div class="col-sm-3">
@@ -362,7 +362,6 @@ Primer: {{$proposalDetail->primer}}
     @if($service->service_category_id == 9)
         <!-- striping -->
 
-
         @foreach($striping as $stripe)
             {{$stripe['name']}}
             {{$stripe['service']['dsort']}} <br/>
@@ -376,38 +375,11 @@ Primer: {{$proposalDetail->primer}}
         <!--  Sub Contractor -->
         <div class="row">
             <div class="col-sm-3">
-                <x-form-select name="contractor_id"
-                               :items="$contractorsCB"
-                               selected=""
-                               :params="['label' => 'Contractor', 'required' => true]"
-                ></x-form-select>
-                <!-- <span id="contractor_overhead"></span> -->
-                <input type="hidden" name="additive" id="additive" value="">
-            </div>
-            <div class="col-sm-3">
-                <x-form-text name="cost_per_day"
-                             class="check-contact tc"
-                             placeholder="enter value"
-                             id="cost_per_day"
-                             :params="[
-                    'label' => 'Contractor Cost',
-                    'required' => true,
-                    'iconClass' => 'none',
-                ]"
-                >{{$proposalDetail->cost_per_day}}</x-form-text>
+            Contractor Cost: {{$proposalDetail->cost_per_day}}
 
             </div>
             <div class="col-sm-6">
-                <x-form-textarea name="alt_desc"
-                                 class="check-contact tc"
-                                 placeholder="enter description"
-                                 id="alt_desc"
-                                 :params="[
-                                     'label' => 'Job Description',
-                                     'required' => true,
-                                    'iconClass' => 'none',
-                                ]"
-                >{{$proposalDetail->alt_desc}}</x-form-textarea>
+Description: {{$proposalDetail->alt_desc}}
             </div>
         </div>
 

@@ -34,9 +34,9 @@
                 @include('_partials._alert')
             <div class="card">
                 <div class="card-header alert-light">
-                    @include('estimator.proposal_header')
+                    @include('workorders.workorder_headerView')
                     @include('_partials._alert', ['alertId' => 'header_alert'])
-                    @include('estimator.striping_form_header')
+                    @include('workorder.striping_form_headerView')
                 </div>
 
             </div>

@@ -9,14 +9,21 @@
 
 <!-- additional costs rows -->
 <div id="additional_cost_rows_container" class="mb20">
-    @include('estimator._form_service_additional_costsView', ['additionalCosts' => $proposalDetail->additionalCosts])
+    @if (!empty($additionalCosts) && $additionalCosts->count() > 0)
+        @foreach ($additionalCosts as $additionalCost)
+            <div id="proposal_detail_additional_cost_id_{{ $additionalCost->id }}" class="row additional-cost-row border-bottom-dashed">
+                <div class="col-sm-4 additional-cost-type">{{ $additionalCost->type }}</div>
+                <div class="col-sm-1 tc additional-cost-cost" data-cost="{{ $additionalCost->cost }}">{{ $additionalCost->html_cost }}</div>
+                <div class="col-sm-5 tc additional-cost-short-description">{{ Str::limit($additionalCost->description, 100) }}</div>
+            </div>
+        @endforeach
+    @endif
 </div>
 <!-- additional costs footer row -->
 <div class="row mt12">
     <div class="col-sm-2 pt8 m0">
         <label class="control-label">Total Additional Costs</label>
-    </div>
-    <div class="col-sm-2">
+
         <div class="admin-form-item-widget">
             <x-form-show
                 class="show-check-contact"
@@ -32,195 +39,12 @@
 @push('partials-scripts')
     <script>
         $(document).ready(function () {
-            var proposalDetailId = Number('{{ $proposalDetail->id }}');
 
-            var additionalCostElForm = $('#additional_cost_form');
-            var additionalCostElFormProposalDetailAdditionalCostId = $('#proposal_detail_additional_cost_id');
-            var additionalCostElFormCostType = $('#additional_cost_type');
-            var additionalCostElFormDescription = $('#additional_cost_description');
-            var additionalCostElFormAmount = $('#additional_cost_amount');
-
-            var additionalCostElRowsHeader = $('#additional_cost_rows_header');
-            var additionalCostElRowsContainer = $('#additional_cost_rows_container');
-
-            var additionalCostSubmitButton = $('.additional-cost-submit');
-            var additionalCostAddButton = $('#additional_cost_add_button');
-            var additionalCostUpdateButton = $('#additional_cost_update_button');
-            var additionalCostCancelButton = $('#additional_cost_cancel_button');
             var additionalCostElTotalCost = $('#additional_cost_total_cost');
-            var additionalCostElEstimatorFormFieldTotalCost = $('#estimator_form_additional_cost_total_cost');
 
-            var additionalCostsAlert = $('#additional_costs_alert');
-
-            additionalCostsAlert.on('click', function(ev){
-                ev.stopPropagation();
-                ev.preventDefault();
-                closeAlert(additionalCostsAlert);
-            });
 
             additionalCostUpdateTotalCost();
 
-            additionalCostSubmitButton.on('click', function(){
-                additionalCostElForm.validate({
-                    rules: {
-                        type: {
-                            required: true,
-                        },
-                        amount: {
-                            required: true,
-                            currency: true
-                        },
-                        description: {
-                            required: true,
-                            text    : true
-                        }
-                    },
-                    messages: {
-                        type: {
-                            required: "@lang('translation.field_required')",
-                        },
-                        amount: {
-                            required: "@lang('translation.field_required')",
-                            currency: "@lang('translation.invalid_entry')"
-                        },
-                        description: {
-                            required: "@lang('translation.field_required')",
-                            text: "@lang('translation.invalid_entry')"
-                        }
-                    }
-                });
-
-                if (additionalCostElForm.valid()) {
-                    let formData = additionalCostElForm.serializeObject();
-                    let extraFormProperties = {
-                        proposal_detail_id: proposalDetailId,
-                    };
-
-                    $.extend(formData, extraFormProperties);
-
-                    $.ajax({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        data: formData,
-                        type: "POST",
-                        url: "{{ route('ajax_additional_cost_add_or_update') }}",
-                        beforeSend: function (request){
-                            showSpinner();
-                        },
-                        complete: function (){
-                            hideSpinner();
-                        },
-                        success: function (response){
-                            if (!response) {
-                                showErrorAlert('Critical error has occurred.', additionalCostsAlert);
-                            } else if (response.success) {
-                                additionalCostElRowsContainer.html(response.html);
-
-                                additionalCostAddButton.removeClass('hidden');
-                                additionalCostUpdateButton.addClass('hidden');
-                                additionalCostCancelButton.addClass('hidden');
-
-                                additionalCostUpdateTotalCost();
-                                additionalCostResetForm();
-
-                                if (response.message) {
-                                    showSuccessAlert(response.message, additionalCostsAlert);
-                                }
-                            } else {
-                                showErrorAlert(response.message, additionalCostsAlert);
-                            }
-                        },
-                        error: function (response){
-                            @if (env('APP_ENV') === 'local')
-                                showErrorAlert(response.responseJSON.message, additionalCostsAlert);
-                            @else
-                                showErrorAlert('Critical error has occurred.', additionalCostsAlert);
-                            @endif
-                        }
-                    });
-                }
-            });
-
-            additionalCostElRowsContainer.on('click', '.additional-cost-show-description-button', function(){
-                let el = $(this);
-                let fullDescription = el.find('.additional-cost-description').html();
-
-                showInfoAlert(fullDescription, additionalCostsAlert);
-            });
-
-            additionalCostElRowsContainer.on('click', '.additional-cost-remove-button', function(){
-                let el = $(this);
-                let proposalDetailAdditionalCostId = el.data('proposal_detail_additional_cost_id');
-
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    data: {
-                        proposal_detail_id: proposalDetailId,
-                        proposal_detail_additional_cost_id: proposalDetailAdditionalCostId
-                    },
-                    type: "POST",
-                    url: "{{ route('ajax_additional_cost_remove') }}",
-                    beforeSend: function (request){
-                        showSpinner();
-                    },
-                    complete: function (){
-                        hideSpinner();
-                    },
-                    success: function (response){
-                        if (!response) {
-                            showErrorAlert('Critical error has occurred.', additionalCostsAlert);
-                        } else if (response.success) {
-                            additionalCostElRowsContainer.html(response.html);
-
-                            let additionalCostRows = $('.additional-cost-row');
-
-                            if (additionalCostRows.length === 0) {
-                                additionalCostElRowsHeader.addClass('hidden');
-                            }
-
-                            additionalCostUpdateTotalCost();
-
-                            if (response.message) {
-                                showSuccessAlert(response.message, additionalCostsAlert);
-                            }
-                        } else {
-                            showErrorAlert(response.message, additionalCostsAlert);
-                        }
-                    },
-                    error: function (response){
-                        @if (env('APP_ENV') === 'local')
-                            showErrorAlert(response.responseJSON.message, additionalCostsAlert);
-                        @else
-                            showErrorAlert('Critical error has occurred.', additionalCostsAlert);
-                        @endif
-                    }
-                });
-            });
-
-            // type:additional_cost_type description:additional_cost_description  amount:additional_cost_amount
-
-            additionalCostElRowsContainer.on('click', '.additional-cost-edit-button', function(){
-                let el = $(this);
-                additionalCostElFormProposalDetailAdditionalCostId.val(el.data('proposal_detail_additional_cost_id'));
-                additionalCostElFormCostType.val(el.data('cost_type'));
-                additionalCostElFormDescription.val(el.data('description'));
-                additionalCostElFormAmount.val(el.data('amount'));
-
-                additionalCostAddButton.addClass('hidden');
-                additionalCostUpdateButton.removeClass('hidden');
-                additionalCostCancelButton.removeClass('hidden');
-            });
-
-            additionalCostCancelButton.click(function(){
-                additionalCostResetForm();
-
-                additionalCostAddButton.removeClass('hidden');
-                additionalCostUpdateButton.addClass('hidden');
-                additionalCostCancelButton.addClass('hidden');
-            });
 
             function additionalCostUpdateTotalCost()
             {
@@ -236,16 +60,9 @@
                 currrencyTotalCost = currencyFormat(totalCost);
 
                 additionalCostElTotalCost.html(currrencyTotalCost);
-                additionalCostElEstimatorFormFieldTotalCost.val(totalCost);
 
-                headerElAdditionalCost.html(currrencyTotalCost);
-                headerElAdditionalCost.data('additional_cost_total_cost', totalCost);
             }
 
-            function additionalCostResetForm()
-            {
-                additionalCostElForm.trigger('reset');
-            }
         });
     </script>
 @endpush

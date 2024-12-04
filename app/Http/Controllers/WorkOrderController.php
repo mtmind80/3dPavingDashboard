@@ -36,7 +36,7 @@ class WorkOrderController extends Controller
             $query->where('salesperson_id', auth()->user()->id);
         }
 
-        $workorders = $query->with(['location', 'contact', 'status', 'salesPerson'])->orderBy('proposal_date','DESC')->paginate($perPage);
+        $workorders = $query->with(['location', 'contact', 'status', 'salesPerson'])->orderBy('proposal_date', 'DESC')->paginate($perPage);
 
         $data = [
             'workorders' => $workorders,
@@ -131,14 +131,13 @@ class WorkOrderController extends Controller
 
             $data['paymentsOK'] = $proposal['HasPayments'];
 
-            if($data['paymentsOK'] && $data['permitsOK'])
-            {
+            if ($data['paymentsOK'] && $data['permitsOK']) {
                 $data['allowSchedule'] = true;
             }
 
 
             //does this work order have change orders?
-            $changeorders = ChangeOrders::where('proposal_id', '=',$proposal->id)->get();
+            $changeorders = ChangeOrders::where('proposal_id', '=', $proposal->id)->get();
 
             $data['fieldmanagers'] = User::where('role_id', 6)->where('status', 1)->get()->toArray();
             $data['mediatypes'] = MediaType::all()->toArray();
@@ -163,7 +162,7 @@ class WorkOrderController extends Controller
             $data['services'] = $services;
             $data['notes'] = $notes;
 
-                    return view('workorders.workorder_home', $data);
+            return view('workorders.workorder_home', $data);
 
         }
         return view('pages-404');
@@ -183,7 +182,7 @@ class WorkOrderController extends Controller
 
     public function changeorder($id)
     {
-        $workorder = WorkOrder::where('id' , '=', $id)->first();
+        $workorder = WorkOrder::where('id', '=', $id)->first();
 
         $changeorder = new ChangeOrders();
         $changeorder->proposal_id = $id;
@@ -195,11 +194,11 @@ class WorkOrderController extends Controller
 
         $proposal = new Proposal();
         // set the job id when converted to a work order
-       // $proposal->job_master_id = $workorder->job_master_id;
+        // $proposal->job_master_id = $workorder->job_master_id;
         $proposal->name = "Change Order: " . $workorder->name;
         $proposal->proposal_statuses_id = 1;
         $proposal->job_master_id = $workorder->job_master_id;
-        $proposal->proposal_date  = $workorder->proposal_date;
+        $proposal->proposal_date = $workorder->proposal_date;
         $proposal->sale_date = $workorder->sale_date;
         $proposal->created_by = auth()->user()->id;
         $proposal->contact_id = $workorder->contact_id;
@@ -250,7 +249,7 @@ class WorkOrderController extends Controller
     public function permits($id)
     {
         $workorder = WorkOrder::find($id)->first();
-        $permits = Permit::where('proposal_id','=',$id)->get()->toArray();
+        $permits = Permit::where('proposal_id', '=', $id)->get()->toArray();
         $data['permits'] = $permits;
         $data['workorder'] = $workorder;
         return view('permit.permitmanager', $data);
@@ -261,16 +260,17 @@ class WorkOrderController extends Controller
     {
 
 
-        $workorder = WorkOrder::where('id' , '=', $id)->first();
+        $workorder = WorkOrder::where('id', '=', $id)->first();
 
-        $payments = Payment::where('proposal_id','=',$id)->get()->toArray();
+        $payments = Payment::where('proposal_id', '=', $id)->get()->toArray();
         $data['payments'] = $payments;
         $data['workorder'] = $workorder;
-        $data['payment_types'] = ['Deposit' =>'Deposit','Progress Billing' =>'Progress Billing','Final Payment'=>'Final Payment','Permit Fee'=>'Permit Fee'];
-        $data['cert_holders'] = ['APEX','3D', 'NONE'];
+        $data['payment_types'] = ['Deposit' => 'Deposit', 'Progress Billing' => 'Progress Billing', 'Final Payment' => 'Final Payment', 'Permit Fee' => 'Permit Fee'];
+        $data['cert_holders'] = ['APEX', '3D', 'NONE'];
         return view('workorders.paymentmanager', $data);
 
     }
+
     public function add_payments(PaymentRequest $request)
     {
         $id = $request['proposal_id'];
@@ -278,19 +278,20 @@ class WorkOrderController extends Controller
         //create new payment
         Payment::create($request->all());
         //get all payments
-        $payments = Payment::where('proposal_id','=',$id)->get()->toArray();
+        $payments = Payment::where('proposal_id', '=', $id)->get()->toArray();
 
         $data['id'] = $id;
         $data['payments'] = $payments;
         $data['workorder'] = $workorder;
-        $data['payment_types'] = ['Deposit' =>'Deposit','Progress Billing' =>'Progress Billing','Final Payment'=>'Final Payment','Permit Fee'=>'Permit Fee'];
-        $data['cert_holders'] = ['APEX','3D', 'NONE'];
+        $data['payment_types'] = ['Deposit' => 'Deposit', 'Progress Billing' => 'Progress Billing', 'Final Payment' => 'Final Payment', 'Permit Fee' => 'Permit Fee'];
+        $data['cert_holders'] = ['APEX', '3D', 'NONE'];
 
         return $this->payments($id)->with('success', "Nice Work!");;
 //        return view('workorders.paymentmanager', $data)->with('success', "Nice Work!");
 
     }
-    public function delete_payment($proposal_id,$id)
+
+    public function delete_payment($proposal_id, $id)
     {
 
         $payment = Payment::where('id', '=', $id)->firstorfail()->delete();
@@ -336,7 +337,7 @@ class WorkOrderController extends Controller
         $proposal = WorkOrder::where('id', $id)->where('proposal_statuses_id', 5)->first()->toArray();
 
 
-        if($proposal) {
+        if ($proposal) {
 
             $data = array();
             $contact = Contact::where('id', $proposal['contact_id'])->first()->toArray();
@@ -348,14 +349,14 @@ class WorkOrderController extends Controller
             $contactstaff[$contact['id']] = $contact['first_name'] . ' ' . $contact['last_name'];
             $staff = Contact::where('related_to', '=', $contact['id'])->get();
             $staff = json_decode(json_encode($staff), true);
-            if($staff) {
-                foreach($staff as $s) {
+            if ($staff) {
+                foreach ($staff as $s) {
                     $contactstaff[$s['id']] = $s['first_name'] . ' ' . $s['last_name'];
                 }
             }
             $data['staff'] = $contactstaff;
 
-            $salesManagersCB = Cache::remember('salesManagersCB', env('CACHE_TIMETOLIVE'), function() {
+            $salesManagersCB = Cache::remember('salesManagersCB', env('CACHE_TIMETOLIVE'), function () {
                 $salesManagersCB = Proposal::salesManagersCB();
                 return json_encode($salesManagersCB);
 
@@ -363,7 +364,7 @@ class WorkOrderController extends Controller
 
             $data['salesManagersCB'] = json_decode($salesManagersCB, true);
 
-            $salesPersonsCB = Cache::remember('salesPersonsCB', env('CACHE_TIMETOLIVE'), function() {
+            $salesPersonsCB = Cache::remember('salesPersonsCB', env('CACHE_TIMETOLIVE'), function () {
                 $salesPersonsCB = Proposal::salesPersonsCB();
                 return json_encode($salesPersonsCB);
 
@@ -410,7 +411,7 @@ class WorkOrderController extends Controller
             \Session::flash('message', 'Your workorder was updated!');
             return redirect()->route('show_workorder', ['id' => $proposal_id]);
 
-        } catch(exception $e) {
+        } catch (exception $e) {
             \Session::flash('message', 'Sorry no matching records were found!');
             return redirect()->back();
         }

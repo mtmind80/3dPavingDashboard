@@ -15,47 +15,46 @@
             @lang('translation.services')
         @endslot
     @endcomponent
-<script>
-    //globals
-    var current_subContractor_total =0;
-    var current_labor_total =0;
-    var current_vehicle_total =0;
-    var current_equipment_total =0;
-    var current_additional_total =0;
+    <script>
+        //globals
+        var current_subContractor_total = 0;
+        var current_labor_total = 0;
+        var current_vehicle_total = 0;
+        var current_equipment_total = 0;
+        var current_additional_total = 0;
 
-
-</script>
+    </script>
     <div class="row estimator-form admin-form">
         <div class="font-weight-semibold"></div>
         <div class="col-12">
             @include('_partials._alert')
             <div class="card">
                 <div class="card-header alert-light">
-                    @include('estimator.proposal_header_View')
+                    @include('workorders.workorder_header_View')
                     @include('_partials._alert', ['alertId' => 'header_alert'])
-                    @include('estimator.form_headerView')
-                    @include('estimator.form_formulasView')
+                    @include('workorders.form_headerView')
+                    @include('workorders.form_formulasView')
                 </div>
             </div>
             {{-- Proposal Text --}}
             <div class="card">
                 <div class="card-header alert-light">
                     @include('_partials._alert', ['alertId' => 'service_text_alert'])
-                    @include('estimator.form_service_textView')
+                    @include('workorders.form_service_textView')
                 </div>
             </div>
             <div class="card">
                 <div id="vehicle_section" class="card-header alert-light ptb16">
                     @include('_partials._alert', ['alertId' => 'vehicle_alert'])
                     <h5>@lang('translation.vehicle')</h5>
-                    @include('estimator.form_service_vehiclesView')
+                    @include('workorders.form_service_vehiclesView')
                 </div>
             </div>
             <div class="card">
                 <div class="card-header alert-light">
                     @include('_partials._alert', ['alertId' => 'equipment_alert'])
                     <h5>@lang('translation.equipment')</h5>
-                    @include('estimator.form_service_equipmentView')
+                    @include('workorders.form_service_equipmentView')
                     <div id="equipmentList"></div>
                 </div>
             </div>
@@ -63,7 +62,7 @@
                 <div class="card-header alert-light">
                     @include('_partials._alert', ['alertId' => 'labor_alert'])
                     <h5>@lang('translation.labor')</h5>
-                    @include('estimator.form_service_laborView')
+                    @include('workorders.form_service_laborView')
                     <div id="laborList"></div>
                 </div>
             </div>
@@ -71,19 +70,19 @@
                 <div class="card-header alert-light">
                     @include('_partials._alert', ['alertId' => 'additional_costs_alert'])
                     <h5>@lang('translation.additionalcost')</h5>
-                    @include('estimator.form_service_additional_costsView')
+                    @include('workorders.form_service_additional_costsView')
                     <div id="otherList"></div>
                 </div>
             </div>
             @if($proposalDetail->service->service_category_id != 10)
-            <div class="card">
-                <div class="card-header alert-light">
-                    @include('_partials._alert', ['alertId' => 'subcontractors_alert'])
-                    <h5>@lang('translation.subcontractors')</h5>
-                    @include('estimator.form_service_subcontractorsView')
-                    <div id="subcontractorsList"></div>
+                <div class="card">
+                    <div class="card-header alert-light">
+                        @include('_partials._alert', ['alertId' => 'subcontractors_alert'])
+                        <h5>@lang('translation.subcontractors')</h5>
+                        @include('workorders.form_service_subcontractorsView')
+                        <div id="subcontractorsList"></div>
+                    </div>
                 </div>
-            </div>
             @endif
         </div>
     </div>

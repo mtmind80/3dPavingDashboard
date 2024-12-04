@@ -1,33 +1,34 @@
 <!-- equipment sections -->
-
-<!-- input fields values row -->
-
-<!-- equipment header row -->
 <div id="equipment_rows_header" class="row fwb pb4 border-bottom-solid{{ !empty($proposalDetail->equipment) && $proposalDetail->equipment->count() > 0 ? '' : ' hidden' }}">
-    <div class="col-sm-5">Equipment</div>
+    <div class="col-sm-5">Equipment Type</div>
     <div class="col-sm-1 tc">Quantity</div>
     <div class="col-sm-1 tc">Days</div>
     <div class="col-sm-1 tc">Hours</div>
-    <div class="col-sm-1 tc">Rate</div>
     <div class="col-sm-1 tc">Total</div>
-    <div class="col-sm-1 tc">Min Cost</div>
+
 </div>
 
 <!-- equipment row -->
 <div id="equipment_rows_container" class="mb20">
-    @if (!empty($proposalDetail->equipment) && $proposalDetail->equipment->count() > 0)
-        @include('estimator._form_service_equipmentView', ['equipments' => $proposalDetail->equipment])
+    @if (!empty($proposalEquipment) && count($proposalEquipment) > 0)
+        @foreach ($proposalEquipment as $equipment)
+            <div id="proposal_detail_equipment_id_{{ $equipment['id'] }}" class="row equipment-row border-bottom-dashed">
+                <div class="col-sm-5 equipment-type">{{ $equipment['equipment']['name']}} {{$equipment['equipment']['rate_type']}} </div>
+                <div class="col-sm-1 tc equipment-quantity">{{ $equipment['number_of_units'] }}</div>
+                <div class="col-sm-1 tc equipment-days">{{ $equipment['days'] }}</div>
+                <div class="col-sm-1 tc equipment-hours">{{ $equipment['hours'] }}</div>
+                <div class="col-sm-1 tc equipment-cost" data-cost="{{ $equipment['hours'] * $equipment['equipment']['rate'] }}">{{ $equipment['hours'] * $equipment['equipment']['rate'] }}</div>
+            </div>
+        @endforeach
+
     @endif
 </div>
 
 <!-- equipment footer row -->
 <div class="row mt12">
-    <div class="col-sm-3">
-    </div>
     <div class="col-sm-2 pt8 m0">
         <label class="control-label">Total Equipment</label>
-    </div>
-    <div class="col-sm-2">
+
         <div class="admin-form-item-widget">
             <x-form-show
                 class="show-check-contact"
@@ -43,26 +44,8 @@
 @push('partials-scripts')
     <script>
         $(document).ready(function () {
-            var proposalDetailId = Number('{{ $proposalDetail->id }}');
 
-            var equipmentElForm = $('#equipment_form');
-            var equipmentElFormProposalDetailEquipmentId = $('#proposal_detail_equipment_id');
-            var equipmentElFormEquipmentId = $('#equipment_id');
-            var equipmentElFormNumberOfUnits = $('#equipment_quantity');
-            var equipmentElFormDays = $('#equipment_days');
-            var equipmentElFormHours = $('#equipment_hours');
-            var equipmentElFormHoursRequired = $('#equipment_hours_required');
-
-            var equipmentElRowsHeader = $('#equipment_rows_header');
-            var equipmentElRowsContainer = $('#equipment_rows_container');
-
-            var equipmentSubmitButton = $('.equipment-submit');
-            var equipmentAddButton = $('#equipment_add_button');
-            var equipmentUpdateButton = $('#equipment_update_button');
-            var equipmentCancelButton = $('#equipment_cancel_button');
             var equipmentElTotalCost = $('#equipment_total_cost');
-            var equipmentElEstimatorFormFieldTotalCost = $('#estimator_form_equipment_total_cost');
-            var equipmentRateType;
 
 
             equipmentUpdateTotalCost();
@@ -81,10 +64,8 @@
 
                 currrencyTotalCost = currencyFormat(totalCost);
                 equipmentElTotalCost.html(currrencyTotalCost);
-                equipmentElEstimatorFormFieldTotalCost.val(totalCost);
 
-                headerElEquipmentCost.html(currrencyTotalCost);
-                headerElEquipmentCost.data('equipment_total_cost', totalCost);
+
             }
 
 
