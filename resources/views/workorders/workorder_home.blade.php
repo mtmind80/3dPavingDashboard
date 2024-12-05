@@ -224,18 +224,31 @@
                                         </td>
                                     </tr>
 
-                                    <tr>
-                                        <td>@lang('translation.on_alert')</td>
-                                        <td>@if($proposal['on_alert'])
-                                                YES
-
+                                        <tr>
+                                            <td>@lang('translation.on_alert')</td>
+                                            @if($proposal['on_alert'])
+                                                <td class="bg-alert">
+                                                    YES &nbsp;&nbsp; Reason: {{$proposal['alert_reason']}}
+                                                    <x-href-button
+                                                        url="{{ route('proposal_alert_reset', ['proposal_id' => $proposal['id']]) }}"
+                                                        class="btn-danger ptb2 fr"><i class="fas fa-times"></i>Remove
+                                                        Alert
+                                                    </x-href-button>
                                             @else
-                                                NO
-                                            @endif
-                                        </td>
-                                    </tr>
+                                                <td>
+                                                    NO
+                                                    <x-href-button id="set_alert_button" class="btn-success ptb2 fr"><i
+                                                            class="fas fa-check"></i>Set Alert
+                                                    </x-href-button>
 
-                                    <tr>
+                                                </td>
+                                           @endif
+
+                                        <tr>
+
+
+
+                                        <tr>
                                         <td>@lang('translation.nto') @lang('translation.sent') </td>
                                         <td>@if($proposal['nto_required'])
                                                 YES
@@ -565,6 +578,7 @@
     @include('modals.form_media_modal')
     @include('modals.form_fieldmanagers_modal')
     @include('modals.form_proposal_note_modal')
+    @include('modals.form_proposal_alert_reason_modal')
 
 @stop
 
@@ -603,6 +617,50 @@
             var noteModal = $('#formNoteModal');
             var noteForm = $('#admin_form_note_modal');
             var note = $('#note');
+
+            var alertModal = $('#formAlertReasonModal');
+            var alertForm = $('#admin_form_alert_reason_modal');
+            var alertReason = $('#form_alert_reason_alert_reason');
+
+
+            $('#set_alert_button').click(function () {
+                alertModal.modal('show');
+            });
+
+            alertModal.on('show.bs.modal', function () {
+                alertForm.find('em.state-error').remove();
+                alertForm.find('.field.state-error').removeClass('state-error');
+                alertReason.val('');
+            })
+
+            alertModal.on('hidden.bs.modal', function () {
+                alertForm.find('em.state-error').remove();
+                alertForm.find('.field.state-error').removeClass('state-error');
+                alertReason.val('');
+            })
+
+            alertForm.validate({
+                rules: {
+                    alert_reason: {
+                        required: true,
+                        text: true
+                    }
+                },
+                messages: {
+                    alert_reason: {
+                        required: "@lang('translation.field_required')",
+                        text: "@lang('translation.invalid_entry')"
+                    }
+                },
+                submitHandler: function (form) {
+                    let errors = false;
+
+                    if (!errors) {
+                        alertForm.submit();
+                    }
+                }
+            });
+
 
 
             $('#addpermit').click(function () {
@@ -707,7 +765,6 @@
                     }
                 }
             });
-
 
         });
     </script>
