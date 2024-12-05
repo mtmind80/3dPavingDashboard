@@ -169,6 +169,25 @@ class WorkOrderController extends Controller
     }
 
 
+public function cancelworkorder($id)
+{
+        if (auth()->user()->isAdmin()) {
+            $proposal = Workorder::find($id);
+        } else {
+
+    $proposal = Workorder::where('id', '=', $id)->where(function ($q) {
+        $q->where('salesmanager_id', auth()->user()->id)->orWhere('salesperson_id', auth()->user()->id);
+    })->first();
+    // managers do only if I am on the Workorder
+    if ($proposal) {
+        $proposal->status = 7;
+        $proposal->update();
+    }
+    return true;
+}
+    return view('pages-404');
+
+}
     public function view_service($proposal_id, $id)
     {
 

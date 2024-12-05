@@ -89,7 +89,7 @@ class Permit extends Model
 
     public function scopeIncomplete($query)
     {
-        return $query->where('status', '<>','Completed');
+        return $query->where('status', '<>','Approved');
     }
 
     /** Accessor(get) and Mutators(set) */
