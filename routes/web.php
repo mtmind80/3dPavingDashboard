@@ -56,6 +56,7 @@ Route::group(['middleware' => ['auth']], function() {
 
     Route::group(['prefix' => 'workorders'], function() {
 
+
         Route::get('/', 'WorkOrderController@index')->name('workorders');
         Route::match(['get', 'post'], '/search', 'WorkOrderController@search')->name('workorder_search');
 
@@ -66,6 +67,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('/delete_payment/{proposal_id}/{id}', 'WorkOrderController@delete_payment')->name('delete_payment');
         Route::get('/{id}/manage_permits', 'WorkOrderController@permits')->name('manage_permits');
         Route::get('/edit_workorder/{id}', 'WorkOrderController@edit')->name('edit_workorder');
+        Route::get('/{id}/cancel_workorder', 'WorkOrderController@cancelworkorder')->name('cancel_workorder');
 
         Route::post('/{id}/{detail_id}/doassignmanager', 'WorkOrderController@doassignmanager')->name('doassignmanager');
         Route::post('/{work_order}/add-note', 'WorkOrderController@storeNote')->name('workorder_note_store');

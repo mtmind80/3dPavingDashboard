@@ -548,8 +548,8 @@
                                 <h3>@lang('translation.status')</h3>
 
                                 <ul>
-                                    <li>Set Alert</li>
-                                    <li>Cancel Workorder</li>
+                                    <li><a href="{{route('cancel_workorder',['id'=>$proposal['id']])}}">
+                                            Cancel Workorder</a></li>
                                     <li>
                                         <a href="{{route('create_payment',['id'=>$proposal['id']])}}">Record
                                             Payments</a>
