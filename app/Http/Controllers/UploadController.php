@@ -75,7 +75,7 @@ class UploadController extends Controller
         $extension = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
         $new_filename = $target_dir . $newfilename . "." . $extension;
         // Check if filetype is accepted
-        if(!in_array($extension, $doctypes)) {
+        if (!in_array($extension, $doctypes)) {
             $msg .= "This file type ($extension) is not allowed.";
             \Session::flash('error', $msg);
             return redirect()->route('show_proposal', ['id' => $proposal_id]);
@@ -85,7 +85,7 @@ class UploadController extends Controller
         $filetype = $_FILES['file']['type'];
         $check = getimagesize($_FILES['file']['tmp_name']);
 
-        if($check !== false) {
+        if ($check !== false) {
             $msg .= "File is an image - " . $check["mime"] . ".";
             $IsImage = 1;
             $image_height = $check[1];
@@ -97,7 +97,7 @@ class UploadController extends Controller
         }
         $file_size = $_FILES["file"]["size"];
 
-        if($file_size > self::FILE_SIZE_LIMIT) {
+        if ($file_size > self::FILE_SIZE_LIMIT) {
             $msg .= "Sorry, your file is too large.";
             \Session::flash('error', $msg);
             return redirect()->route('show_proposal', ['id' => $proposal_id]);
@@ -106,7 +106,7 @@ class UploadController extends Controller
         }
 
         // Check if file already exists
-        if(file_exists($new_filename)) {
+        if (file_exists($new_filename)) {
             //rename file
             $msg .= "Sorry, file already exists.";
             $guid = bin2hex(openssl_random_pseudo_bytes(16));
@@ -131,11 +131,11 @@ class UploadController extends Controller
         $data['file_path'] = $target_dir;
 
         // Check if $uploadOk is set to 0 by an error
-        if($uploadOk == 0) {
+        if ($uploadOk == 0) {
             echo "Sorry, your file was not uploaded.";
             // if everything is ok, try to upload file
         } else {
-            if(move_uploaded_file($_FILES["file"]["tmp_name"], $new_filename)) {
+            if (move_uploaded_file($_FILES["file"]["tmp_name"], $new_filename)) {
 
                 $proposal_media = ProposalMedia::create($data);
                 $msg = "The file " . htmlspecialchars(basename($_FILES["file"]["name"])) . " has been uploaded to $new_filename.";
@@ -183,7 +183,7 @@ class UploadController extends Controller
         $extension = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
         $new_filename = $target_dir . $newfilename . "." . $extension;
         // Check if filetype is accepted
-        if(!in_array($extension, $doctypes)) {
+        if (!in_array($extension, $doctypes)) {
             $msg .= "This file type ($extension) is not allowed.";
             \Session::flash('error', $msg);
             return redirect()->route('show_workorder', ['id' => $proposal_id]);
@@ -193,7 +193,7 @@ class UploadController extends Controller
         $filetype = $_FILES['file']['type'];
         $check = getimagesize($_FILES['file']['tmp_name']);
 
-        if($check !== false) {
+        if ($check !== false) {
             $msg .= "File is an image - " . $check["mime"] . ".";
             $IsImage = 1;
             $image_height = $check[1];
@@ -205,7 +205,7 @@ class UploadController extends Controller
         }
         $file_size = $_FILES["file"]["size"];
 
-        if($file_size >  self::FILE_SIZE_LIMIT) {
+        if ($file_size > self::FILE_SIZE_LIMIT) {
             $msg .= "Sorry, your file is too large.";
             \Session::flash('error', $msg);
             return redirect()->route('show_workorder', ['id' => $proposal_id]);
@@ -214,7 +214,7 @@ class UploadController extends Controller
         }
 
         // Check if file already exists
-        if(file_exists($new_filename)) {
+        if (file_exists($new_filename)) {
             //rename file
             $msg .= "Sorry, file already exists.";
             $guid = bin2hex(openssl_random_pseudo_bytes(16));
@@ -239,11 +239,11 @@ class UploadController extends Controller
         $data['file_path'] = $target_dir;
 
         // Check if $uploadOk is set to 0 by an error
-        if($uploadOk == 0) {
+        if ($uploadOk == 0) {
             echo "Sorry, your file was not uploaded.";
             // if everything is ok, try to upload file
         } else {
-            if(move_uploaded_file($_FILES["file"]["tmp_name"], $new_filename)) {
+            if (move_uploaded_file($_FILES["file"]["tmp_name"], $new_filename)) {
 
                 $proposal_media = ProposalMedia::create($data);
                 $msg = "The file " . htmlspecialchars(basename($_FILES["file"]["name"])) . " has been uploaded to $new_filename.";
@@ -278,8 +278,7 @@ class UploadController extends Controller
         $proposal_id = $request['proposal_id'];
         $proposal = Proposal::where('id', '=', $proposal_id)->first();
         $route = 'show_proposal';
-        If ($proposal['job_master_id'])
-        {
+        if ($proposal['job_master_id']) {
             $route = 'show_workorder';
 
         }
@@ -302,7 +301,7 @@ class UploadController extends Controller
         $extension = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
         $new_filename = $target_dir . $newfilename . "." . $extension;
         // Check if filetype is accepted
-        if(!in_array($extension, $doctypes)) {
+        if (!in_array($extension, $doctypes)) {
             $msg .= "This file type ($extension) is not allowed.";
             \Session::flash('error', $msg);
             return redirect()->route($route, ['id' => $proposal_id]);
@@ -310,7 +309,7 @@ class UploadController extends Controller
         }
         $check = getimagesize($_FILES["file"]["tmp_name"]);
 
-        if($check !== false) {
+        if ($check !== false) {
             $msg .= "File is an image - " . $check["mime"] . ".";
             $IsImage = 1;
             $image_height = $check[1];
@@ -322,7 +321,7 @@ class UploadController extends Controller
         }
         $file_size = $_FILES["file"]["size"];
 
-        if($file_size > 5000000) {
+        if ($file_size > 5000000) {
             $msg .= "Sorry, your file is too large.";
             \Session::flash('error', $msg);
             return redirect()->route($route, ['id' => $proposal_id]);
@@ -331,7 +330,7 @@ class UploadController extends Controller
         }
 
         // Check if file already exists
-        if(file_exists($new_filename)) {
+        if (file_exists($new_filename)) {
             //rename file
             $msg .= "Sorry, file already exists.";
             $guid = bin2hex(openssl_random_pseudo_bytes(16));
@@ -356,18 +355,16 @@ class UploadController extends Controller
         $data['file_path'] = $target_dir;
 
         // Check if $uploadOk is set to 0 by an error
-        if($uploadOk == 0) {
+        if ($uploadOk == 0) {
             echo "Sorry, your file was not uploaded.";
             // if everything is ok, try to upload file
         } else {
-            if(move_uploaded_file($_FILES["file"]["tmp_name"], $new_filename)) {
-
+            if (move_uploaded_file($_FILES["file"]["tmp_name"], $new_filename)) {
 
                 $proposal_media = ProposalMedia::create($data);
                 $msg = "The file " . htmlspecialchars(basename($_FILES["file"]["name"])) . " has been uploaded to $new_filename.";
                 \Session::flash('success', $msg);
                 return redirect()->route($route, ['id' => $proposal_id]);
-
 
             } else {
                 $msg = "Sorry, there was an error uploading your file.";
