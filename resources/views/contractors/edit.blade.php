@@ -136,7 +136,14 @@
 
                         </div>
                         <div class="row">
-                            <div class="form-group col-lg-6">
+                            <div class="form-group col-lg-2">
+                                <label>@lang('translation.disable')</label>
+                                <i class="field-required fa fa-square-o"></i>
+                                <input name="disable" id="disable" type="checkbox"
+                                       class="form-control"
+                                       value="1" @if($contractor['disable']) checked @endif>
+                            </div>
+                            <div class="form-group col-lg-4">
                                 <label>@lang('translation.email')</label>
                                 <i class="field-required fa fa-asterisk"></i>
                                 <input name="email" id="email" size='54' type="text"

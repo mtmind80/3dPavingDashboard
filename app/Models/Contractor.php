@@ -24,6 +24,7 @@ class Contractor extends Model
         'address_line2',
         'city',
         'state',
+        'disable',
         'postal_code',
         'email',
         'note',
@@ -55,6 +56,11 @@ class Contractor extends Model
     /** relationships */
 
     /** scopes */
+
+    public function scopeActive($query)
+    {
+        return $query->where('disable', '=',0);
+    }
 
     /** Accessor(get) and Mutators(set) */
 
@@ -112,7 +118,7 @@ class Contractor extends Model
 
     static public function contractorsCB($default = [])
     {
-        $items = self::orderBy('name')->pluck('name', 'id')->toArray();
+        $items = self::where('disable','=', 0)->orderBy('name')->pluck('name', 'id')->toArray();
 
         if (!empty($default)) {
             return $default + $items;
@@ -123,7 +129,7 @@ class Contractor extends Model
 
     static public function contractorsWithOverheadCB($default = [])
     {
-        $items = self::orderBy('name')->get()->pluck('name_and_overhead_percent', 'id')->toArray();
+        $items = self::where('disable','=', 0)->orderBy('name')->get()->pluck('name_and_overhead_percent', 'id')->toArray();
 
         if (!empty($default)) {
             return $default + $items;

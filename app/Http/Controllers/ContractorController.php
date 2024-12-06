@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 class ContractorController extends Controller
 {
-    
+
     public function __construct(Request $request)
     {
         parent::__construct();
@@ -47,6 +47,11 @@ class ContractorController extends Controller
 
         }
 
+        $disable = 0;
+        if($request['disable'] == 1)
+        {
+            $disable = 1;
+        }
         $contractor->name = $request['name'];
         $contractor->contact = $request['contact'];
         $contractor->phone = $request['phone'];
@@ -55,6 +60,7 @@ class ContractorController extends Controller
         $contractor->city = $request['city'];
         $contractor->state = $request['state'];
         $contractor->postal_code = $request['postal_code'];
+        $contractor->disable = $disable;
         $contractor->email = $request['email'];
         $contractor->note = $request['note'];
         $contractor->contractor_type_id = $request['contractor_type_id'];

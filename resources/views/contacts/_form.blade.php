@@ -18,7 +18,7 @@
 </div>
 <div class="row">
     <div class="col-lg-3 col-md-6 col-sm-6 admin-form-item-widget">
-        <x-form-text name="first_name" class="check-contact" :params="['label' => 'First Name', 'iconClass' => 'fas fa-user', 'required' => true]">{{ $contact->first_name ?? old('first_name') ?? null }}</x-form-text>
+        <x-form-text name="first_name" class="check-contact" :params="['label' => 'First Name / Company Name', 'iconClass' => 'fas fa-user', 'required' => true]">{{ $contact->first_name ?? old('first_name') ?? null }}</x-form-text>
     </div>
     <div class="col-lg-3 col-md-6 col-sm-6 admin-form-item-widget">
         <x-form-text name="last_name" class="check-contact" :params="['label' => 'Last Name', 'iconClass' => 'fas fa-user', 'required' => false]">{{ $contact->last_name ?? old('email') ?? null }}</x-form-text>

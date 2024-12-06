@@ -184,6 +184,7 @@ public function cancelworkorder($id)
         $proposal->update();
     }
     return true;
+    //send email to manager and keith
 }
     return view('pages-404');
 

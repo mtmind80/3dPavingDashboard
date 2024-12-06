@@ -26,11 +26,12 @@ class CreateContractorsTable extends Migration
             $table->string('postal_code', 25)->nullable();
             $table->string('email', 125)->nullable();
             $table->mediumText('note')->nullable();
+            $table->tinyInteger('disable')->default(0);
             $table->unsignedBigInteger('contractor_type_id')->default(1);
             $table->unsignedBigInteger('old_id')->default(0)->nullable();
             $table->timestamps();
             $table->softDeletes($column = 'deleted_at', $precision = 0);
-            
+
         });
     }
 
