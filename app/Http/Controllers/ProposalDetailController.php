@@ -180,7 +180,7 @@ class ProposalDetailController extends Controller
             'vehiclesCB' => VehicleType::get(),
             'laborCB' => LaborRate::LaborWithRatesCB(['0' => 'Select labor']),
             'contractorsCB' => Contractor::contractorsCB(['0' => 'Select contractor']),
-            'contractors' => Contractor::orderBy('name')->get(),
+            'contractors' => Contractor::where('disable','=',0)->orderBy('name')->get(),
             'allowedFileExtensions' => AcceptedDocuments::extensionsStrCid(),
             //'strippingCB' => StripingCost::strippingCB(['0' => 'Select contractor']),
             'typesCB' => ['0' => 'Select type', 'Dump Fee' => 'Dump Fee', 'Other' => 'Other'],

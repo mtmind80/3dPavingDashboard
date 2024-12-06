@@ -77,7 +77,7 @@
                                                     <li class="menu-separator"></li>
                                                     <li>
                                                         <a href="javascript:" class="action" data-action="archive" data-route="{{ route('lead_archive',['lead' => $lead->id]) }}" data-text="Are you sure you want to archive this lead?  Lead: {{ $lead->full_name }}">
-                                                            <span class="far fa-save"></span>@lang('translation.archive')
+                                                            <span class="far fa-save"></span>@lang('translation.dead')
                                                         </a>
                                                     </li>
                                                 @endif

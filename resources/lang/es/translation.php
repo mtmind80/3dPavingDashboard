@@ -406,4 +406,6 @@ return [
     "serviceterms" => "Términos de servicio",
     "my" => "Mi",
     "memo" => "Update Memo",
+    "disable" => "Desactivar",
+    "dead" => "Cerrar Archivo",
 ];

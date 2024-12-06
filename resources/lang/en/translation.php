@@ -412,5 +412,7 @@ return [
     "serviceterms" => "Terms of Service",
     "my" => "My",
     "memo" => "Update Memo",
+    "disable" => "Disable",
+    "dead" => "Dead Lead"
 ];
 
