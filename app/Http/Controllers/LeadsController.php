@@ -7,6 +7,7 @@ use App\Http\Requests\LeadNoteRequest;
 use App\Http\Requests\SearchRequest;
 use App\Mail\LeadAssignedToManager;
 use App\Models\ContactType;
+use App\Models\County;
 use App\Models\Lead;
 use App\Models\LeadNote;
 use App\Models\LeadSource;
@@ -139,7 +140,7 @@ class LeadsController extends Controller
         $data = [
             'sources'      => LeadSource::sourcesCB(['0' => 'Select source']),
             'managersCB'   => User::allmanagersCB(['0' => 'Select previous assigned to']),
-            'countiesCB'   => Location::countiesCB(['0' => 'Select County']),
+            'countiesCB'   => County::countiesCB(['0' => 'Select County']),
             'typesCB' => ContactType::typesCB(['0' => 'Lead Is']),
             'lead_source'  => null,
             'assigned_to'  => null,
@@ -171,7 +172,7 @@ class LeadsController extends Controller
         $data = [
             'sources'      => LeadSource::sourcesCB(['0' => 'Select source']),
             'managersCB'   => User::managersCB(['0' => 'Select previous assigned to']),
-            'countiesCB'   => Location::countiesCB(['' => 'Select county']),
+            'countiesCB'   => County::countiesCB(['' => 'Select county']),
             'lead_source'  => null,
             'assigned_to'  => null,
             'county'       => null,
@@ -192,7 +193,7 @@ class LeadsController extends Controller
             'managersCB'   => User::managersCB(['0' => 'Not Applicable']),
             'sources'    => LeadSource::sourcesCB(['0' => 'Select source']),
             'assignedToCB' => Lead::assigneesCB(['0' => 'Select assigned to']),
-            'countiesCB'   => Location::countiesCB(),
+            'countiesCB'   => County::countiesCB(),
         ];
 
         return view('leads.edit', $data);
