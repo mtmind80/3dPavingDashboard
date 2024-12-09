@@ -73,7 +73,7 @@
 
                                                 <a href="{{route('edit_workorder',['id'=> $proposal['id']])}}"
                                                    title="@lang('translation.edit') @lang('translation.proposal')"
-                                                   class="{{$site_button_class}}">
+                                                   class="{{$site_button_class3}}">
                                                     <i class="fas fa-plus"></i> @lang('translation.edit') @lang('translation.work_order')
                                                 </a>
                                             </td>
@@ -167,7 +167,8 @@
                                         <td>@if($proposal['permit_required'])
                                                 YES
                                                 @if(auth()->user()->isAdmin())
-                                                    <button class="{{$site_button_class}}" id="addpermit">Add Permit
+                                                    <button class="{{$site_button_class2}} float-right"
+                                                            id="addpermit">@lang('translation.add') @lang('translation.permit')
                                                     </button>
                                                 @endif
                                             @else
@@ -178,10 +179,10 @@
 
                                     @if($proposal['permit_required'] && $permits)
                                         <tr>
-                                            <td style="background-color:#A4F9F9;">
+                                            <td style="background-color:#e6f2ff;">
                                                 Current @lang('translation.permits')</td>
                                             <td>
-                                                <table width="80%">
+                                                <table width="100%">
                                                     <tr>
                                                         <th class="tc">View</th>
                                                         <th class="tc">County</th>
@@ -224,31 +225,30 @@
                                         </td>
                                     </tr>
 
-                                        <tr>
-                                            <td>@lang('translation.on_alert')</td>
-                                            @if($proposal['on_alert'])
-                                                <td class="bg-alert">
-                                                    YES &nbsp;&nbsp; Reason: {{$proposal['alert_reason']}}
-                                                    <x-href-button
-                                                        url="{{ route('proposal_alert_reset', ['proposal_id' => $proposal['id']]) }}"
-                                                        class="btn-danger ptb2 fr"><i class="fas fa-times"></i>Remove
-                                                        Alert
-                                                    </x-href-button>
-                                            @else
-                                                <td>
-                                                    NO
-                                                    <x-href-button id="set_alert_button" class="btn-success ptb2 fr"><i
-                                                            class="fas fa-check"></i>Set Alert
-                                                    </x-href-button>
+                                    <tr>
+                                        <td>@lang('translation.on_alert')</td>
+                                        @if($proposal['on_alert'])
+                                            <td class="bg-alert">
+                                                YES &nbsp;&nbsp; Reason: {{$proposal['alert_reason']}}
+                                                <x-href-button
+                                                    url="{{ route('proposal_alert_reset', ['proposal_id' => $proposal['id']]) }}"
+                                                    class="btn-danger ptb2 fr"><i class="fas fa-times"></i>Remove
+                                                    Alert
+                                                </x-href-button>
+                                        @else
+                                            <td>
+                                                NO
+                                                <x-href-button id="set_alert_button" class="btn-success ptb2 fr"><i
+                                                        class="fas fa-check"></i>Set Alert
+                                                </x-href-button>
 
-                                                </td>
-                                           @endif
+                                            </td>
+                                    @endif
 
-                                        <tr>
+                                    <tr>
 
 
-
-                                        <tr>
+                                    <tr>
                                         <td>@lang('translation.nto') @lang('translation.sent') </td>
                                         <td>@if($proposal['nto_required'])
                                                 YES
@@ -261,17 +261,16 @@
                                         <tr>
                                             <td>Create Change Order</td>
                                             <td>
-                                                <a href="Javascript:AREYOUSURE('You want to create a change order for this workorder? Are you sure?','{{route('create_changeorder',['id'=>$proposal['id']])}}');"
-                                                   title="Create Change Order for this Work Order">Create Change
-                                                    Order</a>
-
+                                                <x-href-button id="create_change" class="btn-success ptb2 fr"><i
+                                                        class="fas fa-check"></i>Create Change Order
+                                                </x-href-button>
                                             </td>
                                         </tr>
 
 
                                         @if($changeorders)
 
-                                            <td style="background-color:#A4F9F9;">
+                                            <td style="background-color:#ccfff2;">
                                                 Change Orders
                                             </td>
                                             <td>
@@ -623,150 +622,154 @@
             var alertReason = $('#form_alert_reason_alert_reason');
 
 
-            $('#set_alert_button').click(function () {
-                alertModal.modal('show');
-            });
-
-            alertModal.on('show.bs.modal', function () {
-                alertForm.find('em.state-error').remove();
-                alertForm.find('.field.state-error').removeClass('state-error');
-                alertReason.val('');
-            })
-
-            alertModal.on('hidden.bs.modal', function () {
-                alertForm.find('em.state-error').remove();
-                alertForm.find('.field.state-error').removeClass('state-error');
-                alertReason.val('');
-            })
-
-            alertForm.validate({
-                rules: {
-                    alert_reason: {
-                        required: true,
-                        text: true
-                    }
-                },
-                messages: {
-                    alert_reason: {
-                        required: "@lang('translation.field_required')",
-                        text: "@lang('translation.invalid_entry')"
-                    }
-                },
-                submitHandler: function (form) {
-                    let errors = false;
-
-                    if (!errors) {
-                        alertForm.submit();
-                    }
-                }
+            $('#create_change').click(function () {
+                AREYOUSURE('You want to create a change order for this workorder? Are you sure?', '{{route('create_changeorder',['id'=>$proposal['id']])}}');
             });
 
 
+                $('#set_alert_button').click(function () {
+                    alertModal.modal('show');
+                });
 
-            $('#addpermit').click(function () {
+                alertModal.on('show.bs.modal', function () {
+                    alertForm.find('em.state-error').remove();
+                    alertForm.find('.field.state-error').removeClass('state-error');
+                    alertReason.val('');
+                })
 
-                window.location.href = '{{ route('add_permit',['id'=>$proposal->id]) }}';
+                alertModal.on('hidden.bs.modal', function () {
+                    alertForm.find('em.state-error').remove();
+                    alertForm.find('.field.state-error').removeClass('state-error');
+                    alertReason.val('');
+                })
+
+                alertForm.validate({
+                    rules: {
+                        alert_reason: {
+                            required: true,
+                            text: true
+                        }
+                    },
+                    messages: {
+                        alert_reason: {
+                            required: "@lang('translation.field_required')",
+                            text: "@lang('translation.invalid_entry')"
+                        }
+                    },
+                    submitHandler: function (form) {
+                        let errors = false;
+
+                        if (!errors) {
+                            alertForm.submit();
+                        }
+                    }
+                });
+
+
+                $('#addpermit').click(function () {
+
+                    window.location.href = '{{ route('add_permit',['id'=>$proposal->id]) }}';
+                });
+
+
+                $('#addnotebutton').click(function () {
+
+                    let el = $(this);
+                    let ProposalNoteContainer = $('#formNoteModalLabel').find('span');
+                    let url = el.data('route');
+                    let ProposalName = el.data('proposal_name');
+
+                    noteForm.attr('action', url);
+                    ProposalNoteContainer.text(ProposalName);
+                    noteModal.modal('show');
+                });
+
+                noteModal.on('show.bs.modal', function () {
+                    noteForm.find('em.state-error').remove();
+                    noteForm.find('.field.state-error').removeClass('state-error');
+                })
+
+                noteModal.on('hidden.bs.modal', function () {
+                    noteForm.find('em.state-error').remove();
+                    noteForm.find('.field.state-error').removeClass('state-error');
+                })
+
+                noteForm.validate({
+                    rules: {
+                        note: {
+                            required: true,
+                            plainText: true
+                        }
+                    },
+                    messages: {
+                        note: {
+                            required: "@lang('translation.field_required')",
+                            plainText: "@lang('translation.invalid_entry')"
+                        }
+                    },
+                    submitHandler: function (form) {
+                        let errors = false;
+
+                        if (!errors) {
+                            noteForm.submit();
+                        }
+                    }
+                });
+
+
+                var mediaModal = $('#formMediaModal');
+                var mediaForm = $('#admin_form_media_modal');
+                var media = $('#media');
+
+                $('#addmediabutton').click(function () {
+
+
+                    let el = $(this);
+                    let ProposalMediaContainer = $('#formMediaModalLabel').find('span');
+                    let url = el.data('route');
+                    console.log(url);
+                    let ProposalName = el.data('proposal_name');
+                    console.log(ProposalName);
+
+                    mediaForm.attr('action', url);
+                    ProposalMediaContainer.text(ProposalName);
+                    mediaModal.modal('show');
+
+                });
+
+                mediaModal.on('show.bs.modal', function () {
+                    mediaForm.find('em.state-error').remove();
+                    mediaForm.find('.field.state-error').removeClass('state-error');
+                })
+
+                mediaModal.on('hidden.bs.modal', function () {
+                    mediaForm.find('em.state-error').remove();
+                    mediaForm.find('.field.state-error').removeClass('state-error');
+                })
+
+                mediaForm.validate({
+                    rules: {
+                        description: {
+                            required: true,
+                            plainText: true
+                        }
+                    },
+                    messages: {
+                        description: {
+                            required: "@lang('translation.field_required')",
+                            plainText: "@lang('translation.invalid_entry')"
+                        }
+                    },
+                    submitHandler: function (form) {
+                        let errors = false;
+
+                        if (!errors) {
+                            mediaForm.submit();
+                        }
+                    }
+                });
+
             });
-
-
-            $('#addnotebutton').click(function () {
-
-                let el = $(this);
-                let ProposalNoteContainer = $('#formNoteModalLabel').find('span');
-                let url = el.data('route');
-                let ProposalName = el.data('proposal_name');
-
-                noteForm.attr('action', url);
-                ProposalNoteContainer.text(ProposalName);
-                noteModal.modal('show');
-            });
-
-            noteModal.on('show.bs.modal', function () {
-                noteForm.find('em.state-error').remove();
-                noteForm.find('.field.state-error').removeClass('state-error');
-            })
-
-            noteModal.on('hidden.bs.modal', function () {
-                noteForm.find('em.state-error').remove();
-                noteForm.find('.field.state-error').removeClass('state-error');
-            })
-
-            noteForm.validate({
-                rules: {
-                    note: {
-                        required: true,
-                        plainText: true
-                    }
-                },
-                messages: {
-                    note: {
-                        required: "@lang('translation.field_required')",
-                        plainText: "@lang('translation.invalid_entry')"
-                    }
-                },
-                submitHandler: function (form) {
-                    let errors = false;
-
-                    if (!errors) {
-                        noteForm.submit();
-                    }
-                }
-            });
-
-
-            var mediaModal = $('#formMediaModal');
-            var mediaForm = $('#admin_form_media_modal');
-            var media = $('#media');
-
-            $('#addmediabutton').click(function () {
-
-
-                let el = $(this);
-                let ProposalMediaContainer = $('#formMediaModalLabel').find('span');
-                let url = el.data('route');
-                console.log(url);
-                let ProposalName = el.data('proposal_name');
-                console.log(ProposalName);
-
-                mediaForm.attr('action', url);
-                ProposalMediaContainer.text(ProposalName);
-                mediaModal.modal('show');
-
-            });
-
-            mediaModal.on('show.bs.modal', function () {
-                mediaForm.find('em.state-error').remove();
-                mediaForm.find('.field.state-error').removeClass('state-error');
-            })
-
-            mediaModal.on('hidden.bs.modal', function () {
-                mediaForm.find('em.state-error').remove();
-                mediaForm.find('.field.state-error').removeClass('state-error');
-            })
-
-            mediaForm.validate({
-                rules: {
-                    description: {
-                        required: true,
-                        plainText: true
-                    }
-                },
-                messages: {
-                    description: {
-                        required: "@lang('translation.field_required')",
-                        plainText: "@lang('translation.invalid_entry')"
-                    }
-                },
-                submitHandler: function (form) {
-                    let errors = false;
-
-                    if (!errors) {
-                        mediaForm.submit();
-                    }
-                }
-            });
-
-        });
     </script>
 @stop
 

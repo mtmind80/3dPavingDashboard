@@ -17,6 +17,7 @@ class County extends Model
     {
         $counties = self::distinct('county')
             ->orderBy('county')
+            ->where('state', '=', 'FL')
             ->pluck('county', 'county')
             ->toArray();
 
@@ -27,6 +28,7 @@ class County extends Model
     {
         $cities = self::where('county', $countyId)
             ->distinct()
+            ->where('state', '=', 'FL')
             ->orderBy('city')
             ->pluck('city', 'city')
             ->toArray();

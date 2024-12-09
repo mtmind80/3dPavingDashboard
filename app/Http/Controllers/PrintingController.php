@@ -164,7 +164,7 @@ public function setup(Request $request)
             //save the file to local disk
             $pdf->save($this->storage_path . $pdfname);
 
-            $newpdfname = "Contract_" . $pdfname;
+            $newpdfname = "Change_Order_Contract_" . $pdfname;
 
             rename($this->storage_path . $pdfname, $this->storage_path . $newpdfname);
 
@@ -181,19 +181,17 @@ public function setup(Request $request)
             //merge with cover sheet
             $mergepdf = new \Jurosh\PDFMerge\PDFMerger;
 
-            // add as many pdfs as you want
+            //add cover sheeet
+            $mergepdf->addPDF($this->storage_path . "coversheet.pdf", 'all', 'vertical');
+
             if(count($mediasPDF)) {
                 foreach($mediasPDF as $media) {
                     $file = $media->file_name;
+                    $mergepdf->addPDF($this->pdf_path . $file, 'all');
                 }
-                $mergepdf->addPDF($this->storage_path . "coversheet.pdf", 'all', 'vertical')
-                    ->addPDF($this->storage_path . $pdfname, 'all')
-                    ->addPDF($this->pdf_path . $file, 'all');
-            }  else {
-                $mergepdf->addPDF($this->storage_path . "coversheet.pdf", 'all', 'vertical')
-                    ->addPDF($this->storage_path . $pdfname, 'all');
-
             }
+            // add in invoice
+            $mergepdf->addPDF($this->storage_path . $pdfname, 'all');
             //rename the merged file
             $newpdfname = "Contract_" . $pdfname;
             // call merge, output format `file`
