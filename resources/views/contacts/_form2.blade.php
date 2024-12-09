@@ -27,7 +27,7 @@
         <x-form-text name="email" class="check-contact" :params="['label' => 'Email', 'iconClass' => 'fas fa-envelope', 'required' => true]">{{ $contact->email ?? null }}</x-form-text>
     </div>
     <div class="col-lg-3 col-md-6 col-sm-6 admin-form-item-widget">
-        <x-form-text name="alt_email" :params="['label' => 'Alt Email', 'iconClass' => 'fas fa-envelope', 'required' => false]">{{ $contact->alt_email ?? null }}</x-form-text>
+        <x-form-text name="alt_email" :params="['label' => 'Alt Emaisl', 'iconClass' => 'fas fa-envelope', 'required' => false]">{{ $contact->alt_email ?? null }}</x-form-text>
     </div>
 </div>
 <div class="row">
