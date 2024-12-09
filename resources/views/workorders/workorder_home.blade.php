@@ -553,6 +553,10 @@
                                         <a href="{{route('create_payment',['id'=>$proposal['id']])}}">Record
                                             Payments</a>
                                     </li>
+                                    <li>
+                                        <a href="{{route('permit_invoice',['id'=>$proposal['id']])}}">Invoice
+                                            Permits</a>
+                                    </li>
                                 </ul>
                             </div>
                             <div class="row">
