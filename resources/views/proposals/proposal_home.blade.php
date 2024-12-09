@@ -257,8 +257,10 @@
 
 
 
+
                                         @else
                                             NO
+
 
 
 
@@ -580,7 +582,7 @@
                 if (checkform()) {
                     $('#printform').attr('action', '{{route('print_proposal')}}');
                     @if(count($medias))
-                        $('#printform').attr('action', '{{route('setup_proposal')}}');
+                    $('#printform').attr('action', '{{route('setup_proposal')}}');
                     @endif
 
                     $("#printform").submit();

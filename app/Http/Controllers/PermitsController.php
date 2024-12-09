@@ -68,7 +68,7 @@ class PermitsController extends Controller
         }
 
         //dd($permits);
-        $counties = DB::table('counties')->groupBy('county')->get(['county']);
+        $counties = County::where('state','=','FL')->orderBy('county')->groupBy('county')->get(['county']);
 
 
         $data = [
@@ -119,6 +119,7 @@ class PermitsController extends Controller
         $data['statusCB'] = $this->statusCB;
         $counties = DB::table('florida_counties')->groupBy('county')->orderBy('county')->get(['county']);
         $data['counties'] = $counties;
+        $data['cert_holders'] = ['APEX', '3D', 'NONE'];
 
         $data['statuses'] = $this->statusCB;
         $data['types'] = $this->typesCB;
@@ -171,8 +172,10 @@ class PermitsController extends Controller
         if($permit) {
             $citiesCB = County::citiesCB($permit->county);
         }
+
         $data = [
             'permit' => $permit,
+            'cert_holders' => ['APEX', '3D', 'NONE'],
             'statusCB' => $this->statusCB,
             'countiesCB' => $countiesCB,
             'citiesCB' => $citiesCB,

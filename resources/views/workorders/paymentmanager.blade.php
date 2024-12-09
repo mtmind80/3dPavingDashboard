@@ -47,16 +47,12 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-lg-4 col-md-4 col-sm-4 admin-form-item-widget">
+                            <div class="col-lg-6 col-md-6 col-sm-6 admin-form-item-widget">
                                 <x-form-select name="payment_type" id="payment_type" :items="$payment_types"
                                                :params="['label' => 'Payment Type', 'iconClass' => 'fas fa-money-bill-alt', 'required' => true]"></x-form-select>
                             </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 admin-form-item-widget">
-                                <x-form-select name="cert_holder" id="cert_holder" :items="$cert_holders"
-                                               :params="['label' => 'Cert Holder', 'iconClass' => 'fas fa-briefcase','required' => true]"></x-form-select>
-                            </div>
 
-                            <div class="col-lg-4 col-md-4 col-sm-4 admin-form-item-widget">
+                            <div class="col-lg-6 col-md-6 col-sm-6 admin-form-item-widget">
                                 <x-form-text id="payment" name="payment" class="check-lead"
                                              :params="['label' => 'Amount', 'iconClass' => 'fas fa-dollar-sign', 'required' => true]"></x-form-text>
                             </div>

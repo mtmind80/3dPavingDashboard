@@ -58,6 +58,7 @@
                                 </div>
                                 <div class="col-md-4 col-sm-6 mb20"></div>
                             </div>
+
                             <div class="row">
                                 <div class="col-lg-2 col-md-3 col-sm-6 admin-form-item-widget">
                                    <span class="fas fa-sticky-note"> </span> Contact Type :{{ $contact->contactType->type ?? null }}
@@ -71,6 +72,7 @@
                                     </div>
                                 @endif
                             </div>
+
                             <div class="row">
                                 <div class="col-lg-3 col-md-3 col-sm-6 admin-form-item-widget">
                                     <span class="fas fa-phone"> </span> Phone: {{ $contact->phone }}
@@ -85,6 +87,7 @@
                                     <span class="fas fa-envelope"> </span> Alt Email: {{ $contact->alt_email }}
                                 </div>
                             </div>
+
                             <div class="row">
                                 <div class="col-lg-6 col-md-6 col-sm-12 admin-form-item-widget">
                                     <span class="fas fa-building"> </span> Address: {{ $contact->full_address_one_line }}
