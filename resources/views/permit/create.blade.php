@@ -36,7 +36,7 @@
 
 
                                     <div class="row">
-                                        <div class="col-lg-4">
+                                        <div class="col-lg-3">
                                             <label>Status:</label>
                                             <select class="form-control" name="status">
                                                 @foreach($statuses as $status)
@@ -44,7 +44,7 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                        <div class="col-lg-4">
+                                        <div class="col-lg-3">
                                             <label>Type:</label>
                                             <select class="form-control" name="type">
                                                 @foreach($types as $type)
@@ -53,7 +53,11 @@
 
                                             </select>
                                         </div>
-                                        <div class="col-lg-4">
+                                        <div class="col-lg-3 admin-form-item-widget">
+                                            <x-form-select name="cert_holder" id="cert_holder" :items="$cert_holders"
+                                                           :params="['label' => 'Cert Holder', 'iconClass' => 'fas fa-briefcase','required' => true]"></x-form-select>
+                                        </div>
+                                        <div class="col-lg-3">
                                             <x-form-text name="number"
                                                          :params="['label' => 'Permit Number', 'iconClass' => 'fas fa-folder', 'required' => true]"></x-form-text>
                                         </div>

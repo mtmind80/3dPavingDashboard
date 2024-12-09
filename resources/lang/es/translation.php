@@ -408,4 +408,6 @@ return [
     "memo" => "Update Memo",
     "disable" => "Desactivar",
     "dead" => "Cerrar Archivo",
+    "add" => "Agregar nuevo",
+
 ];

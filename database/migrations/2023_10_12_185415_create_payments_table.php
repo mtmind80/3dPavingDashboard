@@ -20,7 +20,6 @@ class CreatePaymentsTable extends Migration
             $table->float('payment',8,2, true);
             $table->string('check_no',25)->nullable();
             $table->string('note',1000)->nullable();
-            $table->string('cert_holder',50)->nullable();
             $table->unsignedBigInteger('proposal_id');
             $table->unsignedBigInteger('created_by');
             $table->timestamps();

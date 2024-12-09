@@ -75,8 +75,10 @@ class Controller extends BaseController
             //$site_button_class ="btn btn-info";
             $site_button_class ="btn btn-default";
             $site_button_class2 ="btn btn-success";
+            $site_button_class3 ="btn btn-info";
             view()->share('site_button_class', $site_button_class);
             view()->share('site_button_class2', $site_button_class2);
+            view()->share('site_button_class3', $site_button_class3);
 
             view()->share('authuser', json_decode(json_encode(auth()->user()),true));
             return $next($request);

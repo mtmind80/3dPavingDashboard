@@ -60,7 +60,7 @@
                                     <input type="hidden" name="proposal_id" value="{{$permit->proposal->id}}">
 
                                     <div class="row">
-                                        <div class="col-lg-4">
+                                        <div class="col-lg-3">
                                             <label>Status:</label>
                                             <select class="form-control" name="status">
                                                 <option>{{$permit->status}}</option>
@@ -70,7 +70,11 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                        <div class="col-lg-4">
+                                        <div class="col-lg-3 admin-form-item-widget">
+                                            <x-form-select name="cert_holder" id="cert_holder" :items="$cert_holders"
+                                                           :params="['label' => 'Cert Holder', 'iconClass' => 'fas fa-briefcase']"></x-form-select>
+                                        </div>
+                                        <div class="col-lg-3">
                                             <label>Type:</label>
                                             <select class="form-control" name="type">
                                                 <option>{{$permit->type}}</option>
@@ -79,7 +83,7 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                        <div class="col-lg-4">
+                                        <div class="col-lg-3">
                                             <x-form-text name="number"
                                                          :params="['label' => 'Permit Number', 'iconClass' => 'fas fa-folder']">{{ $permit->number }}</x-form-text>
                                         </div>
@@ -149,11 +153,11 @@
                                     <div class="row mt-2">
                                         <div class="col-lg-12">
                                             <p></p>
-                                            <input type="submit" value="Update Permit" class="{{$site_button_class}}"/>
-                                            <input type="button" id="returntoworkorder" value="View Work Order"
-                                                   class="{{$site_button_class}}"/>
+                                            <input type="submit" value="Update Permit" class="{{$site_button_class3}}"/>
                                             <input type="button" id="deletepermit" value="Delete Permit"
-                                                   class="{{$site_button_class}}"/>
+                                                   class="{{$site_button_class3}}"/>
+                                            <input type="button" id="returntoworkorder" value="Cancel"
+                                                   class="{{$site_button_class3}}"/>
                                         </div>
                                     </div>
                                 </form>
@@ -165,7 +169,7 @@
                                         <x-form-show class="mh-100"
                                                      :params="['label' => 'Note', 'iconClass' => 'fas fa-sticky-note']">{{ $permit->note ?? null }}</x-form-show>
                                     </div>
-                                    <div class="col-lg-2 col-md-3 col-sm-4 admin-form-item-widget">
+                                    <div class="col-lg-2 col-md-3 col-sm-3 admin-form-item-widget">
                                         <x-form-show class="mh-100"
                                                      :params="['label' => 'Fee', 'iconClass' => 'fas fa-dollar-sign']">{{ $notes->fee ?? '0.00' }}</x-form-show>
                                     </div>
@@ -187,13 +191,13 @@
                                                 class="fas fa-plus"></i>@lang('translation.add') @lang('translation.note')
                                         </x-href-button>
                                     </div>
-                                    <div class="col-md-4 col-sm-6 mb20"></div>
+                                    <div class="col-md-3 col-sm-6 mb20"></div>
                                 </div>
                                 <div class="row info-color">
                                     <div class="col-lg-6 admin-form-item-widget">
                                         <strong>Note</strong>
                                     </div>
-                                    <div class="col-lg-4  admin-form-item-widget">
+                                    <div class="col-lg-3  admin-form-item-widget">
                                         <strong>Created By</strong>
                                     </div>
                                     <div class="col-lg-2 admin-form-item-widget">
@@ -205,8 +209,8 @@
                                         <div class="col-lg-6 admin-form-item-widget">
                                             {{ $notes->note ?? null }}
                                         </div>
-                                        <div class="col-lg-4  admin-form-item-widget">
-                                            <p class="mb4 fs14">{{ $notes->creator }}:</p>
+                                        <div class="col-lg-3  admin-form-item-widget">
+                                            <p class="mb3 fs13">{{ $notes->creator }}:</p>
                                             {{ $notes->created_at->format('M-d-Y') ?? null }}
                                         </div>
                                         <div class="col-lg-2 admin-form-item-widget">

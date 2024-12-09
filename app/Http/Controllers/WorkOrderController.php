@@ -286,7 +286,6 @@ public function cancelworkorder($id)
         $data['payments'] = $payments;
         $data['workorder'] = $workorder;
         $data['payment_types'] = ['Deposit' => 'Deposit', 'Progress Billing' => 'Progress Billing', 'Final Payment' => 'Final Payment', 'Permit Fee' => 'Permit Fee'];
-        $data['cert_holders'] = ['APEX', '3D', 'NONE'];
         return view('workorders.paymentmanager', $data);
 
     }
@@ -304,7 +303,6 @@ public function cancelworkorder($id)
         $data['payments'] = $payments;
         $data['workorder'] = $workorder;
         $data['payment_types'] = ['Deposit' => 'Deposit', 'Progress Billing' => 'Progress Billing', 'Final Payment' => 'Final Payment', 'Permit Fee' => 'Permit Fee'];
-        $data['cert_holders'] = ['APEX', '3D', 'NONE'];
 
         return $this->payments($id)->with('success', "Nice Work!");;
 //        return view('workorders.paymentmanager', $data)->with('success', "Nice Work!");
