@@ -6,6 +6,7 @@ use App\Http\Requests\ContactRequest;
 use App\Http\Requests\NoteRequest;
 use App\Http\Requests\SearchRequest;
 use App\Models\ContactType;
+use App\Models\County;
 use App\Models\LeadSource;
 use App\Models\Location;
 use App\Models\Staff;
@@ -231,7 +232,7 @@ class ContactsController extends Controller
             'typesCB'         => ContactType::typesCBActive(['0' => 'Select type']),
             'sourcesCB'       => LeadSource::sourcesCB(['0' => 'Select source']),
             'assignedToCB'    => Contact::assignedToCB(['0' => 'Select assigned to']),
-            'countiesCB'      => Location::countiesCB(['' => 'Select county']),
+            'countiesCB'      => County::countiesCB(['' => 'Select county']),
             'contact_type_id' => null,
             'lead_source'     => null,
             'assigned_to'     => null,
@@ -248,7 +249,7 @@ class ContactsController extends Controller
             'typesCB'         => ContactType::typesCBActive(['0' => 'Select type']),
             'sourcesCB'       => LeadSource::sourcesCB(['0' => 'Select source']),
             'assignedToCB'    => Contact::assignedToCB(['0' => 'Select assigned to']),
-            'countiesCB'      => Location::countiesCB(['' => 'Select county']),
+            'countiesCB'      => County::countiesCB(['' => 'Select county']),
             'contact_type_id' => null,
             'proposal_id'     => $proposal_id,
             'lead_source'     => null,
@@ -379,7 +380,7 @@ class ContactsController extends Controller
             'typesCB'      => ContactType::typesCBActive(),
             'sourcesCB'    => LeadSource::sourcesCB(['0' => 'Select source']),
             'assignedToCB' => Contact::assignedToCB(['0' => 'Select assigned to']),
-            'countiesCB'   => Location::countiesCB(),
+            'countiesCB'   => County::countiesCB(),
         ];
 
         return view('contacts.edit', $data);

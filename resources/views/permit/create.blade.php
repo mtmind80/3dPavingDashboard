@@ -131,6 +131,59 @@
     <script>
 
         $(document).ready(function(){
+
+
+            var countyEl = $('#county');
+            var cityEl = $('#city');
+
+            console.log(countyEl);
+            console.log(cityEl);
+
+            countyEl.on('change', function(){
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: {
+                        county: $(this).val()
+                    },
+                    type: "POST",
+                    url: "{{ route('ajax_fetch_cities') }}",
+                    beforeSend: function (request) {
+                        showSpinner();
+                    },
+                    complete: function () {
+                        hideSpinner();
+                    },
+                    success: function (response) {
+                        if (typeof response.success === 'undefined' || !response) {
+                            cityEl.html('<option value="0">Select county last</option>');
+                            console.log('Critical error has occurred.');
+                        } else if (response.success) {
+                            let data = response.data;
+                            let html = '<option>NA</option>';
+
+                            $.each(data, function(key, value){
+                                html += '<option>'+ value +'</option>';
+                            })
+                            cityEl.html(html);
+                        } else {
+                            // controller defined response error message
+                            cityEl.html('<option value="0">Select county first</option>');
+                            console.log(response.message);
+                        }
+                    },
+                    error: function (response) {
+                        cityEl.html('<option value="0">Select county first</option>');
+                        @if (app()->environment() === 'local')
+                        console.log(response.responseJSON.message);
+                        @else
+                        console.log(response.message);
+                        @endif
+                    }
+                });
+            });
+
             var addPermitform = $("#permitform");
             addPermitform.validate({
                 rules: {
@@ -168,53 +221,6 @@
                 window.location.href="{{route('show_workorder',['id'=>$proposal->id])}}";
             });
 
-            var countyEl = $('#county');
-            var cityEl = $('#city');
-
-            countyEl.on('change', function(){
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    data: {
-                        county: $(this).val()
-                    },
-                    type: "POST",
-                    url: "{{ route('ajax_fetch_cities') }}",
-                    beforeSend: function (request) {
-                        showSpinner();
-                    },
-                    complete: function () {
-                        hideSpinner();
-                    },
-                    success: function (response) {
-                        if (typeof response.success === 'undefined' || !response) {
-                            cityEl.html('<option value="0">Select county first</option>');
-                            console.log('Critical error has occurred.');
-                        } else if (response.success) {
-                            let data = response.data;
-                            let html = '<option>NA</option>';
-
-                            $.each(data, function(key, value){
-                                html += '<option>'+ value +'</option>';
-                            })
-                            cityEl.html(html);
-                        } else {
-                            // controller defined response error message
-                            cityEl.html('<option value="0">Select county first</option>');
-                            console.log(response.message);
-                        }
-                    },
-                    error: function (response) {
-                        cityEl.html('<option value="0">Select county first</option>');
-                        @if (app()->environment() === 'local')
-                            console.log(response.responseJSON.message);
-                        @else
-                            console.log(response.message);
-                        @endif
-                    }
-                });
-            });
         });
     </script>
 @stop

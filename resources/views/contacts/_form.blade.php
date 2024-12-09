@@ -45,11 +45,14 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-lg-4 col-md-6 col-sm-6 admin-form-item-widget">
-        <x-form-text name="city" :params="['label' => 'City', 'iconClass' => 'fas fa-building', 'required' => true]">{{ $contact->city ?? old('city') ?? null }}</x-form-text>
-    </div>
     <div class="col-lg-3 col-md-6 col-sm-6 admin-form-item-widget">
-        <x-form-select name="county" :items="$countiesCB" selected="{{ $contact->county ?? old('county') ?? null }}"  :params="['label' => 'County', 'required' => true]"></x-form-select>
+        <x-form-select id="county" name="county" :items="$countiesCB" selected="{{ $contact->county ?? old('county') ?? null }}"  :params="['label' => 'County', 'required' => true]"></x-form-select>
+    </div>
+    <div class="col-lg-4 col-md-6 col-sm-6 admin-form-item-widget">
+        <label>City:</label>
+        <select name="city" id="city" class="form-control">
+            <option value="0">Select county first</option>
+        </select>
     </div>
     {{--
     <div class="col-lg-3 col-md-6 col-sm-6 admin-form-item-widget">
@@ -57,7 +60,7 @@
     </div>
     --}}
     <div class="col-lg-3 col-md-8 col-sm-8 admin-form-item-widget">
-        <x-form-text name="state" :params="['label' => 'State', 'iconClass' => 'fas fa-building', 'required' => true]">{{ $contact->state ?? old('state') ?? null }}</x-form-text>
+        <x-form-text name="state" :params="['label' => 'State', 'iconClass' => 'fas fa-building', 'required' => true]">{{ $contact->state ?? old('state') ?? 'FL' }}</x-form-text>
     </div>
     <div class="col-lg-2 col-md-4 col-sm-4 admin-form-item-widget">
         <x-form-text name="postal_code" :params="['label' => 'Zipcode', 'iconClass' => 'fas fa-building', 'required' => true]">{{ $contact->postal_code ?? old('postal_code') ?? null }}</x-form-text>
@@ -120,7 +123,60 @@
             //alert(isZipCode(zipCode));
 
 
-            //var isLead = $('#is_lead');
+            var countyEl = $('#county');
+            var cityEl = $('#city');
+
+            console.log(countyEl);
+            console.log(cityEl);
+
+            countyEl.on('change', function(){
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: {
+                        county: $(this).val()
+                    },
+                    type: "POST",
+                    url: "{{ route('ajax_fetch_cities') }}",
+                    beforeSend: function (request) {
+                        showSpinner();
+                    },
+                    complete: function () {
+                        hideSpinner();
+                    },
+                    success: function (response) {
+                        if (typeof response.success === 'undefined' || !response) {
+                            cityEl.html('<option value="0">Select county last</option>');
+                            console.log('Critical error has occurred.');
+                        } else if (response.success) {
+                            let data = response.data;
+                            let html = '<option>NA</option>';
+
+                            $.each(data, function(key, value){
+                                html += '<option>'+ value +'</option>';
+                            })
+                            cityEl.html(html);
+                        } else {
+                            // controller defined response error message
+                            cityEl.html('<option value="0">Select county first</option>');
+                            console.log(response.message);
+                        }
+                    },
+                    error: function (response) {
+                        cityEl.html('<option value="0">Select county first</option>');
+                        @if (app()->environment() === 'local')
+                        console.log(response.responseJSON.message);
+                        @else
+                        console.log(response.message);
+                        @endif
+                    }
+                });
+            });
+
+
+
+                //var isLead = $('#is_lead');
             var sameBillingAddress = $('#same_billing_address');
             var address1 = $('#address1');
             var address2 = $('#address2');
@@ -425,6 +481,8 @@
                     window.location = "{{ route('contact_list') }}";
                 }
             });
+
+
         });
     </script>
 @stop
