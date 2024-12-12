@@ -414,6 +414,7 @@ return [
     "memo" => "Update Memo",
     "disable" => "Disable",
     "dead" => "Dead Lead",
-    "add" => "Add",
+    "add" => "Add New",
+    "selectservice" => "Select Service",
 ];
 

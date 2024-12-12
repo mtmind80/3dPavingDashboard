@@ -320,6 +320,8 @@ Route::group(['prefix' => 'print'], function() {
     //Print report
     Route::get('/printcoversheet', 'PrintingController@coversheet')->name('print_coversheet');
 
+    Route::get('/{id}/permit_invoice', 'PrintingController@permitinvoice')->name('permit_invoice');
+
     /**** example of printing a pdf with background image */
 
     Route::get('/print-example-pdf', 'PrintingController@printExamplePdfWithBAckgroundImage');

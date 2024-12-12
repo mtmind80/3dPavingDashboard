@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\AcceptedDocuments;
 use App\Models\MediaType;
+use App\Models\Permit;
 use App\Models\Proposal;
 use App\Models\ProposalMedia;
 use App\Models\Service;
 use App\Models\Term;
 use App\Models\TermsOfService;
 use App\Models\User;
+use App\Models\WorkOrder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
 use PDF;
@@ -84,7 +86,7 @@ public function setup(Request $request)
         }
 
         $mediasPDF = ProposalMedia::where('file_ext', '=', 'pdf')->whereIn('id', $selectmedia)->get();
-        $medias = ProposalMedia::where('file_ext', '<>', 'pdf')->whereIn('id', $selectmedia)->get();
+        $medias = ProposalMedia::where('file_ext', 'IN', ['gif','jpg','jpeg','png'])->whereIn('id', $selectmedia)->get();
 
 
         $datestamp = date("Ymd");
@@ -215,6 +217,48 @@ public function setup(Request $request)
 
         unlink($this->storage_path . $pdfname);
         // unlink($this->storage_path . $newpdfname);
+
+    }
+
+
+    public function permitinvoice($id)
+    {
+
+        $proposal = WorkOrder::find($id)->first();
+        $permits = Permit::where('proposal_id', '=', $id)->with(['notes'])->get()->toArray();
+
+        $pdfname = "Permit_Invoice_" . $id . ".pdf";
+
+        $data['proposal'] = $proposal;
+        $data['permits'] = $permits;
+
+        $pdf = PDF::loadView('pdf.proposal_permit_invoice', $data);
+
+        //save the file to local disk
+        $pdf->save($this->storage_path . $pdfname);
+
+        //merge with cover sheet
+        $mergepdf = new \Jurosh\PDFMerge\PDFMerger;
+        //add cover sheeet
+        $mergepdf->addPDF($this->storage_path . "coversheet.pdf", 'all', 'vertical');
+        // add in invoice
+        $mergepdf->addPDF($this->storage_path . $pdfname, 'all');
+        // call merge, output format `file`
+        $newpdfname =  "3d-paving_". $pdfname;
+        $mergepdf->merge('file', $this->storage_path . $newpdfname);
+        //delete the pdf
+
+        header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
+        header("Cache-Control: public"); // needed for internet explorer
+        header("Content-Type: application/pdf");
+        header("Content-Transfer-Encoding: Binary");
+        header("Content-Length:" . filesize($this->storage_path . $newpdfname));
+        header("Content-Disposition: attachment; filename=$newpdfname");
+        readfile($this->storage_path . $newpdfname);
+
+        unlink($this->storage_path . $pdfname);
+
+
 
     }
 
