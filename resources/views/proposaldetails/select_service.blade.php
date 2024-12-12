@@ -79,17 +79,17 @@
                         </div>
                         <table class="table-centered font-size-16" width="70%">
                             <tr>
-                                <td class='tr'>
+                                <td class='tc'>
                                     Select
                                 </td>
                                 <td class='tl'>
-                                    Name
+                                    Service
                                 </td>
-                                <td class='tr'>
+                                <td class='tc'>
                                     Select
                                 </td>
                                 <td class='tl'>
-                                    Name
+                                    Service
                                 </td>
                                 @php($c =1)
                                 @foreach($servicecats as $cat)
@@ -98,7 +98,7 @@
                             </tr>
                             <tr>
                                 @endif
-                                <td class='tr'>
+                                <td class='tc'>
                                     <input type="radio" name="servicecat" value="{{$cat['id']}}">
                                 </td>
                                 <td class='tl'>
@@ -115,7 +115,7 @@
                 <div class="form-group mb-0  col-lg-12">
                     <div>
                         <button type="button" id='submitbutton'
-                                class="btn btn-primary waves-effect waves-light mr-1">@lang('translation.submit')
+                                class="btn btn-primary waves-effect waves-light mr-1">@lang('translation.selectservice')
                         </button>
                         <button type="button" id="cancelbutton"
                                 class="btn btn-danger waves-effect">@lang('translation.cancel')</button>

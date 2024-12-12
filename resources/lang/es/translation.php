@@ -409,5 +409,6 @@ return [
     "disable" => "Desactivar",
     "dead" => "Cerrar Archivo",
     "add" => "Agregar nuevo",
+    "selectservice" => "Seleccionar servicio",
 
 ];
