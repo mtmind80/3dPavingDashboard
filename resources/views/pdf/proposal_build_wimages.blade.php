@@ -210,14 +210,7 @@
     </table>
     <p class="pb">
     </p>
-        @foreach ($medias as $media)
-            <img src='{{ URL::asset('/media/projects/'. $media->file_name)}}' width='700px'>
-<br/>
-            {{ $media->description}}
 
-            <p class="pb">
-            </p>
-        @endforeach
 
     <h3>Acceptances of proposal</h3>
 
@@ -279,6 +272,7 @@
         </td>
         </tr>
     </table>
+
     <p class="pb">
     </p>
     <h1>General Terms</h1>
@@ -317,6 +311,28 @@
         </tr>
     </table>
 
+        @if($mediasImages)
+
+            @foreach($mediasImages as $mediaImage)
+
+                <table>
+                    <tr>
+                        <td class="small_normal tc">
+                            <IMG SRC="media/projects/{!!$mediaImage['file_name']!!}" width="600"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="small_normal tc">
+                            {!!$mediaImage['description']!!}
+
+                        </td>
+                    </tr>
+                </table>
+
+                <p class="pb">
+                </p>
+            @endforeach
+        @endif
 
 </body>
 </html>

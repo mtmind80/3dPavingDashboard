@@ -229,7 +229,28 @@
     </tr>
 </table>
 
+@if($mediasImages)
 
+    @foreach($mediasImages as $mediaImage)
+
+        <table>
+            <tr>
+                <td class="small_normal tc">
+                    <IMG SRC="media/projects/{!!$mediaImage['file_name']!!}" width="600"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="small_normal tc">
+                    {!!$mediaImage['description']!!}
+
+                </td>
+            </tr>
+        </table>
+
+        <p class="pb">
+        </p>
+    @endforeach
+@endif
 
 </body>
 </html>
