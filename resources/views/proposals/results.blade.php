@@ -34,13 +34,15 @@
 
                             <div class="col-lg-4">
                                 <a href="{{ route('proposals') }}" title="@lang('translation.SearchAgain')"
-                                   class="{{$site_button_class}}"><i class="fas fa-plus"></i>@lang('translation.SearchAgain')
+                                   class="{{$site_button_class}}"><i
+                                        class="fas fa-plus"></i>@lang('translation.SearchAgain')
                                 </a>
                             </div>
                         @else
                             <div class="col-lg-12 p-1">
                                 <a href="{{ route('proposals') }}" title="@lang('translation.SearchAgain')"
-                                   class="{{$site_button_class}}"><i class="fas fa-plus"></i>@lang('translation.SearchAgain')
+                                   class="{{$site_button_class}}"><i
+                                        class="fas fa-plus"></i>@lang('translation.SearchAgain')
                                 </a>
                             </div>
                         @endif
@@ -59,18 +61,19 @@
                                     @lang('translation.View_More')
                                 </th>
 
-                                <th class="sorting_disabled tc" style="width: 60px;">
-                                    @lang('translation.client')
+                                <th class="sorting_disabled tc" style="width: 140px;">
+                                    @lang('translation.proposal')
+                                    @lang('translation.Name')
                                 </th>
 
                                 <th class="sorting_disabled tc" style="width: 60px;">
                                     @lang('translation.proposal')
                                     @lang('translation.date')
                                 </th>
-
-                                <th class="sorting_disabled tc" style="width: 140px;">
-                                    @lang('translation.Name')
+                                <th class="sorting_disabled tc" style="width: 60px;">
+                                    @lang('translation.client')
                                 </th>
+
                                 <th class="sorting_disabled tc" style="width: 67px;">
                                     @lang('translation.manager')
                                 </th>
@@ -95,65 +98,69 @@
 
                                     @if($record->job_master_id)
                                         <tr style="background: #ABEBC6;">
-                                            @else
+                                    @else
                                         <tr>
                                             @endif
-                                        <td class="tc">
-                                            @if($record->job_master_id)
-                                                <a class="ri-edit-box-fill"
-                                                   href="{{ route('show_workorder',['id'=>$record->id]) }}"
-                                                   title="@lang('translation.edit')"
-                                                   >
-                                                    @lang('translation.edit') @lang('translation.work_order')</a>
-                                                
-                                                @else
-                                            <a 
-                                                href="{{ route('show_proposal',['id'=>$record->id]) }}"
-                                               title="@lang('translation.edit')"
-                                               >
-                                                @lang('translation.edit') @lang('translation.proposal')</a>
-                                            @endif
-                                            <br/>ID:{{$record->id}}</td>
-                                        <td class="tc">
-                                            <A href="{{route('contact_details', ['contact'=>$record->contact_id])}}"
-                                               title="@lang('translation.edit') @lang('translation.client')">
-                                                {{ App\Models\Contact::find($record->contact_id)->FullName }}
-                                            </a>
-                                        <td class="tc">
-                                            {{$record->proposal_date->format('m-d-Y')}}
-                                        </td>
+                                            <td class="tc">
+                                                @if($record->job_master_id)
+                                                    <a class="ri-edit-box-fill"
+                                                       href="{{ route('show_workorder',['id'=>$record->id]) }}"
+                                                       title="@lang('translation.edit')"
+                                                    >
+                                                        @lang('translation.edit') @lang('translation.work_order')</a>
 
-                                        <td class="tc text-dark fw-bold">
-                                            {{$record->name}}
-                                        </td>
-                                        <td class="tc text-dark fw-bold">
-                                            @if($record->sales_manager_id)
-                                                {{ App\Models\User::find($record->sales_manager_id)->FullName }}
-                                            @else
-                                                No Manager Assigned
-                                            @endif
-                                        </td>
-                                        <td class="tc text-dark fw-bold">
-                                            @if($record->location_id)
-                                                    <?php $location = App\Models\Location::find($record->location_id); ?>
-                                                {{$location['address_line1']}}<br/>
-                                                @if($location['address_line2'])
-                                                    {{$location['address_line2']}}<br/>
+                                                @else
+                                                    <a
+                                                        href="{{ route('show_proposal',['id'=>$record->id]) }}"
+                                                        title="@lang('translation.edit')"
+                                                    >
+                                                        @lang('translation.edit') @lang('translation.proposal')</a>
                                                 @endif
-                                                @if($location['city'])
-                                                    {{$location['city']}},
+                                                <br/>ID:{{$record->id}}
+                                            </td>
+                                            <td class="tc text-dark fw-bold">
+                                                {{$record->name}}
+                                            </td>
+
+                                            <td class="tc">
+                                                {{$record->proposal_date->format('m-d-Y')}}
+                                            </td>
+                                            <td class="tc">
+                                                <A href="{{route('contact_details', ['contact'=>$record->contact_id])}}"
+                                                   title="@lang('translation.edit') @lang('translation.client')">
+                                                    {{ App\Models\Contact::find($record->contact_id)->full_name }}
+                                                </a>
+                                            </td>
+
+
+                                            <td class="tc text-dark fw-bold">
+                                                @if($record->salesmanager_id)
+                                                    {{ App\Models\User::find($record->salesmanager_id)->full_name}}
+                                                @else
+                                                    No Manager Assigned
                                                 @endif
-                                                {{$location['postal_code']}}
-                                            @endif
-                                        </td>
-                                        <td class="tc text-dark fw-bold">
-                                            @if($record->proposal_statuses_id)
-                                                {{ App\Models\ProposalStatus::find($record->proposal_statuses_id)->status }}
-                                            @endif
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @endif
+                                            </td>
+                                            <td class="tc text-dark fw-bold">
+                                                @if($record->location_id)
+                                                        <?php $location = App\Models\Location::find($record->location_id); ?>
+                                                    {{$location['address_line1']}}<br/>
+                                                    @if($location['address_line2'])
+                                                        {{$location['address_line2']}}<br/>
+                                                    @endif
+                                                    @if($location['city'])
+                                                        {{$location['city']}},
+                                                    @endif
+                                                    {{$location['postal_code']}}
+                                                @endif
+                                            </td>
+                                            <td class="tc text-dark fw-bold">
+                                                @if($record->proposal_statuses_id)
+                                                    {{ App\Models\ProposalStatus::find($record->proposal_statuses_id)->status }}
+                                                @endif
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    @endif
                             </tbody>
                         </table>
 
