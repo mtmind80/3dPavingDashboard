@@ -78,6 +78,8 @@ public function setup(Request $request)
     public function proposalWImages(Request $request)
     {
 
+
+
         $proposal_id = 0;
         if (isset($request['proposal_id'])) {
             $proposal_id = $request['proposal_id'];
@@ -86,8 +88,8 @@ public function setup(Request $request)
         }
 
         $mediasPDF = ProposalMedia::where('file_ext', '=', 'pdf')->whereIn('id', $selectmedia)->get();
-        $medias = ProposalMedia::where('file_ext', 'IN', ['gif','jpg','jpeg','png'])->whereIn('id', $selectmedia)->get();
 
+        $mediasImages = ProposalMedia::whereIn('file_ext', ['gif','jpg','jpeg','png'])->whereIn('id', $selectmedia)->get();
 
         $datestamp = date("Ymd");
         $pdfname = '3DPaving_' . $datestamp . '_' . $proposal_id . '.pdf';
@@ -141,7 +143,7 @@ public function setup(Request $request)
             'hostwithHttp' => $hostwithHttp,
             'id' => $proposal_id,
             'sales' => $sales,
-            'medias' => $medias,
+            'mediasImages' => $mediasImages,
             'mediasPDF' => $mediasPDF,
             'manager' => $manager,
             'proposal' => $proposal,
@@ -186,14 +188,17 @@ public function setup(Request $request)
             //add cover sheeet
             $mergepdf->addPDF($this->storage_path . "coversheet.pdf", 'all', 'vertical');
 
-            if(count($mediasPDF)) {
-                foreach($mediasPDF as $media) {
-                    $file = $media->file_name;
-                    $mergepdf->addPDF($this->pdf_path . $file, 'all');
-                }
-            }
             // add in invoice
             $mergepdf->addPDF($this->storage_path . $pdfname, 'all');
+
+            // add any other pdfs
+            if(count($mediasPDF)) {
+                foreach($mediasPDF as $media) {
+                    $file_name = $media->file_name;
+                    $mergepdf->addPDF($this->pdf_path . $file_name, 'all');
+                }
+            }
+
             //rename the merged file
             $newpdfname = "Contract_" . $pdfname;
             // call merge, output format `file`

@@ -489,8 +489,9 @@ class ContactsController extends Controller
         return redirect()->back()->with('success', 'Contact <b>' . $contact->full_name . '</b> detached from "' . $company->full_name . '"');
     }
 
-    public function addStaff(Contact $contact, Request $request)
+    public function addStaff(Request $request)
     {
+
         $validator = \Validator::make(
             $request->only(['staff_id']), [
                 'staff_id' => 'required|positive',
@@ -523,7 +524,7 @@ class ContactsController extends Controller
     }
 
 
-    public function addNewStaff(Contact $contact, Request $request)
+    public function addNewStaff(Request $request)
     {
 
         $validator = \Validator::make(
@@ -549,6 +550,8 @@ class ContactsController extends Controller
             }
         }
 
+        $contact = Contact::find($request['contact_id'])->first();
+
         $staff = New Contact();
         $staff->contact_type_id = 18;
         $staff->first_name = $request->first_name;
@@ -557,7 +560,7 @@ class ContactsController extends Controller
         $staff->city = $request->city;
         $staff->state = $request->state;
         $staff->email = $request->email;
-        $staff->related_to = $contact->id;
+        $staff->related_to = $request['contact_id'];
         $staff->save();
 
         if (!empty($this->returnTo)) {
