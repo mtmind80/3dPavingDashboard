@@ -145,6 +145,11 @@
                                                 @if($proposal['location_id'])
                                                     {!! App\Models\Location::find($proposal['location_id'])->FullLocationTwoLines !!}
                                                 @endif
+
+                                                    <span style="float:right;"><a
+                                                            href="{{ route('change_location',['proposal' => $proposal['id'], 'location'=>$proposal['location_id']]) }}"
+                                                            class='button' title="Change Location">Change or Edit Location</a></span>
+
                                             </td>
                                         </tr>
                                         <tr>

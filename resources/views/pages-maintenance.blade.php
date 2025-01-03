@@ -5,9 +5,9 @@
 <body data-sidebar="dark">
 @endsection
 @section('content')
-    
+
 <div class="home-btn d-none d-sm-block">
-    <a href="{{url('index')}}" class="text-dark"><i class="mdi mdi-home-variant h2"></i></a>
+    <a href="{{url('')}}" class="text-dark"><i class="mdi mdi-home-variant h2"></i></a>
 </div>
 
 <div class="my-5 pt-sm-5">
@@ -17,7 +17,7 @@
                 <div class="text-center">
                     <div class="mb-5">
                         <a href="{{url('index')}}">
-                            <img src="{{ URL::asset('/assets/images/logo-dark.png')}}" alt="logo" height="20" />
+                            <img src="{{ URL::asset('/assets/images/logo-light-1.png')}}" alt="logo" height="20" />
                         </a>
                     </div>
 
@@ -40,10 +40,9 @@
                                             <i class="mdi mdi-access-point-network font-size-24 text-primary"></i>
                                         </span>
                                     </div>
-                                    
+
                                     <h5 class="font-size-15 text-uppercase mt-4">Why is the Site Down?</h5>
-                                    <p class="text-muted mb-0">There are many variations of passages of
-                                        Lorem Ipsum available, but the majority have suffered alteration.</p>
+                                    <p class="text-muted mb-0">For scheduled updates.</p>
                                 </div>
                             </div>
                         </div>
@@ -57,8 +56,7 @@
                                     </div>
                                     <h5 class="font-size-15 text-uppercase mt-4">
                                         What is the Downtime?</h5>
-                                    <p class="text-muted mb-0">Contrary to popular belief, Lorem Ipsum is not
-                                        simply random text. It has roots in a piece of classical.</p>
+                                    <p class="text-muted mb-0">Approx 20 minutes.</p>
                                 </div>
                             </div>
                         </div>
@@ -72,10 +70,8 @@
                                     </div>
                                     <h5 class="font-size-15 text-uppercase mt-4">
                                         Do you need Support?</h5>
-                                    <p class="text-muted mb-0">If you are going to use a passage of Lorem
-                                        Ipsum, you need to be sure there isn't anything embar.. <a
-                                                href="mailto:no-reply@domain.com"
-                                                class="text-decoration-underline">no-reply@domain.com</a></p>
+                                    <p class="text-muted mb-0">If you are in need of support for this issue please contact your supervisor.
+                                        Or wait for the updates to finish.</p>
                                 </div>
                             </div>
                         </div>

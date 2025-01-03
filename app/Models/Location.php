@@ -13,6 +13,21 @@ class Location extends Model
         'short_location_two_lines',
     ];
 
+
+    protected $fillable = [
+        'address_line1',
+        'address_line2',
+        'city',
+        'state',
+        'postal_code',
+        'county',
+        'location_type_id',
+    	'parcel_number',
+	    'note',
+	    'updated_at',
+	    'created_at'
+    ];
+
     // Relationships:
     public function locationType()
     {
