@@ -28,10 +28,9 @@ class Controller extends BaseController
     {
         $this->middleware(function ($request, $next) {
             $web_config = Cache::remember('webconfig', env('CACHE_TIMETOLIVE'), function () {
-                $data=array();
+                $data = array();
                 $web_config = WebConfig::all()->toArray();
-                foreach($web_config as $wc)
-                {
+                foreach ($web_config as $wc) {
                     $data[$wc['key']] = $wc['value'];
                 }
                 return $data;
@@ -42,7 +41,7 @@ class Controller extends BaseController
 
             view()->share('debug_blade', 'false');
             view()->share('web_config', $web_config);
-            session(['web_config'=> $web_config]);
+            session(['web_config' => $web_config]);
 
             $this->returnTo = $request->returnTo ?? null;
             $this->tabSelected = $request->tab ?? null;
@@ -55,32 +54,32 @@ class Controller extends BaseController
                 }
             }
 
-
-            $this->showprices = false; // don't show pricing field agents, employees
-            if (auth()->user()->isAllSales()) {
-                $this->showprices = true;
+            if (auth()->user()) {
+                $this->showprices = false; // don't show pricing field agents, employees
+                if (auth()->user()->isAllSales()) {
+                    $this->showprices = true;
+                }
+                view()->share('showprices', $this->showprices);
             }
-            view()->share('showprices', $this->showprices);
-
 
             view()->share('lang', \Lang::locale());
             view()->share('returnTo', $this->returnTo);
             view()->share('tabSelected', $this->tabSelected);
 
             $lockout = session('lockout');
-            if($lockout) {
-              //  return redirect()->route('lockout');
+            if ($lockout) {
+                //  return redirect()->route('lockout');
             }
 
             //$site_button_class ="btn btn-info";
-            $site_button_class ="btn btn-default";
-            $site_button_class2 ="btn btn-success";
-            $site_button_class3 ="btn btn-info";
+            $site_button_class = "btn btn-default";
+            $site_button_class2 = "btn btn-success";
+            $site_button_class3 = "btn btn-info";
             view()->share('site_button_class', $site_button_class);
             view()->share('site_button_class2', $site_button_class2);
             view()->share('site_button_class3', $site_button_class3);
 
-            view()->share('authuser', json_decode(json_encode(auth()->user()),true));
+            view()->share('authuser', json_decode(json_encode(auth()->user()), true));
             return $next($request);
         });
     }
@@ -110,11 +109,11 @@ class Controller extends BaseController
         //6 Labor;
         //
         // code to input users
-        $results = DB::Table('crmtblcontacts')->select('cntId','cntFirstName',
-            'cntLastName','cntAvatar','cntSignature','cntJobTitle','cntStatusId',
-            'cntPrimaryEmail','cntPrimaryPhone','cntPassword','cntRole')->where('cntPrimaryEmail','NOT LIKE',"%allpaving.com")->where('cntIsEmployee','=',1)->get();
-        $records =0;
-        foreach($results as $userdata) {
+        $results = DB::Table('crmtblcontacts')->select('cntId', 'cntFirstName',
+            'cntLastName', 'cntAvatar', 'cntSignature', 'cntJobTitle', 'cntStatusId',
+            'cntPrimaryEmail', 'cntPrimaryPhone', 'cntPassword', 'cntRole')->where('cntPrimaryEmail', 'NOT LIKE', "%allpaving.com")->where('cntIsEmployee', '=', 1)->get();
+        $records = 0;
+        foreach ($results as $userdata) {
             $records++;
             $user = new User();
             $user->fname = $userdata->cntFirstName;
@@ -128,7 +127,7 @@ class Controller extends BaseController
             $user->old_id = $userdata->cntId;
             $user->save();
         }
-        return "Records Processed". $records;
+        return "Records Processed" . $records;
 
     }
 
@@ -142,5 +141,6 @@ class Controller extends BaseController
         $proposalAction->save();
 
     }
+
 
 }

@@ -28,41 +28,51 @@ class DashboardController extends Controller
     public function dashboard(Request $request)
     {
 
-        $leaddate = new \DateTime();
-        $leaddate->modify("-90 day");
-        //echo $this->processUsers();  exit();
-        $perPage = 25;
-        $data['managersCB'] = User::managerCB();
-        $data['leads'] = null;
-        //leads
-        if(auth()->user()->isAdmin()) {
-            $data['leads'] = Lead::unassigned()->where('created_at', '>', $leaddate)->with(['status', 'assignedTo', 'previousAssignedTo'])->paginate($perPage);
-        } else {
-            $data['leads'] = Lead::where('created_at', '>', $leaddate)->where('assigned_to', auth()->user()->id)->with(['status', 'assignedTo', 'previousAssignedTo'])->paginate($perPage);
+
+        $webconfig = \Session::get('web_config');
+
+        if ($webconfig['maintenance'] != 'true') {
+
+
+            $leaddate = new \DateTime();
+            $leaddate->modify("-90 day");
+            //echo $this->processUsers();  exit();
+            $perPage = 25;
+            $data['managersCB'] = User::managerCB();
+            $data['leads'] = null;
+            //leads
+            if (auth()->user()->isAdmin()) {
+                $data['leads'] = Lead::unassigned()->where('created_at', '>', $leaddate)->with(['status', 'assignedTo', 'previousAssignedTo'])->paginate($perPage);
+            } else {
+                $data['leads'] = Lead::where('created_at', '>', $leaddate)->where('assigned_to', auth()->user()->id)->with(['status', 'assignedTo', 'previousAssignedTo'])->paginate($perPage);
+            }
+
+            //List active proposals
+            $proposals = Proposal::where('proposal_statuses_id', '=', 1)->where(function ($q) {
+                $q->where('salesmanager_id', auth()->user()->id)->orWhere('salesperson_id', auth()->user()->id);
+            })->get()->toArray();
+
+
+            $data['proposals'] = $proposals;
+            $data['proposalcount'] = count($proposals);
+
+            //ready to close
+            //SELECT proposal_details.proposal_id, proposals.name FROM proposal_details JOIN proposals ON proposals.id = proposal_details.proposal_id WHERE proposals.proposal_statuses_id = 5 AND proposal_details.status_id > 2 GROUP BY proposal_id
+
+            $data['readytoclose'] = Proposal::readytoclose()->with('contact')->get();
+
+            //ready to bill
+            $data['readytobill'] = Proposal::readytobill()->with('contact')->get();
+            $data['activelink'] = 1;
+
+            //onAlert
+            $data['onalert'] = Proposal::onalert()->with('contact')->get();
+
+            return view('dashboard', $data);
         }
-
-        //List active proposals
-        $proposals = Proposal::where('proposal_statuses_id', '=', 1)->where(function($q) {
-            $q->where('salesmanager_id', auth()->user()->id)->orWhere('salesperson_id', auth()->user()->id);
-        })->get()->toArray();
+        return view('pages-maintenance');
 
 
-        $data['proposals'] = $proposals;
-        $data['proposalcount'] = count($proposals);
-
-        //ready to close
-        //SELECT proposal_details.proposal_id, proposals.name FROM proposal_details JOIN proposals ON proposals.id = proposal_details.proposal_id WHERE proposals.proposal_statuses_id = 5 AND proposal_details.status_id > 2 GROUP BY proposal_id
-
-        $data['readytoclose'] = Proposal::readytoclose()->with('contact')->get();
-
-        //ready to bill
-        $data['readytobill'] = Proposal::readytobill()->with('contact')->get();
-        $data['activelink'] = 1;
-
-        //onAlert
-        $data['onalert'] = Proposal::onalert()->with('contact')->get();
-
-        return view('dashboard', $data);
     }
 
 
@@ -80,28 +90,28 @@ class DashboardController extends Controller
         $addonSQL = '';
         $userid = auth()->user()->id;
 
-        if(auth()->user()->isAdmin()) {
+        if (auth()->user()->isAdmin()) {
 
-            if($salesManagerId) {
+            if ($salesManagerId) {
                 $addonSQL = " AND proposals.salesmanager_id = $salesManagerId ";
                 $user = User::where('id', $salesManagerId)->first();
                 $salesgoals = $user->sales_goals;
             }
-            if($creatorId) {
+            if ($creatorId) {
                 $addonSQL = $addonSQL . " AND proposals.created_by = $creatorId ";
             }
-            if($salesPersonId) {
+            if ($salesPersonId) {
                 $user = User::where('id', $salesPersonId)->first();
                 $salesgoals = $user->sales_goals;
                 $addonSQL = $addonSQL . " AND proposals.salesperson_id = $salesPersonId ";
             }
 
-        } else if(auth()->user()->isSalesManager()) {
+        } else if (auth()->user()->isSalesManager()) {
             $addonSQL = " AND proposals.salesmanager_id = $userid ";
             $salesgoals = auth()->user()->sales_goals;
             $selectedYear = now()->format('Y');
 
-        } else if(auth()->user()->isSalesPerson()) {
+        } else if (auth()->user()->isSalesPerson()) {
             $addonSQL = " AND proposals.salesperson_id =  $userid ";
             $salesgoals = auth()->user()->sales_goals;
             $selectedYear = now()->format('Y');
@@ -165,7 +175,7 @@ class DashboardController extends Controller
         ];
         $percent = 0;
         $salespercent = 0;
-        if($totalSalesRevenue > 0 && $proposalsCreated > 0) {
+        if ($totalSalesRevenue > 0 && $proposalsCreated > 0) {
             $salespercent = (int)(($totalSalesRevenue * 100) / $salesgoals);
             $percent = (int)(($workOrdersCreated * 100) / $proposalsCreated);
             //intval(($totalSalesRevenue * 100) / $salesgoals);
@@ -186,7 +196,7 @@ class DashboardController extends Controller
             'totalSalesRevenue' => $totalSalesRevenue,
         ];
 
-        if(auth()->user()->isAdmin()) {
+        if (auth()->user()->isAdmin()) {
             $data['creatorsCB'] = Proposal::creatorsCB();
             $data['salesManagersCB'] = Proposal::salesManagersCB();
             $data['salesPersonsCB'] = Proposal::salesPersonsCB();
@@ -209,23 +219,23 @@ class DashboardController extends Controller
 
         $addonSQL = '';
 
-        if(auth()->user()->isAdmin()) {
+        if (auth()->user()->isAdmin()) {
 
-            if($salesManagerId) {
+            if ($salesManagerId) {
                 $addonSQL = $addonSQL . " AND proposals.salesmanager_id = $salesManagerId ";
             }
-            if($creatorId) {
+            if ($creatorId) {
                 $addonSQL = $addonSQL . " AND proposals.created_by = $creatorId ";
             }
-            if($salesPersonId) {
+            if ($salesPersonId) {
                 $addonSQL = $addonSQL . " AND proposals.salesperson_id = $salesPersonId ";
             }
 
-        } else if(auth()->user()->isSalesManager()) {
+        } else if (auth()->user()->isSalesManager()) {
             $selectedYear = now()->format('Y');
             $addonSQL = $addonSQL . " AND proposals.salesmanager_id =  $userid ";
 
-        } else if(auth()->user()->isSalesPerson()) {
+        } else if (auth()->user()->isSalesPerson()) {
             $selectedYear = now()->format('Y');
             $addonSQL = $addonSQL . " AND proposals.salesperson_id =  $userid ";
 
@@ -260,7 +270,7 @@ class DashboardController extends Controller
         $serviceCategories = [];
         $totalSalesRevenue = 0;
 
-        foreach($services as $service) {
+        foreach ($services as $service) {
             // total all sales
             $totalSalesRevenue = $totalSalesRevenue += $service['cost'];
             $serviceCategories[$service['service']] = [
@@ -276,7 +286,7 @@ class DashboardController extends Controller
 
         $serviceCategoriesNum = \App\Helpers\MultiArray::sort($serviceCategories, 'sales', 'desc');
 
-        foreach($serviceCategoriesNum as $serviceCategory) {
+        foreach ($serviceCategoriesNum as $serviceCategory) {
             $serviceCategoriesAssoc[$serviceCategory['service_category']] = [
                 'sales' => $serviceCategory['sales'],
             ];
@@ -306,7 +316,7 @@ class DashboardController extends Controller
             'totalSalesRevenue' => $totalSalesRevenue,
         ];
 
-        if(auth()->user()->isAdmin()) {
+        if (auth()->user()->isAdmin()) {
             $data['creatorsCB'] = Proposal::creatorsCB();
             $data['salesManagersCB'] = Proposal::salesManagersCB();
             $data['salesPersonsCB'] = Proposal::salesPersonsCB();
@@ -325,23 +335,23 @@ class DashboardController extends Controller
         $addonSQL = '';
         $userid = auth()->user()->id;
 
-        if(auth()->user()->isAdmin()) {
+        if (auth()->user()->isAdmin()) {
 
-            if($salesManagerId) {
+            if ($salesManagerId) {
                 $addonSQL = $addonSQL . " AND proposals.salesmanager_id = $salesManagerId ";
             }
-            if($creatorId) {
+            if ($creatorId) {
                 $addonSQL = $addonSQL . " AND proposals.created_by = $creatorId ";
             }
-            if($salesPersonId) {
+            if ($salesPersonId) {
                 $addonSQL = $addonSQL . " AND proposals.salesperson_id = $salesPersonId ";
             }
 
-        } else if(auth()->user()->isSalesManager()) {
+        } else if (auth()->user()->isSalesManager()) {
             $selectedYear = now()->format('Y');
             $addonSQL = $addonSQL . " AND proposals.salesmanager_id = $userid ";
 
-        } else if(auth()->user()->isSalesPerson()) {
+        } else if (auth()->user()->isSalesPerson()) {
             $selectedYear = now()->format('Y');
             $addonSQL = $addonSQL . " AND proposals.salesperson_id = $userid ";
 
@@ -380,8 +390,8 @@ class DashboardController extends Controller
         $labels = [];
 
 
-        foreach($countys as $county) {
-            if($county['county'] != '') {
+        foreach ($countys as $county) {
+            if ($county['county'] != '') {
                 $counties[$county['county']] = [
                     'county' => $county['county'],
                     'work_orders' => $county['workorders'],
@@ -415,7 +425,7 @@ class DashboardController extends Controller
             'counties' => $counties,
         ];
 
-        if(auth()->user()->isAdmin()) {
+        if (auth()->user()->isAdmin()) {
             $data['creatorsCB'] = Proposal::creatorsCB();
             $data['salesManagersCB'] = Proposal::salesManagersCB();
             $data['salesPersonsCB'] = Proposal::salesPersonsCB();
@@ -457,23 +467,23 @@ class DashboardController extends Controller
         $addonSQL = '';
         $userid = auth()->user()->id;
 
-        if(auth()->user()->isAdmin()) {
+        if (auth()->user()->isAdmin()) {
 
-            if($salesManagerId) {
+            if ($salesManagerId) {
                 $addonSQL = $addonSQL . " AND proposals.salesmanager_id = $salesManagerId ";
             }
-            if($creatorId) {
+            if ($creatorId) {
                 $addonSQL = $addonSQL . " AND proposals.created_by = $creatorId ";
             }
-            if($salesPersonId) {
+            if ($salesPersonId) {
                 $addonSQL = $addonSQL . " AND proposals.salesperson_id = $salesPersonId ";
             }
 
-        } else if(auth()->user()->isSalesManager()) {
+        } else if (auth()->user()->isSalesManager()) {
             $selectedYear = now()->format('Y');
             $addonSQL = $addonSQL . " AND proposals.salesmanager_id = $userid ";
 
-        } else if(auth()->user()->isSalesPerson()) {
+        } else if (auth()->user()->isSalesPerson()) {
             $selectedYear = now()->format('Y');
             $addonSQL = $addonSQL . " AND proposals.salesperson_id = $userid ";
 
@@ -512,8 +522,8 @@ WHERE YEAR(proposals.sale_date) = $selectedYear
         $labels = [];
 
 
-        foreach($countys as $county) {
-            if($county['county'] != '') {
+        foreach ($countys as $county) {
+            if ($county['county'] != '') {
                 $counties[$county['county']] = [
                     'county' => $county['county'],
                     'work_orders' => $county['workorders'],
@@ -547,7 +557,7 @@ WHERE YEAR(proposals.sale_date) = $selectedYear
             'counties' => $counties,
         ];
 
-        if(auth()->user()->isAdmin()) {
+        if (auth()->user()->isAdmin()) {
             $data['creatorsCB'] = Proposal::creatorsCB();
             $data['salesManagersCB'] = Proposal::salesManagersCB();
             $data['salesPersonsCB'] = Proposal::salesPersonsCB();
@@ -563,9 +573,9 @@ WHERE YEAR(proposals.sale_date) = $selectedYear
 
     public function ajaxGetZipsPerCounty(Request $request)
     {
-        if($request->isMethod('post') && $request->ajax()) {
+        if ($request->isMethod('post') && $request->ajax()) {
 
-            if(empty($request->county)) {
+            if (empty($request->county)) {
                 return response()->json([
                     'success' => false,
                     'error' => 'County not defined.',
@@ -579,38 +589,38 @@ WHERE YEAR(proposals.sale_date) = $selectedYear
 
             $locationIds = Location::getIdsPerCountyWithZipCode($request->county);
 
-            if(auth()->user()->isAdmin()) {
+            if (auth()->user()->isAdmin()) {
                 $proposals = Proposal::year($selectedYear)
                     ->filters($creatorId, $salesManagerId, $salesPersonId)
-                    ->whereHas('location', function($q) use ($locationIds) {
+                    ->whereHas('location', function ($q) use ($locationIds) {
                         $q->whereIn('id', $locationIds);
                     })
-                    ->with(['location' => function($w) use ($locationIds) {
+                    ->with(['location' => function ($w) use ($locationIds) {
                         $w->whereIn('id', $locationIds);
                     }])
                     ->get();
                 $workOrders = WorkOrder::year($selectedYear)
                     ->filters($creatorId, $salesManagerId, $salesPersonId)
-                    ->whereHas('location', function($q) use ($locationIds) {
+                    ->whereHas('location', function ($q) use ($locationIds) {
                         $q->whereIn('id', $locationIds);
                     })
-                    ->with(['location' => function($w) use ($locationIds) {
+                    ->with(['location' => function ($w) use ($locationIds) {
                         $w->whereIn('id', $locationIds);
                     }])
-                    ->with(['details' => function($e) {
+                    ->with(['details' => function ($e) {
                         $e->with(['additionalCosts']);
                     }])
                     ->get();
-            } else if(auth()->user()->isSalesManager()) {
+            } else if (auth()->user()->isSalesManager()) {
                 $currentYear = now()->format('Y');
                 $proposals = Proposal::year($currentYear)->salesManagerDashboardData()->with(['location'])->get();
-                $workOrders = WorkOrder::year($currentYear)->salesManagerDashboardData()->with(['details' => function($q) {
+                $workOrders = WorkOrder::year($currentYear)->salesManagerDashboardData()->with(['details' => function ($q) {
                     $q->with(['additionalCosts']);
                 }, 'location'])->get();
-            } else if(auth()->user()->isSalesPerson()) {
+            } else if (auth()->user()->isSalesPerson()) {
                 $currentYear = now()->format('Y');
                 $proposals = Proposal::year($currentYear)->salesPersonDashboardData()->with(['location'])->get();
-                $workOrders = WorkOrder::year($currentYear)->salesPersonDashboardData()->with(['details' => function($q) {
+                $workOrders = WorkOrder::year($currentYear)->salesPersonDashboardData()->with(['details' => function ($q) {
                     $q->with(['additionalCosts']);
                 }, 'location'])->get();
             } else {
@@ -623,16 +633,16 @@ WHERE YEAR(proposals.sale_date) = $selectedYear
             $zips = [];
 
             $totalSalesRevenue = 0;
-            foreach($workOrders as $workOrder) {
+            foreach ($workOrders as $workOrder) {
                 $salesRevenue = 0;
-                foreach($workOrder->details as $details) {
+                foreach ($workOrder->details as $details) {
                     $salesRevenue += $details->cost;
-                    foreach($details->additionalCosts as $additionalCost) {
+                    foreach ($details->additionalCosts as $additionalCost) {
                         $salesRevenue += $additionalCost->amount;
                     }
                 }
 
-                if(!empty($workOrder->location_id) && !empty($workOrder->location->postal_code)) {
+                if (!empty($workOrder->location_id) && !empty($workOrder->location->postal_code)) {
                     $zips[$workOrder->location->postal_code] = [
                         'postal_code' => $workOrder->location->postal_code,
                         'work_orders' => !empty($zips[$workOrder->location->postal_code]['work_orders']) ? $zips[$workOrder->location->postal_code]['work_orders'] + 1 : 1,
@@ -647,7 +657,7 @@ WHERE YEAR(proposals.sale_date) = $selectedYear
 
             $zipsNum = \App\Helpers\MultiArray::sort($zips, 'sales', 'desc');
 
-            foreach($zipsNum as $zip) {
+            foreach ($zipsNum as $zip) {
                 $zipsAssoc[$zip['postal_code']] = [
                     'zipcode' => $zip['postal_code'],
                     'work_orders' => $zip['work_orders'],
@@ -655,9 +665,9 @@ WHERE YEAR(proposals.sale_date) = $selectedYear
                 ];
             }
 
-            foreach($proposals as $proposal) {
-                if(!empty($proposal->location_id) && !empty($proposal->location->county)) {
-                    if(empty($zipsAssoc[$proposal->location->postal_code])) {
+            foreach ($proposals as $proposal) {
+                if (!empty($proposal->location_id) && !empty($proposal->location->county)) {
+                    if (empty($zipsAssoc[$proposal->location->postal_code])) {
                         $zipsAssoc[$proposal->location->postal_code] = [
                             'zipcode' => $proposal->location->postal_code,
                             'work_orders' => 0,
@@ -668,7 +678,7 @@ WHERE YEAR(proposals.sale_date) = $selectedYear
                 }
             }
 
-            if(empty($zipsAssoc)) {
+            if (empty($zipsAssoc)) {
                 return response()->json([
                     'success' => false,
                     'error' => 'No data available.',
@@ -697,9 +707,9 @@ WHERE YEAR(proposals.sale_date) = $selectedYear
 
     public function ajaxGetZipsPerCity(Request $request)
     {
-        if($request->isMethod('post') && $request->ajax()) {
+        if ($request->isMethod('post') && $request->ajax()) {
 
-            if(empty($request->county)) {
+            if (empty($request->county)) {
                 return response()->json([
                     'success' => false,
                     'error' => 'County not defined.',
@@ -713,38 +723,38 @@ WHERE YEAR(proposals.sale_date) = $selectedYear
 
             $locationIds = Location::getIdsPerCountyWithCity($request->county);
 
-            if(auth()->user()->isAdmin()) {
+            if (auth()->user()->isAdmin()) {
                 $proposals = Proposal::year($selectedYear)
                     ->filters($creatorId, $salesManagerId, $salesPersonId)
-                    ->whereHas('location', function($q) use ($locationIds) {
+                    ->whereHas('location', function ($q) use ($locationIds) {
                         $q->whereIn('id', $locationIds);
                     })
-                    ->with(['location' => function($w) use ($locationIds) {
+                    ->with(['location' => function ($w) use ($locationIds) {
                         $w->whereIn('id', $locationIds);
                     }])
                     ->get();
                 $workOrders = WorkOrder::year($selectedYear)
                     ->filters($creatorId, $salesManagerId, $salesPersonId)
-                    ->whereHas('location', function($q) use ($locationIds) {
+                    ->whereHas('location', function ($q) use ($locationIds) {
                         $q->whereIn('id', $locationIds);
                     })
-                    ->with(['location' => function($w) use ($locationIds) {
+                    ->with(['location' => function ($w) use ($locationIds) {
                         $w->whereIn('id', $locationIds);
                     }])
-                    ->with(['details' => function($e) {
+                    ->with(['details' => function ($e) {
                         $e->with(['additionalCosts']);
                     }])
                     ->get();
-            } else if(auth()->user()->isSalesManager()) {
+            } else if (auth()->user()->isSalesManager()) {
                 $currentYear = now()->format('Y');
                 $proposals = Proposal::year($currentYear)->salesManagerDashboardData()->with(['location'])->get();
-                $workOrders = WorkOrder::year($currentYear)->salesManagerDashboardData()->with(['details' => function($q) {
+                $workOrders = WorkOrder::year($currentYear)->salesManagerDashboardData()->with(['details' => function ($q) {
                     $q->with(['additionalCosts']);
                 }, 'location'])->get();
-            } else if(auth()->user()->isSalesPerson()) {
+            } else if (auth()->user()->isSalesPerson()) {
                 $currentYear = now()->format('Y');
                 $proposals = Proposal::year($currentYear)->salesPersonDashboardData()->with(['location'])->get();
-                $workOrders = WorkOrder::year($currentYear)->salesPersonDashboardData()->with(['details' => function($q) {
+                $workOrders = WorkOrder::year($currentYear)->salesPersonDashboardData()->with(['details' => function ($q) {
                     $q->with(['additionalCosts']);
                 }, 'location'])->get();
             } else {
@@ -757,16 +767,16 @@ WHERE YEAR(proposals.sale_date) = $selectedYear
             $zips = [];
 
             $totalSalesRevenue = 0;
-            foreach($workOrders as $workOrder) {
+            foreach ($workOrders as $workOrder) {
                 $salesRevenue = 0;
-                foreach($workOrder->details as $details) {
+                foreach ($workOrder->details as $details) {
                     $salesRevenue += $details->cost;
-                    foreach($details->additionalCosts as $additionalCost) {
+                    foreach ($details->additionalCosts as $additionalCost) {
                         $salesRevenue += $additionalCost->amount;
                     }
                 }
 
-                if(!empty($workOrder->location_id) && !empty($workOrder->location->city)) {
+                if (!empty($workOrder->location_id) && !empty($workOrder->location->city)) {
                     $zips[$workOrder->location->city] = [
                         'city' => $workOrder->location->city,
                         'work_orders' => !empty($zips[$workOrder->location->city]['work_orders']) ? $zips[$workOrder->location->city]['work_orders'] + 1 : 1,
@@ -781,7 +791,7 @@ WHERE YEAR(proposals.sale_date) = $selectedYear
 
             $zipsNum = \App\Helpers\MultiArray::sort($zips, 'sales', 'desc');
 
-            foreach($zipsNum as $zip) {
+            foreach ($zipsNum as $zip) {
                 $zipsAssoc[$zip['city']] = [
                     'city' => $zip['city'],
                     'work_orders' => $zip['work_orders'],
@@ -789,9 +799,9 @@ WHERE YEAR(proposals.sale_date) = $selectedYear
                 ];
             }
 
-            foreach($proposals as $proposal) {
-                if(!empty($proposal->location_id) && !empty($proposal->location->county)) {
-                    if(empty($zipsAssoc[$proposal->location->city])) {
+            foreach ($proposals as $proposal) {
+                if (!empty($proposal->location_id) && !empty($proposal->location->county)) {
+                    if (empty($zipsAssoc[$proposal->location->city])) {
                         $zipsAssoc[$proposal->location->city] = [
                             'city' => $proposal->location->city,
                             'work_orders' => 0,
@@ -802,7 +812,7 @@ WHERE YEAR(proposals.sale_date) = $selectedYear
                 }
             }
 
-            if(empty($zipsAssoc)) {
+            if (empty($zipsAssoc)) {
                 return response()->json([
                     'success' => false,
                     'error' => 'No data available.',
@@ -826,6 +836,13 @@ WHERE YEAR(proposals.sale_date) = $selectedYear
                 'error' => 'Invalid request.',
             ], 500);
         }
+    }
+
+
+    public function show_maintenance()
+    {
+        return view('pages-maintenance');
+
     }
 
 }
