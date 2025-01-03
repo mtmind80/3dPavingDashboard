@@ -27,6 +27,9 @@ Route::group(['prefix' => 'ajax'], function() {
 });
 /** END Ajax */
 
+Route::get('/maintenance', 'Controller@show_maintenance')->name('maintenance');
+
+
 Route::group(['middleware' => ['auth']], function() {
     //main dashboard
     Route::get('/', 'DashboardController@dashboard')->name('base');
@@ -337,6 +340,8 @@ Route::group(['prefix' => 'proposals'], function() {
 
     Route::get('', 'ProposalController@index')->name('proposals');
 
+    Route::get('change_location/{proposal}/{location}', 'ProposalController@change_location')->name('change_location');
+
     Route::match(['get', 'post'], '/{proposal_id}/changeproposalclient', 'ProposalController@changeclient')->name('change_proposal_client');
 
     //update proposal materials pricing
@@ -356,6 +361,9 @@ Route::group(['prefix' => 'proposals'], function() {
     Route::get('/fromlead/{lead}', 'ProposalController@startWithLead')->name('start_from_lead');
 
     Route::get('/fromcontact/{contact}', 'ProposalController@startWithContact')->name('start_from_contact');
+
+
+    Route::post('/updatelocation/{proposal}/{location}', 'ProposalController@update_location')->name('update_location');
 
     Route::post('/createproposal', 'ProposalController@create')->name('create_proposal');
 

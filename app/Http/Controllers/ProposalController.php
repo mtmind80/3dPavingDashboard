@@ -8,6 +8,7 @@ use App\Http\Requests\ProposalNoteRequest;
 use App\Models\AcceptedDocuments;
 use App\Models\ChangeOrders;
 use App\Models\County;
+use App\Models\LocationType;
 use Carbon\Carbon;
 use App\Models\Location;
 use App\Models\MediaType;
@@ -54,56 +55,56 @@ class ProposalController extends Controller
     public function index()
     {
 
-        if(!auth()->user()->isOffice()) {
+        if (!auth()->user()->isOffice()) {
             return redirect()->route('dashboard');
         }
 
         $data = array();
         //List active proposals
-        $proposals = Proposal::where('proposal_statuses_id', '=', 1)->where(function($q) {
+        $proposals = Proposal::where('proposal_statuses_id', '=', 1)->where(function ($q) {
             $q->where('salesmanager_id', auth()->user()->id)->orWhere('salesperson_id', auth()->user()->id);
         })->get()->toArray();
 
 
-            $data['proposals'] = $proposals;
-            $data['proposalcount'] = count($proposals);
+        $data['proposals'] = $proposals;
+        $data['proposalcount'] = count($proposals);
 
-            $customersCB = Cache::remember('customersCB', env('CACHE_TIMETOLIVE'), function () {
-                $customersCB = Proposal::customersCB();
-                return json_encode($customersCB);
+        $customersCB = Cache::remember('customersCB', env('CACHE_TIMETOLIVE'), function () {
+            $customersCB = Proposal::customersCB();
+            return json_encode($customersCB);
 
-            });
-            $data['customersCB'] = json_decode($customersCB, true);
+        });
+        $data['customersCB'] = json_decode($customersCB, true);
 
-            $creatorsCB = Cache::remember('creatorsCB', env('CACHE_TIMETOLIVE'), function () {
-                $creatorsCB = Proposal::creatorsCB();
-                return json_encode($creatorsCB);
+        $creatorsCB = Cache::remember('creatorsCB', env('CACHE_TIMETOLIVE'), function () {
+            $creatorsCB = Proposal::creatorsCB();
+            return json_encode($creatorsCB);
 
-            });
+        });
 
-            $data['creatorsCB'] = json_decode($creatorsCB, true);
+        $data['creatorsCB'] = json_decode($creatorsCB, true);
 
-            $salesManagersCB = Cache::remember('salesManagersCB', env('CACHE_TIMETOLIVE'), function () {
-                $salesManagersCB = Proposal::salesManagersCB();
-                return json_encode($salesManagersCB);
+        $salesManagersCB = Cache::remember('salesManagersCB', env('CACHE_TIMETOLIVE'), function () {
+            $salesManagersCB = Proposal::salesManagersCB();
+            return json_encode($salesManagersCB);
 
-            });
+        });
 
-            $data['salesManagersCB'] = json_decode($salesManagersCB, true);
+        $data['salesManagersCB'] = json_decode($salesManagersCB, true);
 
-            $salesPersonsCB = Cache::remember('salesPersonsCB', env('CACHE_TIMETOLIVE'), function () {
-                $salesPersonsCB = Proposal::salesPersonsCB();
-                return json_encode($salesPersonsCB);
+        $salesPersonsCB = Cache::remember('salesPersonsCB', env('CACHE_TIMETOLIVE'), function () {
+            $salesPersonsCB = Proposal::salesPersonsCB();
+            return json_encode($salesPersonsCB);
 
-            });
+        });
 
-            $data['salesPersonsCB'] = json_decode($salesPersonsCB, true);
+        $data['salesPersonsCB'] = json_decode($salesPersonsCB, true);
 
-        if(auth()->user()->isSales()) {
+        if (auth()->user()->isSales()) {
             return view('proposals.index_sales', $data);
         }
 
-            return view('proposals.index', $data);
+        return view('proposals.index', $data);
 
     }
 
@@ -131,7 +132,7 @@ class ProposalController extends Controller
 
         //insert a location
         $location = Location::where('address_line1', '=', $request['address1'])->where('city', '=', $request['city'])->first();
-        if($location) {
+        if ($location) {
             $id = $location->id;
         } else {
             //create new location
@@ -165,7 +166,7 @@ class ProposalController extends Controller
     public function new()
     {
 
-       // dd('we are here');
+        // dd('we are here');
 
         //\Session::flash('info', 'To begin a new proposal first select a contact, or create a new one.');
         //redirect()->route('contacts');
@@ -200,7 +201,7 @@ class ProposalController extends Controller
             \Session::flash('message', 'Your proposal was updated!');
             return redirect()->route('show_proposal', ['id' => $proposal_id]);
 
-        } catch(exception $e) {
+        } catch (exception $e) {
             \Session::flash('message', 'Sorry no matching records were found!');
             return redirect()->back();
         }
@@ -227,15 +228,15 @@ class ProposalController extends Controller
         $contactstaff[$contact->id] = $contact->Full_Name;
         $staff = Contact::where('related_to', '=', $contact->id)->get();
         $staff = json_decode(json_encode($staff), true);
-        if($staff) {
-            foreach($staff as $s) {
+        if ($staff) {
+            foreach ($staff as $s) {
                 $contactstaff[$s['id']] = $s['first_name'] . ' ' . $s['last_name'];
             }
         }
 
         $data['staff'] = $contactstaff;
 
-        $salesManagersCB = Cache::remember('salesManagersCB', env('CACHE_TIMETOLIVE'), function() {
+        $salesManagersCB = Cache::remember('salesManagersCB', env('CACHE_TIMETOLIVE'), function () {
             $salesManagersCB = Proposal::salesManagersCB();
             return json_encode($salesManagersCB);
 
@@ -243,7 +244,7 @@ class ProposalController extends Controller
 
         $data['salesManagersCB'] = json_decode($salesManagersCB, true);
 
-        $salesPersonsCB = Cache::remember('salesPersonsCB', env('CACHE_TIMETOLIVE'), function() {
+        $salesPersonsCB = Cache::remember('salesPersonsCB', env('CACHE_TIMETOLIVE'), function () {
             $salesPersonsCB = Proposal::salesPersonsCB();
             return json_encode($salesPersonsCB);
 
@@ -272,9 +273,9 @@ class ProposalController extends Controller
         $data['states'] = State::all()->toArray();
         $data['counties'] = County::select('county')->distinct()->orderBy('county')->get();
         $data['lead'] = $lead;
-        if(!$override) { // check contacts for match
+        if (!$override) { // check contacts for match
             $contacts = Contact::where('first_name', '=', $lead->first_name)->where('last_name', '=', $lead->last_name)->orWhere('email', '=', $lead->email)->get()->toArray();
-            if($contacts) {  // we found a match show the user
+            if ($contacts) {  // we found a match show the user
                 $data['contacts'] = $contacts;
                 $data['lead'] = $lead;
                 return view('leads.found', $data);
@@ -305,21 +306,21 @@ class ProposalController extends Controller
         $staff = Contact::where('related_to', '=', $contact->id)->get();
         $staff = json_decode(json_encode($staff), true);
 
-        if($staff) {
-            foreach($staff as $s) {
+        if ($staff) {
+            foreach ($staff as $s) {
                 $contactstaff[$s['id']] = $s['first_name'] . ' ' . $s['last_name'];
             }
         }
         $data['staff'] = $contactstaff;
 
-        $salesManagersCB = Cache::remember('salesManagersCB', env('CACHE_TIMETOLIVE'), function() {
+        $salesManagersCB = Cache::remember('salesManagersCB', env('CACHE_TIMETOLIVE'), function () {
             $salesManagersCB = Proposal::salesManagersCB();
             return json_encode($salesManagersCB);
 
         });
         $data['salesManagersCB'] = json_decode($salesManagersCB, true);
 
-        $salesPersonsCB = Cache::remember('salesPersonsCB', env('CACHE_TIMETOLIVE'), function() {
+        $salesPersonsCB = Cache::remember('salesPersonsCB', env('CACHE_TIMETOLIVE'), function () {
             $salesPersonsCB = Proposal::salesPersonsCB();
             return json_encode($salesPersonsCB);
 
@@ -344,18 +345,18 @@ class ProposalController extends Controller
     {
 
         //what kind of access do i have
-        if(auth()->user()->isAdmin()) {
+        if (auth()->user()->isAdmin()) {
             $proposal = Proposal::find($id);
         } else {
 
-            $proposal = Proposal::where('id', '=', $id)->where(function($q) {
+            $proposal = Proposal::where('id', '=', $id)->where(function ($q) {
                 $q->where('salesmanager_id', auth()->user()->id)->orWhere('salesperson_id', auth()->user()->id);
             })->first()->toArray();
             // managers only show if I am on the proposal
         }
 
 
-        if($proposal) {
+        if ($proposal) {
             $services = ProposalDetail::where('proposal_id', $id)->get();
             $notes = ProposalNote::where('proposal_id', $id)->get();
             $medias = ProposalMedia::where('proposal_id', $id)->get();
@@ -388,18 +389,18 @@ class ProposalController extends Controller
     {
 
         //what kind of access do i have
-        if(auth()->user()->isAdmin()) {
+        if (auth()->user()->isAdmin()) {
             $proposal = Proposal::find($id);
         } else {
 
-            $proposal = Proposal::where('id', '=', $id)->where(function($q) {
+            $proposal = Proposal::where('id', '=', $id)->where(function ($q) {
                 $q->where('salesmanager_id', auth()->user()->id)->orWhere('salesperson_id', auth()->user()->id);
             })->first()->toArray();
             // managers only show if I am on the proposal
         }
 
 
-        if($proposal) {
+        if ($proposal) {
             $services = ProposalDetail::where('proposal_id', $id)->get();
             $notes = ProposalNote::where('proposal_id', $id)->get();
             $medias = ProposalMedia::where('proposal_id', $id)->get();
@@ -416,7 +417,7 @@ class ProposalController extends Controller
 
             $changeorder = 0;
             //is proposal a change order
-            if($proposal->changeorder_id) {
+            if ($proposal->changeorder_id) {
                 $changeorder = ChangeOrders::where('id', '=', $proposal->changeorder_id)->first()->toArray();
             }
             $data['changeorder'] = $changeorder;
@@ -446,18 +447,18 @@ class ProposalController extends Controller
     {
 
         //what kind of access do i have
-        if(auth()->user()->isAdmin()) {
+        if (auth()->user()->isAdmin()) {
             $proposal = Proposal::find($id);
         } else {
 
-            $proposal = Proposal::where('id', '=', $id)->where(function($q) {
+            $proposal = Proposal::where('id', '=', $id)->where(function ($q) {
                 $q->where('salesmanager_id', auth()->user()->id)->orWhere('salesperson_id', auth()->user()->id);
             })->first()->toArray();
             // managers only show if I am on the proposal
         }
 
 
-        if($proposal) {
+        if ($proposal) {
             $services = ProposalDetail::where('proposal_id', $id)->get();
             $notes = ProposalNote::where('proposal_id', $id)->get();
             $medias = ProposalMedia::where('proposal_id', $id)->get();
@@ -491,12 +492,12 @@ class ProposalController extends Controller
     {
         $orderType = $request->order_type ?? 'ASC';
 
-        $query = Proposal::whereIn('proposal_statuses_id', [1,4])->with(['status', 'details' => function($w) use ($orderType){
+        $query = Proposal::whereIn('proposal_statuses_id', [1, 4])->with(['status', 'details' => function ($w) use ($orderType) {
             $w->orderBy('dsort', $orderType);
         }]);
 
         if (!auth()->user()->isAdmin()) {
-            $query->where(function($q) {
+            $query->where(function ($q) {
                 $q->orWhere('salesmanager_id', auth()->user()->id)
                     ->orWhere('salesperson_id', auth()->user()->id);
             });
@@ -513,7 +514,7 @@ class ProposalController extends Controller
 
         $changeorder = 0;
         //is proposal a change order
-        if($proposal->changeorder_id) {
+        if ($proposal->changeorder_id) {
             $changeorder = ChangeOrders::where('id', '=', $proposal->changeorder_id)->first()->toArray();
         }
 
@@ -540,7 +541,7 @@ class ProposalController extends Controller
         $permits = Permit::where('proposal_id', $id)->get();
         $medias = ProposalMedia::where('proposal_id', $id)->get();
         $proposal_customer = [];
-        if($proposal['contact_id'] > 0) {
+        if ($proposal['contact_id'] > 0) {
             $proposal_customer = Contact::where('id', '=', $proposal['contact_id'])->first()->toArray();
         }
 
@@ -553,7 +554,7 @@ class ProposalController extends Controller
         */
 
         $proposal_staff = [];
-        if($proposal['customer_staff_id'] > 0) {
+        if ($proposal['customer_staff_id'] > 0) {
             $proposal_staff = Contact::where('id', '=', $proposal['customer_staff_id'])->first()->toArray();
         }
 
@@ -561,7 +562,7 @@ class ProposalController extends Controller
 
         $data['hostwithHttp'] = $hostwithHttp;
 
-       // $data['proposal_sales'] = $proposal_sales;
+        // $data['proposal_sales'] = $proposal_sales;
         $data['proposal_staff'] = $proposal_staff;
         $data['proposal_customer'] = $proposal_customer;
 
@@ -587,7 +588,7 @@ class ProposalController extends Controller
         }
 
         try {
-            DB::transaction(function() use ($request){
+            DB::transaction(function () use ($request) {
                 foreach (explode(',', $request->reorder_str_cid) as $index => $id) {
                     ProposalDetail::where('proposal_id', $request->proposal_id)->find($id)->update(['dsort' => $index + 1]);
                 }
@@ -611,19 +612,19 @@ class ProposalController extends Controller
     {
 
         //what kind of access do i have
-        if(auth()->user()->isAdmin()) {
+        if (auth()->user()->isAdmin()) {
 
-            $proposal = Proposal::where('id', $id)->whereIN('proposal_statuses_id', [1,4])->first()->toArray();
+            $proposal = Proposal::where('id', $id)->whereIN('proposal_statuses_id', [1, 4])->first()->toArray();
         } else {
 
-            $proposal = Proposal::where('id', '=', $id)->where('proposal_statuses_id', '=', 1)->where(function($q) {
+            $proposal = Proposal::where('id', '=', $id)->where('proposal_statuses_id', '=', 1)->where(function ($q) {
                 $q->where('salesmanager_id', auth()->user()->id)->orWhere('salesperson_id', auth()->user()->id);
             })->first()->toArray();
             // managers only show if I am on the proposal
         }
 
 
-        if($proposal) {
+        if ($proposal) {
 
 
             $data = array();
@@ -636,14 +637,14 @@ class ProposalController extends Controller
             $contactstaff[$contact['id']] = $contact['first_name'] . ' ' . $contact['last_name'];
             $staff = Contact::where('related_to', '=', $contact['id'])->get();
             $staff = json_decode(json_encode($staff), true);
-            if($staff) {
-                foreach($staff as $s) {
+            if ($staff) {
+                foreach ($staff as $s) {
                     $contactstaff[$s['id']] = $s['first_name'] . ' ' . $s['last_name'];
                 }
             }
             $data['staff'] = $contactstaff;
 
-            $salesManagersCB = Cache::remember('salesManagersCB', env('CACHE_TIMETOLIVE'), function() {
+            $salesManagersCB = Cache::remember('salesManagersCB', env('CACHE_TIMETOLIVE'), function () {
                 $salesManagersCB = Proposal::salesManagersCB();
                 return json_encode($salesManagersCB);
 
@@ -651,7 +652,7 @@ class ProposalController extends Controller
 
             $data['salesManagersCB'] = json_decode($salesManagersCB, true);
 
-            $salesPersonsCB = Cache::remember('salesPersonsCB', env('CACHE_TIMETOLIVE'), function() {
+            $salesPersonsCB = Cache::remember('salesPersonsCB', env('CACHE_TIMETOLIVE'), function () {
                 $salesPersonsCB = Proposal::salesPersonsCB();
                 return json_encode($salesPersonsCB);
 
@@ -721,12 +722,12 @@ class ProposalController extends Controller
         $end_date = $request->end_date ?? null;
         $data['paginate'] = 1;
 
-        if($proposalId) {
-            $records = Proposal::where('id', $proposalId)->whereIN('proposal_statuses_id', [1,4])->first();
+        if ($proposalId) {
+            $records = Proposal::where('id', $proposalId)->whereIN('proposal_statuses_id', [1, 4])->first();
             $data['paginate'] = 0;
 
-            if($records) {
-                if($records['job_master_id']) {
+            if ($records) {
+                if ($records['job_master_id']) {
                     return redirect()->route('show_workorder', ['id' => $proposalId]);
                 } else {
                     return redirect()->route('show_proposal', ['id' => $proposalId]);
@@ -736,18 +737,18 @@ class ProposalController extends Controller
         } else {
             //            $contacts = Contact::search($needle)->sortable()->with(['contactType', 'company'])->paginate($perPage);
             //only pending proposals
-            if($showall) {
+            if ($showall) {
                 $records = Proposal::range($start_date, $end_date)->searchfilters($creatorId, $salesManagerId, $salesPersonId, $proposal_name, $contact_id)->paginate($perPage);
             } else {
                 $records = Proposal::whereIn('proposal_statuses_id', array(1, 2, 3, 4, 7))->range($start_date, $end_date)->searchfilters($creatorId, $salesManagerId, $salesPersonId, $proposal_name, $contact_id)->paginate($perPage);
             }
-            if(count($records) < $perPage) {
+            if (count($records) < $perPage) {
                 $data['paginate'] = 0;
 
             }
         }
 
-        if(!$records) {
+        if (!$records) {
             \Session::flash('error', 'Sorry no matching records were found!');
             return redirect()->back();
 
@@ -763,13 +764,72 @@ class ProposalController extends Controller
 
     }
 
+    public function update_location(Request $request)
+    {
 
-    /**
-     * Search the requested resource.
-     *
-     * @param Request
-     * @return data array
-     */
+        $inputs = $request->all();
+        //find current location
+        $location = Location::where('id', '=', $inputs['location_id'])->first();
+
+        if ($inputs['gender'] == 1) {
+            //echo "Create New Location";
+            $data = Location::Create(['address_line1'=>$inputs['address_line1'], 'address_line2' => $inputs['address_line2'],
+            'city' => $inputs['city'],'state' => $inputs['state'],'postal_code' => $inputs['postal_code'],
+            'county'=> $inputs['county'], 'location_type_id'=> $inputs['location_type_id']]);
+
+            $insertedId = $data->id;
+            //echo $insertedId ;
+            //update proposal to new location
+            $proposal = Proposal::where('id' ,'=', $inputs['proposal_id'])->first();
+            $proposal['location_id'] = $insertedId;
+            $proposal->update();
+
+
+        } else {
+            //echo "Update existing Location";
+
+            $location['address_line1'] = $inputs['address_line1'];
+
+            $location['address_line2'] = $inputs['address_line2'];
+
+            $location['city'] = $inputs['city'];
+
+            $location['state'] = $inputs['state'];
+
+            $location['postal_code'] = $inputs['postal_code'];
+
+            $location['county'] = $inputs['county'];
+
+            $location['location_type_id'] = $inputs['location_type_id'];
+            $location->update();
+        }
+
+
+        return redirect()->route('show_proposal', ['id' => $request['proposal_id']]);
+
+
+    }
+
+    public function change_location(Proposal $proposal, Location $location)
+    {
+
+
+        $radios = [
+            ['label' => 'Create A New Location', 'name' => 'newLocation', 'value' => 1],
+            ['label' => 'Update Existing Location', 'name' => 'newLocation', 'checked' => true, 'value' => 0],
+        ];
+
+
+        $data['locationTypesCB'] = Location::locationTypesCB(['' => 'Select Type']);
+        $data['countiesCB'] = County::countiesCB(['' => 'Select county']);
+        $data['location'] = $location;
+        $data['radios'] = $radios;
+        $data['proposal'] = $proposal;
+        return view('proposals.change_location', $data);
+
+    }
+
+
     public function clone($id)
     {
 
@@ -791,15 +851,13 @@ class ProposalController extends Controller
 
         $proposalDetails = ProposalDetail::where('proposal_id', $id)->get();
 
-        foreach($proposalDetails as $detail)
-
-        {
+        foreach ($proposalDetails as $detail) {
 
 
             // get proposal detail and any other items associated
             $proposaldetail = ProposalDetail::find($detail->id);
 
-            if($proposaldetail) {
+            if ($proposaldetail) {
                 $newDetail = $proposaldetail->replicate();
                 $newDetail->proposal_id = $new_id;
                 $newDetail->alt_desc = NULL;
@@ -814,7 +872,7 @@ class ProposalController extends Controller
 
             } else {
 
-                return redirect()->route('show_proposal',['id' => $new_id])->with('success', 'Proposal cloned.');
+                return redirect()->route('show_proposal', ['id' => $new_id])->with('success', 'Proposal cloned.');
 
             }
             //            $newdetails = ProposalDetail::create($newdetail);
@@ -823,8 +881,8 @@ class ProposalController extends Controller
 
             $additional_details = AdditionalCost::where('proposal_detail_id', '=', $detail->id)->get();
 
-            if($additional_details) { // with new id
-                foreach($additional_details as $details) {
+            if ($additional_details) { // with new id
+                foreach ($additional_details as $details) {
                     $d = AdditionalCost::find($details->id);
                     $newRecord = $d->replicate();
                     $newRecord->proposal_detail_id = $newdetail_id;
@@ -835,8 +893,8 @@ class ProposalController extends Controller
 
             $additional_details = Equipment::where('proposal_detail_id', '=', $detail->id)->get();
 
-            if($additional_details) { // with new id
-                foreach($additional_details as $details) {
+            if ($additional_details) { // with new id
+                foreach ($additional_details as $details) {
                     $d = Equipment::find($details->id);
                     $newRecord = $d->replicate();
                     $newRecord->proposal_detail_id = $newdetail_id;
@@ -846,8 +904,8 @@ class ProposalController extends Controller
             }
 
             $additional_details = Labor::where('proposal_detail_id', '=', $detail->id)->get();
-            if($additional_details) { // with new id
-                foreach($additional_details as $details) {
+            if ($additional_details) { // with new id
+                foreach ($additional_details as $details) {
                     $d = Labor::find($details->id);
                     $newRecord = $d->replicate();
                     $newRecord->proposal_detail_id = $newdetail_id;
@@ -856,8 +914,8 @@ class ProposalController extends Controller
             }
 
             $additional_details = Striping::where('proposal_detail_id', '=', $detail->id)->get();
-            if($additional_details) { // with new id
-                foreach($additional_details as $details) {
+            if ($additional_details) { // with new id
+                foreach ($additional_details as $details) {
                     $d = Striping::find($details->id);
                     $newRecord = $d->replicate();
                     $newRecord->proposal_detail_id = $newdetail_id;
@@ -866,8 +924,8 @@ class ProposalController extends Controller
             }
 
             $additional_details = Subcontractor::where('proposal_detail_id', '=', $detail->id)->get();
-            if($additional_details) { // with new id
-                foreach($additional_details as $details) {
+            if ($additional_details) { // with new id
+                foreach ($additional_details as $details) {
                     $d = Subcontractor::find($details->id);
                     $newRecord = $d->replicate();
                     $newRecord->proposal_detail_id = $newdetail_id;
@@ -876,8 +934,8 @@ class ProposalController extends Controller
             }
 
             $additional_details = Vehicle::where('proposal_detail_id', '=', $detail->id)->get();
-            if($additional_details) { // with new id
-                foreach($additional_details as $details) {
+            if ($additional_details) { // with new id
+                foreach ($additional_details as $details) {
                     $d = Vehicle::find($details->id);
                     $newRecord = $d->replicate();
                     $newRecord->proposal_detail_id = $newdetail_id;
@@ -933,7 +991,7 @@ class ProposalController extends Controller
     public function usewhen(Request $request)
     {
         $user = User::select("*")
-            ->when($request->has('user_id'), function($query) use ($request) {
+            ->when($request->has('user_id'), function ($query) use ($request) {
                 $query->where('id', $request->user_id);
             })
             ->get();
@@ -946,7 +1004,7 @@ class ProposalController extends Controller
     {
 
 
-        if(isset($request['status'])){
+        if (isset($request['status'])) {
             $status = $request['status'];
             $note = $request['note'];
             $reason = $request['reason'];
@@ -957,13 +1015,13 @@ class ProposalController extends Controller
 
         $proposal->proposal_statuses_id = $status;
 
-        if($status == 1) // Proposal sent
+        if ($status == 1) // Proposal sent
         {
             $note = "Proposal Reset to Pending";
 
         }
 
-        if($status == 2 && $proposal->changeorder_id == null) // approved
+        if ($status == 2 && $proposal->changeorder_id == null) // approved
         {
             // create job master id and set sale date to taday
             $year = date('Y');
@@ -979,13 +1037,13 @@ class ProposalController extends Controller
         }
 
 
-        if($status == 3) // rejected
+        if ($status == 3) // rejected
         {
             $proposal->rejected_reason = $reason;
             // do something when rejected  email Keith
         }
 
-        if($status == 4) // Proposal sent
+        if ($status == 4) // Proposal sent
         {
             $note = "Proposal Sent to Client";
 
@@ -995,11 +1053,11 @@ class ProposalController extends Controller
 
         $this->globalrecordactions($proposal_id, $action_id, $note);
 
-        if($status == 2) // approved
+        if ($status == 2) // approved
         {
             return redirect()->route('show_workorder', ['id' => $proposal_id])->with('success', 'Proposal status changed.');
         }
-        if($status == 3) // rejected
+        if ($status == 3) // rejected
         {
             return redirect()->route('dashboard')->with('success', 'Proposal was archived. See archived proposals.');
         }
@@ -1021,11 +1079,12 @@ class ProposalController extends Controller
             'proposal_id' => $proposal_id,
             'proposal' => $proposal,
             'contacts' => $contacts,
-            'needle'   => $needle,
+            'needle' => $needle,
         ];
 
         return view('contacts.index_change_client', $data);
     }
+
     public function selectclient($contact_id, $proposal_id)
     {
 
@@ -1085,13 +1144,13 @@ class ProposalController extends Controller
         $reminderDate = $request->reminder_date ?? null;
         $reminder = 0;
         $msg = 'Proposal note added.';
-        if($reminderDate) {
+        if ($reminderDate) {
             $reminderDate = date('Y-m-d', strtotime($reminderDate));
             $reminder = 1;
-            $msg = 'Proposal note added. And a reminder email will be sent on ' .$reminderDate;
+            $msg = 'Proposal note added. And a reminder email will be sent on ' . $reminderDate;
         }
         try {
-            DB::transaction(function() use ($request, $reminderDate, $reminder) {
+            DB::transaction(function () use ($request, $reminderDate, $reminder) {
                 $data = [
                     'proposal_id' => $request->proposal_id,
                     'created_by' => auth()->user()->id,
@@ -1103,15 +1162,15 @@ class ProposalController extends Controller
                 ProposalNote::create($data);
 
             });
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
         $referer = request()->headers->get('referer');
         $this->returnTo = $referer;
-        if(strpos($referer,'?type=note') == 0) {
+        if (strpos($referer, '?type=note') == 0) {
             $this->returnTo = $referer . '?type=note';
         }
-        if(!empty($this->returnTo)) {
+        if (!empty($this->returnTo)) {
             return redirect()->to($this->returnTo)->with('success', $msg);
         } else {
             return redirect()->back()->with('success', $msg);
@@ -1161,8 +1220,8 @@ class ProposalController extends Controller
     public function resetAlert($proposal_id)
     {
         $validator = Validator::make([
-                'proposal_id' => $proposal_id,
-            ], [
+            'proposal_id' => $proposal_id,
+        ], [
                 'proposal_id' => 'required|positive',
             ]
         );
