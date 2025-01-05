@@ -7,6 +7,8 @@ use App\Http\Requests\PermitRequest;
 use App\Http\Requests\SearchRequest;
 use App\Mail\PermitUpdateToManager;
 use App\Notifications\ProposalPermitNotification;
+use Carbon\Carbon;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use App\Models\Proposal;
 use App\Models\County;
@@ -18,12 +20,14 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use NumberFormatter;
 use \App\Helpers\EnumFieldValues;
+
 class PermitsController extends Controller
 {
 
 
     public $statusCB;
     public $typesCB;
+
     public function __construct()
     {
         parent::__construct();
@@ -49,33 +53,42 @@ class PermitsController extends Controller
         */
 
 
-        if(auth()->user()->isAdmin()) {
-
+        if (auth()->user()->isAdmin()) {
+            /*
             $permits = DB::table('permits')
                 ->join('proposals','proposals.id','=','permits.proposal_id')
                 ->selectRaw( 'permits.*, proposals.name, proposals.job_master_id, proposals.salesperson_id')
                 ->where('permits.status', '<>', 'Approved')
                 ->get();
-        } else {
+            */
 
+            $permits = Permit::notApproved()->with(['proposal', 'notes'])->get();
+
+        } else {
+            /*
             $permits = DB::table('permits')
                 ->join('proposals','proposals.id','=','permits.proposal_id')
                 ->selectRaw( 'permits.*, proposals.name, proposals.job_master_id, proposals.salesperson_id')
                 ->where('permits.status', '<>', 'Approved')
                 ->where('proposals.salesperson_id', '=', auth()->user()->id)
                 ->get();
+            */
 
+            $permits = Permit::notApproved()
+                ->where('salesperson_id', auth()->user()->id)
+                ->with(['proposal', 'notes'])
+                ->get();
         }
 
         //dd($permits);
-        $counties = County::where('state','=','FL')->orderBy('county')->groupBy('county')->get(['county']);
+        $counties = County::where('state', '=', 'FL')->orderBy('county')->groupBy('county')->get(['county']);
 
 
         $data = [
-            'counties'  => $counties,
-            'permits'  => $permits,
+            'counties' => $counties,
+            'permits' => $permits,
             'statusCB' => $this->statusCB,
-            'needle'   => $needle,
+            'needle' => $needle,
         ];
 
         return view('permit.index', $data);
@@ -88,20 +101,28 @@ class PermitsController extends Controller
 
     public function storeNote(Permit $permit, PermitNoteRequest $request)
     {
+        if ($permit->id === null) {
+            if (! $permit = Permit::find($request->permit_id)) {
+                return redirect()->back()->with('error', 'Permit not found.');
+            }
+        }
+
         try {
-            \DB::transaction(function () use ($permit, $request){
+            DB::transaction(function () use ($permit, $request){
                 $data = [
-                    'permit_id'  => $permit->id,
+                    'permit_id' => $permit->id,
                     'created_by' => auth()->user()->id,
-                    'note'       => $request->note,
-                    'fee'        => $request->fee,
+                    'note' => $request->note,
+                    'fee' => $request->fee,
                 ];
 
                 PermitNote::create($data);
             });
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
+
+        $permit->load(['notes', 'proposal' => fn($q) => $q->with(['salesPerson'])]);
 
         $permit->proposal->salesperson->notify(new ProposalPermitNotification($permit));
 
@@ -131,25 +152,23 @@ class PermitsController extends Controller
     public function store(PermitRequest $request)
     {
         $inputs = $request->all();
-        if(isset($inputs['submitted_on']) && $inputs['submitted_on'] <> ''){
-            $inputs['submitted_on'] = \Carbon::createFromFormat('m/d/Y', $request->submitted_on)->format('Y-m-d');
+        if (isset($inputs['submitted_on']) && $inputs['submitted_on'] <> '') {
+            $inputs['submitted_on'] = Carbon::createFromFormat('m/d/Y', $request->submitted_on)->format('Y-m-d');
         }
-        if(isset($inputs['expires_on']) && $inputs['expires_on'] <> '' ) {
-            $inputs['expires_on'] = \Carbon::createFromFormat('m/d/Y', $request->expires_on)->format('Y-m-d');
+        if (isset($inputs['expires_on']) && $inputs['expires_on'] <> '') {
+            $inputs['expires_on'] = Carbon::createFromFormat('m/d/Y', $request->expires_on)->format('Y-m-d');
         }
         Permit::create($inputs);
 
         if (!empty($this->returnTo)) {
             return redirect()->to($this->returnTo)->with('success', 'Permit Added.');
         } else {
-            return redirect()->route('show_workorder', ['id'=>$inputs['proposal_id']])->with('success', 'Permit Added.');
+            return redirect()->route('show_workorder', ['id' => $inputs['proposal_id']])->with('success', 'Permit Added.');
         }
     }
 
     public function edit($permit)
     {
-
-
         if (is_numeric($permit)) {
             $permit = Permit::with([
                 'proposal',
@@ -157,7 +176,7 @@ class PermitsController extends Controller
                 'createdBy',
                 'notes' => fn($q) => $q->with(['createdBy'])
             ])->find($permit);
-        } else if ($permit instanceof Permit){
+        } else if ($permit instanceof Permit) {
             $permit->load([
                 'proposal',
                 'proposalDetail',
@@ -167,9 +186,9 @@ class PermitsController extends Controller
         }
 
         //("submitted_on") = '1/1/2024';
-        $citiesCB = ['0'=>'Select a County'];
+        $citiesCB = ['0' => 'Select a County'];
         $countiesCB = County::countiesCB();
-        if($permit) {
+        if ($permit) {
             $citiesCB = County::citiesCB($permit->county);
         }
 
@@ -189,23 +208,23 @@ class PermitsController extends Controller
     public function update(Permit $permit, PermitRequest $request)
     {
         $inputs = $request->all();
-        if(isset($inputs['submitted_on']) && $inputs['submitted_on'] <> ''){
-            $inputs['submitted_on'] = \Carbon::createFromFormat('m/d/Y', $request->submitted_on)->format('Y-m-d');
-        }
-        if(isset($inputs['expires_on']) && $inputs['expires_on'] <> '' ) {
-            $inputs['expires_on'] = \Carbon::createFromFormat('m/d/Y', $request->expires_on)->format('Y-m-d');
-        }
 
+        if (isset($inputs['submitted_on']) && $inputs['submitted_on'] <> '') {
+            $inputs['submitted_on'] = Carbon::createFromFormat('m/d/Y', $request->submitted_on)->format('Y-m-d');
+        }
+        if (isset($inputs['expires_on']) && $inputs['expires_on'] <> '') {
+            $inputs['expires_on'] = Carbon::createFromFormat('m/d/Y', $request->expires_on)->format('Y-m-d');
+        }
 
         //updated permit so get sames person email
-        $proposal = Proposal::where('id','=', $permit->proposal_id)->with(['salesPerson'])->first()->toArray();
+        $proposal = Proposal::where('id', '=', $permit->proposal_id)->with(['salesPerson'])->first()->toArray();
 
-//        dd($inputs);
+        //        dd($inputs);
 
-        if($permit->update($inputs))
-        {
-            $subject = 'You have received a notification from  '. env('APP_NAME');
+        if ($permit->update($inputs)) {
+            $subject = 'You have received a notification from  ' . env('APP_NAME');
             $msg = "Permit Updated";
+
             Mail::to($proposal['sales_person']['email'])->send(new PermitUpdateToManager($permit, $subject));
 
         };
@@ -220,14 +239,21 @@ class PermitsController extends Controller
     public function changeStatus(Permit $permit, Request $request)
     {
         $validator = Validator::make(
-            $request->only(['new_status']), [
+            $request->only(['permit_id', 'new_status']), [
+                'permit_id' => 'required|positive',
                 'status' => [
-                    Rule::in(['Approved','Comments','Not Submitted', 'Submitted', 'Under Review']),
+                    Rule::in(['Approved', 'Comments', 'Not Submitted', 'Submitted', 'Under Review']),
                 ],
             ]
         );
         if ($validator->fails()) {
             return redirect()->back()->with('error', $validator->messages()->first());
+        }
+
+        if ($permit->id === null) {
+            if (! $permit = Permit::find($request->permit_id)) {
+                return redirect()->back()->with('error', 'Permit not found.');
+            }
         }
 
         $permit->status = $request->new_status;
@@ -238,7 +264,7 @@ class PermitsController extends Controller
 
     public function destroy($id)
     {
-        if (!$permit = Permit::where('id','=', $id)->with('proposal')->first()) {
+        if (!$permit = Permit::where('id', '=', $id)->with('proposal')->first()) {
             return redirect()->back()->with('error', 'Permit not found.');
         }
 
@@ -246,10 +272,10 @@ class PermitsController extends Controller
         try {
             $permit->delete();
         } catch (\Exception $e) {
-                return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
         }
 
-        return redirect()->route('show_workorder',['id'=>$id])->with('success', 'Permit  deleted.');
+        return redirect()->route('show_workorder', ['id' => $id])->with('success', 'Permit  deleted.');
     }
 
     public function noteList(Request $request)
@@ -262,42 +288,37 @@ class PermitsController extends Controller
             );
             if ($validator->fails()) {
                 return response()->json([
-                    'success' => false, 'error' => $validator->messages()->first(),
+                    'success' => false,
+                    'error' => $validator->messages()->first(),
                 ]);
             }
-            if (!$permit = Permit::with(['notes' => function ($q){
-                $q->with(['createdBy'])->orderBy('created_at', 'DESC');
-            }])->find($request->permit_id)) {
+            if (! $permit = Permit::with([
+                    'proposal',
+                    'notes' => fn($q) => $q->with(['createdBy'])->orderBy('created_at', 'DESC')
+                ])->find($request->permit_id)
+            ) {
                 return response()->json([
-                    'success' => false, 'error' => 'Permit not found.',
+                    'success' => false,
+                    'error' => 'Permit not found.',
                 ]);
             }
 
-            if (!$notes = $permit->notes) {
+            if ($permit->notes->count() === 0) {
                 return response()->json([
-                    'success' => false, 'error' => 'Permit does not have any note.',
+                    'success' => false,
+                    'error' => 'Permit does not have any note.',
                 ]);
-            }
-
-            $currencyFormater = new NumberFormatter(app()->getLocale() . "_US", NumberFormatter::CURRENCY);
-
-            $data = [];
-
-            foreach ($notes as $note) {
-                $data[] = [
-                    'date_creator' => $note->date_creator,
-                    'fee'          => $currencyFormater->formatCurrency($note->fee, 'USD'),
-                    'content'      => $note->note,
-                ];
             }
 
             $response = [
-                'success'    => true,
-                'notes'      => $data,
-                'total_fees' => $currencyFormater->formatCurrency($notes->sum('fee'), 'USD'),
+                'success' => true,
+                'html' => view('partials.note_list', ['permit' => $permit])->render(),
             ];
         } else {
-            $response = ['success' => false, 'error' => 'Invalid request.'];
+            $response = [
+                'success' => false,
+                'error' => 'Invalid request.'
+            ];
         }
 
         return response()->json($response);

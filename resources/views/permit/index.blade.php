@@ -35,65 +35,60 @@
                     <table class="list-table table table-bordered dt-responsive nowrap"
                            style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
-                        <tr>
-                            <th class="sorting_disabled tc w350">@lang('translation.work_order')</th>
-                            <th class="sorting_disabled tc w200"> @lang('translation.county')</th>
-                            <th class="sorting_disabled tc w200"> @lang('translation.city')</th>
-                            <th class="sorting_disabled tc w120">@lang('translation.type')</th>
-                            <th class="sorting_disabled tc w150">@lang('translation.menu_permits') @lang('translation.number')</th>
-                            <th class="sorting_disabled tc w200"> @lang('translation.status')
-                                / @lang('translation.expires')</th>
-                            <th class="actions">Actions</th>
-                        </tr>
+                            <tr>
+                                <th class="sorting_disabled tc w350">@lang('translation.work_order')</th>
+                                <th class="sorting_disabled tc w200"> @lang('translation.county')</th>
+                                <th class="sorting_disabled tc w200"> @lang('translation.city')</th>
+                                <th class="sorting_disabled tc w120">@lang('translation.type')</th>
+                                <th class="sorting_disabled tc w150">@lang('translation.menu_permits') @lang('translation.number')</th>
+                                <th class="sorting_disabled tc w200"> @lang('translation.status')
+                                    / @lang('translation.expires')</th>
+                                <th class="actions">Actions</th>
+                            </tr>
                         </thead>
-
                         <tbody>
 
-                        @if(!count($permits))
-                            <tr class="even">
-                                <td colspan='7' class="text-dark fw-bold">@lang('translation.norecordsfound')</td>
-                            </tr>
-                        @else
-                            @foreach ($permits as $permit)
-                                @if (strtotime($permit->expires_on) <= strtotime(date('Y-m-d')) )
-                                    <tr class="alert-danger">
-                                @else
-                                    <tr>
-                                        @endif
-
-                                        <td class="tc"><a
-                                                href="{{route('permit_show',['permit'=>$permit->id])}}">{{ $permit->name }}</a>
-                                            <br/>{{ $permit->job_master_id }}
-
+                            @if ($permits->count() === 0)
+                                <tr class="even">
+                                    <td colspan='7' class="text-dark fw-bold">@lang('translation.norecordsfound')</td>
+                                </tr>
+                            @else
+                                @foreach ($permits as $permit)
+                                    <tr class="{{ $permit->expires_on->toDateString() <= now()->toDateString() ? 'alert-danger' : '' }}">
+                                        <td class="tc">
+                                            <p class="m0 fwb">
+                                                <a href="{{ route('permit_show', ['permit' => $permit->id]) }}">
+                                                    {{ $permit->proposal->name }}
+                                                </a>
+                                            </p>
+                                            <p class="mlr0 mt2 mb0 fs13">{{ $permit->proposal->job_master_id }}</p>
                                         </td>
                                         <td class="tc">{{ $permit->county }}</td>
                                         <td class="tc text-dark fw-bold">{{ $permit->city }}</td>
                                         <td class="tc text-dark fw-bold">{{ $permit->type }}</td>
                                         <td class="tc text-dark fw-bold">{{ $permit->number }}</td>
                                         <td class="tc">
-                                            {{ $permit->status }}
-                                            <br/>
-                                            Expires:{{ $permit->expires_on }}
+                                            <p class="m0 fwb">{{ $permit->status }}</p>
+                                            <p class="mlr0 mt2 mb0 fs13">Expires:{{ $permit->expires_on->format('m/d/Y') }}</p>
                                         </td>
                                         <td class="centered actions">
                                             <ul class="nav navbar-nav">
                                                 <li class="dropdown">
                                                     <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i
                                                             class="fa fa-angle-down"></i></a>
-                                                    <ul class="dropdown-menu animated animated-short flipInX"
-                                                        role="menu">
-                                                        @if (\App\Models\PermitNote::where('permit_id','=', $permit->id))
-
+                                                    <ul class="dropdown-menu animated animated-short flipInX" role="menu"
+                                                    >
+                                                        @if ($permit->notes->count() > 0)
                                                             <li>
                                                                 <a href="javascript:"
                                                                    class="action"
                                                                    data-action="list-notes"
                                                                    data-permit_id="{{ $permit->id }}"
-                                                                   data-proposal_name="{{ $permit->name }}"
+                                                                   data-proposal_name="{{ $permit->proposal->name }}"
                                                                    data-permit_number="{{ $permit->number }}"
                                                                 >
-                                                                    <span
-                                                                        class="fas fa-comments"></span>@lang('translation.notes')
+                                                                    <span class="fas fa-comments"></span>
+                                                                    @lang('translation.notes')
                                                                 </a>
                                                             </li>
                                                         @endif
@@ -105,6 +100,7 @@
                                                                    data-route="{{ route('permit_note_add', ['permit' => $permit->id]) }}"
                                                                    data-proposal_name="{{ $permit->name }}"
                                                                    data-permit_number="{{ $permit->number }}"
+                                                                   data-permit_id="{{ $permit->id }}"
                                                                 >
                                                                     <span
                                                                         class="fas fa-sticky-note"></span>@lang('translation.add') @lang('translation.note')
@@ -118,6 +114,7 @@
                                                                    data-proposal_name="{{ $permit->name }}"
                                                                    data-permit_number="{{ $permit->number }}"
                                                                    data-status="{{ $permit->status }}"
+                                                                   data-permit_id="{{ $permit->id }}"
                                                                 >
                                                                     <span
                                                                         class="fas fa-retweet"></span>@lang('translation.change_status')
@@ -141,13 +138,16 @@
                                             </ul>
                                         </td>
                                     </tr>
-                                    @endforeach
-                                    @include('modals.form_select_status_modal')
-                                @endif
+                                @endforeach
+
+                                @include('modals.list_notes_modal')
+
+                                @include('modals.form_permit_note_modal')
+
+                                @include('modals.form_select_status_modal')
+                            @endif
                         </tbody>
                     </table>
-
-
                 </div>
                 <table class="table w220">
                     <tr>
@@ -158,9 +158,6 @@
             </div>
         </div>
     </div>
-    @include('modals.list_notes_modal')
-    @include('modals.form_permit_note_modal')
-
 @stop
 
 @section('page-js')
@@ -168,19 +165,12 @@
         $(document).ready(function () {
             var body = $('body');
 
-            // list notes:
-
             var listNotesModal = $('#listNotesModal');
-            var listNotesModalLabel = $('#listNotesModalLabel');
-            var permitNumberContainer = listNotesModalLabel.find('span');
             var listNotesContainer = $('#listNotesModalContainer');
-            var listNotesModalTotalFees = $('#listNotesModalTotalFees').find('span');
 
             body.on('click', '.actions .action[data-action="list-notes"]', function () {
                 let el = $(this);
                 let permitId = el.data('permit_id');
-                let permitNumber = el.data('permit_number');
-                let proposalName = el.data('proposal_name');
 
                 $.ajax({
                     headers: {
@@ -197,57 +187,41 @@
                     complete: function () {
                         hideSpinner();
                     },
-                    success: function (response) {
-                        if (response.success) {
+                    success: function (response){
+                        if (typeof response.success === 'undefined' || !response) {
+                            uiAlert({type: 'error', title: 'Error', text: 'Critical error has occurred.'});
+                        } else if (response.success) {
+                            // do things here
 
-                            var notes = response.notes;
-                            var html = '';
-                            console.log(notes);
-
-                            $.each(notes, function (index, note) {
-                                html += '<div class="note-box">';
-                                html += '    <p class="note-date-fee clearfix">';
-                                html += '<span class="note-date">' + note.date_creator + '</span>';
-                                html += '<span class="note-fee">Fee: ' + note.fee + '</span>';
-                                html += '    </p>';
-                                html += '   <div class="note-content">';
-                                html += note.content;
-                                html += '   </div>';
-                                html += '</div>';
-                            });
-
-                            listNotesContainer.html(html);
-                            listNotesModalTotalFees.text(response.total_fees);
-                            permitNumberContainer.text(permitNumber);
+                            listNotesContainer.html(response.html);
 
                             listNotesModal.modal('show');
+
+                            // controller defined response success message
+                            if (response.message) {
+                                uiAlert({type: 'success', title: 'Success', text: response.message});
+                            }
                         } else {
+                            // controller defined response error message
                             uiAlert({type: 'error', title: 'Error', text: response.message});
                         }
                     },
-                    error: function (data) {
-                        hideSpinner();
-                        alert('error');
-                        console.log(data);
+                    error: function (response){
+                        @if (app()->environment() === 'local')
+                            uiAlert({type: 'error', title: 'Error', text: response.responseJSON.message});
+                        @else
+                            uiAlert({type: 'error', title: 'Error', text: 'Critical error has occurred.'});
+                        @endif
                     }
                 });
 
             });
 
-            listNotesModal.on('show.bs.modal', function () {
-                permitNumberContainer.empty();
-                listNotesContainer.empty();
-            })
-
-            listNotesModal.on('hidden.bs.modal', function () {
-                permitNumberContainer.empty();
-                listNotesContainer.empty();
-            })
-
             // add note
 
             var noteModal = $('#formNoteModal');
             var noteForm = $('#admin_form_note_modal');
+            var notePermitId = $('#form_note_permit_id');
             var note = $('#note');
 
             body.on('click', '.actions .action[data-action="add-note"]', function () {
@@ -255,9 +229,13 @@
                 let permitNumberContainer = $('#formNoteModalLabel').find('span');
                 let url = el.data('route');
                 let permitNumber = el.data('permit_number');
+                let permitId = el.data('permit_id');
 
                 noteForm.attr('action', url);
+                notePermitId.val(permitId);
                 permitNumberContainer.text(permitNumber);
+                permitNumberContainer.text(permitNumber);
+
                 noteModal.modal('show');
             });
 
@@ -296,7 +274,10 @@
             // status
 
             var statusModal = $('#formStatusModal');
+            var statusCurrentValue = $('#current_status');
             var statusForm = $('#admin_form_status_modal');
+            var statusSelect = $('#modal_permit_status_cb');
+            var statusPermitId = $('#form_status_permit_id');
 
             body.on('click', '.actions .action[data-action="change-status"]', function () {
                 let el = $(this);
@@ -305,13 +286,14 @@
                 let url = el.data('route');
                 let permitNumber = el.data('permit_number');
                 let currentStatus = el.data('status');
-
-                $('#current_status').text(currentStatus);
-
-                permitSelect.find('option[value="' + currentStatus + '"]').remove();
+                let permitId = el.data('permit_id');
 
                 statusForm.attr('action', url);
+                statusPermitId.val(permitId);
                 permitNumberContainer.text(permitNumber);
+                statusCurrentValue.text(currentStatus);
+                statusSelect.find('option[value="'+ currentStatus +'"]').attr('selected','selected');
+
                 statusModal.modal('show');
             });
 

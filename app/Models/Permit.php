@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\SearchTrait;
 use App\Traits\SortableTrait;
 use Illuminate\Database\Eloquent\Model;
+use NumberFormatter;
 
 class Permit extends Model
 {
@@ -87,6 +88,11 @@ class Permit extends Model
 
     /** scopes */
 
+    public function scopeNotApproved($query)
+    {
+        return $query->where('status', '!=','Approved');
+    }
+
     public function scopeIncomplete($query)
     {
         return $query->where('status', '<>','Approved')->orWhere('status', '<>','Completed');
@@ -99,14 +105,26 @@ class Permit extends Model
 
     /** Accessor(get) and Mutators(set) */
 
+    public function getTotalFeesAttribute()
+    {
+        return $this->notes->count() > 0
+            ? $this->notes->sum('fee')
+            : 0;
+    }
+
+    public function getCurrencyTotalFeesAttribute()
+    {
+        $currencyFormater = new NumberFormatter(app()->getLocale() . "_US", NumberFormatter::CURRENCY);
+
+        return $this->total_fees > 0
+            ? $currencyFormater->formatCurrency($this->total_fees, 'USD')
+            : '$0.00';
+    }
 
     public function getHtmlExpiredOnAttribute()
     {
         return !empty($this->expires_on) ? $this->expires_on->format('j F, Y') : null;
     }
-
-
-
 
     /** Methods */
 

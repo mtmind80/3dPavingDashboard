@@ -769,10 +769,11 @@ body.md {
             }
         }
     }
+
     .modal-footer {
         display: block;
         #listNotesModalTotalFees {
-            float: left;
+            float: right;
             font-size: 13px;
             margin-top: 10px;
             span {
@@ -780,7 +781,7 @@ body.md {
             }
         }
         button {
-            float: right;
+            float: left;
         }
     }
 }
