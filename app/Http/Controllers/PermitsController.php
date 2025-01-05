@@ -169,8 +169,6 @@ class PermitsController extends Controller
 
     public function edit($permit)
     {
-
-
         if (is_numeric($permit)) {
             $permit = Permit::with([
                 'proposal',
@@ -241,7 +239,8 @@ class PermitsController extends Controller
     public function changeStatus(Permit $permit, Request $request)
     {
         $validator = Validator::make(
-            $request->only(['new_status']), [
+            $request->only(['permit_id', 'new_status']), [
+                'permit_id' => 'required|positive',
                 'status' => [
                     Rule::in(['Approved', 'Comments', 'Not Submitted', 'Submitted', 'Under Review']),
                 ],
@@ -249,6 +248,12 @@ class PermitsController extends Controller
         );
         if ($validator->fails()) {
             return redirect()->back()->with('error', $validator->messages()->first());
+        }
+
+        if ($permit->id === null) {
+            if (! $permit = Permit::find($request->permit_id)) {
+                return redirect()->back()->with('error', 'Permit not found.');
+            }
         }
 
         $permit->status = $request->new_status;
