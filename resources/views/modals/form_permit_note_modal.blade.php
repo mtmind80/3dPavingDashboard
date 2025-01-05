@@ -7,6 +7,7 @@
                 <input id="form_note_modal_return_to" name="returnTo" type="hidden">
                 <input id="form_note_modal_tab" name="tab" type="hidden">
                 <input id="form_note_lead_id" name="lead_id" type="hidden">
+                <input id="form_note_permit_id" name="permit_id" type="hidden">
                 <div class="modal-header">
                     <h5 class="modal-title" id="formNoteModalLabel">@lang('translation.permit') <b>#<span></span></b> - @lang('translation.add') @lang('translation.note')</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">

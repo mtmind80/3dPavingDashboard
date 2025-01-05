@@ -552,13 +552,13 @@ body.md .not-lg-hidden {
 #listNotesModal .modal-footer {
   display: block; }
   #listNotesModal .modal-footer #listNotesModalTotalFees {
-    float: left;
+    float: right;
     font-size: 13px;
     margin-top: 10px; }
     #listNotesModal .modal-footer #listNotesModalTotalFees span {
       font-weight: 600; }
   #listNotesModal .modal-footer button {
-    float: right; }
+    float: left; }
 
 .hint {
   color: #888686FF;
@@ -886,5 +886,3 @@ table .td-tt {
           background-color: #18ae18; }
           .ui-pnotify .ui-pnotify-container.brighttheme-success .ui-pnotify-action-bar .ui-pnotify-action-button.btn-primary:hover {
             background-color: #159815; }
-
-/*# sourceMappingURL=style-extras.css.map */
