@@ -119,7 +119,7 @@ class Proposal extends Model
 
     public function salesPerson()
     {
-        return $this->hasOne(User::class, 'id', 'salesperson_id');
+        return $this->belongsTo(User::class, 'salesperson_id');
     }
 
     public function contact()

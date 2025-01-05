@@ -10,28 +10,18 @@ use Validator;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     *
-     * @return void
-     */
     public function register()
     {
         //
     }
 
-    /**
-     * Bootstrap any application services.
-     *
-     * @return void
-     */
     public function boot()
     {
        // fix for old versions of mysql
         Schema::defaultStringLength(191);
 
-        if (env('SEND_LOCAL_EMAIL_TO') && app()->environment('local')) {
-            Mail::alwaysTo(env('SEND_LOCAL_EMAIL_TO'));
+        if (app()->environment('local')) {
+            Mail::alwaysTo(config('env.SEND_LOCAL_EMAIL_TO', 'developer@localhost.com'));
         }
 
         /**

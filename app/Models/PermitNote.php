@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\SearchTrait;
 use App\Traits\SortableTrait;
 use Illuminate\Database\Eloquent\Model;
+use NumberFormatter;
 
 class PermitNote extends Model
 {
@@ -66,6 +67,15 @@ class PermitNote extends Model
 
     /** Accessor(get) and Mutators(set) */
 
+    public function getCurrencyFeeAttribute()
+    {
+        $currencyFormater = new NumberFormatter(app()->getLocale() . "_US", NumberFormatter::CURRENCY);
+
+        return $this->fee > 0
+            ? $currencyFormater->formatCurrency($this->fee, 'USD')
+            : '$0.00';
+    }
+
     public function getDateCreatorAttribute()
     {
         return !empty($this->created_at) ? $this->created_at->format('m/d/Y') . ' - ' . $this->createdBy->full_name : null;
@@ -75,4 +85,5 @@ class PermitNote extends Model
     {
         return  $this->createdBy->full_name;
     }
+
 }
