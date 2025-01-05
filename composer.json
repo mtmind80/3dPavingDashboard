@@ -23,7 +23,8 @@
         "phpoffice/phpspreadsheet": "^1.28",
         "predis/predis": "^2.0",
         "spatie/laravel-google-calendar": "^3.5",
-        "tinymce/tinymce": "^6.3"
+        "tinymce/tinymce": "^6.3",
+        "ext-intl": "*"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",
