@@ -114,6 +114,7 @@
                                                                    data-proposal_name="{{ $permit->name }}"
                                                                    data-permit_number="{{ $permit->number }}"
                                                                    data-status="{{ $permit->status }}"
+                                                                   data-permit_id="{{ $permit->id }}"
                                                                 >
                                                                     <span
                                                                         class="fas fa-retweet"></span>@lang('translation.change_status')
@@ -273,7 +274,10 @@
             // status
 
             var statusModal = $('#formStatusModal');
+            var statusCurrentValue = $('#current_status');
             var statusForm = $('#admin_form_status_modal');
+            var statusSelect = $('#modal_permit_status_cb');
+            var statusPermitId = $('#form_status_permit_id');
 
             body.on('click', '.actions .action[data-action="change-status"]', function () {
                 let el = $(this);
@@ -282,13 +286,14 @@
                 let url = el.data('route');
                 let permitNumber = el.data('permit_number');
                 let currentStatus = el.data('status');
-
-                $('#current_status').text(currentStatus);
-
-                permitSelect.find('option[value="' + currentStatus + '"]').remove();
+                let permitId = el.data('permit_id');
 
                 statusForm.attr('action', url);
+                statusPermitId.val(permitId);
                 permitNumberContainer.text(permitNumber);
+                statusCurrentValue.text(currentStatus);
+                statusSelect.find('option[value="'+ currentStatus +'"]').attr('selected','selected');
+
                 statusModal.modal('show');
             });
 
