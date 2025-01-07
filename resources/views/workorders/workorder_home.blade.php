@@ -321,8 +321,10 @@
                                             <thead>
                                             <tr style="background:#E5E8E8;color:#000;">
                                                 <td class="w250"><b>@lang('translation.workorderservices')</b></td>
+                                                <!--
                                                 <td class="w50"><b>@lang('translation.status')</b></td>
                                                 <td class="w230"><b>@lang('translation.location')</b></td>
+                                                -->
                                                 <td class="w200"><b>@lang('translation.fieldmanager')</b></td>
                                                 <td class="w120"><b>@lang('translation.cost')</b></td>
                                                 <td class="actions tc"><b>@lang('translation.actions')</b></td>
@@ -345,7 +347,7 @@
 
                                                         </br>
                                                     </td>
-                                                    <td>
+                                               <!--     <td>
                                                         @if($service->status_id)
                                                             {{ App\Models\ProposalDetailStatus::find($service->status_id)->status }}
                                                         @else
@@ -358,6 +360,7 @@
                                                             No Location Specified
                                                         @endif
                                                     </td>
+                                                   -->
                                                     <td>
                                                         @if($service->fieldmanager_id)
                                                             {{ App\Models\User::find($service->fieldmanager_id)->FullName }}
@@ -405,6 +408,16 @@
                                                                             </a></li>
 
                                                                     @endif
+
+
+                                                                        <li>
+                                                                            <a href="{{route('view_service', ['proposal_id'=>$proposal['id'],'id'=>$service->id])}}"
+                                                                               class="list-group-item-action">
+                                                                                <span class="fa fa-edit"></span>
+                                                                                &nbsp; @lang('translation.edit') @lang('translation.service')
+                                                                            </a>
+                                                                        </li>
+
                                                                     <li>
                                                                         <a href="{{route('workordermedia', ['proposal_id'=>$proposal['id'], 'proposal_detail_id'=>$service->id])}}"
                                                                            class="list-group-item-action">
