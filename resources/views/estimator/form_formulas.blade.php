@@ -1280,10 +1280,12 @@
                             $("#header_show_materials_cost").text('$' + materials);
 
                             //alert(depth);
+                            if (proposaltext == '') {
 
                                 proposaltext = servicedesc.replace('#TONS#', tonamount);
                                 proposaltext = proposaltext.replace('#INCHES#', depth);
                                 tinymce.activeEditor.setContent(proposaltext);
+                            }
                             //add it up
                             var results = additup(materials);
 
@@ -1419,11 +1421,12 @@
                                 $("#profit").val(0);
                             }
 
+                            if (proposaltext == '') {
 
-                            proposaltext = servicedesc.replace('#TONS#', cubic_yards);
-                            proposaltext = proposaltext.replace('#INCHES#', depth);
-                            tinymce.activeEditor.setContent(proposaltext);
-
+                                proposaltext = servicedesc.replace('#TONS#', cubic_yards);
+                                proposaltext = proposaltext.replace('#INCHES#', depth);
+                                tinymce.activeEditor.setContent(proposaltext);
+                            }
                             //total up
                             var results = additup(materials);
                             if ({{$debug_blade}}) {
@@ -1865,6 +1868,9 @@
                     var overhead = 0;
 
                 }
+                $("#x_proposal_text").val(proposaltext);
+
+
                 //console.log("otcost" + otcost + " OHEAD" + ohead);
 
                 $("#form_header_over_head").text(formatCurrency.format(overhead));
@@ -1883,6 +1889,7 @@
 
                 var servicename = $("#service_name").val();
                 $("#x_service_name").val(servicename)
+
                 var proposaltext = tinymce.activeEditor.getContent();
                 $("#x_proposal_text").val(proposaltext);
 
