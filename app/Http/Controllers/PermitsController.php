@@ -293,9 +293,9 @@ class PermitsController extends Controller
                 ]);
             }
             if (! $permit = Permit::with([
-                    'proposal',
-                    'notes' => fn($q) => $q->with(['createdBy'])->orderBy('created_at', 'DESC')
-                ])->find($request->permit_id)
+                'proposal',
+                'notes' => fn($q) => $q->with(['createdBy'])->orderBy('created_at', 'DESC')
+            ])->find($request->permit_id)
             ) {
                 return response()->json([
                     'success' => false,
