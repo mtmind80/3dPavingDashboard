@@ -35,7 +35,7 @@ class ContactsController extends Controller
 
         $data = [
             'contacts' => $contacts,
-            'needle'   => $needle,
+            'needle' => $needle,
         ];
 
         return view('contacts.index', $data);
@@ -55,7 +55,7 @@ class ContactsController extends Controller
             'id' => $id,
             'proposal' => $proposal,
             'contacts' => $contacts,
-            'needle'   => $needle,
+            'needle' => $needle,
         ];
 
         return view('contacts.index_change_client', $data);
@@ -75,9 +75,9 @@ class ContactsController extends Controller
                 $request->only(['first_name', 'last_name', 'email', 'fill_form']),
                 [
                     'first_name' => 'required|personName',
-                    'last_name'  => 'nullable|personName',
-                    'email'      => 'required|email',
-                    'fill_form'  => 'nullable|boolean',
+                    'last_name' => 'nullable|personName',
+                    'email' => 'required|email',
+                    'fill_form' => 'nullable|boolean',
                 ]
             );
 
@@ -100,43 +100,43 @@ class ContactsController extends Controller
 
                 if (!$contacts = $query->get()) {
                     $response = [
-                        'success'  => true,
+                        'success' => true,
                         'contacts' => 0,
                     ];
                 } else {
                     $html = '<h4 class="fs16">' . __('translation.existing_contacts') . ' (' . $contacts->count() . ')</h4>';
                     foreach ($contacts as $number => $contact) {
                         $contactData = '';
-                        if (! $request->fill_form) {
+                        if (!$request->fill_form) {
                             $tooltipCaption = 'Go to Contact Details';
-                            $link = route('selectclient', ['contact_id' => $contact->id, 'proposal_id'=>$proposal_id]);
+                            $link = route('selectclient', ['contact_id' => $contact->id, 'proposal_id' => $proposal_id]);
                         } else {
                             $tooltipCaption = 'Fill contact info fields';
                             $link = 'javascript:';
 
-                            $contactData .= 'data-contact_id="'.$contact->id.'"';
-                            $contactData .= 'data-contact_type_id="'.$contact->contact_type_id.'"';
-                            $contactData .= 'data-first_name="'.$contact->first_name.'"';
-                            $contactData .= 'data-last_name="'.$contact->last_name.'"';
-                            $contactData .= 'data-email="'.$contact->email.'"';
-                            $contactData .= 'data-phone="'.$contact->phone.'"';
-                            $contactData .= 'data-address1="'.$contact->address1.'"';
-                            $contactData .= 'data-address2="'.$contact->address2.'"';
-                            $contactData .= 'data-city="'.$contact->city.'"';
-                            $contactData .= 'data-state="'.$contact->state.'"';
-                            $contactData .= 'data-zipcode="'.$contact->zipcode.'"';
-                            $contactData .= 'data-county="'.$contact->county.'"';
+                            $contactData .= 'data-contact_id="' . $contact->id . '"';
+                            $contactData .= 'data-contact_type_id="' . $contact->contact_type_id . '"';
+                            $contactData .= 'data-first_name="' . $contact->first_name . '"';
+                            $contactData .= 'data-last_name="' . $contact->last_name . '"';
+                            $contactData .= 'data-email="' . $contact->email . '"';
+                            $contactData .= 'data-phone="' . $contact->phone . '"';
+                            $contactData .= 'data-address1="' . $contact->address1 . '"';
+                            $contactData .= 'data-address2="' . $contact->address2 . '"';
+                            $contactData .= 'data-city="' . $contact->city . '"';
+                            $contactData .= 'data-state="' . $contact->state . '"';
+                            $contactData .= 'data-zipcode="' . $contact->zipcode . '"';
+                            $contactData .= 'data-county="' . $contact->county . '"';
                         }
 
-                        $html .= '<p class="mt0 mb5 fs13 contact-container">' . ($number + 1) . '- <a href="' . $link . '" class="a-link" '.$contactData.'><b>' . $contact->full_name . '</b></a><br>';
+                        $html .= '<p class="mt0 mb5 fs13 contact-container">' . ($number + 1) . '- <a href="' . $link . '" class="a-link" ' . $contactData . '><b>' . $contact->full_name . '</b></a><br>';
                         $html .= '<span class="pl17">' . $contact->full_address_one_line . '</span>';
                         $html .= '</span></p>';
                     }
 
                     $response = [
-                        'success'  => true,
+                        'success' => true,
                         'contacts' => $contacts->count(),
-                        'html'     => $html,
+                        'html' => $html,
                     ];
                 }
             }
@@ -155,9 +155,9 @@ class ContactsController extends Controller
                 $request->only(['first_name', 'last_name', 'email', 'fill_form']),
                 [
                     'first_name' => 'required|personName',
-                    'last_name'  => 'nullable|personName',
-                    'email'      => 'required|email',
-                    'fill_form'  => 'nullable|boolean',
+                    'last_name' => 'nullable|personName',
+                    'email' => 'required|email',
+                    'fill_form' => 'nullable|boolean',
                 ]
             );
 
@@ -179,43 +179,43 @@ class ContactsController extends Controller
 
                 if (!$contacts = $query->get()) {
                     $response = [
-                        'success'  => true,
+                        'success' => true,
                         'contacts' => 0,
                     ];
                 } else {
                     $html = '<h4 class="fs16">' . __('translation.existing_contacts') . ' (' . $contacts->count() . ')</h4>';
                     foreach ($contacts as $number => $contact) {
                         $contactData = '';
-                        if (! $request->fill_form) {
+                        if (!$request->fill_form) {
                             $tooltipCaption = 'Go to Contact Details';
                             $link = route('contact_details', ['contact' => $contact->id]);
                         } else {
                             $tooltipCaption = 'Fill contact info fields';
                             $link = 'javascript:';
 
-                            $contactData .= 'data-contact_id="'.$contact->id.'"';
-                            $contactData .= 'data-contact_type_id="'.$contact->contact_type_id.'"';
-                            $contactData .= 'data-first_name="'.$contact->first_name.'"';
-                            $contactData .= 'data-last_name="'.$contact->last_name.'"';
-                            $contactData .= 'data-email="'.$contact->email.'"';
-                            $contactData .= 'data-phone="'.$contact->phone.'"';
-                            $contactData .= 'data-address1="'.$contact->address1.'"';
-                            $contactData .= 'data-address2="'.$contact->address2.'"';
-                            $contactData .= 'data-city="'.$contact->city.'"';
-                            $contactData .= 'data-state="'.$contact->state.'"';
-                            $contactData .= 'data-zipcode="'.$contact->zipcode.'"';
-                            $contactData .= 'data-county="'.$contact->county.'"';
+                            $contactData .= 'data-contact_id="' . $contact->id . '"';
+                            $contactData .= 'data-contact_type_id="' . $contact->contact_type_id . '"';
+                            $contactData .= 'data-first_name="' . $contact->first_name . '"';
+                            $contactData .= 'data-last_name="' . $contact->last_name . '"';
+                            $contactData .= 'data-email="' . $contact->email . '"';
+                            $contactData .= 'data-phone="' . $contact->phone . '"';
+                            $contactData .= 'data-address1="' . $contact->address1 . '"';
+                            $contactData .= 'data-address2="' . $contact->address2 . '"';
+                            $contactData .= 'data-city="' . $contact->city . '"';
+                            $contactData .= 'data-state="' . $contact->state . '"';
+                            $contactData .= 'data-zipcode="' . $contact->zipcode . '"';
+                            $contactData .= 'data-county="' . $contact->county . '"';
                         }
 
-                        $html .= '<p class="mt0 mb5 fs13 contact-container">' . ($number + 1) . '- <a href="' . $link . '" class="a-link" '.$contactData.'><b>' . $contact->full_name . '</b></a><br>';
+                        $html .= '<p class="mt0 mb5 fs13 contact-container">' . ($number + 1) . '- <a href="' . $link . '" class="a-link" ' . $contactData . '><b>' . $contact->full_name . '</b></a><br>';
                         $html .= '<span class="pl17">' . $contact->full_address_one_line . '</span>';
                         $html .= '</span></p>';
                     }
 
                     $response = [
-                        'success'  => true,
+                        'success' => true,
                         'contacts' => $contacts->count(),
-                        'html'     => $html,
+                        'html' => $html,
                     ];
                 }
             }
@@ -229,37 +229,36 @@ class ContactsController extends Controller
     public function create()
     {
         $data = [
-            'typesCB'         => ContactType::typesCBActive(['0' => 'Select type']),
-            'sourcesCB'       => LeadSource::sourcesCB(['0' => 'Select source']),
-            'assignedToCB'    => Contact::assignedToCB(['0' => 'Select assigned to']),
-            'countiesCB'      => County::countiesCB(['' => 'Select county']),
+            'types' => ContactType::typesActive(),
+            'sourcesCB' => LeadSource::sourcesCB(['0' => 'Select source']),
+            'assignedToCB' => Contact::assignedToCB(['0' => 'Select assigned to']),
+            'countiesCB' => County::countiesCB(['' => 'Select county']),
             'contact_type_id' => null,
-            'lead_source'     => null,
-            'assigned_to'     => null,
-            'county'          => null,
+            'lead_source' => null,
+            'assigned_to' => null,
+            'county' => null,
         ];
 
         return view('contacts.create', $data);
     }
 
-
     public function createforproposal($proposal_id)
     {
         $data = [
-            'typesCB'         => ContactType::typesCBActive(['0' => 'Select type']),
-            'sourcesCB'       => LeadSource::sourcesCB(['0' => 'Select source']),
-            'assignedToCB'    => Contact::assignedToCB(['0' => 'Select assigned to']),
-            'countiesCB'      => County::countiesCB(['' => 'Select county']),
+            'types' => ContactType::typesActive(),
+            'typesCB' => ContactType::typesCBActive(['0' => 'Select type']),
+            'sourcesCB' => LeadSource::sourcesCB(['0' => 'Select source']),
+            'assignedToCB' => Contact::assignedToCB(['0' => 'Select assigned to']),
+            'countiesCB' => County::countiesCB(['' => 'Select county']),
             'contact_type_id' => null,
-            'proposal_id'     => $proposal_id,
-            'lead_source'     => null,
-            'assigned_to'     => null,
-            'county'          => null,
+            'proposal_id' => $proposal_id,
+            'lead_source' => null,
+            'assigned_to' => null,
+            'county' => null,
         ];
 
         return view('contacts.createforproposal', $data);
     }
-
 
 
     public function storeforproposal(ContactRequest $request)
@@ -290,7 +289,7 @@ class ContactsController extends Controller
         ]));
         try {
             $contact->save();
-            $data['id']= $contact->id;
+            $data['id'] = $contact->id;
 
         } catch (Exception $e) {
             \Session::flash('message', 'Sorry your entry was not recorded!');
@@ -305,7 +304,7 @@ class ContactsController extends Controller
 
         \Session::flash('message', 'New Contact Created!');
 
-        return redirect()->route('show_proposal',['id' => $request['proposal_id']])->with('info', 'Proposal cloned with New Client.');
+        return redirect()->route('show_proposal', ['id' => $request['proposal_id']])->with('info', 'Proposal cloned with New Client.');
 
         //return redirect()->route('contact_details', ['contact'=>$contact->id]);
 
@@ -338,11 +337,11 @@ class ContactsController extends Controller
             'billing_postal_code',
             'contact',
             'note',
-         ]));
+        ]));
 
         try {
             $contact->save();
-            $data['id']= $contact->id;
+            $data['id'] = $contact->id;
 
         } catch (Exception $e) {
             \Session::flash('message', 'Sorry your entry was not recorded!');
@@ -351,14 +350,14 @@ class ContactsController extends Controller
         }
 
         \Session::flash('message', 'New Contact Created!');
-        return redirect()->route('contact_details', ['contact'=>$contact->id]);
+        return redirect()->route('contact_details', ['contact' => $contact->id]);
 
 
     }
 
     public function details($contactId)
     {
-        if (! $contact = Contact::with(['contactType'])->find($contactId)){
+        if (!$contact = Contact::with(['contactType'])->find($contactId)) {
             return view('pages-404');
         }
 
@@ -371,16 +370,16 @@ class ContactsController extends Controller
 
     public function edit($contactId)
     {
-        if (! $contact = Contact::with(['contactType'])->find($contactId)){
+        if (!$contact = Contact::with(['contactType'])->find($contactId)) {
             return view('pages-404');
         }
 
         $data = [
-            'contact'      => $contact,
-            'typesCB'      => ContactType::typesCBActive(),
-            'sourcesCB'    => LeadSource::sourcesCB(['0' => 'Select source']),
+            'contact' => $contact,
+            'types' => ContactType::typesActive(),
+            'sourcesCB' => LeadSource::sourcesCB(['0' => 'Select source']),
             'assignedToCB' => Contact::assignedToCB(['0' => 'Select assigned to']),
-            'countiesCB'   => County::countiesCB(),
+            'countiesCB' => County::countiesCB(),
         ];
 
         return view('contacts.edit', $data);
@@ -530,15 +529,15 @@ class ContactsController extends Controller
         $validator = \Validator::make(
             [
                 'first_name' => $request->first_name,
-                'address1'  => $request->address1,
-                'phone'      => $request->phone,
-                'email'      => $request->email,
+                'address1' => $request->address1,
+                'phone' => $request->phone,
+                'email' => $request->email,
             ],
             [
                 'first_name' => 'required|personName',
-                'last_name'  => 'nullable|personName',
-                'email'      => 'required|email',
-                'phone'      => 'required|text',
+                'last_name' => 'nullable|personName',
+                'email' => 'required|email',
+                'phone' => 'required|text',
             ]
         );
 
@@ -552,10 +551,10 @@ class ContactsController extends Controller
 
         $contact = Contact::find($request['contact_id'])->first();
 
-        $staff = New Contact();
+        $staff = new Contact();
         $staff->contact_type_id = 18;
         $staff->first_name = $request->first_name;
-        $staff->address1  = $request->address1;
+        $staff->address1 = $request->address1;
         $staff->phone = $request->phone;
         $staff->city = $request->city;
         $staff->state = $request->state;
