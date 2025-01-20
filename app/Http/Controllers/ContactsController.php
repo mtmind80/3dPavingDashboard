@@ -229,7 +229,7 @@ class ContactsController extends Controller
     public function create()
     {
         $data = [
-            'typesCB'         => ContactType::typesCBActive(['0' => 'Select type']),
+            'types' => ContactType::typesActive(),
             'sourcesCB'       => LeadSource::sourcesCB(['0' => 'Select source']),
             'assignedToCB'    => Contact::assignedToCB(['0' => 'Select assigned to']),
             'countiesCB'      => County::countiesCB(['' => 'Select county']),
