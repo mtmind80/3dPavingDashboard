@@ -29,6 +29,7 @@
             font-style: italic;
 
         }
+
         .totalcolor {
             font-size: 20px;
             background-color: #ffffff;
@@ -162,19 +163,28 @@
     @php
         $totalcost = 0;
     @endphp
-    @foreach ($permits as $permit)
-        @php
-            $totalcost += $permit->notes->fee;
-        @endphp
-
+    @foreach ($permits as $permit) {
+    @foreach($permit['notes'] as $note)
+    {
         <tr style="border:5px solid #000000;">
-            <td class="tl normaltext">{{$permit->county}}</td>
-            <td class="tl normaltext">{{$permit->number}}</td>
-            <td class="tl normaltext">{{$permit->notes->note}}</td>
-            <td class="tl normaltext">{{ \App\Helpers\Currency::format($permit->notes->fee ?? '0.0') }}
+            <td class="tl normaltext">{{$permit['county']}}</td>
+            <td class="tl normaltext">{{$permit['number']}}</td>
+            <td class="tl normaltext">{{$note['note']}}</td>
+            <td class="tl normaltext">{{ \App\Helpers\Currency::format($note['fee'] ?? '0.0') }}
             </td>
         </tr>
+@php
+    $totalcost += $note['fee'];
+
+@endphp
     @endforeach
+
+    @endforeach
+    <tr style="border:5px solid #000000;">
+        <td colspan='4' class="tr normaltext"> Grand Total : {{ \App\Helpers\Currency::format($totalcost ?? '0.0') }}
+        </td>
+    </tr>
+
 </table>
 
 
