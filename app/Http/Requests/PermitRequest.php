@@ -15,9 +15,9 @@ class PermitRequest extends Request
 
     public function rules()
     {
-
         $statusRule = EnumFieldValues::get('permits', 'status');
         $typeRule = EnumFieldValues::get('permits', 'type');
+
         return [
             'proposal_id'        => 'required|positive',
             'proposal_detail_id' => 'nullable|integer|min:0',

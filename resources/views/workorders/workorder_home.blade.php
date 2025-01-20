@@ -167,9 +167,15 @@
                                         <td>@if($proposal['permit_required'])
                                                 YES
                                                 @if(auth()->user()->isAdmin())
-                                                    <button class="{{$site_button_class2}} float-right"
-                                                            id="addpermit">@lang('translation.add') @lang('translation.permit')
-                                                    </button>
+                                                    <span
+                                                        class="fr">
+                                                        <a
+                                                            href="{{ route('add_permit',['proposal_id' => $proposal['id']]) }}"
+                                                            class="{{ $site_button_class2 }}"
+                                                        >
+                                                            @lang('translation.add') @lang('translation.permit')
+                                                        </a>
+                                                    </span>
                                                 @endif
                                             @else
                                                 NO
@@ -682,12 +688,9 @@
                     }
                 });
 
-
                 $('#addpermit').click(function () {
-
-                    window.location.href = '{{ route('add_permit',['id'=>$proposal->id]) }}';
+                    window.location.href = '{{ route('add_permit',['proposal_id' => $proposal->id]) }}';
                 });
-
 
                 $('#addnotebutton').click(function () {
 

@@ -46,18 +46,15 @@
                     <div class="tab-content ">
                         <div class="tab-pane active" id="permits" role="tabpanel">
                             <div class="row mt-3 ml-0 mr-0">
-                                <form method="post" action="{{route('permit_update',['permit'=>$permit->id])}}"
-                                      id="permitform" class="w-100">
+                                <form method="post" action="{{ route('permit_update',['permit_id'=>$permit->id]) }}" id="permitform" class="w-100">
                                     @csrf
-
                                     <input name="_method" type="hidden" value="PATCH">
                                     <input type="hidden" name="returnTo" value="{{url()->current()}}">
                                     <input type="hidden" name="id" value="{{$permit->id}}">
                                     <input type="hidden" name="last_updated_by" value="{{auth()->user()->id}}">
                                     <input type="hidden" name="created_by" value="{{$permit->created_by}}">
-                                    <input type="hidden" name="proposal_detail_id"
-                                           value="{{isset($permit->proposal_detail->id) ? $permit->proposal_detail->id : 0 }}">
-                                    <input type="hidden" name="proposal_id" value="{{$permit->proposal->id}}">
+                                    <input type="hidden" name="proposal_detail_id" value="{{ $permit->proposal_detail->id ?? 0 }}">
+                                    <input type="hidden" name="proposal_id" value="{{ $permit->proposal->id }}">
 
                                     <div class="row">
                                         <div class="col-lg-3">

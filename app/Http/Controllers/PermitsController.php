@@ -34,7 +34,6 @@ class PermitsController extends Controller
         //EnumFieldValues::get($table, $column);
         $this->statusCB = EnumFieldValues::get('permits', 'status');
         $this->typesCB = EnumFieldValues::get('permits', 'type');
-
     }
 
 
@@ -102,7 +101,7 @@ class PermitsController extends Controller
     public function storeNote(Permit $permit, PermitNoteRequest $request)
     {
         if ($permit->id === null) {
-            if (! $permit = Permit::find($request->permit_id)) {
+            if (!$permit = Permit::find($request->permit_id)) {
                 return redirect()->back()->with('error', 'Permit not found.');
             }
         }
@@ -133,31 +132,85 @@ class PermitsController extends Controller
         }
     }
 
-    public function create($id)
+    public function create($proposal_id)
     {
-        $data['id'] = $id;
-        $data['proposal'] = Proposal::where('id', '=', $id)->first();
+        $data['proposal'] = Proposal::find($proposal_id);
         $data['statusCB'] = $this->statusCB;
         $counties = DB::table('florida_counties')->groupBy('county')->orderBy('county')->get(['county']);
         $data['counties'] = $counties;
-        $data['cert_holders'] = ['APEX', '3D', 'NONE'];
-
+        $data['cert_holders'] = [
+            '' => 'Select type',
+            'APEX' => 'APEX',
+            '3D' => '3D',
+            'NONE' => 'NONE',
+        ];
         $data['statuses'] = $this->statusCB;
         $data['types'] = $this->typesCB;
 
+        $statusOptionsCB = [];
+        foreach ($this->statusCB as $status) {
+            $statusOptionsCB[$status] = $status;
+        }
+        $data['statusOptionsCB'] = ['' => 'Select status'] + $statusOptionsCB;
+
+        $typeOptionsCB = [];
+        foreach ($this->typesCB as $type) {
+            $typeOptionsCB[$type] = $type;
+        }
+        $data['typeOptionsCB'] = ['' => 'Select type'] + $typeOptionsCB;
 
         return view('permit.create', $data);
     }
 
-    public function store(PermitRequest $request)
+    public function store(Request $request)
     {
-        $inputs = $request->all();
-        if (isset($inputs['submitted_on']) && $inputs['submitted_on'] <> '') {
+        $validator = Validator::make(
+            $request->only([
+                'proposal_id',
+                'status_selected',
+                'type',
+                'cert_holder',
+                'number',
+                'county',
+                'city',
+                'submitted_on',
+                'expires_on',
+            ]), [
+                'proposal_id' => 'required|positive',
+                'status_selected' => [
+                    Rule::in(EnumFieldValues::get('permits', 'status')),
+                ],
+                'type' => [
+                    Rule::in(EnumFieldValues::get('permits', 'type')),
+                ],
+                'cert_holder' => 'required|plainText',
+                'number' => 'required|plainText',
+                'county' => 'required|plainText',
+                'city' => 'required|plainText',
+                'submitted_on' => 'nullable|date',
+                'expires_on' => 'nullable|date',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->with('errors', $validator->messages());
+        }
+
+        $inputs = $validator->validated();
+
+        if ($request->submitted_on !== null) {
             $inputs['submitted_on'] = Carbon::createFromFormat('m/d/Y', $request->submitted_on)->format('Y-m-d');
         }
-        if (isset($inputs['expires_on']) && $inputs['expires_on'] <> '') {
+        if ($request->expires_on !== null) {
             $inputs['expires_on'] = Carbon::createFromFormat('m/d/Y', $request->expires_on)->format('Y-m-d');
         }
+
+        $inputs['status'] = $request->status_selected;
+        $inputs['created_by'] = auth()->user()->id;
+        $inputs['last_updated_by'] = auth()->user()->id;
+
         Permit::create($inputs);
 
         if (!empty($this->returnTo)) {
@@ -194,7 +247,11 @@ class PermitsController extends Controller
 
         $data = [
             'permit' => $permit,
-            'cert_holders' => ['APEX', '3D', 'NONE'],
+            'cert_holders' => [
+                'APEX' => 'APEX',
+                '3D' => '3D',
+                'NONE' => 'NONE',
+            ],
             'statusCB' => $this->statusCB,
             'countiesCB' => $countiesCB,
             'citiesCB' => $citiesCB,
@@ -205,8 +262,12 @@ class PermitsController extends Controller
         return view('permit.edit', $data);
     }
 
-    public function update(Permit $permit, PermitRequest $request)
+    public function update($permit_id, PermitRequest $request)
     {
+        if (!$permit = Permit::find($permit_id)) {
+            return redirect()->back()->with('error', 'Permit not found.');
+        }
+
         $inputs = $request->all();
 
         if (isset($inputs['submitted_on']) && $inputs['submitted_on'] <> '') {
@@ -251,7 +312,7 @@ class PermitsController extends Controller
         }
 
         if ($permit->id === null) {
-            if (! $permit = Permit::find($request->permit_id)) {
+            if (!$permit = Permit::find($request->permit_id)) {
                 return redirect()->back()->with('error', 'Permit not found.');
             }
         }
@@ -292,7 +353,7 @@ class PermitsController extends Controller
                     'error' => $validator->messages()->first(),
                 ]);
             }
-            if (! $permit = Permit::with([
+            if (!$permit = Permit::with([
                 'proposal',
                 'notes' => fn($q) => $q->with(['createdBy'])->orderBy('created_at', 'DESC')
             ])->find($request->permit_id)
