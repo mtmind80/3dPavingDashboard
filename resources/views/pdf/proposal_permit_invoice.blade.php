@@ -29,6 +29,7 @@
             font-style: italic;
 
         }
+
         .totalcolor {
             font-size: 20px;
             background-color: #ffffff;
@@ -77,12 +78,12 @@
             color: #000000;
         }
 
-        thead tr {
+        th tr {
             background-color: #ffffff;
             color: #000000;
         }
 
-        thead tr td {
+        th tr td {
             color: #000000;
         }
 
@@ -117,11 +118,11 @@
 &nbsp;<p>&nbsp;</p>
 &nbsp;<p>&nbsp;</p>
 <table>
-    <thead>
+    <th>
     <tr>
         <th class="headline">Permit Invoice</th>
     </tr>
-    </thead>
+    </th>
     <tbody>
     <tr>
         <td><h2>{{$proposal['name']}}</h2></td>
@@ -158,23 +159,41 @@
 </p>
 <h3>Permits</h3>
 <table>
+    <tr style="border:5px solid #000000;">
+        <th class="tl normaltext">County</th>
+        <th class="tl normaltext">Permit Number</th>
+        <th class="tl normaltext">Note</th>
+        <th class="tl normaltext">Fee</th>
+    </tr>
 
     @php
         $totalcost = 0;
     @endphp
-    @foreach ($permits as $permit)
-        @php
-            $totalcost += $permit->notes->fee;
-        @endphp
-
+    @foreach ($permits as $permit) {
+    @foreach($permit['notes'] as $note)
+    {
         <tr style="border:5px solid #000000;">
-            <td class="tl normaltext">{{$permit->county}}</td>
-            <td class="tl normaltext">{{$permit->number}}</td>
-            <td class="tl normaltext">{{$permit->notes->note}}</td>
-            <td class="tl normaltext">{{ \App\Helpers\Currency::format($permit->notes->fee ?? '0.0') }}
+            <td class="tl normaltext">{{$permit['county']}}</td>
+            <td class="tl normaltext">{{$permit['number']}}</td>
+            <td class="tl normaltext">{{$note['note']}}</td>
+            <td class="tl normaltext">{{ \App\Helpers\Currency::format($note['fee'] ?? '0.0') }}
             </td>
         </tr>
+@php
+    $totalcost += $note['fee'];
+
+@endphp
     @endforeach
+
+    @endforeach
+    <tr style="border:5px solid #000000;">
+        <td class="tl normaltext"></td>
+        <td class="tl normaltext"></td>
+        <td class="tr normaltext">Grand Total</td>
+        <td class="tl normaltext">{{ \App\Helpers\Currency::format($totalcost ?? '0.0') }}
+        </td>
+    </tr>
+
 </table>
 
 

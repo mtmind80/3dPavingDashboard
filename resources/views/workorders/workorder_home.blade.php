@@ -61,42 +61,37 @@
                             </a>
                         </li>
                     </ul>
+                    <table width="100%" class="table-centered table-bordered font-size-20">
+                        @if($proposal->proposal_statuses_id == 5)
+                            <tr>
+                                <td colspan='2' class="tl">
 
+                                    <a href="{{route('edit_workorder',['id'=> $proposal['id']])}}"
+                                       title="@lang('translation.edit') @lang('translation.work_order')"
+                                       class="{{$site_button_class3}}">
+                                        <i class="fas fa-plus"></i> @lang('translation.edit') @lang('translation.work_order')
+                                    </a>
+                                </td>
+                            </tr>
+                        @endif
+                        <tr>
+                            <td class="tl w-50">
+                                {{$proposal['name']}}
+                            </td>
+                            <td class="tl w-50">
+                                STATUS: {{ App\Models\ProposalStatus::find($proposal['proposal_statuses_id'])->status }}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="tl" colspan="2"><b>@lang('translation.workorderid')</b> {{$proposal['job_master_id']}}</td>
+                        </tr>
+                    </table>
                     <!-- Tab panes -->
                     <div class="tab-content plr0 pt30 pb0 text-muted">
                         <div class="tab-pane active" id="proposal" role="tabpanel">
                             <div class="row">
                                 <table width="100%" class="table-centered table-bordered font-size-20">
-                                    @if($proposal->proposal_statuses_id == 5)
-                                        <tr>
-                                            <td class="w-25">
-
-                                                <a href="{{route('edit_workorder',['id'=> $proposal['id']])}}"
-                                                   title="@lang('translation.edit') @lang('translation.proposal')"
-                                                   class="{{$site_button_class3}}">
-                                                    <i class="fas fa-plus"></i> @lang('translation.edit') @lang('translation.work_order')
-                                                </a>
-                                            </td>
-                                            <td class="tc w-75">
-                                            </td>
-                                        </tr>
-                                    @endif
-                                    <tr>
-                                        <td class="tc w-25">
-                                            {{$proposal['name']}}
-                                        </td>
-                                        <td class="tc w-75">
-                                            STATUS: {{ App\Models\ProposalStatus::find($proposal['proposal_statuses_id'])->status }}
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td><b>@lang('translation.workorderid')</b></td>
-                                        <td>
-                                            Work Order ID:{{$proposal['job_master_id']}}
-                                        </td>
-                                    </tr>
-
                                     <tr>
                                         <td>@lang('translation.location')</td>
                                         <td>
@@ -167,15 +162,9 @@
                                         <td>@if($proposal['permit_required'])
                                                 YES
                                                 @if(auth()->user()->isAdmin())
-                                                    <span
-                                                        class="fr">
-                                                        <a
-                                                            href="{{ route('add_permit',['proposal_id' => $proposal['id']]) }}"
-                                                            class="{{ $site_button_class2 }}"
-                                                        >
-                                                            @lang('translation.add') @lang('translation.permit')
-                                                        </a>
-                                                    </span>
+                                                    <button class="{{$site_button_class2}} float-right"
+                                                            id="addpermit">@lang('translation.add') @lang('translation.permit')
+                                                    </button>
                                                 @endif
                                             @else
                                                 NO
@@ -688,9 +677,12 @@
                     }
                 });
 
+
                 $('#addpermit').click(function () {
-                    window.location.href = '{{ route('add_permit',['proposal_id' => $proposal->id]) }}';
+
+                    window.location.href = '{{ route('add_permit',['id'=>$proposal->id]) }}';
                 });
+
 
                 $('#addnotebutton').click(function () {
 

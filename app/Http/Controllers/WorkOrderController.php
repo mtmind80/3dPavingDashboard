@@ -12,6 +12,7 @@ use App\Models\MediaType;
 use App\Models\Payment;
 use App\Models\Permit;
 use App\Models\Proposal;
+use App\Models\ProposalActions;
 use App\Models\ProposalDetail;
 use App\Http\Requests\ProposalNoteRequest;
 use App\Models\ProposalMedia;
@@ -169,26 +170,35 @@ class WorkOrderController extends Controller
     }
 
 
-public function cancelworkorder($id)
-{
+    public function cancelworkorder($id)
+    {
+
         if (auth()->user()->isAdmin()) {
             $proposal = Workorder::find($id);
         } else {
 
-    $proposal = Workorder::where('id', '=', $id)->where(function ($q) {
-        $q->where('salesmanager_id', auth()->user()->id)->orWhere('salesperson_id', auth()->user()->id);
-    })->first();
-    // managers do only if I am on the Workorder
-    if ($proposal) {
-        $proposal->status = 7;
-        $proposal->update();
-    }
-    return true;
-    //send email to manager and keith
-}
-    return view('pages-404');
+            $proposal = Workorder::where('id', '=', $id)->where(function ($q) {
+                $q->where('salesmanager_id', auth()->user()->id)->orWhere('salesperson_id', auth()->user()->id);
+            })->first();
+        }
+            // managers do only if I am on the Workorder
+            if ($proposal) {
+                $proposal->proposal_statuses_id = 7;
+                $proposal->update();
 
-}
+                $actions = New ProposalActions();
+                $actions->proposal_id = $id;
+                $actions->action_id = 18;
+                $actions->created_by = auth()->user()->id;
+                $actions->note ="Workorder was cancelled";
+                $actions->save();
+                return redirect()->action([WorkOrderController::class, 'index'])->with('success', 'Work Order was cancelled.');
+            }
+            //send email to manager and keith
+        return view('pages-404');
+
+    }
+
     public function view_service($proposal_id, $id)
     {
 
