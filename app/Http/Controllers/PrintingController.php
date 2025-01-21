@@ -231,8 +231,7 @@ public function setup(Request $request)
 
         $proposal = WorkOrder::find($id)->first();
         $permits = Permit::where('proposal_id', '=', $id)->with(['notes'])->get()->toArray();
-
-        $pdfname = "Permit_Invoice_" . $id . ".pdf";
+$pdfname = "Permit_Invoice_" . $id . ".pdf";
 
         $data['proposal'] = $proposal;
         $data['permits'] = $permits;
@@ -245,7 +244,7 @@ public function setup(Request $request)
         //merge with cover sheet
         $mergepdf = new \Jurosh\PDFMerge\PDFMerger;
         //add cover sheeet
-        $mergepdf->addPDF($this->storage_path . "coversheet.pdf", 'all', 'vertical');
+        //$mergepdf->addPDF($this->storage_path . "coversheet.pdf", 'all', 'vertical');
         // add in invoice
         $mergepdf->addPDF($this->storage_path . $pdfname, 'all');
         // call merge, output format `file`

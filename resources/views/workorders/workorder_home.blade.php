@@ -347,18 +347,20 @@
 
                                                         </br>
                                                     </td>
-                                               <!--     <td>
+                                                    <!--     <td>
                                                         @if($service->status_id)
-                                                            {{ App\Models\ProposalDetailStatus::find($service->status_id)->status }}
-                                                        @else
-                                                            No Status
+                                                        {{ App\Models\ProposalDetailStatus::find($service->status_id)->status }}
+                                                    @else
+                                                        No Status
+
                                                     @endif
                                                     <td>
                                                         @if($service->location_id)
-                                                            {!! App\Models\Location::find($service->location_id)->FullLocationTwoLines !!}
-                                                        @else
-                                                            No Location Specified
-                                                        @endif
+                                                        {!! App\Models\Location::find($service->location_id)->FullLocationTwoLines !!}
+                                                    @else
+                                                        No Location Specified
+
+                                                    @endif
                                                     </td>
                                                    -->
                                                     <td>
@@ -410,13 +412,13 @@
                                                                     @endif
 
 
-                                                                        <li>
-                                                                            <a href="{{route('view_service', ['proposal_id'=>$proposal['id'],'id'=>$service->id])}}"
-                                                                               class="list-group-item-action">
-                                                                                <span class="fa fa-edit"></span>
-                                                                                &nbsp; @lang('translation.edit') @lang('translation.service')
-                                                                            </a>
-                                                                        </li>
+                                                                    <li>
+                                                                        <a href="{{route('view_service', ['proposal_id'=>$proposal['id'],'id'=>$service->id])}}"
+                                                                           class="list-group-item-action">
+                                                                            <span class="fa fa-edit"></span>
+                                                                            &nbsp; @lang('translation.edit') @lang('translation.service')
+                                                                        </a>
+                                                                    </li>
 
                                                                     <li>
                                                                         <a href="{{route('workordermedia', ['proposal_id'=>$proposal['id'], 'proposal_detail_id'=>$service->id])}}"
@@ -566,10 +568,12 @@
                                         <a href="{{route('create_payment',['id'=>$proposal['id']])}}">Record
                                             Payments</a>
                                     </li>
-                                    <li>
-                                        <a href="{{route('permit_invoice',['id'=>$proposal['id']])}}">Invoice
-                                            Permits</a>
-                                    </li>
+                                    @if($proposal['permit_required'] && $permits)
+                                        <li>
+                                            <a href="{{route('permit_invoice',['id'=>$proposal['id']])}}">
+                                                Print Permits Invoice</a>
+                                        </li>
+                                    @endif
                                 </ul>
                             </div>
                             <div class="row">
@@ -644,149 +648,149 @@
             });
 
 
-                $('#set_alert_button').click(function () {
-                    alertModal.modal('show');
-                });
+            $('#set_alert_button').click(function () {
+                alertModal.modal('show');
+            });
 
-                alertModal.on('show.bs.modal', function () {
-                    alertForm.find('em.state-error').remove();
-                    alertForm.find('.field.state-error').removeClass('state-error');
-                    alertReason.val('');
-                })
+            alertModal.on('show.bs.modal', function () {
+                alertForm.find('em.state-error').remove();
+                alertForm.find('.field.state-error').removeClass('state-error');
+                alertReason.val('');
+            })
 
-                alertModal.on('hidden.bs.modal', function () {
-                    alertForm.find('em.state-error').remove();
-                    alertForm.find('.field.state-error').removeClass('state-error');
-                    alertReason.val('');
-                })
+            alertModal.on('hidden.bs.modal', function () {
+                alertForm.find('em.state-error').remove();
+                alertForm.find('.field.state-error').removeClass('state-error');
+                alertReason.val('');
+            })
 
-                alertForm.validate({
-                    rules: {
-                        alert_reason: {
-                            required: true,
-                            text: true
-                        }
-                    },
-                    messages: {
-                        alert_reason: {
-                            required: "@lang('translation.field_required')",
-                            text: "@lang('translation.invalid_entry')"
-                        }
-                    },
-                    submitHandler: function (form) {
-                        let errors = false;
-
-                        if (!errors) {
-                            alertForm.submit();
-                        }
+            alertForm.validate({
+                rules: {
+                    alert_reason: {
+                        required: true,
+                        text: true
                     }
-                });
-
-
-                $('#addpermit').click(function () {
-
-                    window.location.href = '{{ route('add_permit',['id'=>$proposal->id]) }}';
-                });
-
-
-                $('#addnotebutton').click(function () {
-
-                    let el = $(this);
-                    let ProposalNoteContainer = $('#formNoteModalLabel').find('span');
-                    let url = el.data('route');
-                    let ProposalName = el.data('proposal_name');
-
-                    noteForm.attr('action', url);
-                    ProposalNoteContainer.text(ProposalName);
-                    noteModal.modal('show');
-                });
-
-                noteModal.on('show.bs.modal', function () {
-                    noteForm.find('em.state-error').remove();
-                    noteForm.find('.field.state-error').removeClass('state-error');
-                })
-
-                noteModal.on('hidden.bs.modal', function () {
-                    noteForm.find('em.state-error').remove();
-                    noteForm.find('.field.state-error').removeClass('state-error');
-                })
-
-                noteForm.validate({
-                    rules: {
-                        note: {
-                            required: true,
-                            plainText: true
-                        }
-                    },
-                    messages: {
-                        note: {
-                            required: "@lang('translation.field_required')",
-                            plainText: "@lang('translation.invalid_entry')"
-                        }
-                    },
-                    submitHandler: function (form) {
-                        let errors = false;
-
-                        if (!errors) {
-                            noteForm.submit();
-                        }
+                },
+                messages: {
+                    alert_reason: {
+                        required: "@lang('translation.field_required')",
+                        text: "@lang('translation.invalid_entry')"
                     }
-                });
+                },
+                submitHandler: function (form) {
+                    let errors = false;
 
-
-                var mediaModal = $('#formMediaModal');
-                var mediaForm = $('#admin_form_media_modal');
-                var media = $('#media');
-
-                $('#addmediabutton').click(function () {
-
-
-                    let el = $(this);
-                    let ProposalMediaContainer = $('#formMediaModalLabel').find('span');
-                    let url = el.data('route');
-                    console.log(url);
-                    let ProposalName = el.data('proposal_name');
-                    console.log(ProposalName);
-
-                    mediaForm.attr('action', url);
-                    ProposalMediaContainer.text(ProposalName);
-                    mediaModal.modal('show');
-
-                });
-
-                mediaModal.on('show.bs.modal', function () {
-                    mediaForm.find('em.state-error').remove();
-                    mediaForm.find('.field.state-error').removeClass('state-error');
-                })
-
-                mediaModal.on('hidden.bs.modal', function () {
-                    mediaForm.find('em.state-error').remove();
-                    mediaForm.find('.field.state-error').removeClass('state-error');
-                })
-
-                mediaForm.validate({
-                    rules: {
-                        description: {
-                            required: true,
-                            plainText: true
-                        }
-                    },
-                    messages: {
-                        description: {
-                            required: "@lang('translation.field_required')",
-                            plainText: "@lang('translation.invalid_entry')"
-                        }
-                    },
-                    submitHandler: function (form) {
-                        let errors = false;
-
-                        if (!errors) {
-                            mediaForm.submit();
-                        }
+                    if (!errors) {
+                        alertForm.submit();
                     }
-                });
+                }
+            });
+
+
+            $('#addpermit').click(function () {
+
+                window.location.href = '{{ route('add_permit',['id'=>$proposal->id]) }}';
+            });
+
+
+            $('#addnotebutton').click(function () {
+
+                let el = $(this);
+                let ProposalNoteContainer = $('#formNoteModalLabel').find('span');
+                let url = el.data('route');
+                let ProposalName = el.data('proposal_name');
+
+                noteForm.attr('action', url);
+                ProposalNoteContainer.text(ProposalName);
+                noteModal.modal('show');
+            });
+
+            noteModal.on('show.bs.modal', function () {
+                noteForm.find('em.state-error').remove();
+                noteForm.find('.field.state-error').removeClass('state-error');
+            })
+
+            noteModal.on('hidden.bs.modal', function () {
+                noteForm.find('em.state-error').remove();
+                noteForm.find('.field.state-error').removeClass('state-error');
+            })
+
+            noteForm.validate({
+                rules: {
+                    note: {
+                        required: true,
+                        plainText: true
+                    }
+                },
+                messages: {
+                    note: {
+                        required: "@lang('translation.field_required')",
+                        plainText: "@lang('translation.invalid_entry')"
+                    }
+                },
+                submitHandler: function (form) {
+                    let errors = false;
+
+                    if (!errors) {
+                        noteForm.submit();
+                    }
+                }
+            });
+
+
+            var mediaModal = $('#formMediaModal');
+            var mediaForm = $('#admin_form_media_modal');
+            var media = $('#media');
+
+            $('#addmediabutton').click(function () {
+
+
+                let el = $(this);
+                let ProposalMediaContainer = $('#formMediaModalLabel').find('span');
+                let url = el.data('route');
+                console.log(url);
+                let ProposalName = el.data('proposal_name');
+                console.log(ProposalName);
+
+                mediaForm.attr('action', url);
+                ProposalMediaContainer.text(ProposalName);
+                mediaModal.modal('show');
 
             });
+
+            mediaModal.on('show.bs.modal', function () {
+                mediaForm.find('em.state-error').remove();
+                mediaForm.find('.field.state-error').removeClass('state-error');
+            })
+
+            mediaModal.on('hidden.bs.modal', function () {
+                mediaForm.find('em.state-error').remove();
+                mediaForm.find('.field.state-error').removeClass('state-error');
+            })
+
+            mediaForm.validate({
+                rules: {
+                    description: {
+                        required: true,
+                        plainText: true
+                    }
+                },
+                messages: {
+                    description: {
+                        required: "@lang('translation.field_required')",
+                        plainText: "@lang('translation.invalid_entry')"
+                    }
+                },
+                submitHandler: function (form) {
+                    let errors = false;
+
+                    if (!errors) {
+                        mediaForm.submit();
+                    }
+                }
+            });
+
+        });
     </script>
 @stop
 

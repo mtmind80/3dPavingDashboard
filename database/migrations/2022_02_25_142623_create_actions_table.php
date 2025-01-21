@@ -37,6 +37,7 @@ class CreateActionsTable extends Migration
             ['milestone' => 'Ready to Bill'],
             ['milestone' => 'Job Interim Billed'],
             ['milestone' => 'Job Billed'],
+            ['milestone' => 'Job Canceled'],
         );
         foreach ($data as $datum){
             $milestone = new App\Models\Actions;

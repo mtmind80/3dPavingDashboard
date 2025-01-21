@@ -1,28 +1,68 @@
 <input type="hidden" name="returnTo" value="{{ $returnTo ?? null }}">
 <input type="hidden" name="tab" value="{{ $tabSelected ?? null }}">
+
 <div class="row">
     <div class="col-lg-3 col-md-6 col-sm-6 admin-form-item-widget">
-        <x-form-select name="contact_type_id" :items="$typesCB" selected="{{ $contact->contact_type_id ?? old('contact_type_id') ?? null }}" :params="['label' => 'Contact Type', 'required' => true]"></x-form-select>
+        <span class="form-field-label"> Contact Type:<i class="field-required fa fa-asterisk" data-toggle="tooltip" title="" data-original-title="field requirede"></i></span>
+        <label class="field select prepend-icon">
+            <select name="contact_type_id" id="contact_type_id" value="" class="form-control grayed ">
+                <option value="0">Select type</option>
+                @foreach ($types as $type)
+                    <option
+                        id="value_id_{{ $type->id }}"
+                        value="{{ $type->id }}"
+                        data-entity_type="{{ $type->entity_type }}"
+                        @if (!empty($contact->contact_type_id) && (int) $contact->contact_type_id === (int) $type->id)
+                            selected="selected"
+                        @endif
+                    >
+                        {{ $type->type }}
+                    </option>
+                @endforeach
+            </select>
+            <i class="arrow double"></i>
+            <span class="field-icon"><i class="fas fa-indent"></i></span>
+        </label>
+        {{--
+        <x-form-select name="contact_type_id" id="contact_type_id" :items="$typesCB" selected="{{ $contact->contact_type_id ?? old('contact_type_id') ?? null }}" :params="['label' => 'Contact Type', 'required' => true]"></x-form-select>
+        --}}
     </div>
-    {{--
-    <div class="col-lg-3 col-md-6 col-sm-6 admin-form-item-widget">
-        <x-form-check-box class="not-xs-mt34" name="is_lead" id="is_lead" value="1" checked="{{ !empty($contact->is_lead) }}">Is Lead?</x-form-check-box>
-    </div>
-    <div id="lead_source_container" class="lead-source col-lg-3 col-md-6 col-sm-6 admin-form-item-widget{{ empty($contact->is_lead) ? ' hidden' : '' }}">
-        <x-form-select name="lead_source" id="lead_source" :items="$sourcesCB" selected="{{ $contact->lead_source ?? null }}" :params="['label' => 'Lead Source', 'required' => true]"></x-form-select>
-    </div>
-    <div id="assigned_to_container" class="lead-source col-lg-3 col-md-6 col-sm-6 admin-form-item-widget{{ empty($contact->is_lead) ? ' hidden' : '' }}">
-        <x-form-select name="assigned_to" id="assigned_to" :items="$assignedToCB" selected="{{ $contact->assigned_to ?? null }}" :params="['label' => 'Assigned To', 'required' => true]"></x-form-select>
-    </div>
-    --}}
 </div>
 <div class="row">
-    <div class="col-lg-3 col-md-6 col-sm-6 admin-form-item-widget">
-        <x-form-text name="first_name" class="check-contact" :params="['label' => 'First Name / Company Name', 'iconClass' => 'fas fa-user', 'required' => true]">{{ $contact->first_name ?? old('first_name') ?? null }}</x-form-text>
+    <div
+        id="person_first_name_fields_container"
+        class="
+            col-lg-3 col-md-6 col-sm-6 admin-form-item-widget
+            @if (empty($contact->contact_type_id) || $contact->contactType->entity_type !== 'person')
+                hidden
+            @endif
+        "
+    >
+        <x-form-text name="{{ !empty($contact->contact_type_id) && $contact->contactType->entity_type === 'person' ? 'first_name' : '' }}" class="check-contact" :params="['label' => 'First Name', 'iconClass' => 'fas fa-user', 'required' => true]">{{ $contact->first_name ?? old('first_name') ?? null }}</x-form-text>
     </div>
-    <div class="col-lg-3 col-md-6 col-sm-6 admin-form-item-widget">
-        <x-form-text name="last_name" class="check-contact" :params="['label' => 'Last Name', 'iconClass' => 'fas fa-user', 'required' => false]">{{ $contact->last_name ?? old('email') ?? null }}</x-form-text>
+
+    <div
+        id="person_last_name_fields_container"
+        class="col-lg-3 col-md-6 col-sm-6 admin-form-item-widget
+            @if (empty($contact->contact_type_id) || $contact->contactType->entity_type !== 'person')
+                hidden
+            @endif
+        "
+    >
+        <x-form-text name="last_name" class="check-contact" :params="['label' => 'Last Name', 'iconClass' => 'fas fa-user', 'required' => false]">{{ $contact->last_name ?? old('last_name') ?? null }}</x-form-text>
     </div>
+
+    <div
+        id="company_name_field_container"
+        class="col-lg-6 col-md-6 col-sm-6 admin-form-item-widget
+            @if (empty($contact->contact_type_id) || $contact->contactType->entity_type !== 'company')
+                hidden
+            @endif
+        "
+    >
+        <x-form-text name="{{ !empty($contact->contact_type_id) && $contact->contactType->entity_type === 'company' ? 'first_name' : '' }}" class="check-contact" :params="['label' => 'Company Name', 'iconClass' => 'fas fa-building', 'required' => true]">{{ $contact->first_name ?? old('first_name') ?? null }}</x-form-text>
+    </div>
+
     <div class="col-lg-3 col-md-6 col-sm-6 admin-form-item-widget">
         <x-form-text name="email" class="check-contact" :params="['label' => 'Email', 'iconClass' => 'fas fa-envelope', 'required' => true]">{{ $contact->email ??  old('email') ?? null }}</x-form-text>
     </div>
@@ -122,9 +162,18 @@
 
             //alert(isZipCode(zipCode));
 
+            var personFirstNameFieldsContainer = $('#person_first_name_fields_container');
+            var personFirstNameInputField = personFirstNameFieldsContainer.find('input:text');
+            var personLastNameFieldsContainer = $('#person_last_name_fields_container');
+            
+            var companyNameFieldContainer = $('#company_name_field_container');
+            var companyNameInputField = companyNameFieldContainer.find('input:text');
+
+            var contactTypeIdSelect = $('#contact_type_id');
 
             var countyEl = $('#county');
             var cityEl = $('#city');
+
 
             console.log(countyEl);
             console.log(cityEl);
@@ -174,9 +223,6 @@
                 });
             });
 
-
-
-                //var isLead = $('#is_lead');
             var sameBillingAddress = $('#same_billing_address');
             var address1 = $('#address1');
             var address2 = $('#address2');
@@ -235,6 +281,32 @@
                     });
                 }
             });
+
+            contactTypeIdSelect.on('change', function(){
+                let select = $(this);
+                let contactTypeId = select.val();
+                let opctionSeledted = select.find('option:selected');
+                let contactTypeEntityType = opctionSeledted.data('entity_type');
+
+                if (contactTypeEntityType === 'person') {
+                    personFirstNameFieldsContainer.removeClass('hidden');
+                    personFirstNameInputField.attr('name', 'first_name');
+
+                    personLastNameFieldsContainer.removeClass('hidden');
+
+                    companyNameFieldContainer.addClass('hidden');
+                    companyNameInputField.removeAttr('name');
+
+                } else if (contactTypeEntityType === 'company') {
+                    personFirstNameFieldsContainer.addClass('hidden');
+                    personFirstNameInputField.removeAttr('name');
+
+                    personLastNameFieldsContainer.addClass('hidden');
+                    
+                    companyNameFieldContainer.removeClass('hidden');
+                    companyNameInputField.attr('name', 'first_name');
+                }
+            })
 
             $('#admin_form').validate({
                 rules: {
@@ -465,11 +537,11 @@
                     billingState.prop('disabled', false);
                     billingZipcode.prop('disabled', false);
                     /*
-                    billingAddress1.val('').prop('disabled', false);
-                    billingAddress2.val('').prop('disabled', false);
-                    billingCity.val('').prop('disabled', false);
-                    billingState.val('').prop('disabled', false);
-                    billingZipcode.val('').prop('disabled', false);
+                    billingAddress1.prop('disabled', false);
+                    billingAddress2.prop('disabled', false);
+                    billingCity.prop('disabled', false);
+                    billingState.prop('disabled', false);
+                    billingZipcode.prop('disabled', false);
                     */
                 }
             });
