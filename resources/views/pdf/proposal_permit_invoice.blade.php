@@ -78,12 +78,12 @@
             color: #000000;
         }
 
-        thead tr {
+        th tr {
             background-color: #ffffff;
             color: #000000;
         }
 
-        thead tr td {
+        th tr td {
             color: #000000;
         }
 
@@ -118,11 +118,11 @@
 &nbsp;<p>&nbsp;</p>
 &nbsp;<p>&nbsp;</p>
 <table>
-    <thead>
+    <th>
     <tr>
         <th class="headline">Permit Invoice</th>
     </tr>
-    </thead>
+    </th>
     <tbody>
     <tr>
         <td><h2>{{$proposal['name']}}</h2></td>
@@ -159,6 +159,12 @@
 </p>
 <h3>Permits</h3>
 <table>
+    <tr style="border:5px solid #000000;">
+        <th class="tl normaltext">County</th>
+        <th class="tl normaltext">Permit Number</th>
+        <th class="tl normaltext">Note</th>
+        <th class="tl normaltext">Fee</th>
+    </tr>
 
     @php
         $totalcost = 0;
@@ -181,7 +187,10 @@
 
     @endforeach
     <tr style="border:5px solid #000000;">
-        <td colspan='4' class="tr normaltext"> Grand Total : {{ \App\Helpers\Currency::format($totalcost ?? '0.0') }}
+        <td class="tl normaltext"></td>
+        <td class="tl normaltext"></td>
+        <td class="tr normaltext">Grand Total</td>
+        <td class="tl normaltext">{{ \App\Helpers\Currency::format($totalcost ?? '0.0') }}
         </td>
     </tr>
 

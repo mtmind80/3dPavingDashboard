@@ -61,42 +61,37 @@
                             </a>
                         </li>
                     </ul>
+                    <table width="100%" class="table-centered table-bordered font-size-20">
+                        @if($proposal->proposal_statuses_id == 5)
+                            <tr>
+                                <td colspan='2' class="tl">
 
+                                    <a href="{{route('edit_workorder',['id'=> $proposal['id']])}}"
+                                       title="@lang('translation.edit') @lang('translation.work_order')"
+                                       class="{{$site_button_class3}}">
+                                        <i class="fas fa-plus"></i> @lang('translation.edit') @lang('translation.work_order')
+                                    </a>
+                                </td>
+                            </tr>
+                        @endif
+                        <tr>
+                            <td class="tl w-50">
+                                {{$proposal['name']}}
+                            </td>
+                            <td class="tl w-50">
+                                STATUS: {{ App\Models\ProposalStatus::find($proposal['proposal_statuses_id'])->status }}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="tl" colspan="2"><b>@lang('translation.workorderid')</b> {{$proposal['job_master_id']}}</td>
+                        </tr>
+                    </table>
                     <!-- Tab panes -->
                     <div class="tab-content plr0 pt30 pb0 text-muted">
                         <div class="tab-pane active" id="proposal" role="tabpanel">
                             <div class="row">
                                 <table width="100%" class="table-centered table-bordered font-size-20">
-                                    @if($proposal->proposal_statuses_id == 5)
-                                        <tr>
-                                            <td class="w-25">
-
-                                                <a href="{{route('edit_workorder',['id'=> $proposal['id']])}}"
-                                                   title="@lang('translation.edit') @lang('translation.proposal')"
-                                                   class="{{$site_button_class3}}">
-                                                    <i class="fas fa-plus"></i> @lang('translation.edit') @lang('translation.work_order')
-                                                </a>
-                                            </td>
-                                            <td class="tc w-75">
-                                            </td>
-                                        </tr>
-                                    @endif
-                                    <tr>
-                                        <td class="tc w-25">
-                                            {{$proposal['name']}}
-                                        </td>
-                                        <td class="tc w-75">
-                                            STATUS: {{ App\Models\ProposalStatus::find($proposal['proposal_statuses_id'])->status }}
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td><b>@lang('translation.workorderid')</b></td>
-                                        <td>
-                                            Work Order ID:{{$proposal['job_master_id']}}
-                                        </td>
-                                    </tr>
-
                                     <tr>
                                         <td>@lang('translation.location')</td>
                                         <td>
@@ -316,17 +311,17 @@
                                 <div class="col-lg-12">
                                     @if($services)
 
-                                        <table style="width:100%"
-                                               class="list-table table table-centered table-bordered">
+                                        <table style="width:100%;"
+                                               class="w100perc list-table table table-centered table-bordered">
                                             <thead>
                                             <tr style="background:#E5E8E8;color:#000;">
-                                                <td class="w250"><b>@lang('translation.workorderservices')</b></td>
+                                                <td class="tl"><b>@lang('translation.workorderservices')</b></td>
                                                 <!--
                                                 <td class="w50"><b>@lang('translation.status')</b></td>
                                                 <td class="w230"><b>@lang('translation.location')</b></td>
                                                 -->
-                                                <td class="w200"><b>@lang('translation.fieldmanager')</b></td>
-                                                <td class="w120"><b>@lang('translation.cost')</b></td>
+                                                <td class="tl"><b>@lang('translation.fieldmanager')</b></td>
+                                                <td class="tl"><b>@lang('translation.cost')</b></td>
                                                 <td class="actions tc"><b>@lang('translation.actions')</b></td>
                                             </tr>
                                             </thead>
@@ -416,7 +411,7 @@
                                                                         <a href="{{route('view_service', ['proposal_id'=>$proposal['id'],'id'=>$service->id])}}"
                                                                            class="list-group-item-action">
                                                                             <span class="fa fa-edit"></span>
-                                                                            &nbsp; @lang('translation.edit') @lang('translation.service')
+                                                                            &nbsp; @lang('translation.view') @lang('translation.service')
                                                                         </a>
                                                                     </li>
 
@@ -446,14 +441,12 @@
                                                     </td>
                                                 </tr>
                                             @endforeach
-                                            </tbody>
-                                            <tfoot>
-                                            <tr class="pt10 no-border">
-                                                <td class="tr" colspan="4">Grand Total:</td>
-                                                <td class="tc">{{ $currency_total_details_costs }}</td>
+                                            <tr>
+                                                <td class="tr" colspan="2">Grand Total:</td>
+                                                <td class="tl">{{ $currency_total_details_costs }}</td>
                                                 <td class="tr"></td>
                                             </tr>
-                                            </tfoot>
+                                            </tbody>
                                         </table>
                                     @endif
                                 </div>
