@@ -78,20 +78,6 @@
                                                             class="fa fa-angle-down"></i></a>
                                                     <ul class="dropdown-menu animated animated-short flipInX" role="menu"
                                                     >
-                                                        @if ($permit->notes->count() > 0)
-                                                            <li>
-                                                                <a href="javascript:"
-                                                                   class="action"
-                                                                   data-action="list-notes"
-                                                                   data-permit_id="{{ $permit->id }}"
-                                                                   data-proposal_name="{{ $permit->proposal->name }}"
-                                                                   data-permit_number="{{ $permit->number }}"
-                                                                >
-                                                                    <span class="fas fa-comments"></span>
-                                                                    @lang('translation.notes')
-                                                                </a>
-                                                            </li>
-                                                        @endif
                                                         @if(auth()->user()->isAdmin())
                                                             <li>
                                                                 <a href="javascript:"
@@ -133,6 +119,22 @@
                                                                     class="fas fa-eye"></span>@lang('translation.view') @lang('translation.work_order')
                                                             </a>
                                                         </li>
+
+                                                            @if ($permit->notes->count() > 0)
+                                                                <li>
+                                                                    <a href="javascript:"
+                                                                       class="action"
+                                                                       data-action="list-notes"
+                                                                       data-permit_id="{{ $permit->id }}"
+                                                                       data-proposal_name="{{ $permit->proposal->name }}"
+                                                                       data-permit_number="{{ $permit->number }}"
+                                                                    >
+                                                                        <span class="fas fa-comments"></span>
+                                                                        @lang('translation.view') @lang('translation.notes')
+                                                                    </a>
+                                                                </li>
+                                                            @endif
+
                                                     </ul>
                                                 </li>
                                             </ul>
