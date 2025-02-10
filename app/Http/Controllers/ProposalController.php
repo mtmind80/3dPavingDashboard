@@ -62,7 +62,7 @@ class ProposalController extends Controller
         $data = array();
         //List active proposals
         $proposals = Proposal::where('proposal_statuses_id', '=', 1)->where(function ($q) {
-            $q->where('salesmanager_id', auth()->user()->id)->orWhere('salesperson_id', auth()->user()->id);
+            $q->where('salesmanager_id', auth()->user()->id)->orWhere('salesperson_id', auth()->user()->Fid);
         })->get()->toArray();
 
 
@@ -154,6 +154,7 @@ class ProposalController extends Controller
         $proposal_id = DB::table('proposals')->insertGetId(
             $data
         );
+        $this->globalrecordactions($proposal_id, 1, 'Proposal Created');
 
         //save current material pricing
         $this->setMaterialPricing($proposal_id);
@@ -944,6 +945,7 @@ class ProposalController extends Controller
             }
 
         }
+        $this->globalrecordactions($new_id, 1, 'Proposal : ' . $id . ' Cloned');
 
 
         //push materials
@@ -1002,13 +1004,10 @@ class ProposalController extends Controller
 
     public function changestatus(Request $request)
     {
-
-
         if (isset($request['status'])) {
             $status = $request['status'];
             $note = $request['note'];
             $reason = $request['reason'];
-            $action_id = intval($status) + 1;
             $proposal_id = $request['proposal_id'];
         }
         $proposal = Proposal::where('id', '=', $proposal_id)->first();
@@ -1018,12 +1017,15 @@ class ProposalController extends Controller
         if ($status == 1) // Proposal sent
         {
             $note = "Proposal Reset to Pending";
+            $action_id = 1;
 
         }
 
-        if ($status == 2 && $proposal->changeorder_id == null) // approved
+        if ($status == 5 && $proposal->changeorder_id == null) // active job
         {
-            // create job master id and set sale date to taday
+            $action_id = 3;//Proposal Approved
+
+            // create job master id and set sale date to today
             $year = date('Y');
             $maxrec = Proposal::where(DB::raw('YEAR(created_at)'), '=', $year)->get()->count();
             $maxrec = $maxrec + 1;
@@ -1034,18 +1036,22 @@ class ProposalController extends Controller
             //approved create work order
             $proposal->job_master_id = $jobMasterId;
             $proposal->sale_date = date_create()->format('Y-m-d H:i:s');
+            $note = "Proposal Approved";
         }
 
 
         if ($status == 3) // rejected
         {
             $proposal->rejected_reason = $reason;
+            $action_id = 4;//Proposal rejected
             // do something when rejected  email Keith
+            $note = $reason;
         }
 
         if ($status == 4) // Proposal sent
         {
             $note = "Proposal Sent to Client";
+            $action_id = 2;//Proposal sent
 
         }
 
@@ -1053,7 +1059,7 @@ class ProposalController extends Controller
 
         $this->globalrecordactions($proposal_id, $action_id, $note);
 
-        if ($status == 2) // approved
+        if ($status == 5) // active job
         {
             return redirect()->route('show_workorder', ['id' => $proposal_id])->with('success', 'Proposal status changed.');
         }
@@ -1203,12 +1209,10 @@ class ProposalController extends Controller
                 $proposal->alert_reason = $request->alert_reason;
                 $proposal->save();
 
-                $proposalAction = new ProposalActions;
-                $proposalAction->proposal_id = $proposal->id;
-                $proposalAction->action_id = 6;     // set alert
-                $proposalAction->created_by = auth()->user()->id;
-                $proposalAction->note = $proposal->alert_reason;
-                $proposalAction->save();
+                $proposal_id = $proposal->id;
+                $action_id = 6;     // set alert
+                $note = $proposal->alert_reason;
+                $this->globalrecordactions($proposal_id, $action_id, $note);
             });
         } catch (Exception $e) {
             redirect()->back()->with('error', $e->getMessage());
@@ -1243,12 +1247,9 @@ class ProposalController extends Controller
                 $proposal->alert_reason = null;
                 $proposal->save();
 
-                $proposalAction = new ProposalActions;
-                $proposalAction->proposal_id = $proposal->id;
-                $proposalAction->action_id = 7;     // remove alert
-                $proposalAction->created_by = auth()->user()->id;
-                $proposalAction->note = null;
-                $proposalAction->save();
+                $proposal_id = $proposal->id;
+                $action_id = 7;
+                $note = 'Remove Alert';// remove alert
             });
         } catch (Exception $e) {
             redirect()->back()->with('error', $e->getMessage());

@@ -438,7 +438,7 @@
                                                 onchange="Javascript:shownote(this);">
                                             <option value="1">Reset Proposal to Pending</option>
                                             <option value="4">Proposal Sent to Client</option>
-                                            <option value="2" selected>Client Approved Proposal</option>
+                                            <option value="5" selected>Client Approved Proposal</option>
                                             <option value="3">Client Rejected Proposal (add reason)</option>
                                         </select>
                                         <br/>
@@ -449,7 +449,7 @@
                                             Rejected Reason: <br/><select class="form-control-sm" id="reason"
                                                                           name="reason">
                                                 <option selected>Client decided not to do the work.</option>
-                                                <option>Client accepted a competeing bid.</option>
+                                                <option>Client accepted a competing bid.</option>
                                                 <option>Could not meet the clients needs.</option>
                                                 <option>Other</option>
                                             </select>
