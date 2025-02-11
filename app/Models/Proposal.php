@@ -32,6 +32,7 @@ class Proposal extends Model
 
     public $searchable = [
         'name' => "LIKE",
+        'id' => "=",
         'job_master_id' => "LIKE",
         'childModels' => [
             'contact' => [

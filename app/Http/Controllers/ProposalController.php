@@ -131,7 +131,14 @@ class ProposalController extends Controller
         $data['progressive_billing'] = $request['progressive_billing'] ?? 0;
 
         //insert a location
-        $location = Location::where('address_line1', '=', $request['address1'])->where('city', '=', $request['city'])->first();
+        if($request['location_id'])
+        {
+            $location = Location::where('id', '=', $request['location_id'])->first();
+        } else
+        {
+            $location = Location::where('address_line1', '=', $request['address1'])->where('city', '=', $request['city'])->first();
+
+        }
         if ($location) {
             $id = $location->id;
         } else {
@@ -207,6 +214,60 @@ class ProposalController extends Controller
             return redirect()->back();
         }
 
+    }
+
+
+
+    //start new proposal w client and location
+    public function startWithContactandLocation($location, $contact)
+    {
+
+
+        // start new proposal
+        $data['proposal'] = null;
+        $contactstaff = [];
+        $data['submit_caption'] = "Submit";
+        $data['cancel_caption'] = "Cancel";
+        $data['states'] = State::all()->toArray();
+        $data['counties'] = County::select('county')->distinct()->orderBy('county')->get();
+        $contact = Contact::where('id', $contact)->first();
+        $location = Location::where('id','=',$location)->first();
+        $data['contact'] = $contact;
+        $data['location'] = $location;
+        $data['lead_id'] = 0;
+
+        $contactstaff[$contact->id] = $contact->Full_Name;
+        $staff = Contact::where('related_to', '=', $contact->id)->get();
+        $staff = json_decode(json_encode($staff), true);
+        if ($staff) {
+            foreach ($staff as $s) {
+                $contactstaff[$s['id']] = $s['first_name'] . ' ' . $s['last_name'];
+            }
+        }
+
+        $data['staff'] = $contactstaff;
+
+        $salesManagersCB = Cache::remember('salesManagersCB', env('CACHE_TIMETOLIVE'), function () {
+            $salesManagersCB = Proposal::salesManagersCB();
+            return json_encode($salesManagersCB);
+
+        });
+
+        $data['salesManagersCB'] = json_decode($salesManagersCB, true);
+
+        $salesPersonsCB = Cache::remember('salesPersonsCB', env('CACHE_TIMETOLIVE'), function () {
+            $salesPersonsCB = Proposal::salesPersonsCB();
+            return json_encode($salesPersonsCB);
+
+        });
+        $data['isSales'] = auth()->user()->isSales();
+        $data['user_id'] = auth()->user()->id;
+        $data['locationTypesCB'] = Location::locationTypesCB();
+        $data['countiesCB'] = Location::countiesCB();
+        $data['salesPersonsCB'] = json_decode($salesPersonsCB, true);
+        \Session::flash('message', 'Your proposal was created!');
+
+        return view('proposals.create_proposalwLocation', $data);
     }
 
     //start new proposal w client
@@ -1056,7 +1117,6 @@ class ProposalController extends Controller
         }
 
         $proposal->save();
-
         $this->globalrecordactions($proposal_id, $action_id, $note);
 
         if ($status == 5) // active job

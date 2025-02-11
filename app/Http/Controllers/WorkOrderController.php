@@ -30,12 +30,7 @@ class WorkOrderController extends Controller
     {
         $needle = $request->needle ?? null;
         $perPage = $request->perPage ?? 50;
-
-        $query = WorkOrder::search($needle)->sortable()->where('proposal_statuses_id', 5);
-
-        if (!auth()->user()->isAdmin()) {
-            $query->where('salesperson_id', auth()->user()->id);
-        }
+        $query = WorkOrder::search($needle)->sortable();
 
         $workorders = $query->with(['location', 'contact', 'status', 'salesPerson'])->orderBy('proposal_date', 'DESC')->paginate($perPage);
 
