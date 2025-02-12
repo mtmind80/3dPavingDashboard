@@ -116,6 +116,7 @@ class PermitsController extends Controller
                 ];
 
                 PermitNote::create($data);
+
             });
         } catch (Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
@@ -212,6 +213,9 @@ class PermitsController extends Controller
         $inputs['last_updated_by'] = auth()->user()->id;
 
         Permit::create($inputs);
+        $note = "Permit Created";
+        $action_id = 10;
+        $this->globalrecordactions($inputs['proposal_id'], $action_id, $note);
 
         if (!empty($this->returnTo)) {
             return redirect()->to($this->returnTo)->with('success', 'Permit Added.');
@@ -277,16 +281,27 @@ class PermitsController extends Controller
             $inputs['expires_on'] = Carbon::createFromFormat('m/d/Y', $request->expires_on)->format('Y-m-d');
         }
 
-        //updated permit so get sames person email
+        //updated permit so get sales person email
         $proposal = Proposal::where('id', '=', $permit->proposal_id)->with(['salesPerson'])->first()->toArray();
 
         //        dd($inputs);
 
         if ($permit->update($inputs)) {
+            $note = "Permit Updated:" . $inputs['status'];
+            $action_id = 11;
+            if($inputs['status'] == 'Completed')
+            {
+                $action_id = 12;
+            }
+            $this->globalrecordactions($inputs['proposal_id'], $action_id, $note);
+
+
             $subject = 'You have received a notification from  ' . env('APP_NAME');
             $msg = "Permit Updated";
-
             Mail::to($proposal['sales_person']['email'])->send(new PermitUpdateToManager($permit, $subject));
+
+
+
 
         };
 
