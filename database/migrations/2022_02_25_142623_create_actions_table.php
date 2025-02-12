@@ -20,7 +20,7 @@ class CreateActionsTable extends Migration
         });
 
         $data =  array(
-            ['milestone' => 'Take Off Completed'],
+            ['milestone' => 'Proposal Created'],
             ['milestone' => 'Proposal Sent'],
             ['milestone' => 'Proposal Approved'],
             ['milestone' => 'Proposal Rejected'],
@@ -30,14 +30,15 @@ class CreateActionsTable extends Migration
             ['milestone' => 'MOT Sent'],
             ['milestone' => 'NTO Sent'],
             ['milestone' => 'Permit Filed'],
-            ['milestone' => 'Permit Delayed'],
-            ['milestone' => 'Permit Approved'],
+            ['milestone' => 'Permit Updated'],
+            ['milestone' => 'Permit Completed'],
             ['milestone' => 'Ready To Close'],
             ['milestone' => 'Job Completed'],
             ['milestone' => 'Ready to Bill'],
             ['milestone' => 'Job Interim Billed'],
             ['milestone' => 'Job Billed'],
             ['milestone' => 'Job Canceled'],
+            ['milestone' => 'Other Action'],
         );
         foreach ($data as $datum){
             $milestone = new App\Models\Actions;

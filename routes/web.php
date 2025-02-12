@@ -362,6 +362,7 @@ Route::group(['prefix' => 'proposals'], function() {
 
     Route::get('/fromcontact/{contact}', 'ProposalController@startWithContact')->name('start_from_contact');
 
+    Route::get('/fromcontactlocation/{location}/{contact}', 'ProposalController@startWithContactandLocation')->name('new_proposal_with_location');
 
     Route::post('/updatelocation/{proposal}/{location}', 'ProposalController@update_location')->name('update_location');
 

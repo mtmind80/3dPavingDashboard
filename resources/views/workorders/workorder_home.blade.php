@@ -682,7 +682,7 @@
 
             $('#addpermit').click(function () {
 
-                window.location.href = '{{ route('add_permit',['id'=>$proposal->id]) }}';
+                window.location.href = '{{ route('add_permit',['proposal_id'=>$proposal['id']]) }}';
             });
 
 
