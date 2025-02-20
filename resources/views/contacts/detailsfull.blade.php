@@ -4,7 +4,7 @@
 
 @section('content')
     @component('components.breadcrumb')
-        @slot('title') @lang('translation.Contacts') @endslot
+        @slot('title') @lang('translation.Contacts') "{{ $contact->full_name }}"@endslot
         @slot('li_1') <a href="{{ route('dashboard') }}">@lang('translation.Dashboard')</a>@endslot
         @slot('li_2') <a href="{{ route('contact_list') }}">@lang('translation.Contacts')</a>@endslot
         @slot('li_3') "{{ $contact->full_name }}" @endslot
@@ -60,7 +60,7 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-lg-2 col-md-3 col-sm-6 admin-form-item-widget">
+                                <div class="col-lg-4 col-md-3 col-sm-6 admin-form-item-widget">
                                    <span class="fas fa-sticky-note"> </span> Contact Type :{{ $contact->contactType->type ?? null }}
                                 </div>
                                 <div class="col-lg-4 col-md-3 col-sm-6 admin-form-item-widget">
@@ -269,7 +269,7 @@
                             <div class="tab-pane" id="proposals" role="tabpanel">
                                 <div class="row">
                                     <div class="col-md-8 col-sm-6 mb20">
-                                        <x-href-button url="{{ route('start_from_contact', ['contact' => $contact->id, 'returnTo' => Request::url(), 'tab' => 'proposals']) }}" class="btn-success"><i class="fas fa-edit"></i>@lang('translation.newproposal')</x-href-button>
+                                        <x-href-button url="{{ route('start_from_contact', ['contact' => $contact->id, 'returnTo' => Request::url(), 'tab' => 'proposals']) }}" class="btn-success"><i class="fas fa-edit"></i>@lang('translation.newproposal') at New Location</x-href-button>
                                     </div>
                                     <div class="col-md-4 col-sm-6 mb20"></div>
                                 </div>
