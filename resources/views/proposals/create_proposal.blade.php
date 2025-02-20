@@ -182,6 +182,31 @@
                         </div>
 
                     </form>
+
+                    <h3>Existing Proposals</h3>
+                    <table class="list-table table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                        <thead>
+                        <tr>
+                            <th class="tc w400">Name</th>
+                            <th class="tc">Location</th>
+                            <th class="tc">Create New</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach ($contact->proposals as $proposals)
+                            <tr>
+                                <td class="tc"><a href="{{ route('show_proposal',['id'=>$proposals->id]) }}">{{ $proposals->name }}</a></td>
+                                <td class="tc">{!! $proposals->location->full_location_two_lines ?? null !!}</td>
+                                <td class="tc">
+                                    @if($proposals->location_id)
+                                        <a href="{{ route('new_proposal_with_location',['location'=>$proposals->location->id,'contact' =>$contact->id]) }}">Create Proposal at This Location</a>
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+
                 </div>
             </div>
         </div>

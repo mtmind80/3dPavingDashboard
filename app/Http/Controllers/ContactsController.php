@@ -365,6 +365,7 @@ class ContactsController extends Controller
 
         $data = [
             'contact' => $contact,
+            'tabSelected' => 'proposals',
         ];
 
         return view('contacts.detailsfull', $data);
