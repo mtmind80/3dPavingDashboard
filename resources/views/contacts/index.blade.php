@@ -15,7 +15,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-8 col-sm-6 mb20">
-                            <x-href-button url="{{ route('contact_create', ['returnTo' => Request::url()]) }}" class="{{$site_button_class}}"><i class="fas fa-plus"></i>@lang('translation.new') @lang('translation.client')</x-href-button>
+                            <x-href-button url="{{ route('contact_create', ['returnTo' => Request::url()]) }}" class="{{$site_button_class2}}"><i class="fas fa-plus"></i>@lang('translation.new') @lang('translation.client')</x-href-button>
                         </div>
                         <div class="col-md-4 col-sm-6 mb20">
                             <x-search :needle="$needle" search-route="{{ route('contact_search') }}" cancel-route="{{ route('contact_list') }}" ></x-search>

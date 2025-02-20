@@ -21,19 +21,19 @@
             <div class="card">
                 <div class="card-header">
                     <div class="row">
-                        <div class="col-md-4 col-sm-4 mb20">
-                            Create @lang('translation.newproposal'):</br>
+                        <div class="col-md-8 col-sm-8 mb20">
+                            Create @lang('translation.newproposal'):
                             <a href="{{ route('contact_list') }}"
                                title="Select Contact to Create a New Proposal"
                                class="br-info">
-                                <i class="fas fa-male"></i> From Existing Contact</a>
-                        </br>
+                                <i class="fas fa-male"></i> From An Existing Contact</a>
+
+
+                        &nbsp;
                             <a href="{{ route('new_proposal') }}"
                                title="Create Contact to Create a New Proposal" class="success"><i
-                                    class="fas fa-person-booth"></i> Create New Contact</a>
+                                    class="fas fa-person-booth"></i> Create A New Contact</a>
 
-                        </div>
-                        <div class="col-md-4 col-sm-4 mb20">
                         </div>
                         <div class="col-md-4 col-sm-4 float-right mb20">
                             <a href="{{ route('inactive_proposals') }}" title="View InActive Proposals" class="{{$site_button_class}}"><i
