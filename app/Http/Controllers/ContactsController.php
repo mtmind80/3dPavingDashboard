@@ -378,11 +378,11 @@ class ContactsController extends Controller
         }
 
         $data = [
-            'contact'      => $contact,
-            'typesCB'      => ContactType::typesCBActive(),
-            'sourcesCB'    => LeadSource::sourcesCB(['0' => 'Select source']),
+            'contact' => $contact,
+            'types' => ContactType::typesActive(),
+            'sourcesCB' => LeadSource::sourcesCB(['0' => 'Select source']),
             'assignedToCB' => Contact::assignedToCB(['0' => 'Select assigned to']),
-            'countiesCB'   => County::countiesCB(),
+            'countiesCB' => County::countiesCB(),
         ];
 
         return view('contacts.edit', $data);
