@@ -1,4 +1,4 @@
-TRUNCATE TABLE `duplocations`;
+
 DROP TABLE IF EXISTS `POLkpDocumentTypes`;
 DROP TABLE IF EXISTS `POLkpjobDetailStatus`;
 DROP TABLE IF EXISTS `POTblJobOrderAdditionalCosts`;

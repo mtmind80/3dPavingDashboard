@@ -61,10 +61,19 @@ class ProposalController extends Controller
 
         $data = array();
         //List active proposals
-        $proposals = Proposal::where('proposal_statuses_id', '=', 1)->where(function ($q) {
-            $q->where('salesmanager_id', auth()->user()->id)->orWhere('salesperson_id', auth()->user()->Fid);
-        })->get()->toArray();
-
+        if (auth()->user()->isAdmin()) {
+            $proposals = Proposal::whereIn('proposal_statuses_id', [1, 4])
+                ->orderBy("proposal_date", "DESC")
+                ->limit(100)
+                ->get()
+                ->toArray();
+        } else { // sales persons
+            $proposals = Proposal::whereIn('proposal_statuses_id', [1, 4])
+                ->where('salesmanager_id', auth()->user()->id)
+                ->orWhere('salesperson_id', auth()->user()->id)
+                ->get()
+                ->toArray();
+        }
 
         $data['proposals'] = $proposals;
         $data['proposalcount'] = count($proposals);
@@ -558,14 +567,14 @@ class ProposalController extends Controller
             $w->orderBy('dsort', $orderType);
         }]);
 
-        if (!auth()->user()->isAdmin()) {
+     /*   if (!auth()->user()->isAdmin()) {
             $query->where(function ($q) {
                 $q->orWhere('salesmanager_id', auth()->user()->id)
                     ->orWhere('salesperson_id', auth()->user()->id);
             });
             // managers only show if I am on the proposal
         }
-
+*/
         if (!$proposal = $query->find($id)) {
 
             //try to send it work order
@@ -676,25 +685,20 @@ class ProposalController extends Controller
         //what kind of access do i have
         if (auth()->user()->isAdmin()) {
 
-            $proposal = Proposal::where('id', $id)->whereIN('proposal_statuses_id', [1, 4])->first()->toArray();
+            $proposal = Proposal::where('id', $id)->whereIN('proposal_statuses_id', [1, 4])->first();
         } else {
 
-            $proposal = Proposal::where('id', '=', $id)->where('proposal_statuses_id', '=', 1)->where(function ($q) {
-                $q->where('salesmanager_id', auth()->user()->id)->orWhere('salesperson_id', auth()->user()->id);
-            })->first()->toArray();
+            $proposal = Proposal::where('id', '=', $id)->first();
             // managers only show if I am on the proposal
         }
 
 
         if ($proposal) {
-
-
             $data = array();
             $contact = Contact::where('id', $proposal['contact_id'])->first()->toArray();
             $data['contact'] = $contact;
             $data['id'] = $id;
-            $data['proposal'] = $proposal;
-
+            $data['proposal'] = $proposal->toArray();
             $contactstaff = [];
             $contactstaff[$contact['id']] = $contact['first_name'] . ' ' . $contact['last_name'];
             $staff = Contact::where('related_to', '=', $contact['id'])->get();
@@ -707,7 +711,7 @@ class ProposalController extends Controller
             $data['staff'] = $contactstaff;
 
             $salesManagersCB = Cache::remember('salesManagersCB', env('CACHE_TIMETOLIVE'), function () {
-                $salesManagersCB = Proposal::salesManagersCB();
+                $salesManagersCB = User::managersCB();
                 return json_encode($salesManagersCB);
 
             });
@@ -715,7 +719,7 @@ class ProposalController extends Controller
             $data['salesManagersCB'] = json_decode($salesManagersCB, true);
 
             $salesPersonsCB = Cache::remember('salesPersonsCB', env('CACHE_TIMETOLIVE'), function () {
-                $salesPersonsCB = Proposal::salesPersonsCB();
+                $salesPersonsCB = User::managerCB();
                 return json_encode($salesPersonsCB);
 
             });

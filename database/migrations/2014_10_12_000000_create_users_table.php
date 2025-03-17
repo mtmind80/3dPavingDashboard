@@ -62,6 +62,29 @@ class CreateUsersTable extends Migration
 
             ],
             [
+                'fname' => 'Rita',
+                'email' => 'rita01@3-dpaving.com',
+                'password' => Hash::make('Rita12345'),
+                'rate_per_hour' => 0,
+                'phone' =>'5555555555',
+                'status' => 1,
+                'role_id' => 4,
+                'language' => 'es',
+
+            ],
+            [
+                'fname' => 'Jose',
+                'lname' => 'Vidal',
+                'email' => 'josei.vidal01@yahoo.com',
+                'password' => Hash::make('JoseL@Paving1@3'),
+                'rate_per_hour' => 0,
+                'phone' =>'7862675461',
+                'status' => 1,
+                'role_id' => 4,
+                'language' => 'es',
+
+            ],
+            [
                 'fname' => 'Jose',
                 'lname' => 'Vidal',
                 'email' => 'josei.vidal@yahoo.com',
