@@ -37,7 +37,7 @@
 
 
                     <p>&nbsp;</p>
-                    <h4>You have {{$proposalcount}} active proposals.</h4>
+                    <h4>Showing {{$proposalcount}} active proposals.</h4>
                     <table class="table table-bordered">
                         <thead>
                         <th class="tc">

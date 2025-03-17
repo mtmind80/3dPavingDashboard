@@ -42,41 +42,16 @@ class PermitsController extends Controller
         $needle = $request->needle ?? null;
         $perPage = $request->perPage ?? 10;
 
-        /*
-
-         $permits = Permit::incomplete()
-            ->search($needle)
-            ->sortable()
-            ->with(['proposal'])
-            ->paginate($perPage);
-        */
-
+        $permits = Permit::notApproved()->with(['proposal', 'notes'])->get();
 
         if (auth()->user()->isAdmin()) {
-            /*
-            $permits = DB::table('permits')
-                ->join('proposals','proposals.id','=','permits.proposal_id')
-                ->selectRaw( 'permits.*, proposals.name, proposals.job_master_id, proposals.salesperson_id')
-                ->where('permits.status', '<>', 'Approved')
-                ->get();
-            */
 
-            $permits = Permit::notApproved()->with(['proposal', 'notes'])->get();
+//            $permits = Permit::notApproved()->with(['proposal', 'notes'])->get();
 
         } else {
-            /*
-            $permits = DB::table('permits')
-                ->join('proposals','proposals.id','=','permits.proposal_id')
-                ->selectRaw( 'permits.*, proposals.name, proposals.job_master_id, proposals.salesperson_id')
-                ->where('permits.status', '<>', 'Approved')
-                ->where('proposals.salesperson_id', '=', auth()->user()->id)
-                ->get();
-            */
 
-            $permits = Permit::notApproved()
-                ->where('salesperson_id', auth()->user()->id)
-                ->with(['proposal', 'notes'])
-                ->get();
+            $permits = $permits->filter->isSales()->values();
+
         }
 
         //dd($permits);

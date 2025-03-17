@@ -97,6 +97,10 @@ class Permit extends Model
     {
         return $query->where('status', '<>','Approved')->orWhere('status', '<>','Completed');
     }
+    public function scopeIsSales($query)
+    {
+        return $query->where('status', '<>','Approved')->orWhere('status', '<>','Completed')->where('proposal.salesperson_id','=',auth()->user()->id);
+    }
 
     public function scopeComplete($query)
     {
