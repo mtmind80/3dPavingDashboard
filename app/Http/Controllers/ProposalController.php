@@ -307,7 +307,7 @@ class ProposalController extends Controller
 
         $data['staff'] = $contactstaff;
 
-        $salesManagersCB = Cache::remember('salesManagersCB', env('CACHE_TIMETOLIVE'), function () {
+        $salesManagersCB = Cache::remember('salesManagersCB', env('CACHE_TIMETOLIVE',1000), function () {
             $salesManagersCB = Proposal::salesManagersCB();
             return json_encode($salesManagersCB);
 
@@ -315,7 +315,7 @@ class ProposalController extends Controller
 
         $data['salesManagersCB'] = json_decode($salesManagersCB, true);
 
-        $salesPersonsCB = Cache::remember('salesPersonsCB', env('CACHE_TIMETOLIVE'), function () {
+        $salesPersonsCB = Cache::remember('salesPersonsCB', env('CACHE_TIMETOLIVE',1000), function () {
             $salesPersonsCB = Proposal::salesPersonsCB();
             return json_encode($salesPersonsCB);
 

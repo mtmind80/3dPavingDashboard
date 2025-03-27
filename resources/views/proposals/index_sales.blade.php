@@ -21,10 +21,19 @@
             <div class="card">
                 <div class="card-header">
                     <div class="row">
-                        <div class="col-md-8 col-sm-6 mb20">
-                            <a href="{{ route('new_proposal') }}" title="Select Contact to Create a New Proposal"
-                               class="{{$site_button_class}}"><i
-                                    class="fas fa-plus"></i>@lang('translation.newproposal')</a>
+                        <div class="col-md-8 col-sm-8 mb20">
+                            Create @lang('translation.newproposal'):
+                            <a href="{{ route('contact_list') }}"
+                               title="Select Contact to Create a New Proposal"
+                               class="br-info">
+                                <i class="fas fa-male"></i> From An Existing Contact</a>
+
+
+                            &nbsp;
+                            <a href="{{ route('new_proposal') }}"
+                               title="Create Contact to Create a New Proposal" class="success"><i
+                                    class="fas fa-person-booth"></i> Create A New Contact</a>
+
                         </div>
 
                         <div class="col-md-4 col-sm-6 float-right mb20">
@@ -66,8 +75,10 @@
                                             <span class="ri-ball-pen-fill"></span>
                                             {{$proposal['name']}}</a></td>
                                     <td class="tc">
-                                        {{ App\Models\Contact::find($proposal['contact_id'])->FullName }}
-                                    </td>
+                                        <a title='Click to Edit'
+                                           href="{{route('contact_details',['contact'=>$proposal['contact_id']])}}">
+                                            <span class="ri-ball-pen-fill"></span>{{ App\Models\Contact::find($proposal['contact_id'])->FullName }}
+                                        </a></td>
                                     <td class="tc">
                                         @if($proposal['location_id'])
                                             {{ App\Models\Location::find($proposal['location_id'])->RealShortLocation }}
