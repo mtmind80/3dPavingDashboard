@@ -75,8 +75,10 @@
                                             <span class="ri-ball-pen-fill"></span>
                                             {{$proposal['name']}}</a></td>
                                     <td class="tc">
-                                        {{ App\Models\Contact::find($proposal['contact_id'])->FullName }}
-                                    </td>
+                                        <a title='Click to Edit'
+                                           href="{{route('contact_details',['contact'=>$proposal['contact_id']])}}">
+                                            <span class="ri-ball-pen-fill"></span>{{ App\Models\Contact::find($proposal['contact_id'])->FullName }}
+                                        </a></td>
                                     <td class="tc">
                                         @if($proposal['location_id'])
                                             {{ App\Models\Location::find($proposal['location_id'])->RealShortLocation }}
