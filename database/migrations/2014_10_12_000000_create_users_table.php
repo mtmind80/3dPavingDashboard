@@ -63,6 +63,7 @@ class CreateUsersTable extends Migration
             ],
             [
                 'fname' => 'Rita',
+                'lname' => 'Maldonado',
                 'email' => 'rita01@3-dpaving.com',
                 'password' => Hash::make('Rita12345'),
                 'rate_per_hour' => 0,
