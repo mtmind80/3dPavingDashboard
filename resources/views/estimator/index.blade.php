@@ -85,8 +85,9 @@
                 <a class="btn btn-outline-info estimator-form-submit-button" href="javascript:">Test Ajax Submission</a>
             </div>
         @endif
-        {{$service_id}} - {{$service_cat}}
-
+        <!--
+Service ID {{$service_id}} - Service Cat: {{$service_cat}}
+-->
         <div class="col-12">
             @include('_partials._alert')
             <div class="card">
