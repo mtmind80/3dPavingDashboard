@@ -59,6 +59,8 @@ class ProposalController extends Controller
             return redirect()->route('dashboard');
         }
 
+        $proposals = NULL;
+
         $data = array();
         //List active proposals
         if (auth()->user()->isAdmin()) {
@@ -67,12 +69,19 @@ class ProposalController extends Controller
                 ->limit(100)
                 ->get()
                 ->toArray();
-        } else { // sales persons
-            $proposals = Proposal::whereIn('proposal_statuses_id', [1, 4])
-                ->where('salesmanager_id', auth()->user()->id)
+        }
+        if (auth()->user()->isSales()) { // sales persons
+
+            $proposals = Proposal::where('salesmanager_id', auth()->user()->id)
                 ->orWhere('salesperson_id', auth()->user()->id)
+                ->whereIn('proposal_statuses_id', [1, 4])
+                ->orderBy("proposal_date", "DESC")
                 ->get()
                 ->toArray();
+        }
+
+        if (!$proposals) {
+            return redirect()->route('dashboard');
         }
 
         $data['proposals'] = $proposals;
