@@ -170,6 +170,7 @@ Route::group(['middleware' => ['auth']], function() {
             Route::post('/ajax-subcontractor-store', 'WorkOrderDetailsController@ajaxSubcontractorStore')->name('ajax_workorder_subcontractor_store');
             Route::post('/ajax-subcontractor-destroy', 'WorkOrderDetailsController@ajaxSubcontractorDestroy')->name('ajax_workorder_subcontractor_destroy');
             //view
+            Route::get('/view_service/{proposal_id}/{id}', 'WorkOrderDetailsController@view_service')->name('view_service');
 
         });
         /** END Details */
@@ -188,7 +189,8 @@ Route::group(['prefix' => 'permits'], function() {
     Route::get('/{id}/remove', 'PermitsController@destroy')->name('remove_permit');
     Route::post('/{permit}/add-note', 'PermitsController@storeNote')->name('permit_note_add');
     Route::post('/{permit}/change-status', 'PermitsController@changeStatus')->name('permit_status_change');
-    Route::get('/{id}/add_permit', 'PermitsController@create')->name('add_permit');
+    Route::get('/{id}/add_permit', 'PermitsCo_service
+    ntroller@create')->name('add_permit');
     Route::get('/{permit}/edit', 'PermitsController@edit')->name('permit_edit');
     Route::patch('/{permit}', 'PermitsController@update')->name('permit_update');
     Route::post('ajax-note-list', 'PermitsController@noteList')->name('ajax_permit_note_list');
