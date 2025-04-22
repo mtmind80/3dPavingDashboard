@@ -9,6 +9,23 @@ class ProposalMaterial extends Model
 {
 
     protected $table = 'proposal_materials';
+
+    // Relationships:
+
+    public function proposal()
+    {
+        return $this->belongsTo(Proposal::class);
+    }
+
+    public function material()
+    {
+        return $this->belongsTo(Material::class);
+    }
+
+    public function serviceCategory()
+    {
+        return $this->belongsTo(ServiceCategory::class);
+    }
     
     public function scopeByServiceCategory($query, $service_category_id)
     {

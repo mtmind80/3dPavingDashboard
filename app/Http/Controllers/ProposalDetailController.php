@@ -170,7 +170,7 @@ class ProposalDetailController extends Controller
             'contact' => $proposalDetail->proposal->contact,
             'sealcoatMaterials' => $sealcoatMaterials,
             'rockMaterials' => $rockMaterials,
-            'asphaltMaterials' => $asphaltMaterials,
+            'asphaltMaterials' => $asphaltMaterials, 
             'striping' => $proposalDetail->striping,
             'service' => $proposalDetail->service,
             'color' => $color,
