@@ -1,6 +1,7 @@
 <!-- vehicle sections -->
 
 <!-- input fields header row -->
+
 <div class="row">
     <div class="col-sm-6 mb2 fwb">
         <label class="control-label">Select Vehicle<i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
@@ -15,6 +16,7 @@
         <label class="control-label">Hours per day<i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
     </div>
 </div>
+
 
 <!-- input fields values row -->
 <form method="POST" action="#" accept-charset="UTF-8" id="vehicle_form" class="admin-form">
@@ -68,6 +70,7 @@
         </div>
     </div>
 </form>
+
 
 <!-- vehicle header row -->
 <div id="vehicle_rows_header" class="row fwb pb4 border-bottom-solid{{ !empty($proposalDetail->vehicles) && $proposalDetail->vehicles->count() > 0 ? '' : ' hidden' }}">
@@ -142,94 +145,56 @@
 
             vehicleUpdateTotalCost();
 
+            var vehicleElForm = $('#vehicle_form');
+            var vehicleSubmitButton = $('.vehicle-submit');
+
             vehicleSubmitButton.on('click', function(){
-                vehicleElForm.validate({
-                    rules: {
-                        vehicle_id: {
-                            required: true,
-                            positive: true
-                        },
-                        number_of_vehicles: {
-                            required: true,
-                            positive: true
-                        },
-                        days: {
-                            required: true,
-                            float  : true
-                        },
-                        hours: {
-                            required: true,
-                            float  : true
+                let formData = vehicleElForm.serializeObject();
+                let extraFormProperties = {proposal_detail_id: proposalDetailId};
+
+                $.extend(formData, extraFormProperties);
+
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: formData,
+                    type: "POST",
+                    url: "{{ route('ajax_vehicle_add_or_update') }}",
+                    beforeSend: function (request){
+                        showSpinner();
+                    },
+                    complete: function (){
+                        hideSpinner();
+                    },
+                    success: function (response){
+                        if (!response) {
+                            showErrorAlert('Critical error has occurred.', vehicleAlert);
+                        } else if (response.success) {
+                            vehicleElRowsContainer.html(response.html);
+
+                            vehicleUpdateTotalCost();
+                            vehicleResetForm();
+
+                            vehicleAddButton.removeClass('hidden');
+                            vehicleUpdateButton.addClass('hidden');
+                            vehicleCancelButton.addClass('hidden');
+
+                            if (response.message) {
+                                showSuccessAlert(response.message, vehicleAlert);
+                            }
+                        } else {
+                            showErrorAlert(response.message, vehicleAlert);
                         }
                     },
-                    messages: {
-                        vehicle_id: {
-                            required: "@lang('translation.field_required')",
-                            positive: "@lang('translation.select_item')"
-                        },
-                        number_of_vehicles: {
-                            required: "@lang('translation.field_required')",
-                            positive: "@lang('translation.invalid_entry')"
-                        },
-                        days: {
-                            required: "@lang('translation.field_required')",
-                            positive: "@lang('translation.invalid_entry')"
-                        },
-                        hours: {
-                            required: "@lang('translation.field_required')",
-                            positive: "@lang('translation.invalid_entry')"
-                        }
+                    error: function (response){
+                        @if (env('APP_ENV') === 'local')
+                            showErrorAlert(response.responseJSON.message, vehicleAlert);
+                        @else
+                            showErrorAlert('Critical error has occurred.', vehicleAlert);
+                        @endif
                     }
                 });
-
-                if (vehicleElForm.valid()) {
-                    let formData = vehicleElForm.serializeObject();
-                    let extraFormProperties = {proposal_detail_id: proposalDetailId};
-
-                    $.extend(formData, extraFormProperties);
-
-                    $.ajax({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        data: formData,
-                        type: "POST",
-                        url: "{{ route('ajax_vehicle_add_or_update') }}",
-                        beforeSend: function (request){
-                            showSpinner();
-                        },
-                        complete: function (){
-                            hideSpinner();
-                        },
-                        success: function (response){
-                            if (!response) {
-                                showErrorAlert('Critical error has occurred.', vehicleAlert);
-                            } else if (response.success) {
-                                vehicleElRowsContainer.html(response.html);
-
-                                vehicleUpdateTotalCost();
-                                vehicleResetForm();
-
-                                vehicleAddButton.removeClass('hidden');
-                                vehicleUpdateButton.addClass('hidden');
-                                vehicleCancelButton.addClass('hidden');
-
-                                if (response.message) {
-                                    showSuccessAlert(response.message, vehicleAlert);
-                                }
-                            } else {
-                                showErrorAlert(response.message, vehicleAlert);
-                            }
-                        },
-                        error: function (response){
-                            @if (env('APP_ENV') === 'local')
-                                showErrorAlert(response.responseJSON.message, vehicleAlert);
-                            @else
-                                showErrorAlert('Critical error has occurred.', vehicleAlert);
-                            @endif
-                        }
-                    });
-                }
             });
 
             vehicleElRowsContainer.on('click', '.vehicle-remove-button', function(){

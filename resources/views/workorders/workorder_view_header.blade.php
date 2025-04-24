@@ -13,12 +13,18 @@
                 <div class="col-sm-3">
                     Days: {{ $proposalDetail->days }}
                 </div>
-                <div class="col-sm-2">
-                    Cost Per Day: {{ $proposalDetail->cost_per_day }}
-                </div>
-                <div class="col-sm-2">
-                    Locations: {{ $proposalDetail->locations }}
-                </div>
+                @if (auth()->user()->isAdmin())
+                    <div class="col-sm-2">
+                        Cost Per Day: {{ $proposalDetail->cost_per_day }}
+                    </div>
+                    <div class="col-sm-2">
+                        Locations: {{ $proposalDetail->locations }}
+                    </div>
+                @else
+                    <div class="col-sm-4">
+                        Locations: {{ $proposalDetail->locations }}
+                    </div>
+                @endif
             </div>
             <br/>
             <div class="row">
@@ -148,18 +154,27 @@
     @if ( $service->service_category_id === 5)
         <!--  Other -->
         <div class="row">
-            <div class="col-xs-6 col-sm-3">
-                <p class="fs18 mb5">
-                    <span class="fwb color-black mr5">Cost Per Day:</span>
-                    {{ $proposalDetail->cost_per_day }}
-                </p>
-            </div>
-            <div class="col-xs-6 col-sm-3">
-                <p class="fs18 mb5">
-                    <span class="fwb color-black mr5">Locations:</span>
-                    {{ $proposalDetail->locations }}
-                </p>
-            </div>
+            @if (auth()->user()->isAdmin())
+                <div class="col-xs-6 col-sm-3">
+                    <p class="fs18 mb5">
+                        <span class="fwb color-black mr5">Cost Per Day:</span>
+                        {{ $proposalDetail->cost_per_day }}
+                    </p>
+                </div>
+                <div class="col-xs-6 col-sm-3">
+                    <p class="fs18 mb5">
+                        <span class="fwb color-black mr5">Locations:</span>
+                        {{ $proposalDetail->locations }}
+                    </p>
+                </div>
+            @else
+                <div class="col-xs-6 col-sm-6">
+                    <p class="fs18 mb5">
+                        <span class="fwb color-black mr5">Locations:</span>
+                        {{ $proposalDetail->locations }}
+                    </p>
+                </div>
+            @endif
             <div class="col-xs-12 col-sm-6">
                 <p class="fs18 mb5">
                     <span class="fwb color-black mr5">Job Description:</span>

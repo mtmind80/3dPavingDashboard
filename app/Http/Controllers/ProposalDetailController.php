@@ -503,6 +503,18 @@ class ProposalDetailController extends Controller
                     'days' => 'required|float',
                     'hours' => 'required|float',
                     'proposal_detail_vehicle_id' => 'nullable|positive',
+                ], [
+                    'proposal_detail_id.required' => 'Unknown proposal',
+                    'proposal_detail_id.positive' => 'Unknown proposal',
+                    'vehicle_id.required' => 'No vehicle selected',
+                    'vehicle_id.positive' => 'PLease select a vehicle',
+                    'number_of_vehicles.required' => 'No number of vehicles defined',
+                    'number_of_vehicles.positive' => 'Invalid number of vehicles',
+                    'days.required' => 'No days defined',
+                    'days.float' => 'Invalid number of days',
+                    'hours.required' => 'No hours defined',
+                    'hours.float' => 'Invalid number of hours',
+                    'proposal_detail_vehicle_id.positive' => 'Unknown vehicle',
                 ]
             );
 
