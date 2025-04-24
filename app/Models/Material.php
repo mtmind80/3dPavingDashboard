@@ -31,7 +31,7 @@ class Material extends Model
 
     public function scopeByServiceCategory($query, $service_category_id)
     {
-        return $query->where('service_category_id', '=',$service_category_id);
+        return $query->where('service_category_id', $service_category_id);
     }
 
 }

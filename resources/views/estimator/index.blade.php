@@ -136,14 +136,15 @@ Service ID {{$service_id}} - Service Cat: {{$service_cat}}
                     <div id="otherList"></div>
                 </div>
             </div>
+
             @if($proposalDetail->service->service_category_id != 10)
-            <div class="card">
-                <div class="card-header alert-light">
-                    @include('_partials._alert', ['alertId' => 'subcontractors_alert'])
-                    <h5>@lang('translation.subcontractors')</h5>
-                    @include('estimator.form_service_subcontractors')
-                    <div id="subcontractorsList"></div>
-                </div>
+                <div class="card">
+                    <div class="card-header alert-light">
+                        @include('_partials._alert', ['alertId' => 'subcontractors_alert'])
+                        <h5>@lang('translation.subcontractors')</h5>
+                        @include('estimator.form_service_subcontractors')
+                        <div id="subcontractorsList"></div>
+                    </div>
             </div>
             @endif
         </div>

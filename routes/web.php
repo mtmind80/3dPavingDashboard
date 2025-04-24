@@ -170,7 +170,8 @@ Route::group(['middleware' => ['auth']], function() {
             Route::post('/ajax-subcontractor-store', 'WorkOrderDetailsController@ajaxSubcontractorStore')->name('ajax_workorder_subcontractor_store');
             Route::post('/ajax-subcontractor-destroy', 'WorkOrderDetailsController@ajaxSubcontractorDestroy')->name('ajax_workorder_subcontractor_destroy');
             //view
-            Route::get('/view_service/{proposal_id}/{id}', 'WorkOrderDetailsController@view_service')->name('view_service');
+            //Route::get('/view_service/{proposal_id}/{id}', 'WorkOrderDetailsController@view_service')->name('view_service');
+            Route::get('/view_service/{proposal_id}/{id}', 'WorkOrderDetailsController@viewService')->name('view_service');
 
         });
         /** END Details */

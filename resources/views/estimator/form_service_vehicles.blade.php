@@ -1,6 +1,7 @@
 <!-- vehicle sections -->
 
 <!-- input fields header row -->
+
 <div class="row">
     <div class="col-sm-6 mb2 fwb">
         <label class="control-label">Select Vehicle<i class="field-required fa fa-asterisk" data-toggle="tooltip" title="@lang('translation.field_required')"></i></label>
@@ -22,14 +23,17 @@
     <input type="hidden" name="proposal_detail_vehicle_id" id="proposal_detail_vehicle_id">
     <div class="row">
         <div class="col-sm-3 admin-form-item-widget">
-            <select name="vehicle_id" id="vehicle_id" class="form-control">
-            <option value="0">Select a Vehicle</option>
-            @foreach ($vehiclesCB as $v)
-                <option value="{{$v->id}}">{{$v->NameRate}}</option>
-            @endforeach
-            </select>
+            <x-form-select name="vehicle_id"
+               :items="$vehiclesCB"
+               selected="0"
+               :params="[
+                    'id' => 'vehicle_id',
+                    'iconClass' => 'none',
+                ]"
+            ></x-form-select>
         </div>
         <div class="col-sm-3 xs-hidden"></div>
+
         <div class="col-sm-2 tc admin-form-item-widget">
             <x-form-text name="number_of_vehicles"
                  class="check-contact tc"
@@ -142,6 +146,9 @@
 
             vehicleUpdateTotalCost();
 
+            var vehicleElForm = $('#vehicle_form');
+            var vehicleSubmitButton = $('.vehicle-submit');
+
             vehicleSubmitButton.on('click', function(){
                 vehicleElForm.validate({
                     rules: {
@@ -155,31 +162,13 @@
                         },
                         days: {
                             required: true,
-                            float  : true
+                            float: true
                         },
                         hours: {
                             required: true,
-                            float  : true
+                            float: true
                         }
                     },
-                    messages: {
-                        vehicle_id: {
-                            required: "@lang('translation.field_required')",
-                            positive: "@lang('translation.select_item')"
-                        },
-                        number_of_vehicles: {
-                            required: "@lang('translation.field_required')",
-                            positive: "@lang('translation.invalid_entry')"
-                        },
-                        days: {
-                            required: "@lang('translation.field_required')",
-                            positive: "@lang('translation.invalid_entry')"
-                        },
-                        hours: {
-                            required: "@lang('translation.field_required')",
-                            positive: "@lang('translation.invalid_entry')"
-                        }
-                    }
                 });
 
                 if (vehicleElForm.valid()) {
