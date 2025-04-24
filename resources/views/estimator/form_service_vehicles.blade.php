@@ -17,21 +17,23 @@
     </div>
 </div>
 
-
 <!-- input fields values row -->
 <form method="POST" action="#" accept-charset="UTF-8" id="vehicle_form" class="admin-form">
     @csrf
     <input type="hidden" name="proposal_detail_vehicle_id" id="proposal_detail_vehicle_id">
     <div class="row">
         <div class="col-sm-3 admin-form-item-widget">
-            <select name="vehicle_id" id="vehicle_id" class="form-control">
-            <option value="0">Select a Vehicle</option>
-            @foreach ($vehiclesCB as $v)
-                <option value="{{$v->id}}">{{$v->NameRate}}</option>
-            @endforeach
-            </select>
+            <x-form-select name="vehicle_id"
+               :items="$vehiclesCB"
+               selected="0"
+               :params="[
+                    'id' => 'vehicle_id',
+                    'iconClass' => 'none',
+                ]"
+            ></x-form-select>
         </div>
         <div class="col-sm-3 xs-hidden"></div>
+
         <div class="col-sm-2 tc admin-form-item-widget">
             <x-form-text name="number_of_vehicles"
                  class="check-contact tc"
@@ -70,7 +72,6 @@
         </div>
     </div>
 </form>
-
 
 <!-- vehicle header row -->
 <div id="vehicle_rows_header" class="row fwb pb4 border-bottom-solid{{ !empty($proposalDetail->vehicles) && $proposalDetail->vehicles->count() > 0 ? '' : ' hidden' }}">
@@ -149,52 +150,75 @@
             var vehicleSubmitButton = $('.vehicle-submit');
 
             vehicleSubmitButton.on('click', function(){
-                let formData = vehicleElForm.serializeObject();
-                let extraFormProperties = {proposal_detail_id: proposalDetailId};
-
-                $.extend(formData, extraFormProperties);
-
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    data: formData,
-                    type: "POST",
-                    url: "{{ route('ajax_vehicle_add_or_update') }}",
-                    beforeSend: function (request){
-                        showSpinner();
-                    },
-                    complete: function (){
-                        hideSpinner();
-                    },
-                    success: function (response){
-                        if (!response) {
-                            showErrorAlert('Critical error has occurred.', vehicleAlert);
-                        } else if (response.success) {
-                            vehicleElRowsContainer.html(response.html);
-
-                            vehicleUpdateTotalCost();
-                            vehicleResetForm();
-
-                            vehicleAddButton.removeClass('hidden');
-                            vehicleUpdateButton.addClass('hidden');
-                            vehicleCancelButton.addClass('hidden');
-
-                            if (response.message) {
-                                showSuccessAlert(response.message, vehicleAlert);
-                            }
-                        } else {
-                            showErrorAlert(response.message, vehicleAlert);
+                vehicleElForm.validate({
+                    rules: {
+                        vehicle_id: {
+                            required: true,
+                            positive: true
+                        },
+                        number_of_vehicles: {
+                            required: true,
+                            positive: true
+                        },
+                        days: {
+                            required: true,
+                            float: true
+                        },
+                        hours: {
+                            required: true,
+                            float: true
                         }
                     },
-                    error: function (response){
-                        @if (env('APP_ENV') === 'local')
-                            showErrorAlert(response.responseJSON.message, vehicleAlert);
-                        @else
-                            showErrorAlert('Critical error has occurred.', vehicleAlert);
-                        @endif
-                    }
                 });
+
+                if (vehicleElForm.valid()) {
+                    let formData = vehicleElForm.serializeObject();
+                    let extraFormProperties = {proposal_detail_id: proposalDetailId};
+
+                    $.extend(formData, extraFormProperties);
+
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        data: formData,
+                        type: "POST",
+                        url: "{{ route('ajax_vehicle_add_or_update') }}",
+                        beforeSend: function (request){
+                            showSpinner();
+                        },
+                        complete: function (){
+                            hideSpinner();
+                        },
+                        success: function (response){
+                            if (!response) {
+                                showErrorAlert('Critical error has occurred.', vehicleAlert);
+                            } else if (response.success) {
+                                vehicleElRowsContainer.html(response.html);
+
+                                vehicleUpdateTotalCost();
+                                vehicleResetForm();
+
+                                vehicleAddButton.removeClass('hidden');
+                                vehicleUpdateButton.addClass('hidden');
+                                vehicleCancelButton.addClass('hidden');
+
+                                if (response.message) {
+                                    showSuccessAlert(response.message, vehicleAlert);
+                                }
+                            } else {
+                                showErrorAlert(response.message, vehicleAlert);
+                            }
+                        },
+                        error: function (response){
+                            @if (env('APP_ENV') === 'local')
+                                showErrorAlert(response.responseJSON.message, vehicleAlert);
+                            @else
+                                showErrorAlert('Critical error has occurred.', vehicleAlert);
+                            @endif
+                        }
+                    });
+                }
             });
 
             vehicleElRowsContainer.on('click', '.vehicle-remove-button', function(){

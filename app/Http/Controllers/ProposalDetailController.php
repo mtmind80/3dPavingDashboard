@@ -177,7 +177,7 @@ class ProposalDetailController extends Controller
             'service_category_name' => $proposalDetail->service->category->name,
             'equipmentCollection' => Equipment::available()->orderBy('name')->get(),
             'materialsCB' => $materialsCB,
-            'vehiclesCB' => VehicleType::get(),
+            'vehiclesCB' => VehicleType::vehicleTypesCB([0 => 'Select vehicle']),
             'laborCB' => LaborRate::LaborWithRatesCB(['0' => 'Select labor']),
             'contractorsCB' => Contractor::contractorsCB(['0' => 'Select contractor']),
             'contractors' => Contractor::where('disable','=',0)->orderBy('name')->get(),
