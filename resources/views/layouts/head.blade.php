@@ -6,7 +6,7 @@
 <!-- extra styles -->
 <link href="{{ URL::asset('assets/css/mycss.css')}}" id="mystyles" rel="stylesheet" type="text/css" />
 <link href="{{ URL::asset('/css/common-base.min.css') }}" rel="stylesheet" type="text/css" />
-<link href="{{ URL::asset('/css/style-extras.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ URL::asset('/css/style-extras.min.css') }}" rel="stylesheet">
 
 @yield('headscripts')
 

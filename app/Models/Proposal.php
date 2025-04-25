@@ -148,6 +148,28 @@ class Proposal extends Model
         return $this->belongsTo(Lead::class);
     }
 
+    public function material()
+    {
+        return $this->hasMany(ProposalMaterial::class);
+    }
+
+    public function materialsAsphalt()
+    {
+        return $this->hasMany(ProposalMaterial::class)
+            ->with(['serviceCategory'])
+            ->where('service_category_id', 1);
+    }
+
+    public function materialsRock()
+    {
+        return $this->hasMany(ProposalMaterial::class)->where('service_category_id', 7);
+    }
+
+    public function materialsSealCoat()
+    {
+        return $this->hasMany(ProposalMaterial::class)->where('service_category_id', 8);
+    }
+
     // Scopes:
 
     public function scopeSale($query)

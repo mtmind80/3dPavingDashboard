@@ -35,7 +35,7 @@ class ContactsController extends Controller
 
         $data = [
             'contacts' => $contacts,
-            'needle'   => $needle,
+            'needle' => $needle,
         ];
 
         return view('contacts.index', $data);
@@ -230,7 +230,7 @@ class ContactsController extends Controller
     {
 
         $data = [
-            'types' => ContactType::typesActive(),
+            'typesCB'         => ContactType::typesCBActive(['0' => 'Select type']),
             'sourcesCB'       => LeadSource::sourcesCB(['0' => 'Select source']),
             'assignedToCB'    => Contact::assignedToCB(['0' => 'Select assigned to']),
             'countiesCB'      => County::countiesCB(['' => 'Select county']),

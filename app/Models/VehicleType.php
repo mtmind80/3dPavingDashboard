@@ -7,7 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class VehicleType extends Model
 {
     public $timestamps = false;
+
     protected $table = 'vehicle_types';
+
     protected $fillable = [
         'name',
     ];
@@ -22,9 +24,9 @@ class VehicleType extends Model
         return $this->name. ' - $' . $this->rate;
 
     }
-    static public function vehiclestypesCB($default = [])
+    static public function vehicleTypesCB($default = [])
     {
-        $items = self::orderBy('name')->pluck('name', 'id')->toArray();
+        $items = self::orderBy('name')->get()->pluck('name_rate', 'id')->toArray();
 
         if (!empty($default)) {
             return $default + $items;

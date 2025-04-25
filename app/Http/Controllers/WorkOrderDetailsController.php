@@ -506,9 +506,8 @@ class WorkOrderDetailsController extends Controller
 
 
 
-    public function view_service($proposal_id, $id)
+    public function view_serviceMIKE($proposal_id, $id)
     {
-
         if (!$proposalDetail = ProposalDetail::with([
             'proposal' => function ($q) {
                 $q->with(['contact']);
@@ -565,8 +564,6 @@ class WorkOrderDetailsController extends Controller
             'proposalEquipment' => $proposalEquipment,
             'vehiclesCB' => VehicleType::get(),
             'laborCB' => LaborRate::LaborWithRatesCB(['0' => 'Select labor']),
-            //'allowedFileExtensions' => AcceptedDocuments::extensionsStrCid(),
-            //'strippingCB' => StripingCost::strippingCB(['0' => 'Select contractor']),
         ];
 
         if ($proposalDetail->service->id == 18) { // striping costs
@@ -580,5 +577,51 @@ class WorkOrderDetailsController extends Controller
 
     }
 
+    public function viewService($proposal_id, $id)
+    {
+        if (! $proposalDetail = ProposalDetail::with([
+            'proposal' => function ($q) {
+                $q->with(['contact', 'materialsAsphalt', 'materialsRock', 'materialsSealCoat']);
+            },
+            'service' => function ($r) {
+                $r->with(['category']);
+            },
+            'striping',
+            'location',
+            'vehicles',
+            'equipment' => function ($w) {
+                $w->with(['equipment']);
+            },
+            'labor',
+            'additionalCosts',
+            'subcontractors' => function ($e) {
+                $e->with(['contractor']);
+            },
+
+        ])->find($id)) {
+            return view('pages-404');
+        }
+
+        $data = [
+            'proposalDetail' => $proposalDetail,
+            'proposal' => $proposalDetail->proposal,
+            'service' => $proposalDetail->service,
+            'striping' => $proposalDetail->striping,
+            'location' => $proposalDetail->location,
+            'vehicles' => $proposalDetail->vehicles,
+            'equipment' => $proposalDetail->equipment,
+            'labor' => $proposalDetail->labor,
+            'additionalCosts' => $proposalDetail->additionalCosts,
+            'subcontractors' => $proposalDetail->subcontractors,
+            'materialsCB' => Material::materialsCB(),
+
+            'vehiclesCB' => VehicleType::get(),
+            'laborCB' => LaborRate::LaborWithRatesCB(['0' => 'Select labor']),
+        ];
+
+        return view($proposalDetail->service_id === 18
+            ? 'workorders.striping'
+            : 'workorders.view_service', $data);
+    }
 
 }

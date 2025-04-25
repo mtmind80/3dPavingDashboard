@@ -17,10 +17,19 @@
                     <x-form-textarea style="height:135px" name="note" :params="['label' =>  __('translation.note'), 'iconClass' => 'fas fa-sticky-note', 'required' => false]"></x-form-textarea>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-light waves-effect"
-                            data-dismiss="modal">@lang('translation.close')</button>
-                    <button type="submit"
-                            class="btn btn-dark waves-effect waves-light">@lang('translation.save')</button>
+                    <button
+                        type="button"
+                        class="btn btn-light waves-effect"
+                        data-dismiss="modal"
+                    >
+                        @lang('translation.close')
+                    </button>
+                    <button
+                        type="submit"
+                        class="btn btn-dark waves-effect waves-light"
+                    >
+                        @lang('translation.save')
+                    </button>
                 </div>
             </form>
         </div>
