@@ -24,6 +24,7 @@ use App\Models\WorkorderTimesheets;
 use App\Models\WorkorderVehicle;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 use Validator;
 
 class WorkOrderDetailsController extends Controller
@@ -577,11 +578,11 @@ class WorkOrderDetailsController extends Controller
 
     }
 
-    public function viewService($proposal_id, $id)
+    public function viewService($proposal_id, $id): View
     {
         if (! $proposalDetail = ProposalDetail::with([
             'proposal' => function ($q) {
-                $q->with(['contact', 'materialsAsphalt', 'materialsRock', 'materialsSealCoat']);
+                $q->with(['contact', 'materials' => fn($q) => $q->with(['material']), 'materialsAsphalt', 'materialsRock', 'materialsSealCoat']);
             },
             'service' => function ($r) {
                 $r->with(['category']);
@@ -602,6 +603,8 @@ class WorkOrderDetailsController extends Controller
             return view('pages-404');
         }
 
+        //dd($proposalDetail->proposal->materials()->where('material_id', 9)->value('MaterialCost'));
+
         $data = [
             'proposalDetail' => $proposalDetail,
             'proposal' => $proposalDetail->proposal,
@@ -609,8 +612,8 @@ class WorkOrderDetailsController extends Controller
             'striping' => $proposalDetail->striping,
             'location' => $proposalDetail->location,
             'vehicles' => $proposalDetail->vehicles,
-            'equipment' => $proposalDetail->equipment,
-            'labor' => $proposalDetail->labor,
+            'equipments' => $proposalDetail->equipment,
+            'labors' => $proposalDetail->labor,
             'additionalCosts' => $proposalDetail->additionalCosts,
             'subcontractors' => $proposalDetail->subcontractors,
             'materialsCB' => Material::materialsCB(),
@@ -619,7 +622,9 @@ class WorkOrderDetailsController extends Controller
             'laborCB' => LaborRate::LaborWithRatesCB(['0' => 'Select labor']),
         ];
 
-        return view($proposalDetail->service_id === 18
+        //dd($proposalDetail->service->service_category_id, $proposalDetail->service->id);
+
+        return view($proposalDetail->services_id === 18
             ? 'workorders.striping'
             : 'workorders.view_service', $data);
     }

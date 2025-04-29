@@ -224,6 +224,11 @@ class ProposalDetail extends Model
         return $otalCost;
     }
 
+    public function getHtmlTotalCostVehiclesAttribute(): string
+    {
+        return Currency::format($this->total_cost_vehicles);
+    }
+
     public function getTotalCostEquipmentAttribute()
     {
         $otalCost = 0;
@@ -233,6 +238,11 @@ class ProposalDetail extends Model
         }
 
         return $otalCost;
+    }
+
+    public function getHtmlTotalCostEquipmentAttribute(): string
+    {
+        return Currency::format($this->total_cost_equipment);
     }
 
     public function getTotalCostLaborAttribute()
@@ -246,14 +256,29 @@ class ProposalDetail extends Model
         return $otalCost;
     }
 
+    public function getHtmlTotalCostLaborAttribute(): string
+    {
+        return Currency::format($this->total_cost_labor);
+    }
+
     public function getTotalCostSubcontractorAttribute()
     {
         return $this->acceptedSubcontractor->total_cost ?? 0;
     }
 
+    public function getHtmlTotalCostSubcontractorAttribute(): string
+    {
+        return Currency::format($this->total_cost_subcontractor);
+    }
+
     public function getTotalAdditionalCostsAttribute()
     {
         return $this->getTotalAdditionalCosts();
+    }
+
+    public function getHtmlTotalAdditionalCostsAttribute(): string
+    {
+        return Currency::format($this->total_additional_costs);
     }
 
     public function getIsScheduledAttribute()
