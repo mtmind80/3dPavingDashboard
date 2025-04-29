@@ -1,5 +1,5 @@
 <div class="">
-    @if ( $service->service_category_id === 1)
+    @if ($service->service_category_id === 1)
         <!-- asphalt -->
         @if ( $proposalDetail->services_id === 19)
             {{-- asphalt milling --}}
@@ -26,7 +26,6 @@
                     </div>
                 @endif
             </div>
-            <br/>
             <div class="row">
                 <div class="col-sm-4">
                     Square Yards: {{ $proposalDetail->square_yards }}
@@ -34,36 +33,50 @@
                 <div class="col-sm-4">
                     Loads:{{ $proposalDetail->loads }}
                 </div>
-                <div class="col-sm-4">
-                    &nbsp;
-                </div>
+                <div class="col-sm-4"></div>
             </div>
         @else
-            {{-- all other types --}}
-            <br/>
+            {{-- all other types --}}         <!-- OK -->
             <div class="row">
                 <div class="col-sm-3">
-                    Square Feet: {{ $proposalDetail->square_feet }}
+                    <p class="fs18 mb5">
+                        <span class="fwb color-black mr5">Square Feet:</span>
+                        {{ $proposalDetail->square_feet }}
+                    </p>
                 </div>
                 <div class="col-sm-3">
-                    Depth: {{ $proposalDetail->depth }}
+                    <p class="fs18 mb5">
+                        <span class="fwb color-black mr5">Depth:</span>
+                        {{ $proposalDetail->depth }}
+                    </p>
                 </div>
+                @if (auth()->user()->isAdmin())
+                    <div class="col-sm-3">
+                        <p class="fs18 mb5">
+                            <span class="fwb color-black mr5">Asphalt Cost:</span>
+                            {{ $proposalDetail->material_cost }} {{ $proposalDetail->materials_name }}
+                        </p>
+                    </div>
+                @endif
                 <div class="col-sm-3">
-                    Asphalt Cost:
-                    {{ $proposalDetail->material_cost }}
-                    {{ $proposalDetail->materials_name }}
-                </div>
-                <div class="col-sm-3">
-                    Locations: {{ $proposalDetail->locations }}
+                    <p class="fs18 mb5">
+                        <span class="fwb color-black mr5">Locations:</span>
+                        {{ $proposalDetail->locations }}
+                    </p>
                 </div>
             </div>
-            <br/>
             <div class="row">
                 <div class="col-sm-3">
-                    Square Yards: {{ $proposalDetail->square_yards }}
+                    <p class="fs18 mb5">
+                        <span class="fwb color-black mr5">Square Yards:</span>
+                        {{ $proposalDetail->square_yards }}
+                    </p>
                 </div>
                 <div class="col-sm-3">
-                    Tons: {{ $proposalDetail->tons }}
+                    <p class="fs18 mb5">
+                        <span class="fwb color-black mr5">Tons:</span>
+                        {{ $proposalDetail->tons }}
+                    </p>
                 </div>
             </div>
         @endif
@@ -73,21 +86,32 @@
             <!-- curb mix -->
             <div class="row">
                 <div class="col-sm-3">
-                    Linear Feet: {{ $proposalDetail->linear_feet }}
+                    <p class="fs18 mb5">
+                        <span class="fwb color-black mr5">Linear Feet:</span>
+                        {{ $proposalDetail->linear_feet }}
+                    </p>
                 </div>
                 <div class="col-sm-3">
-                    Locations: {{ $proposalDetail->locations }}
+                    <p class="fs18 mb5">
+                        <span class="fwb color-black mr5">Locations:</span>
+                        {{ $proposalDetail->locations }}
+                    </p>
                 </div>
                 <div class="col-sm-3">
-                    Cubic Yards: {{ $proposalDetail->cubic_yards }}
+                    <p class="fs18 mb5">
+                        <span class="fwb color-black mr5">Cubic Yards:</span>
+                        {{ $proposalDetail->cubic_yards }}
+                    </p>
                 </div>
                 <div class="col-sm-3">
-                    Curb Mix (per cubic yard): {{ \App\Helpers\Currency::format($materialsCB[9] ?? '0.0') }}
+                    <p class="fs18 mb5">
+                        <span class="fwb color-black mr5">Curb Mix (per cubic yard):</span>
+                        {{ \App\Helpers\Currency::format($proposal->materials()->where('material_id', 9)->value('cost')) }}
+                    </p>
                 </div>
             </div>
         @else
             <!-- drum mix -->
-            <br/>
             <div class="row">
                 <div class="col-sm-2">
                     Square Feet: {{ $proposalDetail->square_feet }}
@@ -102,7 +126,7 @@
                     Cubic Yards: {{ $proposalDetail->cubic_yardsn }}
                 </div>
                 <div class="col-sm-3">
-                    Cost Per Linear Feet: {{ \App\Helpers\Currency::format($materialsCB[10] ?? '0.0') }}
+                    Cost Per Linear Feet: {{ \App\Helpers\Currency::format($proposal->materials()->where('material_id', 10)->value('cost')) }}
                 </div>
             </div>
         @endif
@@ -110,8 +134,6 @@
 
     @if ( $service->service_category_id === 3)
         <!--    3	Drainage and Catchbasins -->
-        <br/>
-
         <div class="row">
             <div class="col-sm-5">
                 Catchbasins: {{ $proposalDetail->catchbasins }}
@@ -120,7 +142,6 @@
                 Cost Per Day: {{ $proposalDetail->cost_per_day }}
             </div>
         </div>
-        <br/>
         <div class="row">
             <div class="col-sm-9">
                 Description: {{ $proposalDetail->alt_desc }}
@@ -186,8 +207,6 @@
 
     @if ( $service->service_category_id === 6)
         <!--  Paver Brick -->
-        <br/>
-
         <div class="row">
             <div class="col-sm-4">
                 Square Feet: {{ $proposalDetail->square_feet }}
@@ -200,9 +219,6 @@
                 Tons: {{ $proposalDetail->tons}}
             </div>
         </div>
-
-        <br/>
-
         <div class="row">
             <div class="col-sm-9">
                 Description: {{ $proposalDetail->alt_desc }}
@@ -226,17 +242,10 @@
                 Loads: {{ $proposalDetail->loads }}
             </div>
         </div>
-
-        <br/>
-
         <div class="row">
-            <div class="col-sm-4">
+            <div class="col-sm-12">
                 <!-- Show rock cost -->
                 Rock Cost: {{ $proposalDetail->cost_per_day }}
-            </div>
-            <div class="col-sm-4">
-            </div>
-            <div class="col-sm-4">
             </div>
         </div>
     @endif
@@ -244,8 +253,7 @@
     @if ( $service->service_category_id === 8)
         <!--  Seal Coating -->
         <div class="row">
-            <div class="col-sm-3">
-            </div>
+            <div class="col-sm-3"></div>
             <div class="col-sm-3">
                 Yield: {{ $proposalDetail->yield }}
             </div>
@@ -253,9 +261,6 @@
                 Square Feet: {{ $proposalDetail->square_feet }}
             </div>
         </div>
-
-        <br/>
-
         <div class="row">
             <div class="col-sm-4">
                 Primer: {{ $proposalDetail->primer }}
@@ -267,9 +272,6 @@
                 Phases: {{ $proposalDetail->phases }}
             </div>
         </div>
-
-        <br/>
-
         <div class="row">
             <div class="col-lg-3">
                 <h5>Materials Needed</h5>
