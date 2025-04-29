@@ -128,7 +128,7 @@
                                 <h5 class="color-black fs20">
                                     @lang('translation.vehicle')
                                 </h5>
-                                @include('workorders.form_service_vehiclesView')
+                                @include('workorders.view_service_vehicles')
                             </div>
                         </div>
                     </div>
@@ -136,37 +136,45 @@
             @endif
 
             <!--  Equipment -->
-            <div class="card">
-                <div class="card-header alert-light">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <h5 class="color-black fs20">
-                                @lang('translation.equipment')
-                            </h5>
-                            @include('workorders.form_service_equipmentView')
+            @if (isset($equipments) && $equipments->count() > 0)
+                <div class="card">
+                    <div class="card-header alert-light">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <h5 class="color-black fs20">
+                                    @lang('translation.equipment')
+                                </h5>
+                                @include('workorders.view_service_equipments')
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            @endif
 
             <!--  Labor -->
-            <div class="card">
-                <div class="card-header alert-light">
-                    <h5>@lang('translation.labor')</h5>
-                    @include('workorders.form_service_laborView')
+            @if (isset($labors) && $labors->count() > 0)
+                <div class="card">
+                    <div class="card-header alert-light">
+                        <h5>@lang('translation.labor')</h5>
+                        @include('workorders.view_service_labors')
+                    </div>
                 </div>
-            </div>
+            @endif
 
-            <div class="card">
-                <div class="card-header alert-light">
-                    <h5 class="color-black fs20">
-                        @lang('translation.additionalcost')
-                    </h5>
-                    @include('workorders.form_service_additional_costsView')
+            <!--  Additional Cost -->
+            @if (isset($additionalCosts) && $additionalCosts->count() > 0)
+                <div class="card">
+                    <div class="card-header alert-light">
+                        <h5 class="color-black fs20">
+                            @lang('translation.additionalcost')
+                        </h5>
+                        @include('workorders.form_service_additional_costsView')
+                    </div>
                 </div>
-            </div>
+            @endif
 
-            @if ($proposalDetail->service->service_category_id !== 10)
+            <!--  Subcontractors -->
+            @if (isset($subcontractors) && $subcontractors->count() > 0)
                 <div class="card">
                     <div class="card-header alert-light">
                         <h5 class="color-black fs20">

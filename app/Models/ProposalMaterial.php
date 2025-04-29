@@ -3,12 +3,18 @@
 namespace App\Models;
 
 
+use App\Helpers\Currency;
 use Illuminate\Database\Eloquent\Model;
 
 class ProposalMaterial extends Model
 {
 
     protected $table = 'proposal_materials';
+
+    protected $appends = [
+        'material_name',
+        'material_cost',
+    ];
 
     // Relationships:
 
@@ -40,6 +46,22 @@ class ProposalMaterial extends Model
             $data[] = $r;
             }
         return $data;
+    }
+
+    // Mutators and Accessors
+
+    public function getMaterialNameAttribute()
+    {
+        return $this->material !== null
+            ? $this->material->name
+            : null;
+    }
+
+    public function getMaterialCostAttribute()
+    {
+        return $this->material !== null
+            ? Currency::format($this->material->cost ?? '0.0')
+            : null;
     }
     
 }

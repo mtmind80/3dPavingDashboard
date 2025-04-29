@@ -188,7 +188,7 @@ class ProposalDetailController extends Controller
 
 //            'vehiclesCB' => Vehicle::vehiclesCB(['0' => 'Select vehicle']),
 
-        if ($proposalDetail->service->id == 18) { // striping costs
+        if ($proposalDetail->services_id === 18) { // striping costs
 
             //$sorted = $data['striping']->sortBy(['service.dsort', 'description']);
             //$data['striping'] = $sorted;

@@ -148,7 +148,7 @@ class Proposal extends Model
         return $this->belongsTo(Lead::class);
     }
 
-    public function material()
+    public function materials()
     {
         return $this->hasMany(ProposalMaterial::class);
     }
