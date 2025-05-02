@@ -29,7 +29,7 @@
             promotion: false,
             setup: function (editor) {
                 editor.on('init', function (e) {
-                    //editor.setContent('{!! $proposalDetail->proposal_text !!}');
+                    editor.setContent('{!! $proposalDetail->proposal_text !!}');
                     //editor.setContent('kaka');
                 });
             },
