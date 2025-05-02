@@ -29,8 +29,8 @@
             promotion: false,
             setup: function (editor) {
                 editor.on('init', function (e) {
-                    //editor.setContent('{!! $proposalDetail->proposal_text !!}');
-                    editor.setContent('kaka');
+                    editor.setContent('{!! $proposalDetail->proposal_text !!}');
+                    //editor.setContent('kaka');
                 });
             },
             height : 300,
