@@ -67,7 +67,6 @@ class ProposalDetail extends Model
         'created_at',
     ];
 
-
     public $sortable = [
         'proposal_details.proposal_id|proposals.name',
         'proposal_details.services_id|services.name',
@@ -177,9 +176,9 @@ class ProposalDetail extends Model
         return $this->hasMany(ProposalDetailSubcontractor::class, 'proposal_detail_id');
     }
 
-    public function acceptedSubcontractors()
+    public function acceptedSubcontractor()
     {
-        return $this->hasMany(ProposalDetailSubcontractor::class, 'proposal_detail_id')->where('accepted', 1);
+        return $this->hasOne(ProposalDetailSubcontractor::class, 'proposal_detail_id')->where('accepted', 1);
     }
 
     public function service()
@@ -279,6 +278,28 @@ class ProposalDetail extends Model
     public function getHtmlTotalAdditionalCostsAttribute(): string
     {
         return Currency::format($this->total_additional_costs);
+    }
+
+    public function getHtmlCostAttribute(): string
+    {
+        return Currency::format($this->cost);
+    }
+
+    public function getHtmlMaterialCostAttribute(): string
+    {
+        return Currency::format($this->material_cost);
+    }
+
+    // cost_per_linear_feet cost_per_day
+
+    public function getHtmlCostPerLinearFeetAttribute(): string
+    {
+        return Currency::format($this->cost_per_linear_feet);
+    }
+
+    public function getHtmlCostPerDayAttribute(): string
+    {
+        return Currency::format($this->cost_per_day);
     }
 
     public function getIsScheduledAttribute()

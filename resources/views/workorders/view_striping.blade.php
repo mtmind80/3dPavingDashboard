@@ -3,26 +3,21 @@
 @section('content')
     @component('components.breadcrumb')
         @slot('title')
-            @lang('translation.work_orders') @lang('translation.services')
+            @lang('translation.proposal') @lang('translation.estimator')
         @endslot
         @slot('li_1')
-            <a href="/dashboard">
-                @lang('translation.Dashboard')
-            </a>
+            <a href="/dashboard">@lang('translation.Dashboard')</a>
         @endslot
         @slot('li_2')
-            <a href="{{ route('show_workorder', ['id' => $proposalDetail->proposal_id]) }}">
-                @lang('translation.work_orders')
-            </a>
+            <a href="{{route('show_proposal',['id'=> $proposalDetail->proposal_id])}}">@lang('translation.proposal')</a>
         @endslot
         @slot('li_3')
-            @lang('translation.services')
+           Striping Pavement Markings
         @endslot
     @endcomponent
 
     <div class="row estimator-form admin-form service-view-page">
         <div class="col-12">
-            <!--  Service header -->
             <div class="card">
                 <div class="card-header alert-light">
                     <div class="row mt10">
@@ -90,17 +85,8 @@
                     </div>
 
                     @include('workorders.workorder_view_header')
-
-                    @if ($proposal->progressive_billing)
-                        <div class="row mt20 mb10">
-                            <div class="col-md-12">
-                                <p class="m0 fs16 plr15 ptb12" style="background:#E8F8F5;">
-                                    Service completion will trigger Progressive Billing
-                                </p>
-                            </div>
-                        </div>
-                    @endif
                 </div>
+
             </div>
 
             <!--  Service text view -->
@@ -119,73 +105,15 @@
                 </div>
             </div>
 
-            <!--  Vehicles -->
-            @if (isset($vehicles) && $vehicles->count() > 0)
-                <div class="card">
-                    <div class="card-header alert-light">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <h5 class="color-black fs20">
-                                    @lang('translation.vehicle')
-                                </h5>
-                                @include('workorders.view_service_vehicles')
-                            </div>
-                        </div>
-                    </div>
+            <div class="card">
+                <div class="card-header alert-light">
+                    @include('estimator.form_striping_formulas')
                 </div>
-            @endif
 
-            <!--  Equipment -->
-            @if (isset($equipments) && $equipments->count() > 0)
-                <div class="card">
-                    <div class="card-header alert-light">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <h5 class="color-black fs20">
-                                    @lang('translation.equipment')
-                                </h5>
-                                @include('workorders.view_service_equipments')
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @endif
+            </div>
 
-            <!--  Labor -->
-            @if (isset($labors) && $labors->count() > 0)
-                <div class="card">
-                    <div class="card-header alert-light">
-                        <h5>@lang('translation.labor')</h5>
-                        @include('workorders.view_service_labors')
-                    </div>
-                </div>
-            @endif
 
-            <!--  Additional Cost -->
-            @if (isset($additionalCosts) && $additionalCosts->count() > 0)
-                <div class="card">
-                    <div class="card-header alert-light">
-                        <h5 class="color-black fs20">
-                            @lang('translation.additionalcost')
-                        </h5>
-                        @include('workorders.view_service_additional_costs')
-                    </div>
-                </div>
-            @endif
-
-            <!--  Subcontractors -->
-            @if (isset($acceptedSubcontractor) && $acceptedSubcontractor !== null)
-                <div class="card">
-                    <div class="card-header alert-light">
-                        <h5 class="color-black fs20">
-                            @lang('translation.subcontractor')
-                        </h5>
-                        @include('workorders.view_service_accepted_subcontractor')
-                    </div>
-                </div>
-            @endif
         </div>
     </div>
 @endsection
-
 

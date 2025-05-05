@@ -595,15 +595,14 @@ class WorkOrderDetailsController extends Controller
             },
             'labor',
             'additionalCosts',
-            'subcontractors' => function ($e) {
-                $e->with(['contractor']);
+            'acceptedSubcontractor' => function ($f) {
+                $f->with(['contractor']);
             },
-
         ])->find($id)) {
             return view('pages-404');
         }
 
-        //dd($proposalDetail->proposal->materials()->where('material_id', 9)->value('MaterialCost'));
+        //dd($proposalDetail->acceptedSubcontractor->toArray());
 
         $data = [
             'proposalDetail' => $proposalDetail,
@@ -615,7 +614,7 @@ class WorkOrderDetailsController extends Controller
             'equipments' => $proposalDetail->equipment,
             'labors' => $proposalDetail->labor,
             'additionalCosts' => $proposalDetail->additionalCosts,
-            'subcontractors' => $proposalDetail->subcontractors,
+            'acceptedSubcontractor' => $proposalDetail->acceptedSubcontractor,
             'materialsCB' => Material::materialsCB(),
 
             'vehiclesCB' => VehicleType::get(),
@@ -625,7 +624,7 @@ class WorkOrderDetailsController extends Controller
         //dd($proposalDetail->service->service_category_id, $proposalDetail->service->id);
 
         return view($proposalDetail->services_id === 18
-            ? 'workorders.striping'
+            ? 'workorders.view_striping'
             : 'workorders.view_service', $data);
     }
 
