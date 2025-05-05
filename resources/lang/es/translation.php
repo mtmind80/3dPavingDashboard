@@ -315,6 +315,7 @@ return [
     "CreatedDate" => "Fecha de Creación",
     "between" => "Entre",
     "onAlert" => "Proyectos en Alerta",
+    "subcontractor" => "Subcontratista",
     "subcontractors" => "Subcontratistas",
     "selectservice" => "Seleccione un Servicio",
     "inactiveProposal" => "Propuesta Inactiva",
