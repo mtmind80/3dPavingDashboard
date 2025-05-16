@@ -589,7 +589,6 @@ class WorkOrderDetailsController extends Controller
                 $r->with(['category']);
             },
             'striping',
-            //'striping' => fn($q) => $q->whereHas('services')->with(['services'])->orderBy('dsort'),
             'location',
             'vehicles',
             'equipment' => function ($w) {
@@ -614,8 +613,6 @@ class WorkOrderDetailsController extends Controller
             ->orderBy('dsort')
             ->get();
 
-        //dd($stripingServices->first()->html_total_cost, $stripingServices->first()->toArray());
-
         $data = [
             'proposalDetail' => $proposalDetail,
             'proposal' => $proposalDetail->proposal,
@@ -632,8 +629,6 @@ class WorkOrderDetailsController extends Controller
             'vehiclesCB' => VehicleType::get(),
             'laborCB' => LaborRate::LaborWithRatesCB(['0' => 'Select labor']),
         ];
-
-        //dd($proposalDetail->service->service_category_id, $proposalDetail->service->id);
 
         return view($proposalDetail->services_id === 18
             ? 'workorders.view_striping'
