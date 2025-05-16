@@ -414,11 +414,6 @@
 
     @if ( $service->service_category_id === 9)
         <!-- striping -->
-        @foreach($striping as $stripe)
-            {{ $stripe['name'] }}
-            {{ $stripe['service']['dsort'] }}
-            <br/>
-        @endforeach
     @endif
 
     @if ($service->service_category_id === 10)
