@@ -302,6 +302,13 @@ class ProposalDetail extends Model
         return Currency::format($this->cost_per_day);
     }
 
+    public function getHtmlStrippingCostAttribute()
+    {
+        $cost = (float)$this->profit * (float)$this->overhead * (float)$this->break_even;
+
+        return Currency::format($cost ?? 0);
+    }
+
     public function getIsScheduledAttribute()
     {
         return $this->getIsScheduled();
