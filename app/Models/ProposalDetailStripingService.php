@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\Currency;
 use Illuminate\Database\Eloquent\Model;
 
 class ProposalDetailStripingService extends Model
@@ -17,13 +18,19 @@ class ProposalDetailStripingService extends Model
         return $this->belongsTo(StripingService::class,'striping_service_id');
     }
 
-
     public function getServiceSortAttribute($value)
     {
         return $this->service()->dsort;
     }
+
     public function getCostTotalAttribute($value)
     {
         return (float) ($this->cost * $this->quantity);
     }
+
+    public function getHtmlCostAttribute(): string
+    {
+        return Currency::format($this->cost_total);
+    }
+
 }

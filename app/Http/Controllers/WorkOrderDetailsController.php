@@ -13,6 +13,7 @@ use App\Models\ProposalDetailSubcontractor;
 use App\Models\ProposalDetailEquipment;
 use App\Models\ProposalMaterial;
 use App\Models\ServiceCategory;
+use App\Models\StripingService;
 use App\Models\User;
 use App\Models\Vehicle;
 use App\Models\ProposalDetail;
@@ -33,12 +34,12 @@ class WorkOrderDetailsController extends Controller
     public function details($proposal_detail_id, Request $request)
     {
         if (!$proposalDetail = ProposalDetail::with([
-            'proposal',
-            'service',
-            'vehicles',
-            'equipment',
-            'subcontractors',
-        ])->find($proposal_detail_id)
+                'proposal',
+                'service',
+                'vehicles',
+                'equipment',
+                'subcontractors',
+            ])->find($proposal_detail_id)
         ) {
             abort(404);
         }
@@ -602,13 +603,21 @@ class WorkOrderDetailsController extends Controller
             return view('pages-404');
         }
 
-        //dd($proposalDetail->acceptedSubcontractor->toArray());
+        $stripingServices = StripingService::
+            whereHas(
+            'services', fn($q) => $q->where('proposal_detail_id', $proposalDetail->id)->where('quantity', '>', 0)
+            )
+            ->with([
+                'services' => fn($q) => $q->where('proposal_detail_id', $proposalDetail->id)->where('quantity', '>', 0)
+            ])
+            ->orderBy('dsort')
+            ->get();
 
         $data = [
             'proposalDetail' => $proposalDetail,
             'proposal' => $proposalDetail->proposal,
             'service' => $proposalDetail->service,
-            'striping' => $proposalDetail->striping,
+            'stripingServices' => $stripingServices,
             'location' => $proposalDetail->location,
             'vehicles' => $proposalDetail->vehicles,
             'equipments' => $proposalDetail->equipment,
@@ -620,8 +629,6 @@ class WorkOrderDetailsController extends Controller
             'vehiclesCB' => VehicleType::get(),
             'laborCB' => LaborRate::LaborWithRatesCB(['0' => 'Select labor']),
         ];
-
-        //dd($proposalDetail->service->service_category_id, $proposalDetail->service->id);
 
         return view($proposalDetail->services_id === 18
             ? 'workorders.view_striping'
