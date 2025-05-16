@@ -82,7 +82,7 @@
                                 <div class="">
                                     <p class="fs18 mb5">
                                         <span class="fwb color-black">Customer Price: </span>
-                                        ${{ $proposalDetail->cost }}
+                                        {{ $proposalDetail->html_cost }}
                                     </p>
                                 </div>
                             </div>
@@ -168,19 +168,19 @@
                         <h5 class="color-black fs20">
                             @lang('translation.additionalcost')
                         </h5>
-                        @include('workorders.form_service_additional_costsView')
+                        @include('workorders.view_service_additional_costs')
                     </div>
                 </div>
             @endif
 
             <!--  Subcontractors -->
-            @if (isset($subcontractors) && $subcontractors->count() > 0)
+            @if (isset($acceptedSubcontractor) && $acceptedSubcontractor !== null)
                 <div class="card">
                     <div class="card-header alert-light">
                         <h5 class="color-black fs20">
-                            @lang('translation.subcontractors')
+                            @lang('translation.subcontractor')
                         </h5>
-                        @include('workorders.form_service_subcontractorsView')
+                        @include('workorders.view_service_accepted_subcontractor')
                     </div>
                 </div>
             @endif
