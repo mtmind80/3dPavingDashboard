@@ -320,6 +320,7 @@ return [
     "CreatedDate" => "Created Date",
     "between" => "Is Between",
     "onAlert" => "Projects On Alert",
+    "subcontractor" => "Sub Contractor",
     "subcontractors" => "Sub Contractors",
     "selectservice" => "Select a Service",
     "inactiveProposal" => "In Active Proposals",

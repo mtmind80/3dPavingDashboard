@@ -5,33 +5,57 @@
             {{-- asphalt milling --}}
             <div class="row">
                 <div class="col-sm-3">
-                    Square Feet: {{ $proposalDetail->square_feet }}
+                    <p class="fs18 mb5">
+                        <span class="fwb color-black mr5">Square Feet:</span>
+                        {{ $proposalDetail->square_feet }}
+                    </p>
                 </div>
                 <div class="col-sm-2">
-                    Depth: {{ $proposalDetail->depth }}
+                    <p class="fs18 mb5">
+                        <span class="fwb color-black mr5">Depth:</span>
+                        {{ $proposalDetail->depth }}
+                    </p>
                 </div>
                 <div class="col-sm-3">
-                    Days: {{ $proposalDetail->days }}
+                    <p class="fs18 mb5">
+                        <span class="fwb color-black mr5">:Days</span>
+                        {{ $proposalDetail->days }}
+                    </p>
                 </div>
                 @if (auth()->user()->isAdmin())
                     <div class="col-sm-2">
-                        Cost Per Day: {{ $proposalDetail->cost_per_day }}
+                        <p class="fs18 mb5">
+                            <span class="fwb color-black mr5">Cost Per Day:</span>
+                            {{ $proposalDetail->html_cost_per_day }}
+                        </p>
                     </div>
                     <div class="col-sm-2">
-                        Locations: {{ $proposalDetail->locations }}
+                        <p class="fs18 mb5">
+                            <span class="fwb color-black mr5">Locations:</span>
+                            {{ $proposalDetail->locations }}
+                        </p>
                     </div>
                 @else
                     <div class="col-sm-4">
-                        Locations: {{ $proposalDetail->locations }}
+                        <p class="fs18 mb5">
+                            <span class="fwb color-black mr5">Locations:</span>
+                            {{ $proposalDetail->locations }}
+                        </p>
                     </div>
                 @endif
             </div>
             <div class="row">
                 <div class="col-sm-4">
-                    Square Yards: {{ $proposalDetail->square_yards }}
+                    <p class="fs18 mb5">
+                        <span class="fwb color-black mr5">Square Yards:</span>
+                        {{ $proposalDetail->square_yards }}
+                    </p>
                 </div>
                 <div class="col-sm-4">
-                    Loads:{{ $proposalDetail->loads }}
+                    <p class="fs18 mb5">
+                        <span class="fwb color-black mr5">Loads:</span>
+                        {{ $proposalDetail->loads }}
+                    </p>
                 </div>
                 <div class="col-sm-4"></div>
             </div>
@@ -44,21 +68,21 @@
                         {{ $proposalDetail->square_feet }}
                     </p>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-2">
                     <p class="fs18 mb5">
                         <span class="fwb color-black mr5">Depth:</span>
                         {{ $proposalDetail->depth }}
                     </p>
                 </div>
                 @if (auth()->user()->isAdmin())
-                    <div class="col-sm-3">
+                    <div class="col-sm-4">
                         <p class="fs18 mb5">
                             <span class="fwb color-black mr5">Asphalt Cost:</span>
-                            {{ $proposalDetail->material_cost }} {{ $proposalDetail->materials_name }}
+                            {{ $proposalDetail->html_material_cost }} {{ $proposalDetail->materials_name }}
                         </p>
                     </div>
                 @endif
-                <div class="col-sm-3">
+                <div class="col-sm-2">
                     <p class="fs18 mb5">
                         <span class="fwb color-black mr5">Locations:</span>
                         {{ $proposalDetail->locations }}
@@ -114,20 +138,37 @@
             <!-- drum mix -->
             <div class="row">
                 <div class="col-sm-2">
-                    Square Feet: {{ $proposalDetail->square_feet }}
+                    <p class="fs18 mb5">
+                        <span class="fwb color-black mr5">Square Feet:</span>
+                        {{ $proposalDetail->square_feet }}
+                    </p>
                 </div>
                 <div class="col-sm-2">
-                    Depth: {{ $proposalDetail->depth }}
+                    <p class="fs18 mb5">
+                        <span class="fwb color-black mr5">Depth:</span>
+                        {{ $proposalDetail->depth }}
+                    </p>
                 </div>
                 <div class="col-sm-2">
-                    Locations: {{ $proposalDetail->locations }}
+                    <p class="fs18 mb5">
+                        <span class="fwb color-black mr5">Locations:</span>
+                        {{ $proposalDetail->locations }}
+                    </p>
                 </div>
                 <div class="col-sm-3">
-                    Cubic Yards: {{ $proposalDetail->cubic_yardsn }}
+                    <p class="fs18 mb5">
+                        <span class="fwb color-black mr5">Cubic Yards:</span>
+                        {{ $proposalDetail->cubic_yardsn }}
+                    </p>
                 </div>
-                <div class="col-sm-3">
-                    Cost Per Linear Feet: {{ \App\Helpers\Currency::format($proposal->materials()->where('material_id', 10)->value('cost')) }}
-                </div>
+                @if (auth()->user()->isAdmin())
+                    <div class="col-sm-3">
+                        <p class="fs18 mb5">
+                            <span class="fwb color-black mr5">Cost Per Linear Feet:</span>
+                            {{ \App\Helpers\Currency::format($proposal->materials()->where('material_id', 10)->value('cost')) }}
+                        </p>
+                    </div>
+                @endif
             </div>
         @endif
     @endif
@@ -136,15 +177,26 @@
         <!--    3	Drainage and Catchbasins -->
         <div class="row">
             <div class="col-sm-5">
-                Catchbasins: {{ $proposalDetail->catchbasins }}
+                <p class="fs18 mb5">
+                    <span class="fwb color-black mr5">Catchbasins:</span>
+                    {{ $proposalDetail->catchbasins }}
+                </p>
             </div>
-            <div class="col-sm-4">
-                Cost Per Day: {{ $proposalDetail->cost_per_day }}
-            </div>
+            @if (auth()->user()->isAdmin())
+                <div class="col-sm-4">
+                    <p class="fs18 mb5">
+                        <span class="fwb color-black mr5">Cost Per Day:</span>
+                        {{ $proposalDetail->html_cost_per_day }}
+                    </p>
+                </div>
+            @endif
         </div>
         <div class="row">
             <div class="col-sm-9">
-                Description: {{ $proposalDetail->alt_desc }}
+                <p class="fs18 mb5">
+                    <span class="fwb color-black db mb5">Description:</span>
+                    {{ $proposalDetail->alt_desc }}
+                </p>
             </div>
         </div>
     @endif
@@ -153,35 +205,50 @@
         <!--  4	Excavation -->
         <div class="row">
             <div class="col-sm-2 admin-form-item-widget">
-                Square Feet: {{ $proposalDetail->square_feet }}
+                <p class="fs18 mb5">
+                    <span class="fwb color-black mr5">Square Feet:</span>
+                    {{ $proposalDetail->square_feet }}
+                </p>
             </div>
             <div class="col-sm-2">
-                Depth: {{ $proposalDetail->depth }}
+                <p class="fs18 mb5">
+                    <span class="fwb color-black mr5">Depth:</span>
+                    {{ $proposalDetail->depth }}
+                </p>
             </div>
             <div class="col-sm-2">
-                Cost Per Day: {{ $proposalDetail->cost_per_day }}
+                <p class="fs18 mb5">
+                    <span class="fwb color-black mr5">Cost Per Day:</span>
+                    {{ $proposalDetail->html_cost_per_day }}
+                </p>
             </div>
             <div class="col-sm-2">
-                Loads: {{ $proposalDetail->loads }}
+                <p class="fs18 mb5">
+                    <span class="fwb color-black mr5">Loads:</span>
+                    {{ $proposalDetail->loads }}
+                </p>
             </div>
             <div class="col-sm-2">
-                Tons: {{ $proposalDetail->tons }}
+                <p class="fs18 mb5">
+                    <span class="fwb color-black mr5">Tons:</span>
+                    {{ $proposalDetail->tons }}
+                </p>
             </div>
         </div>
-
-        <br/>
     @endif
 
     @if ( $service->service_category_id === 5)
         <!--  Other -->
         <div class="row">
             @if (auth()->user()->isAdmin())
-                <div class="col-xs-6 col-sm-3">
-                    <p class="fs18 mb5">
-                        <span class="fwb color-black mr5">Cost Per Day:</span>
-                        {{ $proposalDetail->cost_per_day }}
-                    </p>
-                </div>
+                @if (auth()->user()->isAdmin())
+                    <div class="col-xs-6 col-sm-3">
+                        <p class="fs18 mb5">
+                            <span class="fwb color-black mr5">Cost Per Day:</span>
+                            {{ $proposalDetail->html_cost_per_day }}
+                        </p>
+                    </div>
+                @endif
                 <div class="col-xs-6 col-sm-3">
                     <p class="fs18 mb5">
                         <span class="fwb color-black mr5">Locations:</span>
@@ -196,9 +263,11 @@
                     </p>
                 </div>
             @endif
-            <div class="col-xs-12 col-sm-6">
+        </div>
+        <div class="row">
+            <div class="col-md-12">
                 <p class="fs18 mb5">
-                    <span class="fwb color-black mr5">Job Description:</span>
+                    <span class="fwb color-black db mb5">Job Description:</span>
                     {{ $proposalDetail->alt_desc }}
                 </p>
             </div>
@@ -209,19 +278,32 @@
         <!--  Paver Brick -->
         <div class="row">
             <div class="col-sm-4">
-                Square Feet: {{ $proposalDetail->square_feet }}
+                <p class="fs18 mb5">
+                    <span class="fwb color-black mr5">Square Feet:</span>
+                    {{ $proposalDetail->square_feet }}
+                </p>
             </div>
+            @if (auth()->user()->isAdmin())
+                <div class="col-sm-4">
+                    <p class="fs18 mb5">
+                        <span class="fwb color-black mr5">Cost Per Day:</span>
+                        {{ $proposalDetail->html_cost_per_day }}
+                    </p>
+                </div>
+            @endif
             <div class="col-sm-4">
-                Cost Per Day: {{ $proposalDetail->cost_per_day }}
-            </div>
-            <div class="col-sm-4">
-                <div class='check-contact tc' id="tonnage"></div>
-                Tons: {{ $proposalDetail->tons}}
+                <p class="fs18 mb5">
+                    <span class="fwb color-black mr5">Tons:</span>
+                    {{ $proposalDetail->tons }}
+                </p>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-9">
-                Description: {{ $proposalDetail->alt_desc }}
+                <p class="fs18 mb5">
+                    <span class="fwb color-black db mb5">Description:</span>
+                    {{ $proposalDetail->alt_desc }}
+                </p>
             </div>
         </div>
     @endif
@@ -230,80 +312,128 @@
         <!--  Rock -->
         <div class="row">
             <div class="col-sm-3">
-                Square Feet: {{ $proposalDetail->square_feet }}
+                <p class="fs18 mb5">
+                    <span class="fwb color-black mr5">Square Feet:</span>
+                    {{ $proposalDetail->square_feet }}
+                </p>
             </div>
             <div class="col-sm-3">
-                Depth: {{ $proposalDetail->depth }}
+                <p class="fs18 mb5">
+                    <span class="fwb color-black mr5">Depth:</span>
+                    {{ $proposalDetail->depth }}
+                </p>
             </div>
             <div class="col-sm-3">
-                Tons: {{ $proposalDetail->tons }}
+                <p class="fs18 mb5">
+                    <span class="fwb color-black mr5">Tons:</span>
+                    {{ $proposalDetail->tons }}
+                </p>
             </div>
             <div class="col-sm-3">
-                Loads: {{ $proposalDetail->loads }}
+                <p class="fs18 mb5">
+                    <span class="fwb color-black mr5">Loads:</span>
+                    {{ $proposalDetail->loads }}
+                </p>
             </div>
         </div>
-        <div class="row">
-            <div class="col-sm-12">
-                <!-- Show rock cost -->
-                Rock Cost: {{ $proposalDetail->cost_per_day }}
+        @if (auth()->user()->isAdmin())
+            <div class="row">
+                <div class="col-sm-12">
+                    <!-- Show rock cost -->
+                    <p class="fs18 mb5">
+                        <span class="fwb color-black mr5">Rock Cost:</span>
+                        {{ $proposalDetail->html_cost_per_day }}
+                    </p>
+                </div>
             </div>
-        </div>
+        @endif
     @endif
 
     @if ( $service->service_category_id === 8)
         <!--  Seal Coating -->
         <div class="row">
-            <div class="col-sm-3"></div>
             <div class="col-sm-3">
-                Yield: {{ $proposalDetail->yield }}
+                <p class="fs18 mb5">
+                    <span class="fwb color-black mr5">Yield:</span>
+                    {{ $proposalDetail->yield }}
+                </p>
             </div>
-            <div class="col-sm-3">
-                Square Feet: {{ $proposalDetail->square_feet }}
+            <div class="col-sm-9">
+                <p class="fs18 mb5">
+                    <span class="fwb color-black mr5">Square Feet:</span>
+                    {{ $proposalDetail->square_feet }}
+                </p>
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-4">
-                Primer: {{ $proposalDetail->primer }}
+            <div class="col-sm-3">
+                <p class="fs18 mb5">
+                    <span class="fwb color-black mr5">Primer:</span>
+                    {{ $proposalDetail->primer }}
+                </p>
             </div>
-            <div class="col-sm-4">
-                Fast Set: {{ $proposalDetail->fast_set }}
+            <div class="col-sm-3">
+                <p class="fs18 mb5">
+                    <span class="fwb color-black mr5">Fast Set:</span>
+                    {{ $proposalDetail->fast_set }}
+                </p>
             </div>
-            <div class="col-sm-4">
-                Phases: {{ $proposalDetail->phases }}
+            <div class="col-sm-6">
+                <p class="fs18 mb5">
+                    <span class="fwb color-black mr5">Phases:</span>
+                    {{ $proposalDetail->phases }}
+                </p>
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-3">
-                <h5>Materials Needed</h5>
+            <div class="col-sm-3">
+                <p class="fs18 mb5">
+                    <span class="fwb color-black mr5">Materials Needed:</span>
+                </p>
             </div>
-            <div class="col-lg-3">
-                Sealer: {{ $proposalDetail->sealer }}
+            <div class="col-sm-3">
+                <p class="fs18 mb5">
+                    <span class="fwb color-black mr5">Sealer:</span>
+                    {{ $proposalDetail->sealer }}
+                </p>
             </div>
-            <div class="col-lg-3">
-                Sand: {{ $proposalDetail->sand }}
+            <div class="col-sm-3">
+                <p class="fs18 mb5">
+                    <span class="fwb color-black mr5">Sand:</span>
+                    {{ $proposalDetail->sand }}
+                </p>
             </div>
-            <div class="col-lg-3">
-                Additive: {{ $proposalDetail->additive }}
+            <div class="col-sm-3">
+                <p class="fs18 mb5">
+                    <span class="fwb color-black mr5">Additive:</span>
+                    {{ $proposalDetail->additive }}
+                </p>
             </div>
         </div>
    @endif
 
     @if ( $service->service_category_id === 9)
         <!-- striping -->
-        @foreach($striping as $stripe)
-            {{ $stripe['name'] }}
-            {{ $stripe['service']['dsort'] }}
-            <br/>
-        @endforeach
     @endif
 
     @if ($service->service_category_id === 10)
-        <div class="row">
-            <div class="col-sm-3">
-                Contractor Cost: {{ $proposalDetail->cost_per_day }}
+            <div class="row">
+                @if (auth()->user()->isAdmin())
+                    <div class="col-sm-12">
+                        <p class="fs18 mb5">
+                            <span class="fwb color-black mr5">Contractor Cost:</span>
+                            {{ $proposalDetail->html_cost_per_day }}
+                        </p>
+                    </div>
+                @endif
             </div>
-            <div class="col-sm-6">
-                Description: {{ $proposalDetail->alt_desc }}
+
+        <div class="row">
+            <div class="col-sm-12">
+                <p class="fs18 mb5">
+                    <span class="fwb color-black mr5 db mb5">Description:</span>
+                    {{ $proposalDetail->alt_desc }}
+                </p>
             </div>
         </div>
     @endif
