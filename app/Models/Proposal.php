@@ -71,6 +71,17 @@ class Proposal extends Model
         return $this->searchable;
     }
 
+    public static function boot()
+    {
+        static::creating(function($model) {
+            if (auth()->user()->isPavementConsultant()) {
+                $model->salesperson_id = auth()->user()->id;
+            }
+        });
+
+        parent::boot();
+    }
+
     // Relationships:
 
     public function details()

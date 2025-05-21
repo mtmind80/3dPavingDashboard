@@ -204,6 +204,11 @@ class User extends Authenticatable
         return $this->role_id == 4;
     }
 
+    public function isPavementConsultant()
+    {
+        return $this->role_id == 4;
+    }
+
     public function isActive()
     {
         return $this->status;
