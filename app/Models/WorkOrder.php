@@ -19,7 +19,7 @@ class WorkOrder extends Proposal
         $this->appends[] = 'sales_year';
     }
 
-    protected static function boot()
+    public static function boot()
     {
         static::saved(function ($model){
             Cache::forget('existing_sales_years');
