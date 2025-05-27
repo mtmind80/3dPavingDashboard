@@ -92,7 +92,7 @@
                         </div>
                     </form>
                 </div>
-                <div class="card-body{{ empty($timeSheets) || $timeSheets->count() === 0 ? ' hidden' : '' }}">
+                <div id="timesheet_card" class="card-body{{ empty($timeSheets) || $timeSheets->count() === 0 ? ' hidden' : '' }}">
                     <h5 class="mb-4">@lang('translation.list')</h5>
                     <table class="list-table table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
@@ -477,7 +477,7 @@
 
             var timeSheetAlert = $('#timesheet_alert');
             var timesheetTbody = $('#timesheet_tbody');
-            var timesheetCard = timesheetTbody.closest('.card-body');
+            var timeSheetCard = timesheetTbody.closest('.card-body');
 
             timeSheetAlert.on('click', function(ev){
                 ev.stopPropagation();
