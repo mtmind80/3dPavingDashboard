@@ -12,16 +12,14 @@ class WorkorderTimesheets extends Model
 
     protected $table = 'workorder_timesheets';
 
-    protected $guarded = ['id'];
-
-    protected $dates = ['report_date', 'start_time', 'end_time'];
+    protected $dates = ['start_time', 'end_time'];
 
     public $fillable = [
         'proposal_id',
         'proposal_detail_id',
+        'workorder_field_report_id',
         'employee_id',
         'created_by',
-        'report_date',
         'start_time',
         'end_time',
         'actual_hours',
@@ -29,7 +27,6 @@ class WorkorderTimesheets extends Model
     ];
 
     public $sortable = [
-        'report_date',
         'start_time',
         'end_time',
         'actual_hours',
@@ -37,14 +34,13 @@ class WorkorderTimesheets extends Model
         'created_at',
         'workorder_timesheets.proposal_id|proposals.name',
         'workorder_timesheets.employee_id|users.fname',
-        'workorder_timesheets.created_by|users.fname',
+        'workorder_timesheets.workorder_field_report_id|workorder_field_reports.report_date',
     ];
 
     public $searchable = [
-        'report_date'  => 'LIKE',
-        'created_at'   => 'LIKE',
+        'created_at' => 'LIKE',
         'childModels' => [
-            'proposal'     => [
+            'proposal' => [
                 'fields' => [
                     'name' => 'LIKE',
                 ],
@@ -53,6 +49,11 @@ class WorkorderTimesheets extends Model
                 'fields' => [
                     'fname' => 'LIKE',
                     'lname' => 'LIKE',
+                ],
+            ],
+            'fieldReport' => [
+                'fields' => [
+                    'report_date' => 'LIKE',
                 ],
             ],
         ],
@@ -80,6 +81,11 @@ class WorkorderTimesheets extends Model
         return $this->belongsTo(Proposal::class, 'proposal_id');
     }
 
+    public function fieldReport()
+    {
+        return $this->belongsTo(WorkorderFieldReport::class, 'workorder_field_report_id');
+    }
+
     public function employee()
     {
         return $this->belongsTo(User::class, 'employee_id');
@@ -99,7 +105,6 @@ class WorkorderTimesheets extends Model
         if (empty($this->start_time) || empty($this->end_time)) {
             return null;
         }
-
 
 
         return '';

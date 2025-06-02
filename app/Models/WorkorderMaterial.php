@@ -10,18 +10,12 @@ class WorkorderMaterial extends Model
 {
     use SortableTrait, SearchTrait;
 
-    protected $table = 'workorder_materials';
-
-    protected $guarded = ['id'];
-
-    protected $dates = ['report_date'];
-
     public $fillable = [
         'proposal_id',
         'proposal_detail_id',
+        'workorder_field_report_id',
         'material_id',
         'name',
-        'report_date',
         'created_by',
         'cost',
         'note',
@@ -29,28 +23,32 @@ class WorkorderMaterial extends Model
     ];
 
     public $sortable = [
-        'report_date',
         'workorder_materials.name',
         'cost',
         'quantity',
         'workorder_materials.proposal_id|proposals.name',
         'workorder_materials.created_by|users.fname',
+        'workorder_materials.workorder_field_report_id|workorder_field_reports.report_date',
     ];
 
     public $searchable = [
-        'report_date'              => 'LIKE',
         'workorder_materials.name' => 'LIKE',
         'workorder_materials.note' => 'LIKE',
-        'childModels'              => [
+        'childModels' => [
             'proposal' => [
                 'fields' => [
                     'proposals.name' => 'LIKE',
                 ],
             ],
-            'creator'  => [
+            'creator' => [
                 'fields' => [
                     'fname' => 'LIKE',
                     'lname' => 'LIKE',
+                ],
+            ],
+            'fieldReport' => [
+                'fields' => [
+                    'report_date' => 'LIKE',
                 ],
             ],
         ],
@@ -76,6 +74,11 @@ class WorkorderMaterial extends Model
     public function proposal()
     {
         return $this->belongsTo(Proposal::class, 'proposal_id');
+    }
+
+    public function fieldReport()
+    {
+        return $this->belongsTo(WorkorderFieldReport::class, 'workorder_field_report_id');
     }
 
     public function creator()

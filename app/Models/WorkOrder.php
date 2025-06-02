@@ -35,7 +35,6 @@ class WorkOrder extends Proposal
 
     // Relationships
 
-
     public function permits()
     {
         $this->hasMany(Permit::class, 'proposal_id', 'id');
