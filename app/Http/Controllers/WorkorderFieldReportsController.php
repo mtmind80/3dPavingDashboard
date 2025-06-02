@@ -57,9 +57,9 @@ class WorkorderFieldReportsController extends Controller
         return view('workorders.field_report.index', $data);
     }
 
-    public function search(SearchRequest $request)
+    public function search($proposalDetailId, SearchRequest $request)
     {
-        return $this->index($request);
+        return $this->index($proposalDetailId, $request);
     }
 
     public function store(Request $request)
