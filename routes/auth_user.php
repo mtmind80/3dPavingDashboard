@@ -150,8 +150,7 @@ Route::group(['prefix' => 'workorders'], function() {
         Route::post('/ajax-subcontractor-store', 'WorkOrderDetailsController@ajaxSubcontractorStore')->name('ajax_workorder_subcontractor_store');
         Route::post('/ajax-subcontractor-destroy', 'WorkOrderDetailsController@ajaxSubcontractorDestroy')->name('ajax_workorder_subcontractor_destroy');
 
-        //view
-        //Route::get('/view_service/{proposal_id}/{id}', 'WorkOrderDetailsController@view_service')->name('view_service');
+        // view
         Route::get('/view_service/{proposal_id}/{id}', 'WorkOrderDetailsController@viewService')->name('view_service');
 
     });
@@ -192,11 +191,6 @@ Route::group(['prefix' => 'workorders'], function() {
         // additionalCost:
         Route::post('/ajax-additional-cost-store', 'WorkorderFieldReportsController@ajaxAdditionalCostStore')->name('ajax_workorder_field_report_additional_cost_store');
         Route::post('/ajax-additional-cost-destroy', 'WorkorderFieldReportsController@ajaxAdditionalCostDestroy')->name('ajax_workorder_field_report_additional_cost_destroy');
-        
-        //view
-        //Route::get('/view_service/{proposal_id}/{id}', 'WorkorderFieldReportsController@view_service')->name('view_service');
-        Route::get('/view_service/{proposal_id}/{id}', 'WorkorderFieldReportsController@viewService')->name('view_service');
-
     });
     /** END WorkOrder Field Reports */
     

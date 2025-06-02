@@ -6,8 +6,9 @@
     @component('components.breadcrumb')
         @slot('title') @lang('translation.details')@endslot
         @slot('li_1') <a href="{{ route('dashboard') }}">@lang('translation.Dashboard')</a>@endslot
-        @slot('li_2') <a href="{{ route('show_workorder', ['id' => $fieldReport->proposal_detail_id]) }}">@lang('translation.show') @lang('translation.work_order')</a>@endslot
-        @slot('li_3') @lang('translation.details') @endslot
+        @slot('li_2') <a href="{{ route('show_workorder', ['id' => $fieldReport->proposal_id]) }}">@lang('translation.work_order')</a>@endslot
+        @slot('li_3') <a href="{{ route('workorder_field_report_list', ['proposal_detail_id' => $fieldReport->proposal_detail_id]) }}">@lang('translation.fieldreports')</a>@endslot
+        @slot('li_4') @lang('translation.details') @endslot
     @endcomponent
 
     <div class="row admin-form">

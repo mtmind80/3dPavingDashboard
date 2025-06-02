@@ -23,18 +23,13 @@ class WorkorderFieldReport extends Model
 
     public $sortable = [
         'report_date',
-        'workorder_field_reports.proposal_id|proposals.name',
         'workorder_field_reports.created_by|users.fname',
     ];
 
     public $searchable = [
-        'report_date' => 'LIKE',
+        'report_date' => ':date',
+        /*
         'childModels' => [
-            'proposal' => [
-                'fields' => [
-                    'proposals.name' => 'LIKE',
-                ],
-            ],
             'creator' => [
                 'fields' => [
                     'fname' => 'LIKE',
@@ -42,6 +37,7 @@ class WorkorderFieldReport extends Model
                 ],
             ],
         ],
+        */
     ];
 
     public function sortableColumns()
