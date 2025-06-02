@@ -200,6 +200,11 @@ class ProposalDetail extends Model
         return $this->hasMany(Permit::class);
     }
 
+    public function fieldReports()
+    {
+        return $this->hasMany(Permit::class);
+    }
+
     // Mutators and Accessors
 
     public function getFormattedCostAttribute()
