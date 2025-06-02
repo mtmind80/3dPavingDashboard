@@ -14,40 +14,43 @@ class WorkorderVehicle extends Model
 
     protected $guarded = ['id'];
 
-    protected $dates = ['report_date'];
-
     public $fillable = [
         'proposal_id',
         'proposal_detail_id',
+        'workorder_field_report_id',
         'vehicle_id',
         'vehicle_name',
-        'report_date',
         'created_by',
         'note',
         'number_of_vehicles',
     ];
 
     public $sortable = [
-        'report_date',
         'vehicle_name',
         'number_of_vehicles',
         'workorder_vehicles.proposal_id|proposals.name',
         'workorder_vehicles.created_by|users.fname',
+        'workorder_vehicles.workorder_field_report_id|workorder_field_reports.report_date',
     ];
 
     public $searchable = [
-        'report_date'              => 'LIKE',
+        'report_date' => 'LIKE',
         'vehicle_name' => 'LIKE',
-        'childModels'              => [
+        'childModels' => [
             'proposal' => [
                 'fields' => [
                     'proposals.name' => 'LIKE',
                 ],
             ],
-            'creator'  => [
+            'creator' => [
                 'fields' => [
                     'fname' => 'LIKE',
                     'lname' => 'LIKE',
+                ],
+            ],
+            'fieldReport' => [
+                'fields' => [
+                    'report_date' => 'LIKE',
                 ],
             ],
         ],
@@ -73,6 +76,11 @@ class WorkorderVehicle extends Model
     public function proposal()
     {
         return $this->belongsTo(Proposal::class, 'proposal_id');
+    }
+
+    public function fieldReport()
+    {
+        return $this->belongsTo(WorkorderFieldReport::class, 'workorder_field_report_id');
     }
 
     public function creator()

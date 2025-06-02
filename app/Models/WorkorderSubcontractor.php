@@ -7,36 +7,29 @@ use Illuminate\Database\Eloquent\Model;
 
 class WorkorderSubcontractor extends Model
 {
-    protected $table = 'workorder_subcontractors';
-
-    protected $guarded = ['id'];
-
-    protected $dates = ['report_date'];
-
     public $fillable = [
         'proposal_id',
         'proposal_detail_id',
+        'workorder_field_report_id',
         'contractor_id',
-        'report_date',
         'created_by',
         'cost',
         'description',
     ];
 
     public $sortable = [
-        'report_date',
         'cost',
-        'workorder_subcontractors.contractor_id|contractors.name',
         'workorder_subcontractors.proposal_id|proposals.name',
+        'workorder_subcontractors.contractor_id|contractors.name',
         'workorder_subcontractors.created_by|users.fname',
+        'workorder_subcontractors.workorder_field_report_id|workorder_field_reports.report_date',
     ];
 
     public $searchable = [
-        'report_date'                          => 'LIKE',
-        'workorder_subcontractors.name'        => 'LIKE',
+        'workorder_subcontractors.name' => 'LIKE',
         'workorder_subcontractors.description' => 'LIKE',
-        'childModels'                          => [
-            'proposal'      => [
+        'childModels' => [
+            'proposal' => [
                 'fields' => [
                     'proposals.name' => 'LIKE',
                 ],
@@ -46,10 +39,15 @@ class WorkorderSubcontractor extends Model
                     'contractors.name' => 'LIKE',
                 ],
             ],
-            'creator'       => [
+            'creator' => [
                 'fields' => [
                     'fname' => 'LIKE',
                     'lname' => 'LIKE',
+                ],
+            ],
+            'fieldReport' => [
+                'fields' => [
+                    'report_date' => 'LIKE',
                 ],
             ],
         ],
@@ -75,6 +73,11 @@ class WorkorderSubcontractor extends Model
     public function proposal()
     {
         return $this->belongsTo(Proposal::class, 'proposal_id');
+    }
+
+    public function fieldReport()
+    {
+        return $this->belongsTo(WorkorderFieldReport::class, 'workorder_field_report_id');
     }
 
     public function creator()
