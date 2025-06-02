@@ -1,7 +1,6 @@
 @if (!empty($materials) && $materials->count() > 0)
     @foreach ($materials as $material)
         <tr id="material_{{ $material->id }}">
-            <td class="tc">{{ $material->report_date->format('m/d/Y') }}</td>
             <td class="tc">{{ $material->name }}</td>
             <td class="tc">{{ $material->quantity }}</td>
             <td class="tc">{{ \App\Helpers\Currency::format($material->quantity * $material->cost) }}</td>

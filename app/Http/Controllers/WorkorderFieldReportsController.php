@@ -19,6 +19,7 @@ use App\Models\User;
 use App\Models\Vehicle;
 use App\Models\ProposalDetail;
 use App\Models\VehicleType;
+use App\Models\WorkorderAdditionalCost;
 use App\Models\WorkorderEquipment;
 use App\Models\WorkorderFieldReport;
 use App\Models\WorkorderMaterial;
@@ -101,36 +102,6 @@ class WorkorderFieldReportsController extends Controller
             ])
             ->find($fieldReportId);
 
-        /*
-        // time sheets
-        $timeSheets = WorkorderTimesheets::where('workorder_field_report_id', $fieldReportId)
-            ->with(['employee' => fn($q) => $q->orderBy('fname')->orderBy('lname')])
-            ->orderBy('report_date')
-            ->get();
-
-        // equipment
-        $equipments = WorkorderEquipment::where('workorder_field_report_id', $fieldReportId)
-            ->orderBy('report_date')
-            ->get();
-
-        // materials
-        $materials = WorkorderMaterial::where('workorder_field_report_id', $fieldReportId)
-            ->orderBy('report_date')
-            ->get();
-
-        // vehicles
-        $vehicles = WorkorderVehicle::where('workorder_field_report_id', $fieldReportId)
-            ->orderBy('report_date')
-            ->get();
-
-        // subcontractors
-        $subcontractors = WorkorderSubcontractor::where('workorder_field_report_id', $fieldReportId)
-            ->with(['subcontractor' => fn($q) => $q->orderBy('name')])
-            ->orderBy('report_date')
-            ->get();
-        */
-
-
         $data = [
             'fieldReport' => $fieldReport,
             'returnTo' => route('workorder_field_report_list', ['proposal_detail_id' => $fieldReport->proposal_detail_id]),
@@ -188,7 +159,7 @@ class WorkorderFieldReportsController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'New timesheet added.',
+                'message' => 'New timesheet entry added.',
                 'html' => view('workorders.field_report.timesheet._list', ['timeSheets' => $timeSheets])->render(),
             ]);
         } else {
@@ -203,7 +174,8 @@ class WorkorderFieldReportsController extends Controller
     {
         if ($request->isMethod('post') && $request->ajax()) {
             $validator = Validator::make(
-                $request->only(['timesheet_id']), [
+                $request->only(['workorder_field_report_id', 'timesheet_id']), [
+                    'workorder_field_report_id' => 'required|positive',
                     'timesheet_id' => 'required|positive',
                 ]
             );
@@ -220,6 +192,7 @@ class WorkorderFieldReportsController extends Controller
                 'success' => true,
                 'message' => 'Timesheet deleted.',
                 'timesheet_id' => $request->timesheet_id,
+                'total' => WorkorderTimesheets::where('workorder_field_report_id', $request->workorder_field_report_id)->count(),
             ]);
 
         } else {
@@ -235,13 +208,14 @@ class WorkorderFieldReportsController extends Controller
     public function ajaxEquipmentStore(Request $request)
     {
         if ($request->isMethod('post') && $request->ajax()) {
-            $inputs = $request->only(['report_date', 'proposal_id', 'proposal_detail_id', 'equipment_id', 'hours', 'number_of_units']);
+            $inputs = $request->only(['proposal_id', 'proposal_detail_id', 'workorder_field_report_id', 'report_date_str', 'equipment_id', 'hours', 'number_of_units']);
 
             $validator = Validator::make(
                 $inputs, [
-                    'report_date' => 'required|date',
                     'proposal_id' => 'required|positive',
                     'proposal_detail_id' => 'required|positive',
+                    'workorder_field_report_id' => 'required|positive',
+                    'report_date_str' => 'required|usDate',
                     'equipment_id' => 'required|positive',
                     'hours' => 'required|float',
                     'number_of_units' => 'required|positive',
@@ -263,8 +237,8 @@ class WorkorderFieldReportsController extends Controller
 
             WorkOrderEquipment::create($inputs);
 
-            $equipments = WorkorderEquipment::where('proposal_detail_id', $request->proposal_detail_id)
-                ->orderBy('report_date')
+            $equipments = WorkorderEquipment
+                ::where('workorder_field_report_id', $request->workorder_field_report_id)
                 ->get();
 
             return response()->json([
@@ -284,7 +258,8 @@ class WorkorderFieldReportsController extends Controller
     {
         if ($request->isMethod('post') && $request->ajax()) {
             $validator = Validator::make(
-                $request->only(['equipment_id']), [
+                $request->only(['workorder_field_report_id', 'equipment_id']), [
+                    'workorder_field_report_id' => 'required|positive',
                     'equipment_id' => 'required|positive',
                 ]
             );
@@ -301,6 +276,7 @@ class WorkorderFieldReportsController extends Controller
                 'success' => true,
                 'message' => 'Entry deleted.',
                 'equipment_id' => $request->equipment_id,
+                'total' => WorkorderEquipment::where('workorder_field_report_id', $request->workorder_field_report_id)->count(),
             ]);
 
         } else {
@@ -316,13 +292,14 @@ class WorkorderFieldReportsController extends Controller
     public function ajaxMaterialStore(Request $request)
     {
         if ($request->isMethod('post') && $request->ajax()) {
-            $inputs = $request->only(['report_date', 'proposal_id', 'proposal_detail_id', 'material_id', 'quantity', 'note']);
+            $inputs = $request->only(['proposal_id', 'proposal_detail_id', 'workorder_field_report_id', 'report_date_str', 'material_id', 'quantity', 'note']);
 
             $validator = Validator::make(
                 $inputs, [
-                    'report_date' => 'required|date',
                     'proposal_id' => 'required|positive',
                     'proposal_detail_id' => 'required|positive',
+                    'workorder_field_report_id' => 'required|positive',
+                    'report_date_str' => 'required|usDate',
                     'material_id' => 'required|positive',
                     'quantity' => 'required|float',
                     'note' => 'nullable|text',
@@ -337,15 +314,14 @@ class WorkorderFieldReportsController extends Controller
 
             $material = Material::find($request->material_id);
 
-            $inputs['report_date'] = Carbon::createFromFormat('m/d/Y', $request->report_date);
             $inputs['name'] = $material->name;
             $inputs['cost'] = $material->cost;
             $inputs['created_by'] = auth()->user()->id;
 
             WorkOrderMaterial::create($inputs);
 
-            $materials = WorkorderMaterial::where('proposal_detail_id', $request->proposal_detail_id)
-                ->orderBy('report_date')
+            $materials = WorkorderMaterial
+                ::where('workorder_field_report_id', $request->workorder_field_report_id)
                 ->get();
 
             return response()->json([
@@ -365,7 +341,8 @@ class WorkorderFieldReportsController extends Controller
     {
         if ($request->isMethod('post') && $request->ajax()) {
             $validator = Validator::make(
-                $request->only(['material_id']), [
+                $request->only(['workorder_field_report_id', 'material_id']), [
+                    'workorder_field_report_id' => 'required|positive',
                     'material_id' => 'required|positive',
                 ]
             );
@@ -382,6 +359,7 @@ class WorkorderFieldReportsController extends Controller
                 'success' => true,
                 'message' => 'Material deleted.',
                 'material_id' => $request->material_id,
+                'total' => WorkorderMaterial::where('workorder_field_report_id', $request->workorder_field_report_id)->count(),
             ]);
 
         } else {
@@ -397,13 +375,14 @@ class WorkorderFieldReportsController extends Controller
     public function ajaxVehicleStore(Request $request)
     {
         if ($request->isMethod('post') && $request->ajax()) {
-            $inputs = $request->only(['report_date', 'proposal_id', 'proposal_detail_id', 'vehicle_id', 'number_of_vehicles', 'note']);
+            $inputs = $request->only(['proposal_id', 'proposal_detail_id', 'workorder_field_report_id', 'report_date_str', 'vehicle_id', 'number_of_vehicles', 'note']);
 
             $validator = Validator::make(
                 $inputs, [
-                    'report_date' => 'required|date',
                     'proposal_id' => 'required|positive',
                     'proposal_detail_id' => 'required|positive',
+                    'workorder_field_report_id' => 'required|positive',
+                    'report_date_str' => 'required|usDate',
                     'vehicle_id' => 'required|positive',
                     'number_of_vehicles' => 'required|float',
                     'note' => 'nullable|text',
@@ -418,14 +397,13 @@ class WorkorderFieldReportsController extends Controller
 
             $vehicle = Vehicle::find($request->vehicle_id);
 
-            $inputs['report_date'] = Carbon::createFromFormat('m/d/Y', $request->report_date);
             $inputs['vehicle_name'] = $vehicle->name;
             $inputs['created_by'] = auth()->user()->id;
 
             WorkOrderVehicle::create($inputs);
 
-            $vehicles = WorkorderVehicle::where('proposal_detail_id', $request->proposal_detail_id)
-                ->orderBy('report_date')
+            $vehicles = WorkorderVehicle
+                ::where('workorder_field_report_id', $request->workorder_field_report_id)
                 ->get();
 
             return response()->json([
@@ -445,7 +423,8 @@ class WorkorderFieldReportsController extends Controller
     {
         if ($request->isMethod('post') && $request->ajax()) {
             $validator = Validator::make(
-                $request->only(['vehicle_id']), [
+                $request->only(['workorder_field_report_id', 'vehicle_id']), [
+                    'workorder_field_report_id' => 'required|positive',
                     'vehicle_id' => 'required|positive',
                 ]
             );
@@ -462,6 +441,7 @@ class WorkorderFieldReportsController extends Controller
                 'success' => true,
                 'message' => 'Vehicle deleted.',
                 'vehicle_id' => $request->vehicle_id,
+                'total' => WorkorderVehicle::where('workorder_field_report_id', $request->workorder_field_report_id)->count(),
             ]);
 
         } else {
@@ -477,13 +457,14 @@ class WorkorderFieldReportsController extends Controller
     public function ajaxSubcontractorStore(Request $request)
     {
         if ($request->isMethod('post') && $request->ajax()) {
-            $inputs = $request->only(['report_date', 'proposal_id', 'proposal_detail_id', 'contractor_id', 'cost', 'description']);
+            $inputs = $request->only(['proposal_id', 'proposal_detail_id', 'workorder_field_report_id', 'report_date_str', 'contractor_id', 'cost', 'description']);
 
             $validator = Validator::make(
                 $inputs, [
-                    'report_date' => 'required|date',
                     'proposal_id' => 'required|positive',
                     'proposal_detail_id' => 'required|positive',
+                    'workorder_field_report_id' => 'required|positive',
+                    'report_date_str' => 'required|usDate',
                     'contractor_id' => 'required|positive',
                     'cost' => 'required|float',
                     'description' => 'required|text',
@@ -496,16 +477,13 @@ class WorkorderFieldReportsController extends Controller
                 ]);
             }
 
-            $contractor = Contractor::find($request->contractor_id);
-
-            $inputs['report_date'] = Carbon::createFromFormat('m/d/Y', $request->report_date);
             $inputs['created_by'] = auth()->user()->id;
 
             WorkOrderSubcontractor::create($inputs);
 
-            $subcontractors = WorkorderSubcontractor::where('proposal_detail_id', $request->proposal_detail_id)
+            $subcontractors = WorkorderSubcontractor
+                ::where('workorder_field_report_id', $request->workorder_field_report_id)
                 ->with(['subcontractor' => fn($q) => $q->orderBy('name')])
-                ->orderBy('report_date')
                 ->get();
 
             return response()->json([
@@ -525,7 +503,8 @@ class WorkorderFieldReportsController extends Controller
     {
         if ($request->isMethod('post') && $request->ajax()) {
             $validator = Validator::make(
-                $request->only(['subcontractor_id']), [
+                $request->only(['workorder_field_report_id', 'subcontractor_id']), [
+                    'workorder_field_report_id' => 'required|positive',
                     'subcontractor_id' => 'required|positive',
                 ]
             );
@@ -542,7 +521,7 @@ class WorkorderFieldReportsController extends Controller
                 'success' => true,
                 'message' => 'Subcontractor deleted.',
                 'subcontractor_id' => $request->subcontractor_id,
-                'total' => WorkorderSubcontractor::where('proposal_detail_id', $request->proposal_detail_id)->count(),
+                'total' => WorkorderSubcontractor::where('workorder_field_report_id', $request->workorder_field_report_id)->count(),
             ]);
 
         } else {
@@ -553,7 +532,83 @@ class WorkorderFieldReportsController extends Controller
         }
     }
 
+    // additionalCosts
 
+    public function ajaxAdditionalCostStore(Request $request)
+    {
+        if ($request->isMethod('post') && $request->ajax()) {
+            $inputs = $request->only(['proposal_id', 'proposal_detail_id', 'workorder_field_report_id', 'report_date_str', 'cost', 'description']);
+
+            $validator = Validator::make(
+                $inputs, [
+                    'proposal_id' => 'required|positive',
+                    'proposal_detail_id' => 'required|positive',
+                    'workorder_field_report_id' => 'required|positive',
+                    'report_date_str' => 'required|usDate',
+                    'cost' => 'required|float',
+                    'description' => 'required|text',
+                ]
+            );
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $validator->messages()->first(),
+                ]);
+            }
+
+            $inputs['created_by'] = auth()->user()->id;
+
+            WorkOrderAdditionalCost::create($inputs);
+
+            $additionalCosts = WorkorderAdditionalCost
+                ::where('workorder_field_report_id', $request->workorder_field_report_id)
+                ->get();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'New additional cost added.',
+                'html' => view('workorders.field_report.additional_cost._list', ['additionalCosts' => $additionalCosts])->render(),
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid request.',
+            ]);
+        }
+    }
+
+    public function ajaxAdditionalCostDestroy(Request $request)
+    {
+        if ($request->isMethod('post') && $request->ajax()) {
+            $validator = Validator::make(
+                $request->only(['workorder_field_report_id', 'additional_cost_id']), [
+                    'workorder_field_report_id' => 'required|positive',
+                    'additional_cost_id' => 'required|positive',
+                ]
+            );
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $validator->messages()->first(),
+                ]);
+            }
+
+            WorkorderAdditionalCost::destroy($request->additional_cost_id);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Additional cost deleted.',
+                'additional_cost_id' => $request->additional_cost_id,
+                'total' => WorkorderAdditionalCost::where('workorder_field_report_id', $request->workorder_field_report_id)->count(),
+            ]);
+
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid request.',
+            ]);
+        }
+    }
 
     public function view_serviceMIKE($proposal_id, $id)
     {

@@ -1,7 +1,6 @@
 @if (!empty($equipments) && $equipments->count() > 0)
     @foreach ($equipments as $equipment)
         <tr id="equipment_{{ $equipment->id }}">
-            <td class="tc">{{ $equipment->report_date->format('m/d/Y') }}</td>
             <td class="tc">{{ $equipment->name }}</td>
             <td class="tc">{{ $equipment->hours }}</td>
             <td class="tc">{{ $equipment->rate_type }}</td>

@@ -20,7 +20,7 @@
                                 href="javascript:"
                                 class="action-new-report {{ $site_button_class2}}"
                             >
-                                <span class="fas fa-sticky-note"></span>@lang('translation.add') @lang('translation.note')
+                                <span class="fas fa-plus"></span>@lang('translation.new') @lang('translation.fieldreport')
                             </a>
                         </div>
                         <div class="col-md-4 col-sm-6 mb20">
@@ -74,7 +74,7 @@
                 </div>
             </div>
         </div>
-    </div>f
+    </div>
 
     <!-- Modal -->
     <div class="modal fade modal-medium info" id="formFieldReportDateModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="formFieldReportDateModalLabel" aria-hidden="true">
@@ -92,7 +92,7 @@
                         </button>
                     </div>
                     <div class="modal-body plr10 pt10 pb0">
-                        <x-form-date-picker name="report_date" :value="now()" :params="['label' =>  __('translation.date'), 'iconClass' => 'fas fa-calendar', 'required' => true]"></x-form-date-picker>
+                        <x-form-date-picker name="report_date" :value="now()" :params="['label' =>  __('translation.report') . ' ' . __('translation.date'), 'iconClass' => 'fas fa-calendar', 'required' => true]"></x-form-date-picker>
                     </div>
                     <div class="modal-footer">
                         <button
@@ -100,13 +100,13 @@
                             class="btn btn-light waves-effect"
                             data-dismiss="modal"
                         >
-                            @lang('translation.close')
+                            @lang('translation.cancel')
                         </button>
                         <button
                             type="submit"
                             class="btn btn-dark waves-effect waves-light"
                         >
-                            @lang('translation.save')
+                            @lang('translation.submit')
                         </button>
                     </div>
                 </form>

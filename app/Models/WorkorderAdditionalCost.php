@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\Currency;
 use App\Traits\SearchTrait;
 use App\Traits\SortableTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -81,11 +82,11 @@ class WorkorderAdditionalCost extends Model
         return $this->belongsTo(User::class, 'created_by');
     }
 
-    public function material()
-    {
-        return $this->belongsTo(Material::class, 'material_id');
-    }
-
     /** Accessor(get) and Mutators(set) */
+
+    public function getHtmlCostAttribute()
+    {
+        return Currency::format($this->cost);
+    }
 
 }

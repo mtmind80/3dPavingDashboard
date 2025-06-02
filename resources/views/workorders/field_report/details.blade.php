@@ -109,8 +109,7 @@
             </div>
             <!-- END timesheets -->
 
-            {{--
-            <!-- equipment -->
+            <!-- Equipments -->
             <div class="card">
                 <div class="card-body">
                     @include('_partials._alert', ['alertId' => 'equipment_alert'])
@@ -121,33 +120,27 @@
                     </div>
                     <h5 class="mb-4">@lang('translation.add')</h5>
                     <form method="POST" action="#" accept-charset="UTF-8" class="admin-form" id="equipment_form">
+                        <input type="hidden" name="proposal_id" value="{{ $fieldReport->proposal_id }}">
+                        <input type="hidden" name="proposal_detail_id" value="{{ $fieldReport->proposal_detail_id }}">
+                        <input type="hidden" name="workorder_field_report_id" value="{{ $fieldReport->id }}">
+                        <input type="hidden" name="report_date_str" value="{{ $fieldReport->report_date->format('m/d/Y') }}">
+
                         <div class="row">
-                            <div class="col-lg-2 col-md-3 col-sm-6 admin-form-item-widget">
-                                <x-form-date-picker
-                                    name="report_date"
-                                    :params="[
-                                        'id' => 'equipment_report_date',
-                                        'label' => 'Report day',
-                                        'iconClass' => 'fas fa-calendar',
-                                        'value' => $today,
-                                    ]"
-                                ></x-form-date-picker>
-                            </div>
-                            <div class="col-lg-3 col-md-4 col-sm-6 admin-form-item-widget">
+                            <div class="col-lg-4 col-md-6 col-sm-6 admin-form-item-widget">
                                 <x-form-select name="equipment_id"
                                    :items="$equipmentCB"
                                    selected=""
                                    :params="['label' => 'Equipment', 'required' => true]"
                                 ></x-form-select>
                             </div>
-                            <div class="col-lg-2 col-md-3 col-sm-3 admin-form-item-widget">
+                            <div class="col-lg-4 col-md-3 col-sm-3 admin-form-item-widget">
                                 <x-form-text
                                     name="hours"
                                     class="check-contact"
                                     :params="['label' => 'Hours', 'iconClass' => 'far fa-clock', 'required' => true]"
                                 ></x-form-text>
                             </div>
-                            <div class="col-lg-2 col-md-3 col-sm-3 admin-form-item-widget">
+                            <div class="col-lg-4 col-md-3 col-sm-3 admin-form-item-widget">
                                 <x-form-text
                                     name="number_of_units"
                                     class="check-contact"
@@ -169,29 +162,28 @@
                         </div>
                     </form>
                 </div>
-                <div class="card-body{{ empty($equipments) || $equipments->count() === 0 ? ' hidden' : '' }}">
+                <div class="card-body{{ empty($fieldReport->equipments) || $fieldReport->equipments->count() === 0 ? ' hidden' : '' }}">
                     <h5 class="mb-4">@lang('translation.list')</h5>
                     <table class="list-table table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
                         <tr>
-                            <th class="tc w200">Date</th>
                             <th class="tc">Equipment</th>
-                            <th class="tc w200">Hours</th>
-                            <th class="tc w200">Rate Type</th>
-                            <th class="tc w200">Rate</th>
+                            <th class="tc w220">Hours</th>
+                            <th class="tc w220">Rate Type</th>
+                            <th class="tc w220">Rate</th>
                             <th class="tc w200">Number of Units</th>
-                            <th class="tc w100">@lang('translation.action')</th>
+                            <th class="tc w160">@lang('translation.action')</th>
                         </tr>
                         </thead>
                         <tbody id="equipment_tbody">
-                            @include('workorders.field_report.equipment._list')
+                            @include('workorders.field_report.equipment._list', ['equipments' => $fieldReport->equipments])
                         </tbody>
                     </table>
                 </div>
             </div>
             <!-- END equipment -->
 
-            <!-- material -->
+            <!-- Material -->
             <div class="card">
                 <div class="card-body">
                     @include('_partials._alert', ['alertId' => 'material_alert'])
@@ -202,19 +194,13 @@
                     </div>
                     <h5 class="mb-4">@lang('translation.add')</h5>
                     <form method="POST" action="#" accept-charset="UTF-8" class="admin-form" id="material_form">
+                        <input type="hidden" name="proposal_id" value="{{ $fieldReport->proposal_id }}">
+                        <input type="hidden" name="proposal_detail_id" value="{{ $fieldReport->proposal_detail_id }}">
+                        <input type="hidden" name="workorder_field_report_id" value="{{ $fieldReport->id }}">
+                        <input type="hidden" name="report_date_str" value="{{ $fieldReport->report_date->format('m/d/Y') }}">
+
                         <div class="row">
-                            <div class="col-lg-2 col-md-3 col-sm-6 admin-form-item-widget">
-                                <x-form-date-picker
-                                    name="report_date"
-                                    :params="[
-                                        'id' => 'material_report_date',
-                                        'label' => 'Report day',
-                                        'iconClass' => 'fas fa-calendar',
-                                        'value' => $today,
-                                    ]"
-                                ></x-form-date-picker>
-                            </div>
-                            <div class="col-lg-3 col-md-4 col-sm-6 admin-form-item-widget">
+                            <div class="col-lg-4 col-md-4 col-sm-7 admin-form-item-widget">
                                 <x-form-select
                                     name="material_id"
                                     :items="$materialsCB"
@@ -233,7 +219,7 @@
                                     ]"
                                 ></x-form-text>
                             </div>
-                            <div class="col-lg-4 col-md-4 col-sm-7 admin-form-item-widget">
+                            <div class="col-lg-6 col-md-6 col-sm-12 admin-form-item-widget">
                                 <x-form-textarea
                                     name="note"
                                     class="check-contact"
@@ -259,21 +245,20 @@
                         </div>
                     </form>
                 </div>
-                <div class="card-body{{ empty($materials) || $materials->count() === 0 ? ' hidden' : '' }}">
+                <div class="card-body{{ empty($fieldReport->materials) || $fieldReport->materials->count() === 0 ? ' hidden' : '' }}">
                     <h5 class="mb-4">@lang('translation.list')</h5>
                     <table class="list-table table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
                         <tr>
-                            <th class="tc w200">Date</th>
-                            <th class="tc w600">Material</th>
-                            <th class="tc w160">Quantity</th>
-                            <th class="tc w200">Total Cost</th>
+                            <th class="tc w420">Material</th>
+                            <th class="tc w150">Quantity</th>
+                            <th class="tc w190">Total Cost</th>
                             <th class="tc">Note</th>
-                            <th class="tc w100">@lang('translation.action')</th>
+                            <th class="tc w160">@lang('translation.action')</th>
                         </tr>
                         </thead>
                         <tbody id="material_tbody">
-                            @include('workorders.field_report.material._list')
+                            @include('workorders.field_report.material._list', ['materials' => $fieldReport->materials])
                         </tbody>
                     </table>
                 </div>
@@ -291,19 +276,13 @@
                     </div>
                     <h5 class="mb-4">@lang('translation.add')</h5>
                     <form method="POST" action="#" accept-charset="UTF-8" class="admin-form" id="vehicle_form">
+                        <input type="hidden" name="proposal_id" value="{{ $fieldReport->proposal_id }}">
+                        <input type="hidden" name="proposal_detail_id" value="{{ $fieldReport->proposal_detail_id }}">
+                        <input type="hidden" name="workorder_field_report_id" value="{{ $fieldReport->id }}">
+                        <input type="hidden" name="report_date_str" value="{{ $fieldReport->report_date->format('m/d/Y') }}">
+
                         <div class="row">
-                            <div class="col-lg-2 col-md-3 col-sm-6 admin-form-item-widget">
-                                <x-form-date-picker
-                                    name="report_date"
-                                    :params="[
-                                        'id' => 'vehicle_report_date',
-                                        'label' => 'Report day',
-                                        'iconClass' => 'fas fa-calendar',
-                                        'value' => $today,
-                                    ]"
-                                ></x-form-date-picker>
-                            </div>
-                            <div class="col-lg-3 col-md-4 col-sm-6 admin-form-item-widget">
+                            <div class="col-lg-4 col-md-4 col-sm-7 admin-form-item-widget">
                                 <x-form-select
                                     name="vehicle_id"
                                     :items="$vehiclesCB"
@@ -322,7 +301,7 @@
                                     ]"
                                 ></x-form-text>
                             </div>
-                            <div class="col-lg-4 col-md-4 col-sm-7 admin-form-item-widget">
+                            <div class="col-lg-6 col-md-6 col-sm-12 admin-form-item-widget">
                                 <x-form-textarea
                                     name="note"
                                     class="check-contact"
@@ -348,27 +327,26 @@
                         </div>
                     </form>
                 </div>
-                <div class="card-body{{ empty($vehicles) || $vehicles->count() === 0 ? ' hidden' : '' }}">
+                <div class="card-body{{ empty($fieldReport->vehicles) || $fieldReport->vehicles->count() === 0 ? ' hidden' : '' }}">
                     <h5 class="mb-4">@lang('translation.list')</h5>
                     <table class="list-table table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
                         <tr>
-                            <th class="tc w200">Date</th>
-                            <th class="tc w600">Vehicle</th>
-                            <th class="tc w200">Number of Vehicles</th>
+                            <th class="tc w500">Vehicle</th>
+                            <th class="tc w160">Number of Vehicles</th>
                             <th class="tc">Note</th>
-                            <th class="tc w100">@lang('translation.action')</th>
+                            <th class="tc w160">@lang('translation.action')</th>
                         </tr>
                         </thead>
                         <tbody id="vehicle_tbody">
-                            @include('workorders.field_report.vehicle._list')
+                            @include('workorders.field_report.vehicle._list', ['vehicles' => $fieldReport->vehicles])
                         </tbody>
                     </table>
                 </div>
             </div>
             <!-- END vehicle -->
 
-            <!-- subcontractor -->
+            <!-- Subcontractors -->
             <div class="card">
                 <div class="card-body">
                     @include('_partials._alert', ['alertId' => 'subcontractor_alert'])
@@ -379,24 +357,18 @@
                     </div>
                     <h5 class="mb-4">@lang('translation.add')</h5>
                     <form method="POST" action="#" accept-charset="UTF-8" class="admin-form" id="subcontractor_form">
+                        <input type="hidden" name="proposal_id" value="{{ $fieldReport->proposal_id }}">
+                        <input type="hidden" name="proposal_detail_id" value="{{ $fieldReport->proposal_detail_id }}">
+                        <input type="hidden" name="workorder_field_report_id" value="{{ $fieldReport->id }}">
+                        <input type="hidden" name="report_date_str" value="{{ $fieldReport->report_date->format('m/d/Y') }}">
+
                         <div class="row">
-                            <div class="col-lg-2 col-md-3 col-sm-6 admin-form-item-widget">
-                                <x-form-date-picker
-                                    name="report_date"
-                                    :params="[
-                                        'id' => 'contractor_report_date',
-                                        'label' => 'Report day',
-                                        'iconClass' => 'fas fa-calendar',
-                                        'value' => $today,
-                                    ]"
-                                ></x-form-date-picker>
-                            </div>
-                            <div class="col-lg-3 col-md-4 col-sm-6 admin-form-item-widget">
+                            <div class="col-lg-4 col-md-4 col-sm-7 admin-form-item-widget">
                                 <x-form-select
                                     name="contractor_id"
                                     :items="$contractorsCB"
                                     selected=""
-                                    :params="['label' => 'Subcontractor', 'required' => true]"
+                                    :params="['label' => __('translation.subcontractor'), 'required' => true]"
                                 ></x-form-select>
                             </div>
                             <div class="col-lg-2 col-md-2 col-sm-5 admin-form-item-widget">
@@ -410,7 +382,7 @@
                                     ]"
                                 ></x-form-text>
                             </div>
-                            <div class="col-lg-4 col-md-4 col-sm-7 admin-form-item-widget">
+                            <div class="col-lg-6 col-md-6 col-sm-12 admin-form-item-widget">
                                 <x-form-textarea
                                     name="description"
                                     class="check-contact"
@@ -436,26 +408,96 @@
                         </div>
                     </form>
                 </div>
-                <div class="card-body{{ empty($subcontractors) || $subcontractors->count() === 0 ? ' hidden' : '' }}">
+                <div class="card-body{{ empty($fieldReport->subcontractors) || $fieldReport->subcontractors->count() === 0 ? ' hidden' : '' }}">
                     <h5 class="mb-4">@lang('translation.list')</h5>
                     <table class="list-table table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
                         <tr>
-                            <th class="tc w200">Date</th>
-                            <th class="tc w600">Contractor</th>
-                            <th class="tc w200">Cost</th>
+                            <th class="tc w500">Contractor</th>
+                            <th class="tc w160">Cost</th>
                             <th class="tc">Description</th>
-                            <th class="tc w100">@lang('translation.action')</th>
+                            <th class="tc w160">@lang('translation.action')</th>
                         </tr>
                         </thead>
                         <tbody id="subcontractor_tbody">
-                            @include('workorders.field_report.subcontractor._list')
+                            @include('workorders.field_report.subcontractor._list', ['subcontractors' => $fieldReport->subcontractors])
                         </tbody>
                     </table>
                 </div>
             </div>
-            <!-- END subcontractor -->
-            --}}
+            <!-- END subcontractors -->
+
+            <!-- Additional costs -->
+            <div class="card">
+                <div class="card-body">
+                    @include('_partials._alert', ['alertId' => 'additional_cost_alert'])
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h4 class="mb-4">@lang('translation.additionalcosts')</h4>
+                        </div>
+                    </div>
+                    <h5 class="mb-4">@lang('translation.add')</h5>
+                    <form method="POST" action="#" accept-charset="UTF-8" class="admin-form" id="additional_cost_form">
+                    <input type="hidden" name="proposal_id" value="{{ $fieldReport->proposal_id }}">
+                        <input type="hidden" name="proposal_detail_id" value="{{ $fieldReport->proposal_detail_id }}">
+                        <input type="hidden" name="workorder_field_report_id" value="{{ $fieldReport->id }}">
+                        <input type="hidden" name="report_date_str" value="{{ $fieldReport->report_date->format('m/d/Y') }}">
+
+                        <div class="row">
+                            <div class="col-lg-2 col-md-3 col-sm-4 admin-form-item-widget">
+                                <x-form-text
+                                    name="cost"
+                                    class="check-contact"
+                                    :params="[
+                                        'label' => 'Cost',
+                                        'iconClass' => 'fas fa-dollar-sign',
+                                        'required' => true,
+                                    ]"
+                                ></x-form-text>
+                            </div>
+                            <div class="col-lg-10 col-md-11 col-sm-8 admin-form-item-widget">
+                                <x-form-textarea
+                                    name="description"
+                                    class="check-contact"
+                                    :params="[
+                                        'label' => 'Description',
+                                        'iconClass' => 'fa fa-bookmark',
+                                        'required' => true,
+                                    ]"
+                                ></x-form-textarea>
+                            </div>
+                        </div>
+                        <div class="row buttons">
+                            <div class="col-sm-12">
+                                <x-button
+                                    id="add_additional_cost_button"
+                                    class="btn-dark"
+                                    type="button"
+                                >
+                                    <i class="fas fa-save"></i>
+                                    @lang('translation.save')
+                                </x-button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-body{{ empty($fieldReport->additionalCosts) || $fieldReport->additionalCosts->count() === 0 ? ' hidden' : '' }}">
+                    <h5 class="mb-4">@lang('translation.list')</h5>
+                    <table class="list-table table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                        <thead>
+                        <tr>
+                            <th class="tl">Description</th>
+                            <th class="tc w200">Cost</th>
+                            <th class="tc w160">@lang('translation.action')</th>
+                        </tr>
+                        </thead>
+                        <tbody id="additional_cost_tbody">
+                            @include('workorders.field_report.additional_cost._list', ['additionalCosts' => $fieldReport->additionalCosts])
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- END additionalCost -->
 
             <div id="bottom_empty_div" class="{{ !empty($fieldReport->subcontractors) && $fieldReport->subcontractors->count() > 0 ? ' hidden' : '' }}" style="height:140px;"></div>
         </div>
@@ -465,9 +507,12 @@
 @section('page-js')
     <script>
         $(document).ready(function () {
+            var fieldReportId = Number("{{ $fieldReport->id }}");
+
             var commonFormProperties = {
-                proposal_id: "{{ $fieldReport->proposal_id  }}",
-                proposal_detail_id: "{{ $fieldReport->proposal_detail_id }}"
+                proposal_id: Number("{{ $fieldReport->proposal_id  }}"),
+                proposal_detail_id: Number("{{ $fieldReport->proposal_detail_id }}"),
+                workorder_field_report_id: fieldReportId
             };
 
             var bottomEmptyDiv = $('#bottom_empty_div');
@@ -523,7 +568,6 @@
                 }
 
                 let formData = timeSheetForm.serializeObject();
-
                 $.extend(formData, commonFormProperties);
 
                 $.ajax({
@@ -574,6 +618,7 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     data: {
+                        workorder_field_report_id: fieldReportId,
                         timesheet_id: timesheetId
                     },
                     type: "POST",
@@ -608,7 +653,7 @@
                 });
             });
 
-            // equipment
+            // Equipments
 
             var equipmentAlert = $('#equipment_alert');
             var equipmentTbody = $('#equipment_tbody');
@@ -624,10 +669,6 @@
 
             equipmentForm.validate({
                 rules: {
-                    report_date: {
-                        required: true,
-                        date: true
-                    },
                     equipment_id: {
                         required: true,
                         positive: true
@@ -642,10 +683,6 @@
                     }
                 },
                 messages: {
-                    report_date: {
-                        required: "@lang('translation.field_required')",
-                        date: "@lang('translation.invalid_entry')"
-                    },
                     equipment_id: {
                         required: "@lang('translation.field_required')",
                         positive: "@lang('translation.select_item')"
@@ -667,7 +704,6 @@
                 }
 
                 let formData = equipmentForm.serializeObject();
-
                 $.extend(formData, commonFormProperties);
 
                 $.ajax({
@@ -717,6 +753,7 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     data: {
+                        workorder_field_report_id: fieldReportId,
                         equipment_id: equipmentId
                     },
                     type: "POST",
@@ -751,7 +788,7 @@
                 });
             });
 
-            // materials
+            // Materials
 
             var materialAlert = $('#material_alert');
             var materialTbody = $('#material_tbody');
@@ -767,10 +804,6 @@
 
             materialForm.validate({
                 rules: {
-                    report_date: {
-                        required: true,
-                        date: true
-                    },
                     material_id: {
                         required: true,
                         positive: true
@@ -786,10 +819,6 @@
                     }
                 },
                 messages: {
-                    report_date: {
-                        required: "@lang('translation.field_required')",
-                        date: "@lang('translation.invalid_entry')"
-                    },
                     material_id: {
                         required: "@lang('translation.field_required')",
                         positive: "@lang('translation.select_item')"
@@ -810,7 +839,6 @@
                 }
 
                 let formData = materialForm.serializeObject();
-
                 $.extend(formData, commonFormProperties);
 
                 $.ajax({
@@ -861,6 +889,7 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     data: {
+                        workorder_field_report_id: fieldReportId,
                         material_id: materialId
                     },
                     type: "POST",
@@ -895,7 +924,7 @@
                 });
             });
 
-            // vehicles
+            // Vehicles
 
             var vehicleAlert = $('#vehicle_alert');
             var vehicleTbody = $('#vehicle_tbody');
@@ -911,10 +940,6 @@
 
             vehicleForm.validate({
                 rules: {
-                    report_date: {
-                        required: true,
-                        date: true
-                    },
                     vehicle_id: {
                         required: true,
                         positive: true
@@ -930,10 +955,6 @@
                     }
                 },
                 messages: {
-                    report_date: {
-                        required: "@lang('translation.field_required')",
-                        date: "@lang('translation.invalid_entry')"
-                    },
                     vehicle_id: {
                         required: "@lang('translation.field_required')",
                         positive: "@lang('translation.select_item')"
@@ -954,7 +975,6 @@
                 }
 
                 let formData = vehicleForm.serializeObject();
-
                 $.extend(formData, commonFormProperties);
 
                 $.ajax({
@@ -1004,6 +1024,7 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     data: {
+                        workorder_field_report_id: fieldReportId,
                         vehicle_id: vehicleId
                     },
                     type: "POST",
@@ -1038,7 +1059,7 @@
                 });
             });
 
-            // subcontractors
+            // Subcontractors
 
             var subcontractorAlert = $('#subcontractor_alert');
             var subcontractorTbody = $('#subcontractor_tbody');
@@ -1054,10 +1075,6 @@
 
             subcontractorForm.validate({
                 rules: {
-                    report_date: {
-                        required: true,
-                        date: true
-                    },
                     contractor_id: {
                         required: true,
                         positive: true
@@ -1072,10 +1089,6 @@
                     }
                 },
                 messages: {
-                    report_date: {
-                        required: "@lang('translation.field_required')",
-                        date: "@lang('translation.invalid_entry')"
-                    },
                     contractor_id: {
                         required: "@lang('translation.field_required')",
                         positive: "@lang('translation.select_item')"
@@ -1148,6 +1161,7 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     data: {
+                        workorder_field_report_id: fieldReportId,
                         subcontractor_id: subcontractorId
                     },
                     type: "POST",
@@ -1182,6 +1196,148 @@
                             showErrorAlert(response.responseJSON.message, subcontractorAlert);
                         @else
                             showErrorAlert(response.message, subcontractorAlert);
+                        @endif
+                    }
+                });
+            });
+
+            // Additional costs
+
+            var additionalCostAlert = $('#additional_cost_alert');
+            var additionalCostTbody = $('#additional_cost_tbody');
+            var additionalCostCard = additionalCostTbody.closest('.card-body');
+
+            additionalCostAlert.on('click', function(ev){
+                ev.stopPropagation();
+                ev.preventDefault();
+                closeAlert(additionalCostAlert);
+            });
+
+            var additionalCostForm = $('#additional_cost_form');
+
+            additionalCostForm.validate({
+                rules: {
+                    contractor_id: {
+                        required: true,
+                        positive: true
+                    },
+                    cost: {
+                        required: true,
+                        float: true
+                    },
+                    description: {
+                        required: true,
+                        plainText: true
+                    }
+                },
+                messages: {
+                    contractor_id: {
+                        required: "@lang('translation.field_required')",
+                        positive: "@lang('translation.select_item')"
+                    },
+                    cost: {
+                        required: "@lang('translation.field_required')",
+                        float: "@lang('translation.invalid_entry')"
+                    },
+                    description: {
+                        plainText: "@lang('translation.invalid_entry')"
+                    }
+                }
+            });
+
+            $('#add_additional_cost_button').click(function () {
+                if (! additionalCostForm.valid()) {
+                    return false;
+                }
+
+                let formData = additionalCostForm.serializeObject();
+
+                $.extend(formData, commonFormProperties);
+
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: formData,
+                    type: "POST",
+                    url: "{{ route('ajax_workorder_field_report_additional_cost_store') }}",
+                    beforeSend: function (request){
+                        showSpinner();
+                    },
+                    complete: function (){
+                        hideSpinner();
+                    },
+                    success: function (response){
+                        if (typeof response.success === 'undefined'  ) {
+                            showErrorAlert('Critical error has occurred.', additionalCostAlert);
+                        } else if (response.success) {
+                            additionalCostTbody.html(response.html);
+                            additionalCostForm.trigger('reset');
+                            additionalCostCard.removeClass('hidden');
+
+                            bottomEmptyDiv.addClass('hidden');
+
+                            if (response.message) {
+                                showSuccessAlert(response.message, additionalCostAlert);
+                            }
+                        } else {
+                            showErrorAlert(response.message, additionalCostAlert);
+                        }
+                    },
+                    error: function (response){
+                        @if (app()->environment() === 'local')
+                        showErrorAlert(response.responseJSON.message, additionalCostAlert);
+                        @else
+                        showErrorAlert(response.message, additionalCostAlert);
+                        @endif
+                    }
+                });
+
+            });
+
+            additionalCostTbody.on('click', '.delete-additional-cost-button', function () {
+                let additionalCostId = $(this).data('additional_cost_id');
+
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: {
+                        workorder_field_report_id: fieldReportId,
+                        additional_cost_id: additionalCostId
+                    },
+                    type: "POST",
+                    url: "{{ route('ajax_workorder_field_report_additional_cost_destroy') }}",
+                    beforeSend: function (request){
+                        showSpinner();
+                    },
+                    complete: function (){
+                        hideSpinner();
+                    },
+                    success: function (response){
+                        if (typeof response.success === 'undefined'  ) {
+                            showErrorAlert('Critical error has occurred.', additionalCostAlert);
+                        } else if (response.success) {
+                            additionalCostTbody.find('tr#additional_cost_'+response.additional_cost_id).remove();
+
+                            if (response.total === 0) {
+                                additionalCostCard.addClass('hidden');
+                                bottomEmptyDiv.removeClass('hidden');
+                            }
+
+                            if (response.message) {
+                                showSuccessAlert(response.message, additionalCostAlert);
+                            }
+                        } else {
+                            // controller defined response error message
+                            showErrorAlert(response.message, additionalCostAlert);
+                        }
+                    },
+                    error: function (response){
+                        @if (app()->environment() === 'local')
+                        showErrorAlert(response.responseJSON.message, additionalCostAlert);
+                        @else
+                        showErrorAlert(response.message, additionalCostAlert);
                         @endif
                     }
                 });

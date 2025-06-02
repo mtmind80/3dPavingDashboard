@@ -15,7 +15,7 @@ class CreateWorkorderAdditionalCostsTable extends Migration
             $table->unsignedBigInteger('proposal_detail_id')->index();
             $table->unsignedBigInteger('workorder_field_report_id')->index()->nullable();
             $table->unsignedBigInteger('created_by')->index();
-            $table->double('cost');
+            $table->double('cost', 8, 2);
             $table->text('description')->nullable();
             $table->timestamps();
         });
