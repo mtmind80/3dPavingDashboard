@@ -123,11 +123,12 @@ Route::group(['prefix' => 'workorders'], function() {
     /** END Contractors */
 
 
-    /*************** Details  ***************/
+    /*************** WorkOrder Details  ***************/
 
     Route::group(['prefix' => 'details'], function() {
         Route::get('/{proposal_detail_id}', 'WorkOrderDetailsController@details')->name('workorder_details');
-
+        
+        Route::get('/{proposal_detail_id}', 'WorkOrderDetailsController@details')->name('workorder_details');
 
         // timesheet:
         Route::post('/ajax-timesheet-store', 'WorkOrderDetailsController@ajaxTimeSheetStore')->name('ajax_workorder_timesheet_store');
@@ -148,14 +149,55 @@ Route::group(['prefix' => 'workorders'], function() {
         // subcontractor:
         Route::post('/ajax-subcontractor-store', 'WorkOrderDetailsController@ajaxSubcontractorStore')->name('ajax_workorder_subcontractor_store');
         Route::post('/ajax-subcontractor-destroy', 'WorkOrderDetailsController@ajaxSubcontractorDestroy')->name('ajax_workorder_subcontractor_destroy');
+
         //view
         //Route::get('/view_service/{proposal_id}/{id}', 'WorkOrderDetailsController@view_service')->name('view_service');
         Route::get('/view_service/{proposal_id}/{id}', 'WorkOrderDetailsController@viewService')->name('view_service');
 
     });
-    /** END Details */
+    /** END Workorder Details */
+
+
+    /*************** WorkOrder Field Reports  ***************/
+
+    Route::group(['prefix' => 'field-reports'], function() {
+        Route::get('/{proposal_detail_id}', 'WorkorderFieldReportsController@index')->name('workorder_field_report_list');
+        Route::match(['get', 'post'], '/{proposal_detail_id}/search', 'WorkorderFieldReportsController@search')->name('workorder_field_report_search');
+        Route::get('/{workorder_field_report_id}/details', 'WorkorderFieldReportsController@details')->name('workorder_field_report_details');
+        Route::post('/store', 'WorkorderFieldReportsController@store')->name('workorder_field_report_store');
+        Route::get('/{workorder_field_report_id}/edit', 'WorkorderFieldReportsController@edit')->name('workorder_field_report_edit');
+        Route::patch('/{workorder_field_report_id}', 'WorkorderFieldReportsController@update')->name('workorder_field_report_update');
+        Route::delete('/{workorder_field_report_id}', 'WorkorderFieldReportsController@destroy')->name('workorder_field_report_delete');
+
+        // timesheet:
+        Route::post('/ajax-timesheet-store', 'WorkorderFieldReportsController@ajaxTimeSheetStore')->name('ajax_workorder_field_report_timesheet_store');
+        Route::post('/ajax-timesheet-destroy', 'WorkorderFieldReportsController@ajaxTimeSheetDestroy')->name('ajax_workorder_field_report_timesheet_destroy');
+
+        // equipment:
+        Route::post('/ajax-equipment-store', 'WorkorderFieldReportsController@ajaxEquipmentStore')->name('ajax_workorder_field_report_equipment_store');
+        Route::post('/ajax-equipment-destroy', 'WorkorderFieldReportsController@ajaxEquipmentDestroy')->name('ajax_workorder_field_report_equipment_destroy');
+
+        // material:
+        Route::post('/ajax-material-store', 'WorkorderFieldReportsController@ajaxMaterialStore')->name('ajax_workorder_field_report_material_store');
+        Route::post('/ajax-material-destroy', 'WorkorderFieldReportsController@ajaxMaterialDestroy')->name('ajax_workorder_field_report_material_destroy');
+
+        // vehicle:
+        Route::post('/ajax-vehicle-store', 'WorkorderFieldReportsController@ajaxVehicleStore')->name('ajax_workorder_field_report_vehicle_store');
+        Route::post('/ajax-vehicle-destroy', 'WorkorderFieldReportsController@ajaxVehicleDestroy')->name('ajax_workorder_field_report_vehicle_destroy');
+
+        // subcontractor:
+        Route::post('/ajax-subcontractor-store', 'WorkorderFieldReportsController@ajaxSubcontractorStore')->name('ajax_workorder_field_report_subcontractor_store');
+        Route::post('/ajax-subcontractor-destroy', 'WorkorderFieldReportsController@ajaxSubcontractorDestroy')->name('ajax_workorder_field_report_subcontractor_destroy');
+
+        //view
+        //Route::get('/view_service/{proposal_id}/{id}', 'WorkorderFieldReportsController@view_service')->name('view_service');
+        Route::get('/view_service/{proposal_id}/{id}', 'WorkorderFieldReportsController@viewService')->name('view_service');
+
+    });
+    /** END WorkOrder Field Reports */
+    
 });
-/** END Workorders */
+/** END Workorders*/
 
 
 /*************** Permits  ***************/
@@ -167,8 +209,7 @@ Route::group(['prefix' => 'permits'], function() {
     Route::get('/{id}/remove', 'PermitsController@destroy')->name('remove_permit');
     Route::post('/{permit}/add-note', 'PermitsController@storeNote')->name('permit_note_add');
     Route::post('/{permit}/change-status', 'PermitsController@changeStatus')->name('permit_status_change');
-    Route::get('/{id}/add_permit', 'PermitsCo_service
-    ntroller@create')->name('add_permit');
+    Route::get('/{id}/add_permit', 'PermitsController@create')->name('add_permit');
     Route::get('/{permit}/edit', 'PermitsController@edit')->name('permit_edit');
     Route::patch('/{permit}', 'PermitsController@update')->name('permit_update');
     Route::post('ajax-note-list', 'PermitsController@noteList')->name('ajax_permit_note_list');

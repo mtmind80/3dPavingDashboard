@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Currency;
+use App\Http\Requests\SearchRequest;
 use App\Models\AcceptedDocuments;
 use App\Models\Contractor;
 use App\Models\Equipment;
@@ -19,6 +20,7 @@ use App\Models\Vehicle;
 use App\Models\ProposalDetail;
 use App\Models\VehicleType;
 use App\Models\WorkorderEquipment;
+use App\Models\WorkorderFieldReport;
 use App\Models\WorkorderMaterial;
 use App\Models\WorkorderSubcontractor;
 use App\Models\WorkorderTimesheets;
@@ -28,89 +30,120 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Validator;
 
-class WorkOrderDetailsController extends Controller
+class WorkorderFieldReportsController extends Controller
 {
-    public function fieldReports(Request $request): View
+    public function index($proposalDetailId, Request $request)
     {
+        if (! $proposalDetail = ProposalDetail::with(['proposal'])->find($proposalDetailId)) {
+            return redirect()->back()->with('error', 'Proposal details not found.');
+        }
+
         $needle = $request->needle ?? null;
         $perPage = $request->perPage ?? 10;
 
-        $contacts = ProposalDetail::search($needle)->sortable()->with(['contactType', 'company'])->paginate($perPage);
+        $fieldReports = WorkorderFieldReport::forProposalDetail($proposalDetailId)
+            ->search($needle)
+            ->sortable('report_date', 'DESC')
+            ->paginate($perPage);
 
         $data = [
-            'contacts' => $contacts,
+            'proposalDetail' => $proposalDetail,
+            'proposal' => $proposalDetail->proposal,
+            'fieldReports' => $fieldReports,
             'needle' => $needle,
         ];
 
-        return view('workorders.field_report', $data);
+        return view('workorders.field_report.index', $data);
     }
 
-    public function details($proposal_detail_id, Request $request)
+    public function search(SearchRequest $request)
     {
-        if (!$proposalDetail = ProposalDetail::with([
-                'proposal',
-                'service',
-                'vehicles',
-                'equipment',
-                'subcontractors',
-            ])->find($proposal_detail_id)
-        ) {
-            abort(404);
+        return $this->index($request);
+    }
+
+    public function store(Request $request)
+    {
+        $validator = Validator::make(
+            $request->only(['proposal_id', 'proposal_detail_id', 'report_date']), [
+                'proposal_id' => 'required|positive',
+                'proposal_detail_id' => 'positive|positive',
+                'report_date' => 'required|usDate',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return redirect()->back()->with('error', 'Invalid date');
         }
 
+        if (! $fieldReport = WorkorderFieldReport::forProposalDetail($request->proposal_detail_id)->first()) {
+            $inputs = $validator->validated();
+
+            $inputs['report_date'] = Carbon::createFromFormat('m/d/Y', $inputs['report_date']);;
+            $inputs['created_by'] = auth()->user()->id;
+
+            $fieldReport = WorkorderFieldReport::create($inputs);
+        }
+
+        return redirect()->route('workorder_field_report_details', ['workorder_field_report_id' => $fieldReport->id]);
+    }
+
+    public function details($fieldReportId, Request $request)
+    {
+        $fieldReport = WorkorderFieldReport
+            ::with([
+                'proposal',
+                'proposalDetails',
+                'vehicles',
+                'equipments',
+                'subcontractors' ,
+                'additionalCosts',
+                'timesheets' => fn($q) => $q->with(['employee' => fn($w) => $w->orderBy('fname')->orderBy('lname')]),
+            ])
+            ->find($fieldReportId);
+
+        /*
         // time sheets
-        $timeSheets = WorkorderTimesheets::where('proposal_detail_id', $proposal_detail_id)
+        $timeSheets = WorkorderTimesheets::where('workorder_field_report_id', $fieldReportId)
             ->with(['employee' => fn($q) => $q->orderBy('fname')->orderBy('lname')])
             ->orderBy('report_date')
             ->get();
 
         // equipment
-        $equipments = WorkorderEquipment::where('proposal_detail_id', $proposal_detail_id)
+        $equipments = WorkorderEquipment::where('workorder_field_report_id', $fieldReportId)
             ->orderBy('report_date')
             ->get();
 
         // materials
-        $materials = WorkorderMaterial::where('proposal_detail_id', $proposal_detail_id)
+        $materials = WorkorderMaterial::where('workorder_field_report_id', $fieldReportId)
             ->orderBy('report_date')
             ->get();
 
         // vehicles
-        $vehicles = WorkorderVehicle::where('proposal_detail_id', $proposal_detail_id)
+        $vehicles = WorkorderVehicle::where('workorder_field_report_id', $fieldReportId)
             ->orderBy('report_date')
             ->get();
 
         // subcontractors
-        $subcontractors = WorkorderSubcontractor::where('proposal_detail_id', $proposal_detail_id)
+        $subcontractors = WorkorderSubcontractor::where('workorder_field_report_id', $fieldReportId)
             ->with(['subcontractor' => fn($q) => $q->orderBy('name')])
             ->orderBy('report_date')
             ->get();
+        */
+
 
         $data = [
-            'today' => now(config('app.timezone')),
-            'proposalDetail' => $proposalDetail,
-
-            'returnTo' => route('show_workorder', ['id' => $proposalDetail->proposal_id]),
-            'currentUrl' => route('workorder_details', ['proposal_detail_id' => $proposalDetail->id]),
+            'fieldReport' => $fieldReport,
+            'returnTo' => route('workorder_field_report_list', ['proposal_detail_id' => $fieldReport->proposal_detail_id]),
+            'currentUrl' => route('workorder_field_report_details', ['workorder_field_report_id' => $fieldReport->id]),
             'tabSelected' => 'services',
-
-            // time sheets
-            'timeSheets' => $timeSheets ?? null,
             'employeesCB' => User::employeesCB(['0' => 'Select employee']),
-            // equipment
-            'equipments' => $equipments ?? null,
             'equipmentCB' => Equipment::equipmentCB(['0' => 'Select equipment']),
-            // materials
-            'materials' => $materials ?? null,
             'materialsCB' => Material::materialsCB(['0' => 'Select material']),
-            // vehicles:
-            'vehicles' => $vehicles ?? null,
             'vehiclesCB' => Vehicle::vehiclesCB(['0' => 'Select vehicle']),
-            // subcontractors:
-            'subcontractors' => $subcontractors ?? null,
             'contractorsCB' => Contractor::contractorsCB(['0' => 'Select contractor']),
         ];
 
-        return view('workorders.field_report', $data);
+        return view('workorders.field_report.details', $data);
     }
 
     // Timesheets
@@ -118,13 +151,14 @@ class WorkOrderDetailsController extends Controller
     public function ajaxTimeSheetStore(Request $request)
     {
         if ($request->isMethod('post') && $request->ajax()) {
-            $inputs = $request->only(['report_date', 'proposal_id', 'proposal_detail_id', 'employee_id', 'start_time', 'end_time']);
+            $inputs = $request->only(['proposal_id', 'proposal_detail_id', 'workorder_field_report_id', 'report_date_str', 'employee_id', 'start_time', 'end_time']);
 
             $validator = Validator::make(
                 $inputs, [
-                    'report_date' => 'required|date',
                     'proposal_id' => 'required|positive',
                     'proposal_detail_id' => 'required|positive',
+                    'workorder_field_report_id' => 'required|positive',
+                    'report_date_str' => 'required|usDate',
                     'employee_id' => 'required|positive',
                     'start_time' => 'required|time',
                     'end_time' => 'required|time',
@@ -140,23 +174,22 @@ class WorkOrderDetailsController extends Controller
             $employee = User::find($request->employee_id);
 
             $inputs['rate'] = $employee->rate_per_hour;
-            $inputs['report_date'] = Carbon::createFromFormat('m/d/Y', $request->report_date);
-            $inputs['start_time'] = Carbon::createFromFormat('m/d/Y g:i A', $request->report_date . ' ' . $request->start_time);
-            $inputs['end_time'] = Carbon::createFromFormat('m/d/Y g:i A', $request->report_date . ' ' . $request->end_time);
+            $inputs['start_time'] = Carbon::createFromFormat('m/d/Y g:i A', $request->report_date_str . ' ' . $request->start_time);
+            $inputs['end_time'] = Carbon::createFromFormat('m/d/Y g:i A', $request->report_date_str . ' ' . $request->end_time);
             $inputs['actual_hours'] = round($inputs['start_time']->floatDiffInHours($inputs['end_time']), 2);
             $inputs['created_by'] = auth()->user()->id;
 
             WorkOrderTimeSheets::create($inputs);
 
-            $timeSheets = WorkorderTimesheets::where('proposal_detail_id', $request->proposal_detail_id)
+            $timeSheets = WorkorderTimesheets
+                ::where('workorder_field_report_id', $request->workorder_field_report_id)
                 ->with(['employee' => fn($q) => $q->orderBy('fname')->orderBy('lname')])
-                ->orderBy('report_date')
                 ->get();
 
             return response()->json([
                 'success' => true,
                 'message' => 'New timesheet added.',
-                'html' => view('workorders.timesheet._list', ['timeSheets' => $timeSheets])->render(),
+                'html' => view('workorders.field_report.timesheet._list', ['timeSheets' => $timeSheets])->render(),
             ]);
         } else {
             return response()->json([
@@ -237,7 +270,7 @@ class WorkOrderDetailsController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'New equipment added.',
-                'html' => view('workorders.equipment._list', ['equipments' => $equipments])->render(),
+                'html' => view('workorders.field_report.equipment._list', ['equipments' => $equipments])->render(),
             ]);
         } else {
             return response()->json([
@@ -318,7 +351,7 @@ class WorkOrderDetailsController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'New material added.',
-                'html' => view('workorders.material._list', ['materials' => $materials])->render(),
+                'html' => view('workorders.field_report.material._list', ['materials' => $materials])->render(),
             ]);
         } else {
             return response()->json([
@@ -398,7 +431,7 @@ class WorkOrderDetailsController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'New vehicle added.',
-                'html' => view('workorders.vehicle._list', ['vehicles' => $vehicles])->render(),
+                'html' => view('workorders.field_report.vehicle._list', ['vehicles' => $vehicles])->render(),
             ]);
         } else {
             return response()->json([
@@ -478,7 +511,7 @@ class WorkOrderDetailsController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'New subcontractor added.',
-                'html' => view('workorders.subcontractor._list', ['subcontractors' => $subcontractors])->render(),
+                'html' => view('workorders.field_report.subcontractor._list', ['subcontractors' => $subcontractors])->render(),
             ]);
         } else {
             return response()->json([
@@ -584,11 +617,11 @@ class WorkOrderDetailsController extends Controller
 
         if ($proposalDetail->service->id == 18) { // striping costs
 
-            return view('workorders.striping', $data);
+            return view('workorders.field_report.striping', $data);
 
         }
 
-        return view('workorders.view_service', $data);
+        return view('workorders.field_report.view_service', $data);
 
 
     }
@@ -645,8 +678,8 @@ class WorkOrderDetailsController extends Controller
         ];
 
         return view($proposalDetail->services_id === 18
-            ? 'workorders.view_striping'
-            : 'workorders.view_service', $data);
+            ? 'workorders.field_report.view_striping'
+            : 'workorders.field_report.view_service', $data);
     }
 
 }

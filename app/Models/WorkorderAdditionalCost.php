@@ -2,48 +2,37 @@
 
 namespace App\Models;
 
-use App\Helpers\Currency;
 use App\Traits\SearchTrait;
 use App\Traits\SortableTrait;
 use Illuminate\Database\Eloquent\Model;
 
-class WorkorderEquipment extends Model
+class WorkorderAdditionalCost extends Model
 {
     use SortableTrait, SearchTrait;
-
-    protected $table = 'workorder_equipment';
 
     public $fillable = [
         'proposal_id',
         'proposal_detail_id',
         'workorder_field_report_id',
-        'equipment_id',
-        'name',
         'created_by',
-        'hours',
-        'number_of_units',
-        'rate_type',
-        'rate',
+        'cost',
+        'description',
     ];
 
     public $sortable = [
-        'hours',
-        'rate_type',
-        'rate',
-        'created_at',
-        'workorder_equipment.proposal_id|proposals.name',
-        'workorder_equipment.created_by|users.fname',
-        'workorder_equipment.workorder_field_report_id|workorder_field_reports.report_date',
+        'cost',
+        'workorder_additional_costs.proposal_id|proposals.name',
+        'workorder_additional_costs.created_by|users.fname',
+        'workorder_additional_costs.workorder_field_report_id|workorder_field_reports.report_date',
     ];
 
     public $searchable = [
-        'rate_type' => 'LIKE',
-        'rate' => 'LIKE',
-        'created_at' => 'LIKE',
+        'cost' => 'LIKE',
+        'description' => 'LIKE',
         'childModels' => [
             'proposal' => [
                 'fields' => [
-                    'name' => 'LIKE',
+                    'proposals.name' => 'LIKE',
                 ],
             ],
             'creator' => [
@@ -92,16 +81,11 @@ class WorkorderEquipment extends Model
         return $this->belongsTo(User::class, 'created_by');
     }
 
-    public function equipment()
+    public function material()
     {
-        return $this->belongsTo(Equipment::class, 'equipment_id');
+        return $this->belongsTo(Material::class, 'material_id');
     }
 
     /** Accessor(get) and Mutators(set) */
-
-    public function getHtmlRateAttribute()
-    {
-        return Currency::format($this->rate);
-    }
 
 }

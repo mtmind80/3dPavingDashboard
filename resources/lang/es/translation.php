@@ -401,6 +401,7 @@ return [
     "percentage" => "Porciento",
     "list" => "Lista",
     "fieldreport" => "Reporte de Campo",
+    "fieldreports" => "Reportes de Campo",
     "cantschedule" => "Can't Schedule",
     "all" => "Todo",
     "fees" => "Fees",

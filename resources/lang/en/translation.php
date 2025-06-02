@@ -407,6 +407,7 @@ return [
     "percentage" => "Percentage",
     "list" => "List",
     "fieldreport" => "Field Report",
+    "fieldreports" => "Field Reports",
     "cantschedule" => "Can't Schedule",
     "all" => "All",
     "fees" => "Fees",

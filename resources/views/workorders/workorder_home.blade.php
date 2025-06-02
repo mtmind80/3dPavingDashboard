@@ -9,15 +9,11 @@
         font-size: 1.25EM;
         margin-bottom: 9px;
     }
-
     .bg_lightning {
         color: #000000;
         background-color: #E8F8F5;
     }
-
 </style>
-
-
 
 @section('content')
     @component('components.breadcrumb')
@@ -62,13 +58,13 @@
                         </li>
                     </ul>
                     <table width="100%" class="table-centered table-bordered font-size-20">
-                        @if($proposal->proposal_statuses_id == 5)
+                        @if ($proposal->proposal_statuses_id == 5)
                             <tr>
                                 <td colspan='2' class="tl">
 
                                     <a href="{{route('edit_workorder',['id'=> $proposal['id']])}}"
                                        title="@lang('translation.edit') @lang('translation.work_order')"
-                                       class="{{$site_button_class3}}">
+                                       class="{{ $site_button_class3}}">
                                         <i class="fas fa-plus"></i> @lang('translation.edit') @lang('translation.work_order')
                                     </a>
                                 </td>
@@ -76,7 +72,7 @@
                         @endif
                         <tr>
                             <td class="tl w-50">
-                                {{$proposal['name']}}
+                                {{ $proposal['name']}}
                             </td>
                             <td class="tl w-50">
                                 STATUS: {{ App\Models\ProposalStatus::find($proposal['proposal_statuses_id'])->status }}
@@ -84,7 +80,7 @@
                         </tr>
 
                         <tr>
-                            <td class="tl" colspan="2"><b>@lang('translation.workorderid')</b> {{$proposal['job_master_id']}}</td>
+                            <td class="tl" colspan="2"><b>@lang('translation.workorderid')</b> {{ $proposal['job_master_id']}}</td>
                         </tr>
                     </table>
                     <!-- Tab panes -->
@@ -95,7 +91,7 @@
                                     <tr>
                                         <td>@lang('translation.location')</td>
                                         <td>
-                                            @if($proposal['location_id'])
+                                            @if ($proposal['location_id'])
                                                 {!! App\Models\Location::find($proposal['location_id'])->FullLocationTwoLines !!}
                                             @endif
                                         </td>
@@ -107,7 +103,7 @@
                                     <tr>
                                         <td>@lang('translation.status')</td>
                                         <td>
-                                            @if($proposal['proposal_statuses_id'])
+                                            @if ($proposal['proposal_statuses_id'])
                                                 {{ App\Models\ProposalStatus::find($proposal['proposal_statuses_id'])->status }}
                                             @endif
                                         </td>
@@ -116,7 +112,7 @@
                                     <tr>
                                         <td>@lang('translation.salesmanager')</td>
                                         <td>
-                                            @if($proposal['salesmanager_id'])
+                                            @if ($proposal['salesmanager_id'])
                                                 {{ App\Models\User::find($proposal['salesmanager_id'])->FullName }}
                                             @endif
                                         </td>
@@ -124,7 +120,7 @@
                                     <tr>
                                         <td>@lang('translation.salesperson')</td>
                                         <td>
-                                            @if($proposal['salesperson_id'])
+                                            @if ($proposal['salesperson_id'])
                                                 {{ App\Models\User::find($proposal['salesperson_id'])->FullName }}
                                             @endif
                                         </td>
@@ -132,7 +128,7 @@
                                     <tr>
                                         <td>@lang('translation.client')</td>
                                         <td>
-                                            @if($proposal['contact_id'])
+                                            @if ($proposal['contact_id'])
                                                 <a href="{{route('contact_details',['contact'=>$proposal['contact_id']])}}">{{ App\Models\Contact::find($proposal['contact_id'])->FullName }}</a>
                                             @endif
                                         </td>
@@ -140,14 +136,14 @@
                                     <tr>
                                         <td>@lang('translation.proposalclient')</td>
                                         <td>
-                                            @if($proposal['customer_staff_id'])
+                                            @if ($proposal['customer_staff_id'])
                                                 <a href="{{route('contact_details',['contact'=>$proposal['customer_staff_id']])}}">{{ App\Models\Contact::find($proposal['customer_staff_id'])->FullName }}</a>
                                             @endif
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>@lang('translation.progressivebilling')</td>
-                                        <td>@if($proposal['progressive_billing'])
+                                        <td>@if ($proposal['progressive_billing'])
                                                 YES
                                             @else
                                                 NO
@@ -159,10 +155,10 @@
                                             @lang('translation.permit') @lang('translation.required')
                                         </td>
 
-                                        <td>@if($proposal['permit_required'])
+                                        <td>@if ($proposal['permit_required'])
                                                 YES
-                                                @if(auth()->user()->isAdmin())
-                                                    <button class="{{$site_button_class2}} float-right"
+                                                @if (auth()->user()->isAdmin())
+                                                    <button class="{{ $site_button_class2}} float-right"
                                                             id="addpermit">@lang('translation.add') @lang('translation.permit')
                                                     </button>
                                                 @endif
@@ -172,10 +168,11 @@
                                         </td>
                                     </tr>
 
-                                    @if($proposal['permit_required'] && $permits)
+                                    @if ($proposal['permit_required'] && $permits)
                                         <tr>
                                             <td style="background-color:#e6f2ff;">
-                                                Current @lang('translation.permits')</td>
+                                                Current @lang('translation.permits')
+                                            </td>
                                             <td>
                                                 <table width="100%">
                                                     <tr>
@@ -189,70 +186,71 @@
                                                     @foreach($permits as $permit)
                                                         <tr>
                                                             <td class="tc">
-                                                                <a href="{{route('permit_show',['permit'=>$permit->id])}}">View
-                                                                    Permit</a>
+                                                                <a href="{{route('permit_show',['permit'=>$permit->id])}}"
+                                                                >View Permit
+                                                                </a>
                                                             </td>
-                                                            <td class="tc">{{$permit->county}}</td>
-                                                            <td class="tc">{{$permit->number}}</td>
-                                                            <td class="tc">{{$permit->status}}</td>
-                                                            <td class="tc">@if($permit->submitted_on)
-                                                                    {{$permit->submitted_on->format('M-d-Y')}}
-                                                                @endif</td>
-                                                            <td class="tc">@if($permit->expires_on)
-                                                                    {{$permit->expires_on->format('M-d-Y')}}
-                                                                @endif</td>
+                                                            <td class="tc">{{ $permit->county}}</td>
+                                                            <td class="tc">{{ $permit->number}}</td>
+                                                            <td class="tc">{{ $permit->status}}</td>
+                                                            <td class="tc">
+                                                                @if ($permit->submitted_on)
+                                                                    {{ $permit->submitted_on->format('M-d-Y')}}
+                                                                @endif
+                                                            </td>
+                                                            <td class="tc">
+                                                                @if ($permit->expires_on)
+                                                                    {{ $permit->expires_on->format('M-d-Y')}}
+                                                                @endif
+                                                            </td>
                                                         </tr>
                                                     @endforeach
                                                 </table>
-
-
                                             </td>
                                         </tr>
                                     @endif
 
                                     <tr>
                                         <td>@lang('translation.mot') @lang('translation.required')</td>
-                                        <td>@if($proposal['mot_required'])
+                                        <td>
+                                            @if ($proposal['mot_required'])
                                                 YES
                                             @else
                                                 NO
                                             @endif
                                         </td>
                                     </tr>
-
                                     <tr>
                                         <td>@lang('translation.on_alert')</td>
-                                        @if($proposal['on_alert'])
+                                        @if ($proposal['on_alert'])
                                             <td class="bg-alert">
-                                                YES &nbsp;&nbsp; Reason: {{$proposal['alert_reason']}}
+                                                YES &nbsp;&nbsp; Reason: {{ $proposal['alert_reason']}}
                                                 <x-href-button
                                                     url="{{ route('proposal_alert_reset', ['proposal_id' => $proposal['id']]) }}"
                                                     class="btn-danger ptb2 fr"><i class="fas fa-times"></i>Remove
                                                     Alert
                                                 </x-href-button>
+                                            </td>
                                         @else
                                             <td>
                                                 NO
                                                 <x-href-button id="set_alert_button" class="btn-success ptb2 fr"><i
                                                         class="fas fa-check"></i>Set Alert
                                                 </x-href-button>
-
                                             </td>
-                                    @endif
-
-                                    <tr>
-
-
+                                       @endif
+                                    </tr>
                                     <tr>
                                         <td>@lang('translation.nto') @lang('translation.sent') </td>
-                                        <td>@if($proposal['nto_required'])
+                                        <td>
+                                            @if ($proposal['nto_required'])
                                                 YES
                                             @else
                                                 NO
                                             @endif
                                         </td>
                                     </tr>
-                                    @if(!$proposal['changeorder'])
+                                    @if (!$proposal['changeorder'])
                                         <tr>
                                             <td>Create Change Order</td>
                                             <td>
@@ -262,9 +260,7 @@
                                             </td>
                                         </tr>
 
-
-                                        @if($changeorders)
-
+                                        @if ($changeorders)
                                             <td style="background-color:#ccfff2;">
                                                 Change Orders
                                             </td>
@@ -305,147 +301,145 @@
 
                             </div>
                         </div>
+
                         <div class="tab-pane" id="services" role="tabpanel">
                             <div class="row">
-
                                 <div class="col-lg-12">
-                                    @if($services)
-
+                                    @if ($services)
                                         <table style="width:100%;"
-                                               class="w100perc list-table table table-centered table-bordered">
+                                               class="w100perc list-table table table-centered table-bordered"
+                                        >
                                             <thead>
-                                            <tr style="background:#E5E8E8;color:#000;">
-                                                <td class="tl"><b>@lang('translation.workorderservices')</b></td>
-                                                <!--
-                                                <td class="w50"><b>@lang('translation.status')</b></td>
-                                                <td class="w230"><b>@lang('translation.location')</b></td>
-                                                -->
-                                                <td class="tl"><b>@lang('translation.fieldmanager')</b></td>
-                                                <td class="tl"><b>@lang('translation.cost')</b></td>
-                                                <td class="actions tc"><b>@lang('translation.actions')</b></td>
-                                            </tr>
+                                                <tr style="background:#E5E8E8;color:#000;">
+                                                    <td class="tl"><b>@lang('translation.workorderservices')</b></td>
+                                                    <!--
+                                                    <td class="w50"><b>@lang('translation.status')</b></td>
+                                                    <td class="w230"><b>@lang('translation.location')</b></td>
+                                                    -->
+                                                    <td class="tl"><b>@lang('translation.fieldmanager')</b></td>
+                                                    <td class="tl"><b>@lang('translation.cost')</b></td>
+                                                    <td class="actions tc"><b>@lang('translation.actions')</b></td>
+                                                </tr>
                                             </thead>
                                             <tbody>
-                                            @php
-                                                $totalcost = 0;
-                                            @endphp
-
-                                            @foreach($services as $service)
                                                 @php
-
-                                                    $totalcost = $totalcost + $service->cost;
+                                                    $totalcost = 0;
                                                 @endphp
-                                                <tr>
 
-                                                    <td>
-                                                        <a href="{{route('view_service', ['proposal_id'=>$proposal['id'],'id'=>$service->id])}}">{{$service->service_name}}</a>
+                                                @foreach($services as $service)
+                                                    @php
+                                                        $totalcost = $totalcost + $service->cost;
+                                                    @endphp
+                                                    <tr>
+                                                        <td>
+                                                            <a href="{{route('view_service', ['proposal_id'=>$proposal['id'],'id'=>$service->id])}}">{{ $service->service_name}}</a>
 
-                                                        </br>
-                                                    </td>
-                                                    <!--     <td>
-                                                        @if($service->status_id)
-                                                        {{ App\Models\ProposalDetailStatus::find($service->status_id)->status }}
-                                                    @else
-                                                        No Status
-
-                                                    @endif
-                                                    <td>
-                                                        @if($service->location_id)
-                                                        {!! App\Models\Location::find($service->location_id)->FullLocationTwoLines !!}
-                                                    @else
-                                                        No Location Specified
-
-                                                    @endif
-                                                    </td>
-                                                   -->
-                                                    <td>
-                                                        @if($service->fieldmanager_id)
-                                                            {{ App\Models\User::find($service->fieldmanager_id)->FullName }}
+                                                            </br>
+                                                        </td>
+                                                        <!--     <td>
+                                                            @if ($service->status_id)
+                                                            {{ App\Models\ProposalDetailStatus::find($service->status_id)->status }}
                                                         @else
-                                                            No Manager Assigned
+                                                            No Status
+
                                                         @endif
-                                                    </td>
-                                                    <td>
-                                                        {{ \App\Helpers\Currency::format($service->cost ?? '0.0') }}</br>
-                                                    </td>
-                                                    <td class="centered actions">
-                                                        <ul class="nav navbar-nav">
-                                                            <li class="dropdown">
-                                                                <a class="dropdown-toggle" data-toggle="dropdown"
-                                                                   href="#"><i class="fa fa-angle-down"></i></a>
-                                                                <ul class="dropdown-menu animated animated-short flipInX"
-                                                                    role="menu">
-                                                                    @if($allowSchedule)
-                                                                        @if($service->status_id == 1)
-                                                                            <li>
-                                                                                <a href="{{route('schedule_service', ['service_id'=>$service->id])}}"
-                                                                                   class="action list-group-item-action">
-                                                                                    <span
-                                                                                        class="far fa-calendar-check"></span>
-                                                                                    &nbsp; @lang('translation.schedule')
-                                                                                </a>
-                                                                            </li>
+                                                        <td>
+                                                            @if ($service->location_id)
+                                                            {!! App\Models\Location::find($service->location_id)->FullLocationTwoLines !!}
+                                                        @else
+                                                            No Location Specified
+
+                                                        @endif
+                                                        </td>
+                                                       -->
+                                                        <td>
+                                                            @if ($service->fieldmanager_id)
+                                                                {{ App\Models\User::find($service->fieldmanager_id)->FullName }}
+                                                            @else
+                                                                No Manager Assigned
+                                                            @endif
+                                                        </td>
+                                                        <td>
+                                                            {{ \App\Helpers\Currency::format($service->cost ?? '0.0') }}</br>
+                                                        </td>
+                                                        <td class="centered actions">
+                                                            <ul class="nav navbar-nav">
+                                                                <li class="dropdown">
+                                                                    <a class="dropdown-toggle" data-toggle="dropdown"
+                                                                       href="#"><i class="fa fa-angle-down"></i></a>
+                                                                    <ul class="dropdown-menu animated animated-short flipInX"
+                                                                        role="menu">
+                                                                        @if ($allowSchedule)
+                                                                            @if ($service->status_id == 1)
+                                                                                <li>
+                                                                                    <a href="{{route('schedule_service', ['service_id'=>$service->id])}}"
+                                                                                       class="action list-group-item-action">
+                                                                                        <span
+                                                                                            class="far fa-calendar-check"></span>
+                                                                                        &nbsp; @lang('translation.schedule')
+                                                                                    </a>
+                                                                                </li>
+                                                                            @else
+                                                                                <li>
+                                                                                    <a href="{{route('schedule_service', ['service_id'=>$service->id])}}"
+                                                                                       class="list-group-item-action">
+                                                                                        <span
+                                                                                            class="far fa-calendar-check"></span>
+                                                                                        &nbsp; @lang('translation.changeschedule')
+                                                                                    </a>
+                                                                                </li>
+                                                                            @endif
                                                                         @else
                                                                             <li>
-                                                                                <a href="{{route('schedule_service', ['service_id'=>$service->id])}}"
+                                                                                <a href="Javascript:alert('Until a deposit is recorded and all permits are completed you cannot schedule this work. Check Payments and Permits');"
                                                                                    class="list-group-item-action">
                                                                                     <span
                                                                                         class="far fa-calendar-check"></span>
-                                                                                    &nbsp; @lang('translation.changeschedule')
+                                                                                    &nbsp; @lang('translation.cantschedule')
+                                                                                </a></li>
+
+                                                                        @endif
+
+
+                                                                        <li>
+                                                                            <a href="{{route('view_service', ['proposal_id'=>$proposal['id'],'id'=>$service->id])}}"
+                                                                               class="list-group-item-action">
+                                                                                <span class="fa fa-edit"></span>
+                                                                                &nbsp; @lang('translation.view') @lang('translation.service')
+                                                                            </a>
+                                                                        </li>
+
+                                                                        <li>
+                                                                            <a href="{{route('workordermedia', ['proposal_id'=>$proposal['id'], 'proposal_detail_id'=>$service->id])}}"
+                                                                               class="list-group-item-action">
+                                                                                <span class="fa fa-upload"></span>
+                                                                                &nbsp; @lang('translation.upload')
+                                                                            </a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <a href="{{route('assignmanager', ['id'=>$proposal['id'], 'detail_id'=>$service->id])}}"
+                                                                               class="list-group-item-action">
+                                                                                <span class="far fa-address-book"></span>
+                                                                                &nbsp; @lang('translation.fieldmanager')
+                                                                            </a>
+                                                                        </li>
+                                                                            <li>
+                                                                                <a href="{{ route('workorder_field_report_list', ['proposal_detail_id' => $service->id]) }}">
+                                                                                    <span class="fas fa-eye mr10"></span>
+                                                                                    @lang('translation.fieldreport')
                                                                                 </a>
                                                                             </li>
-                                                                        @endif
-                                                                    @else
-                                                                        <li>
-                                                                            <a href="Javascript:alert('Until a deposit is recorded and all permits are completed you cannot schedule this work. Check Payments and Permits');"
-                                                                               class="list-group-item-action">
-                                                                                <span
-                                                                                    class="far fa-calendar-check"></span>
-                                                                                &nbsp; @lang('translation.cantschedule')
-                                                                            </a></li>
-
-                                                                    @endif
-
-
-                                                                    <li>
-                                                                        <a href="{{route('view_service', ['proposal_id'=>$proposal['id'],'id'=>$service->id])}}"
-                                                                           class="list-group-item-action">
-                                                                            <span class="fa fa-edit"></span>
-                                                                            &nbsp; @lang('translation.view') @lang('translation.service')
-                                                                        </a>
-                                                                    </li>
-
-                                                                    <li>
-                                                                        <a href="{{route('workordermedia', ['proposal_id'=>$proposal['id'], 'proposal_detail_id'=>$service->id])}}"
-                                                                           class="list-group-item-action">
-                                                                            <span class="fa fa-upload"></span>
-                                                                            &nbsp; @lang('translation.upload')
-                                                                        </a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a href="{{route('assignmanager', ['id'=>$proposal['id'], 'detail_id'=>$service->id])}}"
-                                                                           class="list-group-item-action">
-                                                                            <span class="far fa-address-book"></span>
-                                                                            &nbsp; @lang('translation.fieldmanager')
-                                                                        </a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a href="{{ route('workorder_details', ['proposal_detail_id' => $service->id]) }}">
-                                                                            <span
-                                                                                class="fas fa-eye mr10"></span>@lang('translation.fieldreport')
-                                                                        </a>
-                                                                    </li>
-                                                                </ul>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
+                                                                    </ul>
+                                                                </li>
+                                                            </ul>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                                <tr>
+                                                    <td class="tr" colspan="2">Grand Total:</td>
+                                                    <td class="tl">{{ $currency_total_details_costs }}</td>
+                                                    <td class="tr"></td>
                                                 </tr>
-                                            @endforeach
-                                            <tr>
-                                                <td class="tr" colspan="2">Grand Total:</td>
-                                                <td class="tl">{{ $currency_total_details_costs }}</td>
-                                                <td class="tr"></td>
-                                            </tr>
                                             </tbody>
                                         </table>
                                     @endif
@@ -457,11 +451,13 @@
                                 <a href="javascript:" id="addnotebutton" class="btn  btn-success action"
                                    data-action="add-note"
                                    data-route="{{ route('proposal_note_store', ['proposal' => $proposal['id']]) }}"
-                                   data-proposal_name="{{ $proposal['name'] }}">
+                                   data-proposal_name="{{ $proposal['name'] }}"
+                                >
                                     <span
-                                        class="fas fa-sticky-note"></span>@lang('translation.add') @lang('translation.note')
+                                        class="fas fa-sticky-note"
+                                    ></span>
+                                    @lang('translation.add') @lang('translation.note')
                                 </a>
-
                             </div>
                             <div class="row">
                                 <table style="width:100%" class="table table-centered table-bordered">
@@ -473,28 +469,26 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @foreach($notes as $note)
-                                        <tr>
-                                            <td>
-                                                {{$note->note}}</br>
-                                            </td>
-                                            <td>
-                                                @if($note->reminder)
-                                                    {{ \Carbon\Carbon::parse($note->reminder_date)->format('m/d/Y') }}</br>
-                                                @else
-                                                    NA
-                                                @endif
-                                            </td>
-
-                                            <td>
-                                                @if($note['created_by'])
-                                                    {{ App\Models\User::find($note->created_by)->FullName }} </br>
-                                                @endif
-                                                {{ \Carbon\Carbon::parse($note->created_at)->format('m/d/Y') }}</br>
-                                            </td>
-                                        </tr>
-
-                                    @endforeach
+                                        @foreach($notes as $note)
+                                            <tr>
+                                                <td>
+                                                    {{ $note->note }}</br>
+                                                </td>
+                                                <td>
+                                                    @if ($note->reminder)
+                                                        {{ \Carbon\Carbon::parse($note->reminder_date)->format('m/d/Y') }}</br>
+                                                    @else
+                                                        NA
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($note['created_by'])
+                                                        {{ App\Models\User::find($note->created_by)->FullName }} </br>
+                                                    @endif
+                                                    {{ \Carbon\Carbon::parse($note->created_at)->format('m/d/Y') }}</br>
+                                                </td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -508,8 +502,8 @@
 
                             </div>
                             <div class="row">
-
-                                <!--                            <a href="{{route('workordermedia', ['proposal_id'=>$id,'proposal_detail_id'=> 0])}}"
+                                <!--
+                                    <a href="{{route('workordermedia', ['proposal_id'=>$id,'proposal_detail_id'=> 0])}}"
                                    class="btn btn-success"><i
                                             class="fas fa-plus"></i> Add Media</a>
    -->
@@ -526,21 +520,21 @@
                                     @foreach($medias as $media)
                                         <tr>
                                             <td>
-                                                @if($media->media_type_id)
+                                                @if ($media->media_type_id)
                                                     {{ App\Models\MediaType::find($media->media_type_id)->type}}
                                                 @endif
                                             </td>
 
                                             <td>
-                                                {{$media->description}}
+                                                {{ $media->description}}
                                             </td>
                                             <td>
-                                                {{$media->file_ext}}
+                                                {{ $media->file_ext}}
                                             </td>
 
                                             <td>
                                                 <a target='blank'
-                                                   href="{{$hostwithHttp}}/{{$media->file_path . $media->file_name}}">Download</a>
+                                                   href="{{ $hostwithHttp}}/{{ $media->file_path . $media->file_name}}">Download</a>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -561,7 +555,7 @@
                                         <a href="{{route('create_payment',['id'=>$proposal['id']])}}">Record
                                             Payments</a>
                                     </li>
-                                    @if($proposal['permit_required'] && $permits)
+                                    @if ($proposal['permit_required'] && $permits)
                                         <li>
                                             <a href="{{route('permit_invoice',['id'=>$proposal['id']])}}">
                                                 Print Permits Invoice</a>

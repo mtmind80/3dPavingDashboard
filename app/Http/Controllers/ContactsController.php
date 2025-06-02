@@ -17,17 +17,8 @@ use App\Models\Contact;
 
 class ContactsController extends Controller
 {
-
-    public function __construct(Request $request)
-    {
-        parent::__construct();
-
-    }
-
-
     public function index(Request $request)
     {
-
         $needle = $request->needle ?? null;
         $perPage = $request->perPage ?? 10;
 
@@ -43,11 +34,8 @@ class ContactsController extends Controller
 
     public function changeclient(Request $request, $id)  //proposal id
     {
-
-
         $needle = $request->needle ?? null;
         $perPage = $request->perPage ?? 10;
-
 
         $proposal = Proposal::where('id', '=', $id)->first();
         $contacts = Contact::search($needle)->sortable()->with(['contactType', 'company'])->paginate($perPage);

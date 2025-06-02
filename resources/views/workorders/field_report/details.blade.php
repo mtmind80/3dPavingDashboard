@@ -6,7 +6,7 @@
     @component('components.breadcrumb')
         @slot('title') @lang('translation.details')@endslot
         @slot('li_1') <a href="{{ route('dashboard') }}">@lang('translation.Dashboard')</a>@endslot
-        @slot('li_2') <a href="{{ route('show_workorder', ['id' => $proposalDetail->proposal_id]) }}">@lang('translation.show') @lang('translation.work_order')</a>@endslot
+        @slot('li_2') <a href="{{ route('show_workorder', ['id' => $fieldReport->proposal_detail_id]) }}">@lang('translation.show') @lang('translation.work_order')</a>@endslot
         @slot('li_3') @lang('translation.details') @endslot
     @endcomponent
 
@@ -18,13 +18,16 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-sm-12">
-                            <h6 class="">@lang('translation.work_order'): <span class="ml8 fwn info-color">{{ $proposalDetail->proposal->name }}</span></h6>
-                            <h6 class="mt-3">@lang('translation.work_order') @lang('translation.service'): <span class="ml8 fwn info-color">{{ $proposalDetail->service->name }}</span></h6>
+                            <h6 class="">@lang('translation.work_order'): <span class="ml8 fwn info-color">{{ $fieldReport->proposal->name }}</span></h6>
+                            <h6 class="mt-3">@lang('translation.work_order') @lang('translation.service'): <span class="ml8 fwn info-color">{{ $fieldReport->proposal->name }}</span></h6>
+                            <h6 class="mt-3">@lang('translation.fieldreport') @lang('translation.date'): <span class="ml8 fwn info-color">{{ $fieldReport->report_date->format('m/d/Y') }}</span></h6>
                         </div>
                     </div>
                 </div>
             </div>
+
             <!-- timesheets -->
+
             <div class="card">
                 <div class="card-body">
                     @include('_partials._alert', ['alertId' => 'timesheet_alert'])
@@ -36,18 +39,12 @@
                     <h5 class="mb-4">@lang('translation.add')</h5>
                     <form method="POST" action="#" accept-charset="UTF-8" class="admin-form" id="time_sheet_form">
                         <div class="row">
-                            <div class="col-lg-2 col-md-3 col-sm-6 admin-form-item-widget">
-                                <x-form-date-picker
-                                    name="report_date"
-                                    :params="[
-                                        'id' => 'time_sheet_report_date',
-                                        'label' => 'Report day',
-                                        'iconClass' => 'fas fa-calendar',
-                                        'value' => $today,
-                                    ]"
-                                ></x-form-date-picker>
-                            </div>
-                            <div class="col-lg-3 col-md-4 col-sm-6 admin-form-item-widget">
+                            <input type="hidden" name="proposal_id" value="{{ $fieldReport->proposal_id }}">
+                            <input type="hidden" name="proposal_detail_id" value="{{ $fieldReport->proposal_detail_id }}">
+                            <input type="hidden" name="workorder_field_report_id" value="{{ $fieldReport->id }}">
+                            <input type="hidden" name="report_date_str" value="{{ $fieldReport->report_date->format('m/d/Y') }}">
+
+                            <div class="col-lg-4 col-md-6 col-sm-6 admin-form-item-widget">
                                 <x-form-select
                                    name="employee_id"
                                    :items="$employeesCB"
@@ -55,7 +52,7 @@
                                    :params="['label' => 'Employee', 'required' => true]"
                                 ></x-form-select>
                             </div>
-                            <div class="col-lg-2 col-md-3 col-sm-3 admin-form-item-widget">
+                            <div class="col-lg-4 col-md-3 col-sm-3 admin-form-item-widget">
                                 <x-form-time-picker
                                     name="start_time"
                                     class=""
@@ -66,7 +63,7 @@
                                 ]"
                                 ></x-form-time-picker>
                             </div>
-                            <div class="col-lg-2 col-md-3 col-sm-3 admin-form-item-widget">
+                            <div class="col-lg-4 col-md-3 col-sm-3 admin-form-item-widget">
                                 <x-form-time-picker
                                     name="end_time"
                                     class=""
@@ -92,27 +89,27 @@
                         </div>
                     </form>
                 </div>
-                <div id="timesheet_card" class="card-body{{ empty($timeSheets) || $timeSheets->count() === 0 ? ' hidden' : '' }}">
+                <div id="timesheet_card" class="card-body{{ empty($fieldReport->timeSheets) || $fieldReport->timeSheets->count() === 0 ? ' hidden' : '' }}">
                     <h5 class="mb-4">@lang('translation.list')</h5>
                     <table class="list-table table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
                             <tr>
-                                <th class="tc w200">Date</th>
                                 <th class="tc">Employeee</th>
-                                <th class="tc w200">Start</th>
-                                <th class="tc w200">Finish</th>
-                                <th class="tc w200">Hours</th>
-                                <th class="tc w100">@lang('translation.action')</th>
+                                <th class="tc w220">Start</th>
+                                <th class="tc w220">Finish</th>
+                                <th class="tc w220">Hours</th>
+                                <th class="tc w160">@lang('translation.action')</th>
                             </tr>
                         </thead>
                         <tbody id="timesheet_tbody">
-                            @include('workorders.timesheet._list')
+                            @include('workorders.field_report.timesheet._list', ['timeSheets' => $fieldReport->timeSheets])
                         </tbody>
                     </table>
                 </div>
             </div>
             <!-- END timesheets -->
 
+            {{--
             <!-- equipment -->
             <div class="card">
                 <div class="card-body">
@@ -187,7 +184,7 @@
                         </tr>
                         </thead>
                         <tbody id="equipment_tbody">
-                            @include('workorders.equipment._list')
+                            @include('workorders.field_report.equipment._list')
                         </tbody>
                     </table>
                 </div>
@@ -276,7 +273,7 @@
                         </tr>
                         </thead>
                         <tbody id="material_tbody">
-                            @include('workorders.material._list')
+                            @include('workorders.field_report.material._list')
                         </tbody>
                     </table>
                 </div>
@@ -364,7 +361,7 @@
                         </tr>
                         </thead>
                         <tbody id="vehicle_tbody">
-                            @include('workorders.vehicle._list')
+                            @include('workorders.field_report.vehicle._list')
                         </tbody>
                     </table>
                 </div>
@@ -452,13 +449,15 @@
                         </tr>
                         </thead>
                         <tbody id="subcontractor_tbody">
-                            @include('workorders.subcontractor._list')
+                            @include('workorders.field_report.subcontractor._list')
                         </tbody>
                     </table>
                 </div>
             </div>
             <!-- END subcontractor -->
-            <div id="bottom_empty_div" class="{{ !empty($subcontractors) && $subcontractors->count() > 0 ? ' hidden' : '' }}" style="height:140px;"></div>
+            --}}
+
+            <div id="bottom_empty_div" class="{{ !empty($fieldReport->subcontractors) && $fieldReport->subcontractors->count() > 0 ? ' hidden' : '' }}" style="height:140px;"></div>
         </div>
     </div>
 @stop
@@ -467,8 +466,8 @@
     <script>
         $(document).ready(function () {
             var commonFormProperties = {
-                proposal_id: "{{ $proposalDetail->proposal_id  }}",
-                proposal_detail_id: "{{ $proposalDetail->id  }}"
+                proposal_id: "{{ $fieldReport->proposal_id  }}",
+                proposal_detail_id: "{{ $fieldReport->proposal_detail_id }}"
             };
 
             var bottomEmptyDiv = $('#bottom_empty_div');
@@ -489,10 +488,6 @@
 
             timeSheetForm.validate({
                 rules: {
-                    report_date: {
-                        required: true,
-                        date: true
-                    },
                     employee_id: {
                         required: true,
                         positive: true
@@ -507,10 +502,6 @@
                     }
                 },
                 messages: {
-                    report_date: {
-                        required: "@lang('translation.field_required')",
-                        date: "@lang('translation.invalid_entry')"
-                    },
                     employee_id: {
                         required: "@lang('translation.field_required')",
                         positive: "@lang('translation.select_item')"
@@ -541,7 +532,7 @@
                     },
                     data: formData,
                     type: "POST",
-                    url: "{{ route('ajax_workorder_timesheet_store') }}",
+                    url: "{{ route('ajax_workorder_field_report_timesheet_store') }}",
                     beforeSend: function (request){
                         showSpinner();
                     },
@@ -586,7 +577,7 @@
                         timesheet_id: timesheetId
                     },
                     type: "POST",
-                    url: "{{ route('ajax_workorder_timesheet_destroy') }}",
+                    url: "{{ route('ajax_workorder_field_report_timesheet_destroy') }}",
                     beforeSend: function (request){
                         showSpinner();
                     },
@@ -685,7 +676,7 @@
                     },
                     data: formData,
                     type: "POST",
-                    url: "{{ route('ajax_workorder_equipment_store') }}",
+                    url: "{{ route('ajax_workorder_field_report_equipment_store') }}",
                     beforeSend: function (request){
                         showSpinner();
                     },
@@ -729,7 +720,7 @@
                         equipment_id: equipmentId
                     },
                     type: "POST",
-                    url: "{{ route('ajax_workorder_equipment_destroy') }}",
+                    url: "{{ route('ajax_workorder_field_report_equipment_destroy') }}",
                     beforeSend: function (request){
                         showSpinner();
                     },
@@ -828,7 +819,7 @@
                     },
                     data: formData,
                     type: "POST",
-                    url: "{{ route('ajax_workorder_material_store') }}",
+                    url: "{{ route('ajax_workorder_field_report_material_store') }}",
                     beforeSend: function (request){
                         showSpinner();
                     },
@@ -873,7 +864,7 @@
                         material_id: materialId
                     },
                     type: "POST",
-                    url: "{{ route('ajax_workorder_material_destroy') }}",
+                    url: "{{ route('ajax_workorder_field_report_material_destroy') }}",
                     beforeSend: function (request){
                         showSpinner();
                     },
@@ -972,7 +963,7 @@
                     },
                     data: formData,
                     type: "POST",
-                    url: "{{ route('ajax_workorder_vehicle_store') }}",
+                    url: "{{ route('ajax_workorder_field_report_vehicle_store') }}",
                     beforeSend: function (request){
                         showSpinner();
                     },
@@ -1016,7 +1007,7 @@
                         vehicle_id: vehicleId
                     },
                     type: "POST",
-                    url: "{{ route('ajax_workorder_vehicle_destroy') }}",
+                    url: "{{ route('ajax_workorder_field_report_vehicle_destroy') }}",
                     beforeSend: function (request){
                         showSpinner();
                     },
@@ -1114,7 +1105,7 @@
                     },
                     data: formData,
                     type: "POST",
-                    url: "{{ route('ajax_workorder_subcontractor_store') }}",
+                    url: "{{ route('ajax_workorder_field_report_subcontractor_store') }}",
                     beforeSend: function (request){
                         showSpinner();
                     },
@@ -1160,7 +1151,7 @@
                         subcontractor_id: subcontractorId
                     },
                     type: "POST",
-                    url: "{{ route('ajax_workorder_subcontractor_destroy') }}",
+                    url: "{{ route('ajax_workorder_field_report_subcontractor_destroy') }}",
                     beforeSend: function (request){
                         showSpinner();
                     },
