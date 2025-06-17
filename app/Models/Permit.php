@@ -16,8 +16,6 @@ class Permit extends Model
         'submitted_on' => 'date',
     ];
 
-
-
     public $fillable = [
         'proposal_id',
         'proposal_detail_id',

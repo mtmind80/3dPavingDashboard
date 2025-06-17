@@ -28,7 +28,6 @@ class WorkorderFieldReport extends Model
 
     public $searchable = [
         'report_date' => ':date',
-        /*
         'childModels' => [
             'creator' => [
                 'fields' => [
@@ -37,7 +36,6 @@ class WorkorderFieldReport extends Model
                 ],
             ],
         ],
-        */
     ];
 
     public function sortableColumns()

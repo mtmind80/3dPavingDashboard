@@ -1191,56 +1191,6 @@ class ProposalDetailController extends Controller
         return response()->json($response);
     }
 
-
-    public function schedule($service_id)
-    {
-
-        $service = ProposalDetail::where('id', '=', $service_id)->first();
-        if (!$service) {
-            return view('pages-404');
-        }
-
-        $proposal = Proposal::where('id', '=', $service->proposal_id)->first();
-
-        $schedules = ServiceSchedule::where('proposal_detail_id', '=', $service->id)->get();
-        $data['schedules'] = $schedules;
-        $data['service_id'] = $service_id;
-        $data['service'] = $service;
-        $data['proposal'] = $proposal;
-
-
-        return view('proposaldetails.schedule_service', $data);
-
-
-    }
-
-    public function removeschedule($schedule)
-    {
-        $serviceschedule = ServiceSchedule::where('id', '=', $schedule)->delete();
-
-        return redirect()->back()->with('info', 'Schedule Deleted!');
-
-    }
-
-
-    public function createschedule(ScheduleRequest $request, ProposalDetail $proposal_detail)
-    {
-        $start_date = strtotime($request['start_date']);
-        $request['start_date'] = date('Y-m-d', $start_date);
-
-        $end_date = strtotime($request['end_date']);
-        $request['end_date'] = date('Y-m-d', $end_date);
-
-        $newschedule = $request->all();
-        $serviceschedule = ServiceSchedule::create($newschedule);
-
-        $id = $serviceschedule->id;
-
-        return redirect()->back()->with('info', 'Schedule Created!');
-
-
-    }
-
     public function destroyOLD($id)
     {
         $service = ProposalDetail::where('id', '=', $id)->first()->toArray();

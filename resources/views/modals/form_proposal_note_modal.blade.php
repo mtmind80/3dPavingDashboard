@@ -7,7 +7,7 @@
                 @csrf
                 <input id="form_note_modal_return_to" name="returnTo" type="hidden">
                 <input id="form_note_modal_tab" name="tab" type="hidden">
-                <input id="proposal_id" name="proposal_id" type="hidden" value="{{$proposal['id']}}">
+                <input id="proposal_id" name="proposal_id" type="hidden" value="{{ $proposal['id']}} ">
                 <div class="modal-header">
                     <h5 class="modal-title" id="formNoteModalLabel"><b><span></span></b> - @lang('translation.add') @lang('translation.note')</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -15,17 +15,10 @@
                     </button>
                 </div>
                 <div class="modal-body plr10 pt10 pb0">
-                    <x-form-textarea style="height:135px" name="note" :params="['label' =>  __('translation.note'), 'iconClass' => 'fas fa-sticky-note', 'required' => false]"></x-form-textarea>
+                    <x-form-textarea style="height:135px" name="note" :params="['label' => __('translation.note'), 'iconClass' => 'fas fa-sticky-note', 'required' => false]"></x-form-textarea>
                 </div>
-<!--
-                <div class="modal-body p10 plr10 pt10 pb0">
-                        @lang('translation.reminder')
-                        <x-form-check-box name="reminder" id="reminder" value="1"
-                                    :checked="false"></x-form-check-box>
-                </div>
--->
                 <div class="modal-body plr10 pt10 pb0">
-                    <x-form-date_picker name="reminder_date" :params="['label' =>  __('translation.reminderdate'), 'iconClass' => 'fas fa-calendar', 'required' => false]">
+                    <x-form-date_picker name="reminder_date" :params="['label' => __('translation.reminderdate'), 'iconClass' => 'fas fa-calendar', 'required' => false]">
                     </x-form-date_picker>
                 </div>
                 <div class="modal-footer">

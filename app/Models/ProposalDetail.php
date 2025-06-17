@@ -100,7 +100,6 @@ class ProposalDetail extends Model
             ],
             ],
         ]
-
     ];
 
     public static function boot()

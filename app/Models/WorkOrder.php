@@ -33,25 +33,9 @@ class WorkOrder extends Proposal
         static::addGlobalScope(new WorkOrderScope);
     }
 
-    // Relationships
-
-    public function permits()
-    {
-        $this->hasMany(Permit::class, 'proposal_id', 'id');
-
-    }
-    public function services()
-    {
-        $this->hasMany(ProposalDetail::class, 'proposal_id', 'id');
-
-    }
-    public function payment()
-    {
-        $this->hasMany(Payment::class, 'proposal_id', 'id');
-
-    }
-
-    // Scopes:
+    /** Relationships */
+    
+    /** Scopes */
 
     public function scopeActive($query)
     {
@@ -85,7 +69,12 @@ class WorkOrder extends Proposal
         return !empty($this->sale_date) ? $this->sale_date->format('Y') : null;
     }
 
-    // Methods
+    /** Methods */
+
+    public function canBeScheduled()
+    {
+        return $this->permits->count() > 0 && $this->payments->count() > 0;
+    }
 
     public function getTotalCosts()
     {
