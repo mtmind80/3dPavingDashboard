@@ -1,8 +1,8 @@
 <?php namespace App\Traits;
 
-/**
- * 2023-02-16 - replace == by ===
+/** 2025-06-02 - be able to search date field. add :date as operator in model declaration
  *
+ * 2023-02-16 - replace == by ===
  */
 
 trait SearchTrait
@@ -20,7 +20,19 @@ trait SearchTrait
                             $q->orWhereHas($modelName, function ($z) use ($needle, $modelName, $fields) {
                                 $z->where(function($w) use ($needle, $fields) {
                                     foreach ($fields as $f => $op) {
-                                        if ($op === 'LIKE') {
+                                        if ($op === ':date') {
+                                            $op = '=';
+                                            try {
+                                                if (str_contains($needle, '/')) {
+                                                    $needle = \Carbon\Carbon::createFromFormat('m/d/Y', $needle)->toDateString();
+                                                } else if (str_contains($needle, '-')) {
+                                                    $needle = \Carbon\Carbon::createFromFormat('d-m-Y', $needle)->toDateString();
+                                                }
+                                                $w->orWhere($f, $op, $needle);
+                                            } catch (\Exception $e) {
+                                                $w->orWhere($f, $op, $needle);
+                                            }
+                                        } else if ($op === 'LIKE') {
                                             $w->orWhere($f, $op, '%' . $needle . '%');
                                         } else {
                                             $w->orWhere($f, $op, $needle);
@@ -35,7 +47,19 @@ trait SearchTrait
                         $q->orWhereHas($modelName, function ($z) use ($needle, $modelName, $fields) {
                             $z->where(function($w) use ($needle, $fields) {
                                 foreach ($fields as $f => $op) {
-                                    if ($op === 'LIKE') {
+                                    if ($op === ':date') {
+                                        $op = '=';
+                                        try {
+                                            if (str_contains($needle, '/')) {
+                                                $needle = \Carbon\Carbon::createFromFormat('m/d/Y', $needle)->toDateString();
+                                            } else if (str_contains($needle, '-')) {
+                                                $needle = \Carbon\Carbon::createFromFormat('d-m-Y', $needle)->toDateString();
+                                            }
+                                            $w->orWhere($f, $op, $needle);
+                                        } catch (\Exception $e) {
+                                            $w->orWhere($f, $op, $needle);
+                                        }
+                                    } else if ($op === 'LIKE') {
                                         $w->orWhere($f, $op, '%' . $needle . '%');
                                     } else {
                                         $w->orWhere($f, $op, $needle);
@@ -51,7 +75,19 @@ trait SearchTrait
                                 $r->orWhereHas($modelName, function ($z) use ($needle, $modelName, $fields) {
                                     $z->where(function($w) use ($needle, $fields) {
                                         foreach ($fields as $f => $op) {
-                                            if ($op === 'LIKE') {
+                                            if ($op === ':date') {
+                                                $op = '=';
+                                                try {
+                                                    if (str_contains($needle, '/')) {
+                                                        $needle = \Carbon\Carbon::createFromFormat('m/d/Y', $needle)->toDateString();
+                                                    } else if (str_contains($needle, '-')) {
+                                                        $needle = \Carbon\Carbon::createFromFormat('d-m-Y', $needle)->toDateString();
+                                                    }
+                                                    $w->orWhere($f, $op, $needle);
+                                                } catch (\Exception $e) {
+                                                    $w->orWhere($f, $op, $needle);
+                                                }
+                                            } else if ($op === 'LIKE') {
                                                 $w->orWhere($f, $op, '%' . $needle . '%');
                                             } else {
                                                 $w->orWhere($f, $op, $needle);
@@ -62,7 +98,19 @@ trait SearchTrait
                             });
                         }
                     } else {
-                        if ($operator === 'LIKE') {
+                        if ($operator === ':date') {
+                            $operator = '=';
+                            try {
+                                if (str_contains($needle, '/')) {
+                                    $needle = \Carbon\Carbon::createFromFormat('m/d/Y', $needle)->toDateString();
+                                } else if (str_contains($needle, '-')) {
+                                    $needle = \Carbon\Carbon::createFromFormat('d-m-Y', $needle)->toDateString();
+                                }
+                                $q->orWhere($field, $operator, $needle);
+                            } catch (\Exception $e) {
+                                $q->orWhere($field, $operator, $needle);
+                            }
+                        } else if ($operator === 'LIKE') {
                             $q->orWhere($field, $operator, '%' . $needle . '%');
                         } else {
                             $q->orWhere($field, $operator, $needle);

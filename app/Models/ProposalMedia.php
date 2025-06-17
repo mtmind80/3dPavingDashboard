@@ -6,8 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProposalMedia extends Model
 {
-    //
-
     protected $table = 'proposal_media';
-    protected $guarded = ['id'];
+
+    /** Relations */
+
+    public function type()
+    {
+        return $this->belongsTo(MediaType::class, 'media_type_id');
+    }
+
+
 }

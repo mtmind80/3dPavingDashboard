@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\WorkorderTimesheets;
+use App\Http\Controllers\ProposalDetailSchedulesController;
 use Illuminate\Support\Facades\Route;
 
 /***********************************  Ajax  ***********************************/
@@ -286,14 +286,10 @@ Route::group(['prefix' => 'vendors'], function() {
 
 /** Proposals Details */
 
-Route::group(['prefix' => 'proposaldetails'], function() {
+Route::group(['prefix' => 'proposal-details'], function() {
 
     // get details to  display or edit
     Route::get('/edit/{proposal_id}/{id}', 'ProposalDetailController@edit')->name('edit_service');
-    // Schedule a service
-    Route::get('/scehdule/{service_id}', 'ProposalDetailController@schedule')->name('schedule_service');
-    Route::post('/creeate_scehdule/{proposal_detail}', 'ProposalDetailController@createschedule')->name('create_schedule');
-    Route::get('/remove_schedule/{schedule}', 'ProposalDetailController@removeschedule')->name('remove_schedule');
 
     // Select service type
     Route::post('/checkform', 'ProposalDetailController@checkform')->name('checkform');
@@ -328,8 +324,20 @@ Route::group(['prefix' => 'proposaldetails'], function() {
     Route::post('/ajax-subcontractor-remove', 'ProposalDetailController@ajaxSubcontractorRemove')->name('ajax_subcontractor_remove');
 
     Route::post('/ajax-proposal-details-update', 'ProposalDetailController@ajaxUpdate')->name('ajax_proposal_details_update');
+
+    // Schedule a service:
+    Route::group(['prefix' => 'schedule'], function() {
+        Route::get('{service_id}', 'ProposalDetailSchedulesController@index')->name('schedule_service');
+
+        Route::post('/create', 'ProposalDetailSchedulesController@ajaxAddOrUpdate')->name('ajax_schedule_add_or_update');
+        Route::post('/remove', 'ProposalDetailSchedulesController@ajaxRemove')->name('ajax_schedule_remove');
+    });
+
 });
+
+
 /** END Proposal Details */
+
 
 /** Printing PDF */
 
