@@ -14,10 +14,6 @@ class Proposal extends Model
 
     protected $dates = ['proposal_date', 'sale_date'];
 
-    protected $table = 'proposals';
-
-    protected $guarded = ['id'];
-
     protected $appends = ['work_order_number', 'proposal_year'];
 
     public $sortable = [
@@ -82,18 +78,25 @@ class Proposal extends Model
         parent::boot();
     }
 
-    // Relationships:
+    /** Relationships: */
 
     public function details()
     {
         return $this->hasMany(ProposalDetail::class, 'proposal_id');
     }
 
-    public function notes()
+    // alias
+    public function services()
     {
-        return $this->hasMany('App\Models\ProposalNote');
+        return $this->hasMany(ProposalDetail::class, 'proposal_id');
     }
 
+    public function notes()
+    {
+        return $this->hasMany(ProposalNote::class, 'proposal_id');
+    }
+
+    // ???
     public function documents()
     {
         return $this->hasMany('App\Models\ProposalDocument');
@@ -101,12 +104,12 @@ class Proposal extends Model
 
     public function terms()
     {
-        return $this->hasOne('App\Models\ProposalTerm');
+        return $this->hasOne(ProposalTerm::class, 'proposal_id');
     }
 
     public function media()
     {
-        return $this->hasMany('App\Models\ProposalMedia');
+        return $this->hasMany(ProposalMedia::class, 'proposal_id');
     }
 
     public function creator()
@@ -119,14 +122,10 @@ class Proposal extends Model
         return $this->hasOne(User::class, 'id', 'salesmanager_id');
     }
 
-    public function payments()
+    // alias
+    public function salesManager()
     {
-        return $this->hasMany(Payments::class, 'id', 'proposal_id');
-
-    }
-    public function location()
-    {
-        return $this->belongsTo(Location::class);
+        return $this->hasOne(User::class, 'id', 'salesmanager_id');
     }
 
     public function salesPerson()
@@ -134,9 +133,24 @@ class Proposal extends Model
         return $this->belongsTo(User::class, 'salesperson_id');
     }
 
+    public function payments()
+    {
+        return $this->hasMany(Payment::class, 'proposal_id');
+    }
+
+    public function location()
+    {
+        return $this->belongsTo(Location::class, 'location_id');
+    }
+
     public function contact()
     {
-        return $this->belongsTo(Contact::class);
+        return $this->belongsTo(Contact::class, 'contact_id');
+    }
+
+    public function customerStaff()
+    {
+        return $this->belongsTo(Contact::class, 'customer_staff_id');
     }
 
     public function status()
@@ -146,7 +160,7 @@ class Proposal extends Model
 
     public function permits()
     {
-        return $this->hasMany(Permit::class);
+        return $this->hasMany(Permit::class, 'proposal_id');
     }
 
     public function activeJobs()
@@ -181,7 +195,19 @@ class Proposal extends Model
         return $this->hasMany(ProposalMaterial::class)->where('service_category_id', 8);
     }
 
-    // Scopes:
+    public function changeOrders()
+    {
+        return $this->belongsToMany(Proposal::class, 'change_orders', 'proposal_id', 'new_proposal_id', 'id', 'id')
+            ->withPivot('created_by', 'created_at', 'updated_at');
+    }
+
+    public function parentWorkOrders()
+    {
+        return $this->belongsToMany(Proposal::class, 'change_orders', 'new_proposal_id', 'proposal_id', 'id', 'id')
+            ->withPivot('created_by', 'created_at', 'updated_at');
+    }
+
+    /** Scopes */
 
     public function scopeSale($query)
     {
@@ -343,11 +369,12 @@ class Proposal extends Model
     public function getWorkOrderNumberAttribute()
     {
         $pieces = explode(":", $this->job_master_id ?? '');
-        if (count($pieces) == 3) {
+
+        if (count($pieces) === 3) {
             return $pieces[0] . '-' . $pieces[1] . '-' . str_pad($pieces[2], 5, "0", STR_PAD_LEFT);
         }
-        return null;
 
+        return null;
     }
 
     public function getTotalDetailsCostsAttribute()
@@ -375,7 +402,12 @@ class Proposal extends Model
         return !empty($this->proposal_date) ? $this->proposal_date->format('m/d/Y') . '<br>' . $this->proposal_date->format('h:i A') : null;
     }
 
-    // Methods:
+    /** Methods */
+
+    public function parentWorkOrder()
+    {
+        return $this->parentWorkOrders->first();
+    }
 
     public function getCostActiveJobs()
     {

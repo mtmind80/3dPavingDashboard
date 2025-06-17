@@ -17,10 +17,12 @@ class CreateServiceScheduleTable extends Migration
             $table->engine = 'InnoDB';
             $table->id();
             $table->unsignedBigInteger('proposal_detail_id');
+            $table->string('title', 100);
             $table->dateTime('start_date');
             $table->dateTime('end_date');
             $table->string('note', 1000)->nullable();
             $table->unsignedBigInteger('created_by');
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
         });
     }

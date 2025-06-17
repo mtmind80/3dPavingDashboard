@@ -420,19 +420,19 @@ function confirmation(params)
         }
     })
     .get()
-    .on('pnotify.confirm', typeof params.confirm_function == 'function' ? params.confirm_function : function(){
-        if (typeof params.confirm_function != 'undefined') {
-            executeFunctionByName(params.confirm_function, window, typeof params.confirm_args != 'undefined' ? params.confirm_args : null);
+    .on('pnotify.confirm', typeof params.confirm_function === 'function' ? params.confirm_function : function(){
+        if (typeof params.confirm_function !== 'undefined') {
+            executeFunctionByName(params.confirm_function, window, typeof params.confirm_args !== 'undefined' ? params.confirm_args : null);
         } else {
-            console.log('confirmed');
+            console.log('confirmed here');
         }
         return;
     })
-    .on('pnotify.cancel', typeof params.cancel_function == 'function' ? params.cancel_function : function(){
-        if (typeof params.cancel_function != 'undefined') {
-            executeFunctionByName(params.cancel_function, window, typeof params.cancel_args != 'undefined' ? params.cancel_args : null);
+    .on('pnotify.cancel', typeof params.cancel_function === 'function' ? params.cancel_function : function(){
+        if (typeof params.cancel_function !== 'undefined') {
+            executeFunctionByName(params.cancel_function, window, typeof params.cancel_args !== 'undefined' ? params.cancel_args : null);
         } else {
-            console.log('canceled');
+            console.log('canceled here');
         }
         return;
     });
@@ -570,4 +570,32 @@ function hideSpinnerWithText()
 function currencyFormat(value)
 {
     return '$' + Number(value).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+function usDateToTimestamp(dateString) {
+    // Split the date string into month, day, and year
+    const [month, day, year] = dateString.split('/').map(Number);
+
+    // Create a new Date object
+    const date = new Date(year, month - 1, day);
+
+    // Get the timestamp in milliseconds
+    const timestampMilliseconds = date.getTime();
+
+    // Optionally, convert to seconds
+    const timestampSeconds = timestampMilliseconds / 1000;
+
+    return timestampSeconds;
+}
+function usDateTimeToTimestamp(dateString) {
+    // Parse the date string
+    const date = new Date(dateString);
+
+    // Get the timestamp in milliseconds
+    const timestampMilliseconds = date.getTime();
+
+    // Convert to seconds if needed
+    const timestampSeconds = Math.floor(timestampMilliseconds / 1000);
+
+    return timestampSeconds;
 }

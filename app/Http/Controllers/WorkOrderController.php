@@ -92,65 +92,50 @@ class WorkOrderController extends Controller
 
     public function show(Request $request, $id)
     {
-        $data = array();
+        $relationShips = [
+            'changeOrders',
+            'services',
+            'notes',
+            'media' => fn($q) => $q->with(['type']),
+            'permits',
+            'payments',
+            'status',
+            'location',
+            'salesManager',
+            'salesPerson',
+            'contact',
+            'customerStaff',
+        ];
 
-        //what kind of access do i have
         if (auth()->user()->isAdmin()) {
-            $proposal = Workorder::find($id);
+            $workOrder = WorkOrder::with($relationShips)->find($id);
         } else {
-            $proposal = Workorder::where('id', '=', $id)->where(function ($q) {
-                $q->where('salesmanager_id', auth()->user()->id)->orWhere('salesperson_id', auth()->user()->id);
-            })->first();
-            // managers only show if I am on the Workorder
+            $workOrder = WorkOrder
+                ::where('id', $id)
+                ->where(fn($q) => $q
+                    ->orWhere('salesmanager_id', auth()->user()->id)
+                    ->orWhere('salesperson_id', auth()->user()->id)
+                )
+                ->with($relationShips)
+                ->first();
         }
 
-        if (! $proposal) {
+        if ($workOrder === null) {
             return view('pages-404');
         }
 
-        $currencyTotalDetailCosts = $proposal->currency_total_details_costs;
+        $workOrder->parent_work_order = $workOrder->parentWorkOrder();
 
-        $data['currency_total_details_costs'] = $currencyTotalDetailCosts;
-
-        $data['allowSchedule'] = false;
-
-        $data['permitsOK'] = $proposal['HasPermits'];
-
-        $data['paymentsOK'] = $proposal['HasPayments'];
-
-        if ($data['paymentsOK'] && $data['permitsOK']) {
-            $data['allowSchedule'] = true;
-        }
-
-        //does this work order have change orders?
-        $changeorders = ChangeOrders::where('proposal_id', '=', $proposal->id)->get();
-
-        $data['fieldmanagers'] = User::where('role_id', 6)->where('status', 1)->get()->toArray();
-        $data['mediatypes'] = MediaType::all()->toArray();
-
-        $accepted_filetypes = AcceptedDocuments::all()->pluck('extension')->toArray();
-        $data['doctypes'] = implode(',', $accepted_filetypes);
-
-        $services = ProposalDetail::where('proposal_id', $id)->get();
-        $notes = ProposalNote::where('proposal_id', $id)->get();
-        $permits = Permit::where('proposal_id', $id)->get();
-        $medias = ProposalMedia::where('proposal_id', $id)->get();
-
-        $hostwithHttp = request()->getSchemeAndHttpHost();
-        $data['fieldmanagersCB'] = User::fieldmanagersCB(['0' => 'Select a Manager']);
-        $data['hostwithHttp'] = $hostwithHttp;
-
-        $data['changeorders'] = $changeorders;
-        $data['id'] = $id;
-        $data['proposal'] = $proposal;
-        $data['permits'] = $permits;
-        $data['medias'] = $medias;
-        $data['services'] = $services;
-        $data['notes'] = $notes;
+        $data = [
+            'workOrder' => $workOrder,
+            'mediaTypes' => MediaType::all()->toArray(),
+            'docTypes' => implode(',', AcceptedDocuments::pluck('extension')->toArray()),
+            'fieldManagersCB' => User::fieldmanagersCB(['0' => 'Select a Manager']),
+            'hostWithHttp' => request()->getSchemeAndHttpHost(),
+        ];
 
         return view('workorders.workorder_home', $data);
     }
-
 
     public function cancelworkorder($id)
     {
