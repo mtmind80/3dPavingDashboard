@@ -296,10 +296,12 @@
                                                 </table>
                                             </td>
                                         </tr>
-                                    @elseif ($workOrder->parentWorkOrder->count() > 0)
 
                                     @endif
                                     {{--
+                                    @elseif ($workOrder->parentWorkOrder !== null && $workOrder->parentWorkOrder->count() > 0)
+                                        <!-- -->
+
                                     <tr>
                                         <td>Clone Work Order</td>
                                         <td>
