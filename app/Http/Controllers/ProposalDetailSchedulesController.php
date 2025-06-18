@@ -14,6 +14,14 @@ class ProposalDetailSchedulesController extends Controller
 {
     public function index($proposal_detail_id)
     {
+        if (! $proposalDetail = ProposalDetail::with(['proposal', 'workOrder', 'schedule'])->find($proposal_detail_id)) {
+            return view('pages-404');
+        }
+
+        if ($proposalDetail->workOrder === null && ! $proposalDetail->workOrder->canBeScheduled()) {
+            return redirect()->back()->with('error', 'This workorder cannot be scheduled');
+        }
+
         if (! $proposalDetail = ProposalDetail::with(['proposal', 'schedule'])->find($proposal_detail_id)) {
             return view('pages-404');
         }
