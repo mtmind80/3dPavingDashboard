@@ -3,8 +3,8 @@
         <td class="tc">{{ $schedule->start_date->format('m/d/Y - h:i A') }}</td>
         <td class="tc">{{ $schedule->end_date->format('m/d/Y - h:i A') }}</td>
         <td class="tc">{{ Str::limit($schedule->title, 100) }}</td>
-        <td class="tc">{{ $schedule->creator->full_name }}</td>
-        <td class="tc">{{ $schedule->updater->full_name }}</td>
+        <td class="tc">{{ $schedule->creator->full_name ?? null }}</td>
+        <td class="tc">{{ $schedule->updater->full_name ?? null }}</td>
         <td class="tc">
             <a
                 href="javascript:"
