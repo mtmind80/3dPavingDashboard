@@ -128,6 +128,11 @@ class ProposalDetail extends Model
         return $this->belongsTo(Proposal::class);
     }
 
+    public function workOrder()
+    {
+        return $this->belongsTo(WorkOrder::class, 'proposal_id');
+    }
+
     public function status()
     {
         return $this->belongsTo(ProposalStatus::class, 'status_id');
